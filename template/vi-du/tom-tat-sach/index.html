@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết.
+     Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Tóm tắt sách — mẫu giấy sách 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ.
+     ⚠ VÀ ĐỪNG THÊM MỘT FONT GOOGLE THỨ HAI Ở ĐÂY. Hàm đó thay BẤT KỲ link
+     `fonts.googleapis.com/css2` nào bằng Inter đóng gói — thêm một font chữ có
+     chân từ Google là lúc quay nó âm thầm biến mất, trong khi mở bằng trình
+     duyệt vẫn thấy đúng. Chữ có chân của mẫu này dùng font HỆ THỐNG, khai
+     trong `--font-chan` ở style.css. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. BÌA SÁCH — 1 câu script ═════════════════════════════════════
+         ⚠ Slide đầu có ĐÚNG 1 câu thì bảng nhịp gộp mọi phần tử vào một cú
+         bấm, nên cả ba khối ở đây hiện cùng lúc — cố ý, để mở ra như lật trang
+         bìa chứ không nhỏ giọt.
+
+         ⚠ Ở ĐÂY DÙNG ẢNH THẬT, không phải SVG như các mẫu ngang khác. Lý do:
+         thứ đang nói tới LÀ một cuốn sách có thật, và bìa của nó là bằng chứng
+         — vẽ lại một cái bìa là bịa. Ảnh nằm trong `anh/`, nạp cục bộ nên deck
+         vẫn dựng được offline; nguồn và giấy phép ghi trong source/source.md. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="bia">
+      <div class="nen nen-1"></div>
+      <div class="than than-bia">
+        <figure class="slide-element bia">
+          <img src="anh/so-do-bia.jpg" alt="Bìa bản in đầu tiểu thuyết Số đỏ, nhà in Lê Cường, 1938" />
+        </figure>
+        <div class="bia-chu">
+          <div class="slide-element">
+            <div class="nhan">Tóm tắt sách</div>
+            <h1 class="ten-sach">Số đỏ</h1>
+          </div>
+          <div class="slide-element the-sach">
+            <div class="dong-sach"><span>Tác giả</span><b><img class="chan-dung" src="anh/vu-trong-phung.jpg" alt="Chân dung Vũ Trọng Phụng" />Vũ Trọng Phụng</b></div>
+            <div class="dong-sach"><span>Đăng báo</span><b>1936 · Hà Nội báo</b></div>
+            <div class="dong-sach"><span>In thành sách</span><b>1938 · nhà in Lê Cường</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2. MỘT CÂU TÓM CẢ CUỐN — 2 câu script ═════════════════════════
+         ⚠ Câu này phải tóm được cả cuốn mà vẫn còn chỗ cho người xem tò mò.
+         Ở đây chốt vào nghịch lý của chính cốt truyện: đỉnh cao của nhân vật
+         là lúc anh ta THUA. -->
+    <div class="slide" data-slide="1" data-bo-cuc="mot-cau">
+      <div class="nen nen-3"></div>
+      <div class="than giua">
+        <div class="slide-element nhan-giua">Tóm cả cuốn trong một câu</div>
+        <p class="slide-element cau-lon">Một kẻ bị coi là hạ lưu leo lên tận đỉnh xã hội —<br />và đỉnh cao nhất là lúc anh ta <em>thua</em> một trận quần vợt.</p>
+      </div>
+    </div>
+
+    <!-- ══ 3–5. BA Ý CHÍNH — mỗi slide 2 câu script ══════════════════════
+         ⚠ Số thứ tự to mờ phía sau lấy từ `data-y`, KHÔNG phải số slide. Là
+         pseudo-element của `.slide` nên nó không kéo hộp bao mà kiemDeck đo. -->
+    <div class="slide" data-slide="2" data-bo-cuc="y" data-y="1">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="slide-element y-dau">
+          <div class="nhan">Ý thứ nhất</div>
+          <h2 class="tieu-de">Xã hội tôn vinh cái vỏ</h2>
+        </div>
+        <p class="slide-element y-giai">Xuân Tóc Đỏ đi lên bằng <b>hiểu lầm</b> và bằng cái mác người khác gán cho, chứ không bằng thứ gì anh ta có. Mỗi lần bị hiểu nhầm là một lần thăng chức.</p>
+      </div>
+    </div>
+
+    <div class="slide" data-slide="3" data-bo-cuc="y" data-y="2">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="slide-element y-dau">
+          <div class="nhan">Ý thứ hai</div>
+          <h2 class="tieu-de">"Âu hoá" thành một trò hề</h2>
+        </div>
+        <p class="slide-element y-giai">Phong trào cải cách của giới tiểu tư sản Hà Nội — y phục, thể thao, <b>bình dân</b> — rốt cuộc chỉ còn là hình thức. Ai cũng biết thế, và không ai nói ra.</p>
+      </div>
+    </div>
+
+    <div class="slide" data-slide="4" data-bo-cuc="y" data-y="3">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="slide-element y-dau">
+          <div class="nhan">Ý thứ ba</div>
+          <h2 class="tieu-de">Đến cái chết cũng thành dịp khoe</h2>
+        </div>
+        <p class="slide-element y-giai">Chương <b>XV</b> kể một đám tang mà cả nhà đều vui, mỗi người vui một kiểu riêng. Đoạn này nằm trong sách giáo khoa Ngữ văn 11.</p>
+      </div>
+    </div>
+
+    <!-- ══ 6. TRÍCH DẪN + ÁP DỤNG — 2 câu script ═════════════════════════
+         ⚠ Trích NGUYÊN VĂN, và ở đây trích chính TÊN CHƯƠNG — sáu chữ đó tự
+         nó đã là toàn bộ lời châm biếm, không cần bình thêm.
+         Dòng "áp dụng thế nào" phải nói được một việc người xem làm được,
+         không phải một lời khen cuốn sách. -->
+    <div class="slide" data-slide="5" data-bo-cuc="trich">
+      <div class="nen nen-6"></div>
+      <div class="than giua">
+        <blockquote class="slide-element trich">Hạnh phúc của một tang gia</blockquote>
+        <p class="slide-element ap-dung">Lần sau thấy một đám đông cùng khen một thứ mà không ai giải thích nổi vì sao — <b>nhớ lại sáu chữ đó</b>.</p>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

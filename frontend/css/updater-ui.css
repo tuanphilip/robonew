@@ -1,0 +1,23 @@
+/* Tách từ updater-ui.js (02/09/2026, audit Phase 2.1). */
+#bee-update-bar {
+  position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+  z-index: var(--z-toast); display: flex; align-items: center; gap: var(--sp-12);
+  max-width: min(92vw, 720px);
+  padding: var(--sp-12) var(--sp-14) var(--sp-12) var(--sp-18);
+  border: 1px solid var(--line); border-radius: var(--radius-pill);
+  background: var(--panel); box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  font-family: var(--font-ui); color: var(--text); font-size: var(--text-base);
+}
+#bee-update-bar .upd-text { font-weight: var(--weight-bold); }
+#bee-update-bar button {
+  border: 0; border-radius: var(--radius-pill); cursor: pointer;
+  font-family: inherit; font-weight: var(--weight-semibold); font-size: var(--text-md);
+}
+#bee-update-bar .upd-action {
+  padding: var(--sp-8) var(--sp-16); color: var(--accent-contrast); background: var(--accent);
+}
+#bee-update-bar .upd-action[disabled] { opacity: 0.55; cursor: default; }
+#bee-update-bar .upd-close {
+  width: 28px; height: 28px; color: var(--text-faint); background: var(--surface-strong);
+}

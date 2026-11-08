@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#0a1410",
+      "--primary": "#22c55e",
+      "--primary-light": "#bbf7d0",
+      "--primary-dark": "#15803d",
+      "--accent": "#facc15",
+      "--accent-light": "#fef08a",
+      "--info": "#38bdf8",
+      "--success": "#4ade80"
+    },
+    "customVariables": {
+      "--bg-dark": "#0a1410",
+      "--primary": "#22c55e",
+      "--primary-light": "#bbf7d0",
+      "--primary-dark": "#15803d",
+      "--accent": "#facc15",
+      "--accent-light": "#fef08a",
+      "--info": "#38bdf8",
+      "--success": "#4ade80"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#22c55e",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#0a1410",
+    "gridEnabled": false,
+    "gridLight": "#facc15",
+    "iconGlow": "#22c55e",
+    "iconBacklight": "#facc15",
+    "iconLight": "#4ade80",
+    "mainLight": "#22c55e",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#facc15",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Một trận đấu bị lật ngược trong đúng bảy phút cuối.",
+      "Hiệp một trôi qua khá nhạt. Đội khách dựng xe buýt hai tầng trước khung thành và không dâng lên lần nào. Hết hiệp, tỉ số vẫn là không đều.",
+      "Phút năm mươi tám, đội khách mở tỉ số từ một pha phản công. Cả sân lặng đi trong vài giây. Đây là lần đầu đội chủ nhà bị dẫn sau chín trận liền.",
+      "Phút bảy mươi, huấn luyện viên tung hai tiền đạo vào sân cùng lúc. Đội hình chuyển từ bốn hậu vệ xuống còn ba. Đây là canh bạc đổi cả trận đấu.",
+      "Phút tám mươi ba có bàn gỡ hoà từ một quả phạt góc. Tới phút chín mươi cộng một là bàn ấn định. Sân vận động vỡ oà trong hai phút liên tiếp.",
+      "Chung cuộc hai một cho đội chủ nhà. Ba điểm này đưa họ trở lại nhóm dẫn đầu bảng. Bóng đá chỉ thật sự kết thúc khi trọng tài thổi còi."
+    ],
+    "transitionSounds": [
+      "boom",
+      "bass",
+      "alarm",
+      "rise",
+      "ascending",
+      "dramatic"
+    ],
+    "revealSounds": [
+      "snap",
+      "tick",
+      "ping",
+      "pop",
+      "sparkle",
+      "bell"
+    ]
+  }
+}

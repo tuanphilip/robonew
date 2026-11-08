@@ -1,0 +1,954 @@
+/* ⚠ CỠ CHỮ TRONG TAB NÀY NHỈNH HƠN PHẦN CÒN LẠI MỘT BẬC.
+   Thang chung của app chạy từ 10px (`--text-2xs`) cho chữ phụ. Ở những bảng
+   chỉ liếc qua thì 10px đủ, nhưng tab này là chỗ ĐỌC: lời AI trả lời, câu lỗi
+   của kiem_deck, tham số tool. Chủ dự án báo "chữ hơi bé, nhất là chữ sub"
+   (18/09/2026) — đúng, 10px cho một đoạn văn là mỏi mắt.
+   Nên cả tệp này dịch lên một bậc: 2xs→xs, xs→sm, sm→md. Dịch cả thang chứ
+   không gõ px lẻ ở vài chỗ, để thứ bậc giữa các cỡ không vỡ. */
+/* Tab "Tạo bằng AI" ở cột dự án — xem `ai-tao.js`.
+   Mọi màu/cỡ/khoảng cách đi qua `tokens.css`, không có giá trị viết cứng. */
+
+/* ── hàng tab ─────────────────────────────────────────────────────────────
+   ⚠ ĐỌC KỸ CHỖ NÀY TRƯỚC KHI SỬA. Bản đầu tôi cho hàng tab `position: sticky`
+   vì đọc `app.css` thấy `.slide-list { overflow-y: auto }` — TƯỞNG cả cột tự
+   cuộn. SAI: `bien-tap.css` ghi đè bằng `.bt-ba-cot .slide-list { display:flex;
+   flex-direction:column; overflow:hidden }`, mà `<main>` LÚC NÀO CŨNG mang cả
+   hai lớp. Hậu quả đo được bằng ảnh chụp: pane AI bị CẮT CỤT ở giữa ô "Nội
+   dung" — nút "Tạo video bằng AI" và bảng chạy không có cách nào với tới, và
+   không có thanh cuộn nào để biết là còn nữa.
+   Nên: cột đã là flex dọc rồi thì hàng tab `flex: none`, pane tự cuộn. Không
+   cần sticky.
+   Lề âm + padding bù: `.slide-list` có padding hai bên, muốn vạch dưới của hàng
+   tab chạy hết bề ngang cột thì phải kéo ra sát mép. */
+.rl-tab[hidden] { display: none; }
+.rl-tab {
+  flex: none;
+  display: flex; gap: var(--sp-4);
+  margin: calc(var(--sp-16) * -1) calc(var(--sp-10) * -1) var(--sp-12);
+  padding: var(--sp-10) var(--sp-10) 0;
+  border-bottom: 1px solid var(--line);
+  /* Nen --surface-mo chu KHONG --panel. O theme toi --panel la #32312f dat tren
+     nen trang #262624: do sang 49 so voi 38, thanh mot dai sang hat len ngay
+     dinh cot. Chu du an bao dung chu: "mo thoi, ko nen de dam sang nhu the vi
+     la theme toi" (20/09/2026). --surface-mo ra #2a2a28 (do sang 42) — dung
+     bang nut nguon giong doc chua chon, tuc cot trai va bang sua noi cung mot
+     ngon ngu mau.
+     An toan vi hang tab KHONG sticky (ly do o khoi chu thich ngay tren): khong
+     co noi dung nao cuon ben duoi no de lo ra. Vach ngan van la border-bottom.
+     O theme sang --surface-mo la rgba(0,0,0,0.012) tren nen trang — gan nhu
+     khong doi, va the van co vien rieng. */
+  background: var(--surface-mo);
+}
+/* Icon + chữ, và nét dưới lấy MÀU CHỮ chứ không màu thương hiệu — cùng nếp với
+   hàng tab bên bảng sửa (`bs-tab-nut`). Lý do đã ghi ở đó: xanh nhạt trên nền
+   trắng gần bằng độ đậm của chữ xám ở tab kia, nhìn vào không biết đang đứng
+   tab nào; đen thì chênh lệch đọc ra ngay. Hai hàng tab trong cùng một cửa sổ
+   mà hai kiểu khác nhau cũng là một thứ vô cớ. */
+.rl-tab-nut {
+  flex: 1 1 0; min-width: 0;
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-6);
+  padding: var(--sp-8) var(--sp-6) var(--sp-10);
+  border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+  background: none; color: var(--text-faint);
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+.rl-tab-nut .btn-icon { flex: none; display: grid; place-items: center; }
+.rl-tab-nut svg { width: 15px; height: 15px; }
+.rl-tab-nut > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.rl-tab-nut:hover { color: var(--text-soft); }
+.rl-tab-nut.dang-chon { color: var(--text); border-bottom-color: var(--text); }
+
+/* Bánh răng "Cài đặt AI" ở góc hàng tab ĐÃ BỎ (03/10/2026): bảng Cài đặt AI nay
+   bật lên từ nút chọn AI dưới ô nhập của từng tab (`.ait-nha-nut`, agent-tab). */
+/* Pane là ô flex CUỘN ĐƯỢC. `min-height: 0` là bắt buộc — thiếu nó, ô flex
+   không co xuống dưới chiều cao nội dung nên `overflow-y` chẳng có tác dụng gì
+   và nội dung vẫn tràn ra ngoài cột. */
+.rl-pane { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.rl-pane[hidden] { display: none; }
+/* Danh sách dự án KHÔNG còn là pane ở đây — nay là hộp bật lên từ thanh trên
+   (css/du-an-pop.css, 03/10/2026). */
+
+/* ── form ─────────────────────────────────────────────────────────────── */
+/* `max-width`: dưới 1180px cột này nhảy xuống thành HÀNG NGANG hết bề ngang
+   (`bien-tap.css` @media), lúc đó ô nhập kéo dài cả 1300px — đã chụp thấy.
+   Ghim bề ngang đọc được rồi căn giữa. */
+.ait { display: grid; gap: var(--sp-12); max-width: 560px; margin-inline: auto; }
+
+/* Nhãn TRÊN, ô nhập DƯỚI. Cột chỉ ~340px: nhãn bên trái thì ô nhập còn chưa
+   tới 200px, mà đây toàn ô cần gõ nhiều chữ. */
+.ait-hang { display: grid; gap: var(--sp-6); }
+.ait-hang > span { color: var(--text-soft); font-size: var(--text-md); font-weight: var(--weight-semibold); }
+/* ⚠ `font-weight` phải đặt RÕ. Ô nhập thừa hưởng từ hàng nhãn (đậm) nên chữ
+   NGƯỜI DÙNG GÕ VÀO cũng ra đậm — đọc như một cái nhãn chứ không như nội dung.
+   Đã sửa placeholder một lần rồi mà quên chính chữ thật. */
+.ait-hang input[type="text"], .ait-hang select, .ait-hang textarea {
+  width: 100%; padding: var(--sp-8) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  color: var(--text); background: var(--panel);
+  font: inherit; font-size: var(--text-md); line-height: var(--leading-normal);
+  /* ⚠ PHẢI ĐỨNG SAU `font: inherit`. Viết trước thì cái shorthand kia đặt lại
+     `font-weight` về giá trị thừa hưởng (đậm, từ hàng nhãn) và câu lệnh này
+     thành vô nghĩa — đo ra vẫn 600. Thứ tự trong một khối là có thật. */
+  font-weight: var(--weight-normal);
+}
+.ait-hang input[type="text"], .ait-hang select { height: 36px; padding-block: 0; }
+/* `resize: vertical` chứ không `both`: kéo ngang được thì ô tràn khỏi cột. */
+.ait-hang textarea { resize: vertical; min-height: 64px; }
+.ait-hang input:focus, .ait-hang select:focus, .ait-hang textarea:focus {
+  outline: none; border-color: var(--brand);
+}
+.ait-goi { color: var(--text-faint); font-size: var(--text-xs); line-height: var(--leading-normal); }
+/* Vế phải của hàng nhãn: nút phụ + bộ đếm. */
+.ait-nhan-phai { display: flex; align-items: center; gap: var(--sp-8); }
+/* (5) Placeholder KHÔNG đậm. Ô nhập thừa hưởng `font-weight` của hàng nhãn nên
+   chữ gợi ý ra đậm y như một nhãn — đọc lướt tưởng là nội dung đã điền. */
+.ait-hang textarea::placeholder, .ait-hang input::placeholder {
+  font-weight: var(--weight-normal); color: var(--text-faint);
+}
+
+.ait-nut { display: flex; gap: var(--sp-8); }
+.ait-chinh {
+  flex: 1 1 auto; height: 38px; padding: 0 var(--sp-14);
+  border: 0; border-radius: var(--radius-md);
+  /* Cùng cặp màu với nút "Tạo video" trên thanh trên — hai nút này làm cùng
+     một việc trong đầu người dùng, để hai màu khác nhau là gây phân vân. */
+  background: var(--nut-ai-nen); color: var(--nut-ai-chu);
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-bold); cursor: pointer;
+}
+.ait-chinh:hover:not(:disabled) { background: var(--nut-ai-nen-dam); }
+/* ⚠ Icon phải ăn theo MÀU CHỮ của nút. `.btn-icon` có quy tắc màu riêng ở
+   `app.css`, nên trên nền tối nó vẫn ra đen — đúng lỗi đã chụp. */
+.ait-chinh .btn-icon, .ait-chinh svg { color: var(--nut-ai-chu); }
+.ait-chinh:disabled { opacity: 0.6; cursor: default; }
+.ait-phu {
+  flex: none; height: 38px; padding: 0 var(--sp-12);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: none; color: var(--text);
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.ait-phu:hover { background: var(--surface); }
+.ait-phu[hidden], .ait-chinh[hidden] { display: none; }
+
+/* ── dòng lịch sử hội thoại ───────────────────────────────────────────── */
+/* ── màn kết quả ──────────────────────────────────────────────────────── */
+/* ── bảng chạy ────────────────────────────────────────────────────────── */
+.ait-console {
+  display: grid; gap: var(--sp-6);
+  max-height: 320px; overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--sp-10);
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.ait-console[hidden] { display: none; }
+.ait-dong {
+  display: flex; gap: var(--sp-8); align-items: baseline;
+  color: var(--text-soft); font-size: var(--text-sm); line-height: var(--leading-normal);
+  word-break: break-word;
+}
+/* Cột dấu cố định để các dòng thẳng hàng, chữ không so le theo độ dài dấu. */
+.ait-dau { flex: none; width: 14px; text-align: center; color: var(--text-faint); }
+.ait-dong-cong-cu .ait-dau { color: var(--brand-dam); }
+.ait-dong-loi { color: var(--delete-text); }
+.ait-dong-loi .ait-dau { color: var(--delete-text); }
+.ait-dong-xong { color: var(--ok); }
+.ait-dong-xong .ait-dau { color: var(--ok); }
+/* Chữ model viết ra: nhạt hơn, để dòng hành động nổi lên trên nền lời kể. */
+.ait-dong-chu { color: var(--text-faint); }
+
+
+/* ── màn HỘI THOẠI: ô nhập ghim đáy, bảng tin ăn hết phần thừa ─────────── */
+/* ⚠ Cả chuỗi này phải đi cùng nhau, thiếu một mắt là hỏng cả:
+   1. pane thôi cuộn (`overflow: hidden`) và thành flex dọc;
+   2. `.ait` cũng là flex dọc và ăn hết chiều cao pane;
+   3. bảng tin `flex: 1` + `min-height: 0` — THIẾU `min-height: 0` thì ô flex
+      không co xuống dưới chiều cao nội dung, `overflow-y` mất tác dụng và
+      nội dung lại đẩy ô nhập xuống khỏi màn hình (đúng lỗi cũ);
+   4. thanh chat `flex: none` nên nó nằm yên ở đáy.
+   Bỏ luôn `max-height: 320px` của bảng tin: ở màn này nó phải cao bằng chỗ
+   còn trống, chứ không phải một hộp 320px rồi chừa khoảng trắng bên dưới. */
+.rl-pane[data-pane="ai"].rl-pane-chat { display: flex; flex-direction: column; overflow: hidden; }
+/* ⚠ PHẢI ĐỔI SANG FLEX. `.ait` là `display: grid`, mà grid mặc định
+   `align-content: stretch` — cho nó `flex: 1` để cao bằng cột thì nó đem TOÀN
+   BỘ chỗ thừa CHIA ĐỀU cho các hàng. Hậu quả đã chụp được: hàng tab cao gấp
+   ba, thanh đầu hội thoại giãn ra một khoảng trắng mênh mông, ô nhập cao như
+   một ô soạn thảo. Nhìn tưởng lỗi khoảng cách nên đi sửa `gap`, nhưng `gap`
+   không liên quan gì: thủ phạm là hàng grid tự kéo dãn.
+   Flex dọc thì các con giữ đúng chiều cao của mình, chỉ mỗi bảng tin có
+   `flex: 1` mới ăn chỗ thừa. */
+/* ⚠ `width: 100%` là BẮT BUỘC. `.ait` có `margin-inline: auto`, mà một ô flex
+   có lề tự động thì KHÔNG còn được kéo giãn (`stretch` thua `margin: auto`) —
+   nó co lại vừa nội dung. Đo được: màn tạo mới rộng 560px, màn hội thoại chỉ
+   402px trong một cột rộng 894px, nhìn như bị "co vào". */
+.ait.ait-doc-chat {
+  display: flex; flex-direction: column;
+  flex: 1 1 auto; min-height: 0; gap: var(--sp-10);
+  width: 100%;
+}
+/* KHÔNG nền, KHÔNG viền ở màn hội thoại: một khung xám lồng trong cột vốn đã
+   là một khung thì thành hai lớp hộp chồng nhau. Nền của hội thoại là nền
+   chính; nổi lên trên đó chỉ có thẻ bước và bong bóng tin nhắn. */
+/* Đệm đáy: tin nhắn cuối và dòng "đang nghĩ" dính sát ô nhập thì đọc rất tức
+   mắt, mà đó lại đúng là hai thứ người ta nhìn nhiều nhất. */
+/* ⚠ `align-content: start`. `.ait-console` là `display: grid`, mà grid có dư
+   chiều cao thì mặc định KÉO GIÃN các hàng cho đầy — y hệt lỗi đã gặp ở `.ait`.
+   Hậu quả: hội thoại mới có hai ba tin thì chúng nằm rải đều khắp cột, cách
+   nhau cả trăm px. Tin nhắn phải DỒN LÊN TRÊN, chỗ thừa để trống ở dưới. */
+.ait-doc-chat .ait-console {
+  flex: 1 1 auto; min-height: 0; max-height: none;
+  align-content: start;
+  padding: 0 0 var(--sp-12); border: 0; background: none;
+}
+.ait-doc-chat .ait-chat { flex: none; }
+
+/* Thanh đầu hội thoại: đang nói chuyện về deck nào + hai lối ra. */
+.ait-dau-chat {
+  flex: none;
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding-bottom: var(--sp-8);
+  border-bottom: 1px solid var(--line);
+  color: var(--text-soft); font-size: var(--text-sm);
+}
+.ait-dau-chat[hidden] { display: none; }
+.ait-dau-chat .btn-icon { flex: none; display: grid; place-items: center; color: var(--text-faint); }
+/* Ô chọn deck trong thanh đầu: trần trụi, không viền — nó là một phần của
+   thanh chứ không phải một ô nhập liệu riêng. */
+/* ⚠ `width: 0` chứ không chỉ `min-width: 0`. `<select>` tự tính bề rộng theo
+   OPTION DÀI NHẤT, và bề rộng đó là `flex-basis: auto` — tên deck dài thì nó
+   nở ra đẩy hai cái nút tràn khỏi cột (đã chụp thấy "Tạo video m…" bị cắt).
+   Đặt `flex-basis: 0` thì nó chỉ còn được chia phần CÒN LẠI sau khi hai nút đã
+   lấy đủ chỗ, và chữ dài thì cắt ba chấm. */
+/* `min-width` là SÀN: dưới 90px thì ô chọn không còn đọc được chữ nào, mà nó
+   là thứ quan trọng nhất trên thanh — thà để nút tự co. */
+.ait-dau-chon {
+  flex: 1 1 0; width: 0; min-width: 90px; height: 24px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  padding: 0 var(--sp-4); border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+.ait-dau-chon:hover { background: var(--surface); }
+.ait-dau-chon:focus { outline: none; background: var(--surface); }
+.ait-dau-chon[hidden] { display: none; }
+.ait-dau-ten[hidden] { display: none; }
+
+/* Dải cảnh báo ở màn hội thoại: CHỮ TRẦN, bỏ khung. Một cái hộp viền đỏ cao
+   50px trong một cột đã chật thì nó ăn mất chỗ của chính hội thoại. */
+.ait-doc-chat .ait-chan { padding: 0; border: 0; background: none; }
+
+.ait-dau-ten {
+  flex: 1 1 auto; min-width: 0;
+  font-weight: var(--weight-semibold); color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* KHÔNG viền — cùng nếp với nút Cài đặt ở hàng tab: trần trụi, hover mới hiện
+   nền. Thanh này đã có một đường kẻ dưới rồi, thêm hai cái khung nữa là ba lớp
+   đường kẻ trong một hàng cao 33px. */
+.ait-dau-nut {
+  flex: none;
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-8);
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-soft);
+  font: inherit; font-size: var(--text-xs); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.ait-dau-nut .btn-icon { display: grid; place-items: center; }
+.ait-dau-nut svg { width: 12px; height: 12px; }
+.ait-dau-nut:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+.ait-dau-nut:disabled { opacity: 0.5; cursor: default; }
+.ait-dau-nut[hidden] { display: none; }
+/* Nút chỉ có icon: vuông, không chữ. */
+.ait-dau-xoa { width: 26px; padding: 0; display: grid; place-items: center; }
+.ait-dau-xoa .btn-icon { display: grid; place-items: center; }
+.ait-dau-xoa svg { width: 13px; height: 13px; }
+/* Nút xoá ĐỎ sẵn, không đợi hover — nó là việc không lấy lại được, màu đỏ là
+   lời cảnh báo chứ không phải hiệu ứng. */
+/* ⚠ `color: inherit` cho icon. Đo được: nút đã đỏ (`rgb(163,38,38)`) nhưng
+   `<svg>` bên trong vẫn xám — có quy tắc khác đặt màu cho `.btn-icon`, và SVG
+   vẽ bằng `currentColor` nên nó ăn theo màu ĐÓ chứ không theo màu nút. Đổi màu
+   nút mà quên cái này thì icon cứ xám, nhìn tưởng chưa sửa gì. */
+.ait-dau-xoa { color: var(--delete-text); }
+.ait-dau-xoa .btn-icon, .ait-dau-xoa svg { color: inherit; }
+.ait-dau-xoa:hover { color: var(--delete-text); background: var(--danger-bg); }
+
+/* Luật khoá `body.bee-ai-khoa` (khoá bảng sửa khi tab "Tạo bằng AI" đang chạy) ĐÃ GỠ cùng tab đó
+   (16/10/2026) — không còn mã nào đặt lớp này; để lại là khoá luôn Thư viện vừa dời sang bảng phải. */
+
+/* Tiêu đề một chặng — mốc mở đầu của cả lượt, phải đọc ra ngay. */
+.ait-tieu-de {
+  display: flex; align-items: center; gap: var(--sp-8);
+  margin-top: var(--sp-4);
+  color: var(--text); font-size: var(--text-md); font-weight: var(--weight-bold);
+  line-height: var(--leading-normal); word-break: break-word;
+}
+.ait-tieu-de .btn-icon { flex: none; display: grid; place-items: center; color: var(--text-faint); }
+.ait-tieu-de svg { width: 15px; height: 15px; }
+
+/* ── THẺ BƯỚC: một việc AI làm, gồm tên việc + tham số + kết quả ───────── */
+/* Trước đây mỗi bước là một dòng chữ trôi lẫn giữa lời model nói — đọc lại một
+   lượt dài thì không phân biệt nổi đâu là AI nói, đâu là việc nó làm. Gom vào
+   một thẻ có viền thì ba thứ đó tách bạch ngay từ cái nhìn đầu. */
+/* KHÔNG viền. Tên việc in đậm kèm icon riêng đã đủ tách các bước ra khỏi nhau;
+   thêm viền là kẻ ô cho từng dòng một, mà một lượt có hai chục bước thì màn hình
+   thành bảng biểu. Nền nhạt giữ lại, đủ để biết đâu là một khối. */
+.ait-buoc {
+  display: grid; gap: var(--sp-6);
+  padding: var(--sp-8) var(--sp-10);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+}
+.ait-buoc-dau {
+  display: flex; align-items: center; gap: var(--sp-6);
+  color: var(--text); font-size: var(--text-sm);
+}
+/* Icon lệnh ĐEN TRẮNG: nó là nhãn phân loại, không phải nút bấm. Tô màu thương
+   hiệu thì hai chục icon xanh dọc màn hình tranh nhau với đúng thứ đáng được
+   tô màu — dấu tích xong và câu lỗi. */
+.ait-buoc-dau .btn-icon { flex: none; display: grid; place-items: center; color: var(--text-faint); }
+.ait-buoc-dau .btn-icon svg { width: 14px; height: 14px; }
+.ait-buoc-dau b { font-weight: var(--weight-semibold); }
+/* Dấu tích xanh NGAY CẠNH tên việc, thay cho cả một dòng "✓ Xong" bên dưới.
+   Một bước chạy trót lọt là chuyện thường — nó đáng một ký hiệu, không đáng
+   một dòng riêng nhân với hai chục bước mỗi lượt. */
+/* Ô trạng thái của một bước: chấm nhịp khi đang chạy, tích xanh khi xong, dấu
+   × đỏ khi hỏng. Cùng một chỗ, cùng một cỡ — mắt chỉ phải học một vị trí. */
+.ait-buoc-dau .ait-buoc-tt { flex: none; display: grid; place-items: center; }
+.ait-buoc-dau .ait-buoc-tt svg { width: 13px; height: 13px; }
+.ait-buoc-chay {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--brand-dam); animation: ait-tho 1.2s ease-in-out infinite;
+}
+.ait-buoc-dau .ait-buoc-x { color: var(--danger); }
+@media (prefers-reduced-motion: reduce) { .ait-buoc-chay { animation: none; } }
+
+/* ⚠ Phải viết đủ `.ait-buoc-dau .ait-buoc-tich`. Ở trên đã có
+   `.ait-buoc-dau .btn-icon { color: var(--brand-dam) }` — hai lớp, ưu tiên cao
+   hơn một lớp, nên dấu tích bị tô màu thương hiệu (xanh navy) thay vì xanh lá.
+   Đã chụp thấy: dấu tích "xong" trông y như icon của tên việc. */
+.ait-buoc-dau .ait-buoc-tich { flex: none; display: grid; place-items: center; color: var(--ok); }
+.ait-buoc-dau .ait-buoc-tich svg { width: 13px; height: 13px; }
+/* Thẻ đã GỌN: chỉ còn hàng tên, phần ruột giấu đi. Hàng tên bấm được cả hàng. */
+.ait-buoc-gon > :not(.ait-buoc-dau) { display: none; }
+.ait-buoc-nut {
+  flex: none; width: 18px; height: 18px; padding: 0; margin-left: var(--sp-4);
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-xs);
+  background: none; color: var(--text-faint); cursor: pointer;
+}
+.ait-buoc-nut:hover { background: var(--surface); color: var(--text); }
+.ait-buoc-nut svg { width: 12px; height: 12px; }
+.ait-buoc-nut[hidden] { display: none; }
+
+.ait-buoc-thamso {
+  margin: 0; max-height: 132px; overflow: auto;
+  padding: var(--sp-6) var(--sp-8);
+  border-radius: var(--radius-sm); background: var(--surface);
+  color: var(--text-soft);
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  line-height: var(--leading-normal); white-space: pre-wrap; word-break: break-word;
+}
+.ait-buoc-kq {
+  font-size: var(--text-xs); line-height: var(--leading-normal);
+  word-break: break-word;
+}
+.ait-buoc-loi { color: var(--delete-text); }
+
+/* ── hộp hỏi xác nhận (dùng chung khung với popup Cài đặt AI) ──────────── */
+.ait-hoi-dong { color: var(--text-soft); font-size: var(--text-md); line-height: var(--leading-normal); }
+.ait-hoi-dong + .ait-hoi-dong { margin-top: var(--sp-8); }
+.ait-hoi-nut {
+  display: flex; justify-content: flex-end; gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-16);
+  border-top: 1px solid var(--line);
+}
+.ait-hoi-phu, .ait-hoi-chinh {
+  height: 34px; padding: 0 var(--sp-14);
+  border-radius: var(--radius-md);
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.ait-hoi-phu { border: 1px solid var(--control-line); background: none; color: var(--text); }
+.ait-hoi-phu:hover { background: var(--surface); }
+.ait-hoi-chinh { border: 0; background: var(--brand); color: var(--brand-text); }
+.ait-hoi-chinh:hover { background: var(--brand-dam); }
+/* ⚠ Nền đặc thì phải dùng bản `-solid`, và `tokens.css` đã ghi hẳn cảnh báo đó
+   ra rồi mà tôi vẫn lấy `--delete-text` làm nền: đó là màu dành cho CHỮ đỏ, đem
+   làm nền thì ra đỏ thẫm, còn chữ trên nút thì thừa hưởng màu chữ mặc định nên
+   thành ĐEN trên ĐỎ THẪM. Nền đặc + chữ trắng, đúng như nút xoá ở `app.css`. */
+.ait-hoi-xoa { background: var(--danger-solid); color: var(--on-ok); }
+.ait-hoi-xoa:hover { background: var(--danger-solid); filter: brightness(1.1); }
+
+/* ── markdown trong tin nhắn của AI ───────────────────────────────────── */
+/* Cỡ chữ KHÔNG đổi theo cấp tiêu đề. Khung chat rộng ~330px: một `h1` cỡ thật
+   chiếm hai dòng cho ba chữ. Phân cấp bằng ĐẬM + khoảng cách là đủ đọc. */
+.ait-md > * + * { margin-top: var(--sp-6); }
+.ait-md-p { margin: 0; }
+.ait-md-h { font-weight: var(--weight-bold); color: var(--text); }
+.ait-md-h1 { margin-top: var(--sp-10); }
+.ait-md-h2 { margin-top: var(--sp-10); }
+.ait-md-h3 { margin-top: var(--sp-8); }
+.ait-md > .ait-md-h:first-child { margin-top: 0; }
+/* Gạch đầu dòng: cột dấu cố định để chữ của mọi mục thẳng hàng nhau. */
+.ait-md-li { display: flex; gap: var(--sp-6); align-items: baseline; }
+.ait-md-dau { flex: none; min-width: 14px; color: var(--text-faint); }
+.ait-md-li + .ait-md-li { margin-top: var(--sp-2); }
+.ait-md-vach { height: 1px; background: var(--line); margin: var(--sp-8) 0; }
+.ait-md-code {
+  padding: 0 var(--sp-4); border-radius: var(--radius-xs);
+  background: var(--surface); color: var(--text);
+  font-family: var(--font-mono); font-size: var(--text-xs);
+}
+.ait-md-ma {
+  margin: 0; max-height: 220px; overflow: auto;
+  padding: var(--sp-8);
+  border-radius: var(--radius-sm); background: var(--surface); color: var(--text-soft);
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  line-height: var(--leading-normal); white-space: pre-wrap; word-break: break-word;
+}
+/* Đã có thẻ khối bên trong thì bỏ `pre-wrap` của bong bóng, không thì mỗi lần
+   xuống dòng trong nguồn markdown lại thành một dòng trống thừa. */
+.ait-tin.ait-md { white-space: normal; }
+
+/* ── tin nhắn ──────────────────────────────────────────────────────────── */
+/* Hai bong bóng, hai phía. `max-width` 86% để câu dài vẫn thấy được lề bên kia
+   — bong bóng chạm hai mép thì mất luôn cái dấu hiệu "ai đang nói". */
+.ait-tin {
+  max-width: 86%;
+  padding: var(--sp-8) var(--sp-10);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm); line-height: var(--leading-normal);
+  white-space: pre-wrap; word-break: break-word;
+}
+/* Nền NHẠT chứ không đặc. Một mảng xanh đặc mỗi lần mình gõ câu gì là chỗ chói
+   nhất màn hình, trong khi thứ cần đọc kỹ lại là phần AI trả lời. Nhạt vẫn đủ
+   phân biệt ai nói — đằng nào nó cũng đã dạt hẳn sang phải. */
+.ait-tin-toi {
+  margin-left: auto;
+  background: var(--brand-nhat); color: var(--text);
+  font-weight: var(--weight-semibold);
+}
+.ait-tin-ai { margin-right: auto; background: var(--panel); color: var(--text); }
+
+.ait-trangthai {
+  display: flex; align-items: center; gap: var(--sp-8);
+  color: var(--text-soft); font-size: var(--text-md);
+}
+.ait-trangthai[hidden] { display: none; }
+/* "Đang nghĩ" = LOGO NHÀ CUNG CẤP phình to thu nhỏ. Không dùng ảnh động: một
+   phép `scale` trên chính logo là đủ và không tốn thêm tệp nào. Logo Claude và
+   Gemini có màu riêng nên không đặt `color` ở đây. */
+.ait-nhip {
+  flex: none; display: grid; place-items: center;
+  /* Màu CHỮ, không phải màu thương hiệu của app: logo Beeknoee vẽ bằng
+     `currentColor` nên đặt xanh ở đây là nó ra xanh, trong khi logo thật là
+     đen-trắng. Claude/Gemini có màu riêng trong chính SVG nên không bị ảnh
+     hưởng — đúng như mong muốn, logo của ai giữ màu của người đó. */
+  width: 16px; height: 16px; color: var(--text-soft);
+  animation: ait-nhip 1.4s ease-in-out infinite;
+}
+.ait-nhip svg { width: 16px; height: 16px; }
+@keyframes ait-nhip {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.72); opacity: 0.5; }
+}
+@media (prefers-reduced-motion: reduce) { .ait-nhip { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ait-nhip { animation: none; } }
+
+/* ── tệp đính kèm ─────────────────────────────────────────────────────── */
+.ait-kem {
+  display: flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.ait-kem[hidden] { display: none; }
+.ait-kem-ten {
+  flex: 1 1 auto; min-width: 0;
+  color: var(--text-soft); font-size: var(--text-xs);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ait-kem-bo {
+  flex: none; width: 22px; height: 22px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint);
+  font-size: var(--text-md); line-height: var(--leading-none); cursor: pointer;
+}
+.ait-kem-bo:hover { background: var(--panel); color: var(--delete-text); }
+
+/* ── thanh chat ───────────────────────────────────────────────────────── */
+.ait-chat { display: grid; gap: var(--sp-8); }
+.ait-chat[hidden] { display: none; }
+/* MỘT VIÊN THUỐC: gim trái — ô gõ giữa — nút tròn phải, giống các app chat.
+   Viền nằm ở CẢ THANH chứ không ở riêng ô gõ, nên ba thứ đọc ra một khối. */
+/* ⚠ `center`, không phải `flex-end`. Ô nhập một dòng cao 33px còn hai nút cao
+   30px: dóng theo ĐÁY thì tâm hai nút nằm thấp hơn tâm dòng chữ, nhìn như hai
+   nút bị tụt xuống — đã chụp thấy. Ô có giãn tới 4 dòng thì nút nằm giữa vẫn
+   đọc được là "thuộc về ô này". */
+.ait-thanh {
+  display: flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6);
+  border: 1px solid var(--control-line); border-radius: var(--radius-lg);
+  background: var(--panel);
+  /* Chốt chặn thứ hai: khối lưới ngoài mặc định cho con `min-width: auto`, nên
+     một phần tử con phình to vẫn kéo được cả thanh ra. */
+  min-width: 0;
+}
+.ait-thanh:focus-within { border-color: var(--brand); }
+.ait-thanh textarea {
+  flex: 1 1 auto; min-width: 0;
+  /* `field-sizing: content` cho ô tự cao dần theo chữ ở trình duyệt mới; bản cũ
+     bỏ qua thuộc tính này và vẫn chạy đúng nhờ `rows=1` + `min-height`. */
+  /* MỘT DÒNG lúc rảnh, tự cao dần, TỐI ĐA 4 DÒNG rồi mới cuộn.
+     `field-sizing: content` lo phần tự cao; hai con số dưới đây chốt hai đầu.
+     ⚠ Tính theo dòng, không gõ đại một số px: `--text-sm` × `--leading-normal`
+     ≈ 21px/dòng, cộng padding 12px ⇒ 1 dòng ≈ 33px, 4 dòng ≈ 96px. Trước đây
+     `max-height: 140px` là gần 7 dòng — ô nhập chiếm mất chỗ của hội thoại. */
+  field-sizing: content;
+  /* ⚠ `anywhere`, KHÔNG PHẢI `break-word`. Hai giá trị này ngắt chữ giống hệt
+     nhau khi ô đã có bề ngang cố định, nhưng khác nhau ở chỗ quyết định:
+     `break-word` KHÔNG làm giảm bề rộng min-content, còn `anywhere` thì có.
+     Ô này lại đang dùng `field-sizing: content`, tức bề ngang CHẠY THEO
+     min-content — nên gõ một chuỗi dài không có dấu cách thì ô tự phình ra
+     theo. Đo 18/09/2026: 240 ký tự liền nhau đẩy ô từ 475px lên 1778px và kéo
+     cả thanh gõ ra 1863px, tràn khỏi khung hội thoại. Câu có dấu cách không
+     dính vì nó tự xuống dòng ở khoảng trắng. */
+  overflow-wrap: anywhere;
+  max-height: 96px; min-height: 33px;
+  padding: var(--sp-6) var(--sp-4); border: 0; background: none;
+  color: var(--text); font: inherit; font-size: var(--text-md);
+  line-height: var(--leading-normal); resize: none;
+}
+.ait-thanh textarea:focus { outline: none; }
+.ait-thanh-gim {
+  flex: none; width: 30px; height: 30px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: 50%;
+  background: none; color: var(--text-faint); cursor: pointer;
+}
+.ait-thanh-gim:hover { background: var(--surface); color: var(--text); }
+.ait-thanh-gim svg { width: 17px; height: 17px; }
+
+/* Nút GỬI — và cũng là nút DỪNG. Một nút, hai việc: xem `veNut` trong
+   `ai-tao.js`. Lúc rảnh là mũi tên; lúc chạy là hình vuông thở. */
+/* KHÔNG NỀN. Một viên tròn xanh đặc nằm trong một cái khung vốn đã có viền thì
+   thành hai lớp nút chồng nhau; mà đây là thanh gõ chữ, không phải một cái bảng
+   điều khiển. Hover mới hiện nền nhạt, đúng nếp nút Cài đặt ở hàng tab. */
+.ait-thanh-gui {
+  flex: none; position: relative;
+  width: 30px; height: 30px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: 50%;
+  background: none; color: var(--brand-dam); cursor: pointer;
+}
+.ait-thanh-gui:hover:not(:disabled) { background: var(--surface); }
+.ait-thanh-gui:disabled { opacity: 0.6; cursor: default; }
+.ait-thanh-gui svg { width: 18px; height: 18px; }
+/* ĐANG CHẠY: hình vuông ĐỎ, to hơn mũi tên gửi. Đỏ vì đây là nút dừng — màu
+   thương hiệu thì nó trông vẫn như nút gửi, chỉ đổi hình. To hơn vì lúc cần
+   bấm nó là lúc đang vội. */
+.ait-thanh-gui.dang-chay { color: var(--danger); }
+.ait-thanh-gui.dang-chay:hover { background: var(--danger-bg); }
+.ait-thanh-vuong {
+  position: absolute; width: 13px; height: 13px;
+  border-radius: var(--radius-xs); background: var(--danger);
+  opacity: 0; transform: scale(0.6);
+}
+.ait-thanh-gui.dang-chay svg { opacity: 0; }
+.ait-thanh-gui.dang-chay .ait-thanh-vuong {
+  opacity: 1; transform: scale(1);
+  animation: ait-tho 1.2s ease-in-out infinite;
+}
+/* "Thở" = to nhỏ + mờ dần. Đủ để biết máy đang làm, không nhấp nháy gắt tới
+   mức khó chịu khi lượt chạy kéo dài vài phút. */
+@keyframes ait-tho {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.62); opacity: 0.55; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ait-thanh-gui.dang-chay .ait-thanh-vuong { animation: none; }
+}
+
+/* Câu người dùng gõ: đậm hơn lời kể của model, để đọc lại bảng chạy còn biết
+   mình đã bảo nó làm gì. */
+.ait-dong-nguoi-dung { color: var(--text); font-weight: var(--weight-semibold); }
+.ait-dong-nguoi-dung .ait-dau { color: var(--brand-dam); }
+
+/* ── thẻ mẫu đang chọn trong form ─────────────────────────────────────── */
+.ait-nhan-lien {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: 0; border: 0; background: none;
+  color: var(--brand-dam); font: inherit; font-size: var(--text-xs);
+  font-weight: var(--weight-semibold); cursor: pointer;
+}
+.ait-nhan-lien:hover { text-decoration: underline; }
+.ait-nhan-lien svg { width: 12px; height: 12px; }
+
+/* KHÔNG nền. Thẻ này là thứ DUY NHẤT trong hàng nên không cần nền để tách khỏi
+   ai; nền xám chỉ làm nó nặng hơn mấy hàng nhập bên dưới, trong khi nó chỉ là
+   "mẫu đang chọn". Viền mờ đi cho cùng nhịp. */
+.ait-mau-nut {
+  display: flex; align-items: flex-start; gap: var(--sp-10);
+  width: 100%; padding: var(--sp-10);
+  border: 1px solid var(--line-mo); border-radius: var(--radius-md);
+  background: none; color: var(--text);
+  font: inherit; text-align: left; cursor: pointer;
+}
+.ait-mau-nut:hover { border-color: var(--line); background: var(--surface-mo); }
+/* Ảnh giữ khổ dựng đứng — nhận ra mẫu bằng hình, không bằng chữ. */
+.ait-mau-anh {
+  position: relative; flex: none; width: 44px; height: 62px; overflow: hidden;
+  border-radius: var(--radius-sm); background: var(--surface-strong);
+}
+.ait-mau-anh img, .ait-mau-anh video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Ảnh bìa mẫu là ảnh VUÔNG (đo: 1024×1024) — `cover` trong ô 9:16 cắt mất
+   gần hết. Đường lùi này phải `contain`. */
+.ait-mau-anh .ait-anh-vua { object-fit: contain; }
+/* ⚠ Dấu tích KHÔNG còn nằm đè lên ảnh. Ô ảnh chỉ 44×62 nên viên tròn 15px ở
+   góc che mất một phần hình — mà hình mới là thứ để nhận ra mẫu. Nay nó đứng
+   cuối DÒNG TÊN, và dùng đúng màu `--ok` như dấu tích "xong" của các bước bên
+   dưới: cùng một ý "cái này đã chốt" thì phải cùng một màu. */
+.ait-mau-dong { display: flex; align-items: center; gap: var(--sp-6); min-width: 0; }
+.ait-mau-tich { flex: none; display: grid; place-items: center; color: var(--ok); }
+.ait-mau-tich svg { width: 14px; height: 14px; }
+.ait-mau-chu { flex: 1 1 auto; min-width: 0; display: grid; gap: var(--sp-4); }
+.ait-mau-ten {
+  flex: 1 1 auto; min-width: 0;
+  font-size: var(--text-md); font-weight: var(--weight-bold);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ait-mau-phu { color: var(--text-faint); font-size: var(--text-xs); }
+.ait-mau-the { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+.ait-tag {
+  padding: 1px var(--sp-6);
+  border: 1px solid var(--line); border-radius: var(--radius-pill);
+  background: var(--panel); color: var(--text-soft);
+  font-size: var(--text-xs); line-height: var(--leading-normal);
+  white-space: nowrap;
+}
+
+/* ── dải gợi ý + dải chặn ─────────────────────────────────────────────── */
+.ait-goiy {
+  display: flex; align-items: flex-start; gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-10);
+  border: 1px solid var(--brand-vien); border-radius: var(--radius-md);
+  background: var(--brand-mo); color: var(--brand-dam);
+  font-size: var(--text-xs); line-height: var(--leading-normal);
+}
+.ait-goiy[hidden] { display: none; }
+.ait-goiy > .btn-icon { flex: none; display: grid; place-items: center; }
+.ait-goiy svg { width: 14px; height: 14px; }
+.ait-goiy > span:nth-child(2) { flex: 1 1 auto; min-width: 0; }
+.ait-goiy-x {
+  flex: none; width: 18px; height: 18px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--brand-dam);
+  font-size: var(--text-md); line-height: var(--leading-none); cursor: pointer;
+}
+
+/* Dải ĐỎ gom mọi thứ đang chặn nút chính — tách khỏi bảng chạy của agent. */
+/* CHỮ TRẦN, không khung không nền. Một hộp viền đỏ cho một câu nhắc ngắn thì
+   nó nặng ngang một hộp thoại lỗi, trong khi đây chỉ là "bạn còn thiếu bước
+   này". Chữ đỏ + icon cảnh báo đã đủ đọc ra. */
+.ait-chan {
+  display: flex; align-items: flex-start; gap: var(--sp-8);
+  padding: 0; border: 0; background: none;
+  color: var(--delete-text); font-size: var(--text-xs); line-height: var(--leading-normal);
+}
+.ait-chan[hidden] { display: none; }
+.ait-chan > .btn-icon { flex: none; display: grid; place-items: center; }
+.ait-chan svg { width: 14px; height: 14px; }
+.ait-chan-chu { flex: 1 1 auto; min-width: 0; display: grid; gap: var(--sp-4); }
+
+/* ── bộ đếm ký tự + ô có nút bên trong ────────────────────────────────── */
+.ait-dem {
+  flex: none; color: var(--text-faint); font-size: var(--text-xs);
+  font-weight: var(--weight-normal); font-variant-numeric: tabular-nums;
+}
+/* Nút nằm TRONG ô nhập: đệm phải của ô phải chừa chỗ, không thì chữ chui
+   xuống dưới nút. */
+.ait-o-boc { position: relative; display: block; }
+/* Chừa chỗ cho nút bên trong: 26px nút + hai lề 6px. */
+.ait-o-boc textarea { padding-right: var(--sp-40); }
+.ait-o-nut {
+  position: absolute; right: var(--sp-6); bottom: var(--sp-6);
+  width: 26px; height: 26px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text-faint); cursor: pointer;
+}
+.ait-o-nut:hover { color: var(--brand-dam); }
+.ait-o-nut svg { width: 15px; height: 15px; }
+
+/* Nút nhờ AI: nền nhạt màu thương hiệu — việc phụ nhưng là việc CỦA AI. */
+/* Trần trụi: không viền, không nền — nó đứng trong HÀNG NHÃN cạnh bộ đếm, mà
+   một cái khung ở đó thì nặng hơn cả cái nhãn nó đứng cạnh. Hover mới hiện nền. */
+.ait-nut-ai {
+  display: inline-flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-2) var(--sp-6);
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--brand-dam);
+  font: inherit; font-size: var(--text-xs); font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+.ait-nut-ai:hover:not(:disabled) { background: var(--surface); }
+.ait-nut-ai:disabled { opacity: 0.6; cursor: default; }
+.ait-nut-ai svg { width: 14px; height: 14px; }
+.ait-hang-nut { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-8); }
+/* Nút chọn AI: logo nhà + "Nhà · model" + mũi tên — mở bảng Cài đặt AI cạnh nút.
+   Chưa nối được (thiếu khoá / model) thì chữ đỏ để người dùng biết bấm vào đây. */
+.ait-nha-nut {
+  flex: 0 1 auto; min-width: 0;
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-4) var(--sp-8);
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-soft);
+  font: inherit; font-size: var(--text-xs); cursor: pointer;
+}
+.ait-nha-nut:hover { background: var(--surface); color: var(--text); }
+.ait-nha-nut .btn-icon { flex: none; display: grid; place-items: center; background: none; box-shadow: none; }
+.ait-nha-nut svg { width: 15px; height: 15px; }
+.ait-nha-nut .ait-nha-mui svg { width: 12px; height: 12px; }
+.ait-nha-chu { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ait-nha-nut.chua-noi { color: var(--danger-text); }
+.ait-goi-phai {
+  flex: 1 1 auto; min-width: 0; text-align: right;
+  color: var(--text-faint); font-size: var(--text-xs);
+}
+
+/* Nút chính: icon — chữ — mũi tên, chữ chiếm phần giữa để hai icon dạt hai mép. */
+.ait-chinh { display: flex; align-items: center; gap: var(--sp-8); }
+.ait-chinh-chu { flex: 1 1 auto; }
+.ait-chinh svg { width: 15px; height: 15px; }
+
+/* ── popup chọn mẫu ───────────────────────────────────────────────────── */
+.ait-hop { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; }
+.ait-hop-nen { position: absolute; inset: 0; background: var(--overlay); }
+.ait-hop-khung {
+  position: relative; width: min(880px, calc(100vw - var(--sp-32)));
+  max-height: calc(100vh - var(--sp-32));
+  display: flex; flex-direction: column;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--panel); box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.ait-hop-dau {
+  flex: none; display: flex; align-items: baseline; gap: var(--sp-8);
+  padding: var(--sp-14) var(--sp-16);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--text-md);
+}
+.ait-hop-dem { color: var(--text-faint); font-size: var(--text-xs); }
+.ait-hop-x {
+  margin-left: auto; width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint);
+  font-size: var(--text-lg); line-height: var(--leading-none); cursor: pointer;
+}
+.ait-hop-x:hover { background: var(--surface); color: var(--text); }
+
+/* Hàng tìm kiếm + sắp xếp + kiểu xem. */
+.ait-hop-tim {
+  flex: none; display: flex; gap: var(--sp-8); align-items: center;
+  padding: var(--sp-12) var(--sp-16) 0;
+}
+.ait-tim-o {
+  flex: 1 1 auto; min-width: 0; position: relative;
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding: 0 var(--sp-10); height: 38px;
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: var(--panel);
+}
+.ait-tim-o:focus-within { border-color: var(--brand); }
+.ait-tim-o .btn-icon { flex: none; display: grid; place-items: center; color: var(--text-faint); }
+.ait-tim-o svg { width: 15px; height: 15px; }
+.ait-tim-o input {
+  flex: 1 1 auto; min-width: 0; height: 100%;
+  border: 0; background: none; color: var(--text);
+  font: inherit; font-size: var(--text-md);
+}
+.ait-tim-o input:focus { outline: none; }
+.ait-sap {
+  flex: none; display: flex; align-items: center; gap: var(--sp-6);
+  padding: 0 var(--sp-8); height: 38px;
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  color: var(--text-soft);
+}
+.ait-sap svg { width: 14px; height: 14px; }
+.ait-sap select {
+  border: 0; background: none; color: var(--text);
+  font: inherit; font-size: var(--text-md); cursor: pointer;
+}
+.ait-sap select:focus { outline: none; }
+.ait-xem {
+  flex: none; display: flex; gap: 2px; padding: 2px;
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+}
+.ait-xem-nut {
+  width: 32px; height: 32px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint); cursor: pointer;
+}
+.ait-xem-nut:hover { background: var(--surface); color: var(--text); }
+.ait-xem-nut.dang-chon { background: var(--brand); color: var(--brand-text); }
+.ait-xem-nut svg { width: 15px; height: 15px; }
+
+.ait-hop-loc {
+  flex: none; display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-16) 0;
+}
+.ait-loc { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+.ait-loc-nut {
+  padding: var(--sp-4) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-pill);
+  background: var(--panel); color: var(--text-soft);
+  font: inherit; font-size: var(--text-xs); cursor: pointer;
+}
+.ait-loc-nut:hover:not(:disabled) { border-color: var(--brand); color: var(--text); }
+.ait-loc-nut.dang-chon { border-color: var(--brand); background: var(--brand); color: var(--brand-text); }
+.ait-loc-nut:disabled { opacity: 0.45; cursor: default; }
+/* "Ưa thích" tách hẳn sang mép phải: nó KHÔNG cùng nhóm với mấy bộ lọc kia —
+   bật nó là lọc CHỒNG lên bộ lọc đang chọn, không phải thay thế. */
+.ait-loc-sao {
+  flex: none; display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-4) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-pill);
+  background: var(--panel); color: var(--text-soft);
+  font: inherit; font-size: var(--text-xs); cursor: pointer;
+}
+.ait-loc-sao.dang-chon { border-color: var(--warn); color: var(--warn); }
+.ait-loc-sao svg { width: 13px; height: 13px; }
+
+/* Lưới tự giãn: cột rộng tối thiểu 150px, còn bao nhiêu cột là do bề ngang
+   popup quyết — khỏi phải viết breakpoint nào. */
+.ait-luoi {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--sp-14); padding: var(--sp-14) var(--sp-16);
+}
+/* Kiểu danh sách: một cột, ảnh nhỏ nằm bên trái. */
+.ait-luoi-doc { grid-template-columns: 1fr; gap: var(--sp-8); }
+.ait-luoi-doc .ait-the { grid-template-columns: 56px 1fr; align-items: center; gap: var(--sp-10); }
+.ait-luoi-doc .ait-the-khung { grid-row: span 2; }
+.ait-luoi-doc .ait-the-ten { align-self: end; }
+.ait-luoi-doc .ait-the-tag { align-self: start; }
+
+.ait-dai-cho { grid-column: 1 / -1; color: var(--text-faint); font-size: var(--text-xs); padding: var(--sp-10) 0; }
+
+.ait-the { display: grid; gap: var(--sp-4); cursor: pointer; }
+.ait-the-khung {
+  position: relative; width: 100%; overflow: hidden;
+  border: 2px solid transparent; border-radius: var(--radius-md);
+  /* Nền TRẮNG (nền thẻ), không phải `--surface-strong` xám đậm. Ảnh mẫu là
+     slide nền tối, đặt trên một ô xám đậm nữa thì cả lưới mẫu ra một mảng tối
+     om — trong khi popup này là chỗ NHÌN, càng sáng càng dễ so. */
+  background: var(--panel);
+}
+.ait-the-khung[data-khung="doc"] { aspect-ratio: 9 / 16; }
+.ait-the-khung[data-khung="ngang"] { aspect-ratio: 16 / 9; }
+.ait-the-anh { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ait-the-trong {
+  display: grid; place-items: center;
+  color: var(--text-faint); font-size: var(--text-xs); text-align: center;
+}
+.ait-the:hover .ait-the-khung { border-color: var(--control-line); }
+.ait-the.dang-chon .ait-the-khung { border-color: var(--brand); }
+.ait-the.dang-chon .ait-the-khung::after {
+  content: '✓';
+  position: absolute; top: var(--sp-6); left: var(--sp-6);
+  width: 20px; height: 20px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--brand); color: var(--brand-text);
+  font-size: var(--text-xs); line-height: var(--leading-none);
+}
+.ait-the-kho {
+  position: absolute; right: var(--sp-6); bottom: var(--sp-6);
+  padding: 1px var(--sp-6); border-radius: var(--radius-sm);
+  background: var(--overlay); color: var(--chu-tren-phu);
+  font-size: var(--text-xs); line-height: var(--leading-normal);
+}
+.ait-the-sao {
+  position: absolute; top: var(--sp-6); right: var(--sp-6);
+  width: 24px; height: 24px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: 50%;
+  background: var(--overlay); color: var(--chu-tren-phu);
+  font-size: var(--text-sm); line-height: var(--leading-none); cursor: pointer;
+}
+.ait-the-sao.co { color: var(--warn); }
+.ait-the-ten {
+  color: var(--text); font-size: var(--text-md); font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ait-the-tag { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+
+.ait-hop-chan {
+  flex: none; display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-16);
+  border-top: 1px solid var(--line);
+}
+.ait-hop-day { flex: 1 1 auto; }
+.ait-hop-bao {
+  flex: 0 1 auto; min-width: 0;
+  color: var(--text-faint); font-size: var(--text-xs);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ait-hop-bao.tot { color: var(--ok); }
+.ait-hop-bao[hidden] { display: none; }
+.ait-hop-chan .ait-chinh { flex: none; }
+
+/* ── nhãn + lớp còn lại ───────────────────────────────────────────────── */
+/* Icon đứng ĐẦU nhãn, cỡ 13px bằng chữ nhãn — 16px thì icon át cả cái tên nó
+   đang giới thiệu. */
+.ait-nhan-icon { flex: none; display: inline-grid; place-items: center; }
+.ait-nhan-icon svg { width: 13px; height: 13px; }
+/* Hàng nhãn: tên bên trái, bộ đếm hoặc liên kết bên phải. */
+.ait-nhan-hang {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-8);
+  color: var(--text-soft); font-size: var(--text-md); font-weight: var(--weight-semibold);
+}
+.ait-nhan-hang > span:first-child { display: flex; align-items: center; gap: var(--sp-6); }
+
+/* Mũi tên ở nút chính: mờ hơn icon bên trái, nó chỉ là dấu hiệu "đi tiếp". */
+.ait-chinh-phai { opacity: 0.75; }
+
+/* Nút nhỏ trung tính (nút "Hoàn tác đoạn AI vừa viết" trong bảng chạy). */
+.ait-nut-nho {
+  padding: var(--sp-4) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: none; color: var(--text-soft);
+  font: inherit; font-size: var(--text-xs); cursor: pointer;
+}
+.ait-nut-nho:hover:not(:disabled) { border-color: var(--brand); color: var(--text); }
+.ait-nut-nho:disabled { opacity: 0.6; cursor: default; }
+
+/* ĐANG CHẠY: gấp hẳn phần điền form. Chọn theo `.ait-hang` chứ không đặt lớp
+   lên từng ô — thêm một ô nhập mới sau này là nó tự theo, khỏi phải nhớ.
+   Dải gợi ý và nút chính cũng đi cùng: lúc AI làm thì chúng vô nghĩa. */
+.ait-dang-chay > .ait-hang,
+.ait-dang-chay > .ait-goiy { display: none; }
+
+/* ── chế độ: tạo mới ↔ sửa dự án có sẵn ───────────────────────────────── */
+/* Hai nút chia đôi một khối — đọc ra "hai lựa chọn loại trừ nhau", khác hẳn
+   hai nút rời cạnh nhau (đọc ra "hai việc"). */
+/* KHÔNG viền. Nền `--surface` đã tách khối này ra khỏi trang, mà nó nằm ngay
+   dưới một hàng tab vốn đã có nét kẻ dưới — thêm một khung nữa là ba lớp đường
+   kẻ chồng nhau trong khoảng 60px. */
+.ait-che-do {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  padding: 2px;
+  border: 0; border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.ait-che-nut {
+  padding: var(--sp-6) var(--sp-8);
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-soft);
+  font: inherit; font-size: var(--text-xs); font-weight: var(--weight-semibold);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+}
+.ait-che-nut:hover { color: var(--text); }
+.ait-che-nut.dang-chon { background: var(--panel); color: var(--text); box-shadow: var(--shadow-sm); }

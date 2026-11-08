@@ -1,0 +1,6 @@
+Thuê máy chủ hay tự dựng, và chọn thế nào cho đỡ tiếc về sau.
+Có hai cách, và mỗi cách là một kiểu chi phí. Thuê thì trả hằng tháng, còn tự dựng thì trả một lần rồi tự lo phần còn lại. Chọn sai không vỡ ngay, nó ngấm dần qua từng hoá đơn.
+Thuê máy chủ thì chạy được trong ngày, không cần người trực, đổi lại trả đều mỗi tháng. Tự dựng thì mất vài tuần chuẩn bị và cần người biết vận hành, nhưng sau năm đầu thì rẻ dần.
+Tiêu chí thứ nhất là thời gian tới lúc chạy, thuê một ngày còn tự dựng ba tuần. Tiêu chí thứ hai là chi phí năm đầu, sáu mươi tư triệu so với tám mươi tám triệu. Tiêu chí thứ ba là chi phí năm thứ ba, lúc này thuê đã lên một trăm chín hai triệu còn tự dựng chỉ một trăm lẻ tư.
+Chỗ hay nhầm là tưởng bảng giá đã là toàn bộ chi phí. Tự dựng còn tốn thời gian người, thứ không nằm trên hoá đơn nào cả. Còn thuê thì tốn thêm khi dữ liệu đi ra, và khoản đó tăng theo lưu lượng.
+Kết luận gọn lại thế này. Dưới hai năm thì thuê, trên ba năm và có người vận hành thì tự dựng, còn ở giữa hai mốc đó thì con số của bạn mới quyết định.

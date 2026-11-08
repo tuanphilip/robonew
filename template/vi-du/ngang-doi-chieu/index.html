@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết —
+     toàn bộ style.css bên cạnh viết cho khung ngang. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Đối chiếu hai bên — mẫu so sánh 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font này: `rewriteFontLinks()` đổi sang font đóng gói
+     lúc quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         Slide đầu một câu thì bảng nhịp gộp mọi phần tử vào một cú bấm
+         (HOOK_SENTENCE_COUNTS), nên hai phần tử ở đây hiện cùng lúc.
+
+         ⚠ HÌNH MINH HOẠ LÀ SVG ĐẶT THẲNG TRONG HTML, không phải ảnh, cũng
+         không phải thư viện. Ba lý do, đúng như bên mẫu bản tin:
+           · deck phải dựng được OFFLINE — thư viện tải qua mạng là hỏng bản
+             dựng, còn ảnh thì không đổi màu theo bảng "Tông màu";
+           · SVG ăn `currentColor` / biến CSS nên đổi tông là hình đổi theo;
+           · sửa hình là sửa thẳng trong HTML, không cần công cụ nào.
+         Hình KHÔNG mang lớp `.slide-element` — nó là trang trí, không được
+         kéo hộp bao mà `kiemDeck` đo, và không chiếm một nhịp bấm nào. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-can" aria-hidden="true">
+        <svg viewBox="0 0 440 330" fill="none">
+          <!-- quầng sáng hai bên: teal cho bên thuê, hổ phách cho bên tự dựng.
+               Hai quầng sáng LUÂN PHIÊN chứ hình thì đứng yên — cân đung đưa
+               thật thì hai cái đĩa phải nghiêng theo, mà đĩa nghiêng là đồ trên
+               đĩa đổ. Đổi nhịp sáng rẻ hơn và đọc ra đúng ý "đang cân nhắc". -->
+          <circle class="quang quang-a" cx="118" cy="150" r="88" />
+          <circle class="quang quang-b" cx="322" cy="150" r="88" />
+
+          <!-- ĐÒN CÂN + TRỤ -->
+          <rect class="don" x="60" y="176" width="320" height="11" rx="5.5" />
+          <path class="tru" d="M220 187 L184 268 H256 Z" />
+          <rect class="de" x="148" y="268" width="144" height="11" rx="5.5" />
+          <circle class="chot" cx="220" cy="181" r="13" />
+          <!-- hai mặt đỡ -->
+          <rect class="mat-do mat-a" x="70" y="166" width="96" height="10" rx="5" />
+          <rect class="mat-do mat-b" x="274" y="166" width="96" height="10" rx="5" />
+
+          <!-- BÊN TRÁI — đám mây (thuê máy chủ) -->
+          <g class="hinh-ben ben-trai">
+            <path class="hinh-a" d="M96 158a19 19 0 0 1 4.5-37 27 27 0 0 1 50-5.5 20 20 0 0 1 2.5 42.5Z" />
+            <path class="hinh-a-net" d="M124 146v-20" stroke-width="4.4" stroke-linecap="round" />
+            <path class="hinh-a-net" d="m116 133 8-8 8 8" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+
+          <!-- BÊN PHẢI — tủ máy chủ (tự dựng) -->
+          <g class="hinh-ben ben-phai">
+            <rect class="hinh-b" x="288" y="106" width="68" height="24" rx="6" />
+            <rect class="hinh-b" x="288" y="136" width="68" height="24" rx="6" />
+            <circle class="den-b" cx="301" cy="118" r="4" />
+            <circle class="den-b" cx="301" cy="148" r="4" />
+            <path class="hinh-b-net" d="M314 118h30" stroke-width="3.6" stroke-linecap="round" />
+            <path class="hinh-b-net" d="M314 148h30" stroke-width="3.6" stroke-linecap="round" />
+          </g>
+
+          <!-- dấu hỏi nhỏ ở chốt: cả hình là một câu hỏi chưa ngã ngũ -->
+          <text class="hoi" x="220" y="188">?</text>
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Thuê máy chủ<br />hay tự dựng?</div>
+        <div class="slide-element phu-de">Bốn tiêu chí · Hai cột · Một kết luận</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. ĐẶT VẤN ĐỀ — 3 câu / 3 phần tử ══════════════════════════════ -->
+    <div class="slide" data-slide="1" data-bo-cuc="noi-dung">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="nhan">Vì sao phải chọn</div>
+        <div class="slide-element tieu-de">Hai cách, hai kiểu chi phí</div>
+        <ul class="gach">
+          <li class="slide-element">Thuê thì trả <b>hằng tháng</b>, tự dựng thì trả <b>một lần rồi tự lo</b></li>
+          <li class="slide-element">Chọn sai không vỡ ngay — nó ngấm dần qua từng hoá đơn</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 3. ĐỐI CHIẾU CHÍNH — 2 câu / 2 phần tử ═════════════════════════
+         Bố cục chữ ký của mẫu: hai cột cao bằng nhau, vạch dọc "VS" ở giữa.
+         Khung dọc 9:16 không đặt nổi thế này — hai cột ở đó chỉ còn 170px mỗi
+         bên, chữ vỡ thành từng chữ một.
+
+         Mỗi bên có một icon SVG riêng (mây / tủ máy) để mắt phân biệt được hai
+         phía trước khi kịp đọc chữ. -->
+    <div class="slide" data-slide="2" data-bo-cuc="doi-chieu">
+      <div class="nen nen-3"></div>
+      <div class="than">
+        <div class="nhan">Đối chiếu</div>
+        <div class="dau-truong">
+          <div class="slide-element ben ben-a">
+            <div class="ben-dau">
+              <span class="ben-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 18a4.2 4.2 0 0 1-.8-8.3 5.8 5.8 0 0 1 11-1.5A3.9 3.9 0 0 1 17.6 18Z" />
+                  <path d="M12 15.5v-5" /><path d="m9.7 12.8 2.3-2.3 2.3 2.3" />
+                </svg>
+              </span>
+              <div class="ben-ten">Thuê máy chủ</div>
+            </div>
+            <ul class="ben-ds">
+              <li>Chạy được <b>trong ngày</b></li>
+              <li>Không cần người trực</li>
+              <li>Trả đều mỗi tháng</li>
+            </ul>
+          </div>
+          <div class="vs">VS</div>
+          <div class="slide-element ben ben-b">
+            <div class="ben-dau">
+              <span class="ben-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3.2" y="4" width="17.6" height="6.4" rx="2" />
+                  <rect x="3.2" y="13.6" width="17.6" height="6.4" rx="2" />
+                  <path d="M6.6 7.2h.01" /><path d="M6.6 16.8h.01" />
+                  <path d="M10.4 7.2h6.8" /><path d="M10.4 16.8h6.8" />
+                </svg>
+              </span>
+              <div class="ben-ten">Tự dựng</div>
+            </div>
+            <ul class="ben-ds">
+              <li>Mất <b>vài tuần</b> chuẩn bị</li>
+              <li>Cần người biết vận hành</li>
+              <li>Trả nặng lần đầu, sau rẻ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. THANH ĐO — 3 câu / 3 phần tử ════════════════════════════════
+         Ba tiêu chí, mỗi tiêu chí một cặp thanh ngang: thứ chỉ khung 16:9 mới
+         đủ bề ngang để so tỉ lệ bằng mắt.
+
+         ⚠ MỖI HÀNG MỘT THANG RIÊNG (ngày ở hàng 1, triệu đồng ở hàng 2–3) nên
+         KHÔNG kẻ lưới dùng chung — kẻ lưới xuyên ba hàng là nói dối người xem.
+         Thay vào đó mỗi hàng có một rãnh nền chạy hết bề ngang và một cái mốc
+         cực đại ghi ở cuối rãnh, để biết thanh đang so với cái gì. -->
+    <div class="slide" data-slide="3" data-bo-cuc="thanh-do">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="do-dau">
+          <div class="nhan">Ba tiêu chí đo được</div>
+          <div class="chu-giai">
+            <span class="cg cg-a">Thuê</span>
+            <span class="cg cg-b">Tự dựng</span>
+          </div>
+        </div>
+
+        <div class="slide-element hang-do">
+          <div class="do-ten">
+            <span class="do-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12.6" r="8.4" /><path d="M12 8.4v4.2l2.8 2" />
+              </svg>
+            </span>Thời gian tới lúc chạy<em class="do-moc">thang 24 ngày</em>
+          </div>
+          <div class="do-thanh"><i style="width: 4%"></i><em>Thuê · 1 ngày</em></div>
+          <div class="do-thanh b"><i style="width: 88%"></i><em>Tự dựng · 3 tuần</em></div>
+        </div>
+
+        <div class="slide-element hang-do">
+          <div class="do-ten">
+            <span class="do-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2.8" y="6" width="18.4" height="12.6" rx="2.4" />
+                <path d="M2.8 10.4h18.4" /><path d="M6.6 14.8h3.4" />
+              </svg>
+            </span>Chi phí năm đầu<em class="do-moc">thang 200 triệu</em>
+          </div>
+          <div class="do-thanh"><i style="width: 32%"></i><em>Thuê · 64 triệu</em></div>
+          <div class="do-thanh b"><i style="width: 44%"></i><em>Tự dựng · 88 triệu</em></div>
+        </div>
+
+        <div class="slide-element hang-do">
+          <div class="do-ten">
+            <span class="do-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.4V10" /><path d="M11.2 19.4V5.2" /><path d="M18.4 19.4v-6" />
+                <path d="M2.4 21.4h19.2" />
+              </svg>
+            </span>Chi phí năm thứ ba<em class="do-moc">thang 200 triệu</em>
+          </div>
+          <div class="do-thanh"><i style="width: 96%"></i><em>Thuê · 192 triệu</em></div>
+          <div class="do-thanh b"><i style="width: 52%"></i><em>Tự dựng · 104 triệu</em></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5. CHỖ HAY NHẦM — 3 câu / 3 phần tử ════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Chỗ hay nhầm</div>
+        <div class="slide-element tieu-de">Bảng giá không phải toàn bộ chi phí</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Tự dựng còn tốn <b>thời gian người</b> — thứ không nằm trên hoá đơn nào</li>
+          <li class="slide-element">Thuê thì tốn thêm khi dữ liệu đi ra, và khoản đó tăng theo lưu lượng</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. KẾT LUẬN — 2 câu / 2 phần tử ════════════════════════════════
+         Đây là chỗ trả bài: BIỂU ĐỒ ĐƯỜNG cộng dồn ba năm, hai đường cắt nhau.
+         Cả deck nói "rẻ lúc đầu" với "rẻ về sau" — một hình cho thấy chỗ hai
+         thứ đó đổi chỗ cho nhau, thứ mà đọc ba con số rời không thấy được.
+
+         Đường được vẽ dần bằng `stroke-dashoffset` khi slide thành `.active`,
+         nên nó mọc ra trong lúc người dẫn nói. Đây là TRANG TRÍ (không mang
+         `.slide-element`) nên không ăn nhịp bấm nào của bảng timeline. -->
+    <div class="slide" data-slide="5" data-bo-cuc="ket-luan">
+      <div class="nen nen-6"></div>
+      <div class="than than-ket">
+
+        <div class="bieu-do-duong" aria-hidden="true">
+          <svg viewBox="0 0 470 268" fill="none">
+            <!-- lưới ngang + mốc trục dọc (đơn vị triệu đồng, chung một thang) -->
+            <g class="luoi">
+              <path d="M52 24h404" /><path d="M52 71h404" /><path d="M52 118h404" />
+              <path d="M52 165h404" /><path d="M52 212h404" />
+            </g>
+            <g class="truc-chu">
+              <text x="44" y="29">200</text><text x="44" y="76">150</text>
+              <text x="44" y="123">100</text><text x="44" y="170">50</text>
+              <text x="44" y="217">0</text>
+            </g>
+
+            <!-- vùng dưới đường "thuê": tô nhẹ để hai đường không lẫn nhau -->
+            <path class="vung-a" d="M96 148 L248 86 L404 24 L404 212 L96 212 Z" />
+
+            <!-- đường TỰ DỰNG (hổ phách) -->
+            <path class="duong duong-b" d="M96 125 L248 117 L404 109" />
+            <!-- đường THUÊ (teal) -->
+            <path class="duong duong-a" d="M96 148 L248 86 L404 24" />
+
+            <!-- chỗ hai đường đổi chỗ cho nhau -->
+            <path class="vach-giao" d="M156 32v180" />
+            <circle class="cham-giao" cx="156" cy="121" r="6.5" />
+            <!-- Nhãn đặt trên đỉnh vạch đứt chứ không cạnh chỗ giao: đặt cạnh
+                 thì nó nằm đè lên chính đường teal đang đi qua đó. -->
+            <text class="chu-giao" x="156" y="22">Đổi chỗ</text>
+
+            <g class="cham">
+              <circle class="cham-a" cx="96" cy="148" r="5.5" />
+              <circle class="cham-a" cx="248" cy="86" r="5.5" />
+              <circle class="cham-a noi-bat" cx="404" cy="24" r="6.5" />
+              <circle class="cham-b" cx="96" cy="125" r="5.5" />
+              <circle class="cham-b" cx="248" cy="117" r="5.5" />
+              <circle class="cham-b noi-bat" cx="404" cy="109" r="6.5" />
+            </g>
+
+            <g class="truc-ngang">
+              <text x="96" y="238">Năm 1</text>
+              <text x="248" y="238">Năm 2</text>
+              <text x="404" y="238">Năm 3</text>
+            </g>
+            <g class="nhan-duong">
+              <text class="nd-a" x="404" y="10">Thuê · 192</text>
+              <text class="nd-b" x="404" y="130">Tự dựng · 104</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="cot-ket">
+          <div class="slide-element the-ket">
+            <div class="ket-nhan">Kết luận</div>
+            <div class="ket-chu">Dưới hai năm thì <b>thuê</b>. Trên ba năm và có người vận hành thì <b>tự dựng</b>.</div>
+          </div>
+          <div class="slide-element phu-de">Giữa hai mốc đó, con số của bạn mới quyết định</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

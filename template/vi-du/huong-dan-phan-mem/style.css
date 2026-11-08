@@ -1,0 +1,322 @@
+/* ══ MẪU HƯỚNG DẪN PHẦN MỀM NGANG 16:9 (GD-06) ═════════════════════════════
+ *
+ * Khung thiết kế **1232 × 693** (693 × 16/9 = 1232 chằn → video không viền
+ * đen). Mọi `px` là px CỦA KHUNG; bộ ghi phóng bằng `zoom`.
+ *
+ * ⚠ VÙNG AN TOÀN [100, 493]. `main/kiemDeck.js` đo hộp bao của mọi
+ * `.slide-element`; ra ngoài là TRƯỢT. `.than` khai dải đó bằng padding.
+ *
+ * ⚠ VÌ SAO PHẢI LÀ KHUNG NGANG: ảnh chụp màn hình phần mềm VỐN LÀ khổ ngang.
+ * Nhét vào khung dọc thì hoặc phải thu nhỏ tới mức không đọc nổi chữ trong
+ * ảnh, hoặc phải cắt mất ngữ cảnh xung quanh chỗ cần bấm — mà ngữ cảnh chính
+ * là thứ giúp người xem tìm được nút đó trên máy mình.
+ *
+ * ⚠ KHÁC `GD-04` Quy trình từng bước: cái kia là đường ray toàn chữ, KHÔNG có
+ * chỗ đặt ảnh chụp. Đây là khác biệt chính giữa hai mẫu.
+ *
+ * ══ TÔNG MÀU: XÁM NHẠT + XANH DƯƠNG ══════════════════════════════════════
+ * ⚠ ĐÂY LÀ MẪU NỀN SÁNG (`visuals.colorMode: "cream"`).
+ *
+ * ⚠ NỀN SÁNG THÌ PHỤ ĐỀ PHẢI ĐỔI THEO. Bộ ghi mặc định `--subtitle-color:
+ * #ffffff`; để nguyên là chữ trắng trên nền xám nhạt, mất hút.
+ *
+ * ⚠ KHOÁ `theme.variables` TRONG preview-settings.json PHẢI TRÙNG CẢ TÊN LẪN
+ * GIÁ TRỊ với bảng màu dưới đây — trình sửa ghi đè `:root` lúc quay, nên lệch
+ * là video ra MÀU CŨ trong khi trình duyệt vẫn thấy màu mới.
+ */
+:root {
+  /* ══ BẢNG MÀU CHUẨN — ĐỪNG ĐỔI TÊN (hợp đồng với bảng "Tông màu") ════════ */
+  --bg-dark: #eef1f5;
+  --primary: #1f6fd0;
+  --primary-light: #4a92e8;
+  --primary-dark: #14508f;
+  --accent: #46586c;
+  --accent-light: #5c6b7c;
+  --info: #1f6fd0;
+  --success: #17835a;
+  --warning: #c8901a;
+  --danger: #b5372c;
+
+  /* ── Tên đọc được, bắc cầu ── */
+  --nen: var(--bg-dark);
+  --nen-2: #ffffff;
+  --chu: #131c26;
+  --chu-mem: #43515f;
+  --chu-mo: #75818e;
+  --nhan-mau: var(--primary);
+  --canh-bao-mau: var(--warning);
+  --vien: rgba(28, 48, 74, 0.14);
+  --vien-sang: rgba(255, 255, 255, 0.9);
+  --bong: 0 10px 28px rgba(22, 40, 64, 0.10);
+  --bong-sau: 0 22px 54px rgba(22, 40, 64, 0.16);
+
+  /* ── Dải an toàn ── */
+  --an-toan-tren: 100px;
+  --an-toan-duoi: 200px;
+  --le: 72px;
+
+  /* ── Thang chữ ── */
+  --co-nhan: 19px;
+  --co-tieu-de: 42px;
+  --co-tieu-de-lon: 68px;
+  --co-than: 24px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ⚠ 22px: khung ngang rộng 1232 nên cỡ mặc định 15px (tính cho khung dọc
+     390) chỉ chiếm 39% bề ngang.
+     ⚠ Con số này PHẢI bằng `subtitles.fontSize` trong preview-settings.json. */
+  --subtitle-font-size: 22px;
+  --subtitle-bottom: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #dfe4ea;
+  color: var(--chu);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.main-wrapper { height: 100%; display: grid; place-items: center; }
+
+/* ⚠ Bộ ghi GHI ĐÈ width/height/zoom lúc quay; giá trị đây chỉ để xem trước. */
+.slide-container {
+  position: relative;
+  width: 1232px; height: 693px;
+  overflow: hidden;
+  background: var(--nen);
+  border-radius: 18px;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; opacity: 0;
+  transition: opacity 0.42s ease;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* ══ NỀN: lưới kỹ thuật rất nhạt ═════════════════════════════════════════
+ * Mẫu nói về phần mềm nên lưới đọc ra đúng chỗ, khác mẫu tóm tắt sách dùng
+ * vân giấy. */
+.nen { position: absolute; inset: 0; }
+.nen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--vien) 1px, transparent 1px),
+    linear-gradient(90deg, var(--vien) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.55;
+  mask-image: radial-gradient(ellipse 88% 88% at 50% 46%, #000 10%, transparent 82%);
+}
+.nen-1 { background: radial-gradient(ellipse 70% 84% at 50% 14%, color-mix(in srgb, var(--primary) 13%, transparent), transparent 68%), var(--nen); }
+.nen-2 { background: radial-gradient(ellipse 58% 78% at 14% 42%, color-mix(in srgb, var(--primary) 11%, transparent), transparent 66%), var(--nen); }
+.nen-3 { background: radial-gradient(ellipse 58% 78% at 86% 42%, color-mix(in srgb, var(--primary) 11%, transparent), transparent 66%), var(--nen); }
+.nen-4 { background: radial-gradient(ellipse 60% 76% at 14% 74%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 66%), var(--nen); }
+.nen-5 { background: radial-gradient(ellipse 60% 76% at 86% 24%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 66%), var(--nen); }
+.nen-6 { background: radial-gradient(ellipse 82% 90% at 50% 52%, color-mix(in srgb, var(--success) 12%, transparent), transparent 70%), var(--nen); }
+
+/* ══ DẢI AN TOÀN KHAI BẰNG PADDING ═══════════════════════════════════════ */
+.than {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  padding: var(--an-toan-tren) var(--le) var(--an-toan-duoi);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 20px;
+}
+.than.giua { align-items: center; text-align: center; gap: 24px; }
+
+/* ══ HỢP ĐỒNG VỚI ĐƯỜNG DỰNG — số `.slide-element` mỗi slide PHẢI bằng số câu
+ * của dòng script tương ứng (trừ slide đầu một câu). ĐỪNG đổi tên lớp. */
+.slide-element {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(5px);
+  transition: opacity 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 0.42s ease;
+}
+.slide-element.visible { opacity: 1; transform: none; filter: none; }
+
+.tieu-de, .tieu-de-lon { color: var(--chu); }
+.tieu-de { font-size: var(--co-tieu-de); font-weight: 850; letter-spacing: -0.03em; line-height: 1.12; }
+.tieu-de-lon { font-size: var(--co-tieu-de-lon); font-weight: 900; letter-spacing: -0.035em; line-height: 1.08; }
+
+/* ── 1. Mở đầu ── */
+.dau-app {
+  display: flex; flex-direction: row; align-items: center; gap: 12px;
+  padding: 9px 20px 9px 15px; border-radius: 999px;
+  background: var(--nen-2); border: 1px solid var(--vien); box-shadow: var(--bong);
+}
+.dau-cham {
+  width: 13px; height: 13px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+}
+.dau-ten { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; color: var(--chu-mem); }
+
+.hang-buoc {
+  display: flex; flex-direction: row; align-items: center; justify-content: center;
+  gap: 13px; flex-wrap: wrap;
+}
+.hang-buoc span {
+  padding: 8px 15px; border-radius: 11px;
+  background: var(--nen-2); border: 1px solid var(--vien);
+  font-size: 17px; font-weight: 700; color: var(--chu-mem);
+}
+.hang-buoc i {
+  width: 16px; height: 2px; border-radius: 1px; flex: none;
+  background: color-mix(in srgb, var(--primary) 46%, transparent);
+}
+
+/* ── 2–6. Bước: chữ trái, ảnh chụp 2/3 phải ──
+   ⚠ Tỉ lệ cột 1fr / 2fr chính là cái "2/3 bên phải" của đặc tả. Đừng đổi
+   thành 50/50: ảnh chụp cần bề ngang mới đọc được chữ bên trong. */
+.than-buoc {
+  /* ⚠ Cột phải CHỐT 600px chứ không để `2fr`. Ảnh chụp tỉ lệ 16:10, nên bề
+     ngang quyết định chiều cao: để `2fr` thì cột phải rộng 697px và ảnh cao
+     436px — vượt dải an toàn 393px đúng 21,8px mỗi bên. 600px cho ảnh cao
+     375px, vừa khít và còn 18px dư.
+     Phần dư dồn sang cột chữ (446px), chứ không bỏ trống. */
+  display: grid; grid-template-columns: 1fr 600px; gap: 42px;
+  align-items: center;
+}
+.buoc-chu { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.buoc-so {
+  display: grid; place-items: center;
+  width: 54px; height: 54px; border-radius: 15px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  color: #fff; font-size: 27px; font-weight: 900;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+.buoc-lenh {
+  font-size: 21px; line-height: 1.5; color: var(--chu-mem);
+}
+.buoc-lenh b { color: var(--chu); font-weight: 800; }
+
+/* Khung ảnh chụp bo góc, đổ bóng nhẹ — đúng đặc tả. */
+.khung-anh {
+  position: relative;
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--nen-2);
+  border: 1px solid var(--vien);
+  box-shadow: var(--bong-sau);
+}
+.khung-anh img { display: block; width: 100%; height: auto; }
+
+/* ── Khung vàng khoanh chỗ cần bấm + mũi tên ──
+   Toạ độ truyền bằng biến trong thuộc tính `style` của HTML, tính theo PHẦN
+   TRĂM của khung ảnh — nên đổi ảnh khác kích thước vẫn khoanh đúng chỗ. */
+.khoanh {
+  position: absolute;
+  left: var(--l); top: var(--t); width: var(--w); height: var(--h);
+  border: 3px solid var(--warning);
+  border-radius: 9px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--warning) 22%, transparent),
+              0 0 22px color-mix(in srgb, var(--warning) 40%, transparent);
+}
+/* Mũi tên chỉ vào khung, mọc ra từ mép trái. */
+.khoanh::before {
+  content: '';
+  position: absolute; right: calc(100% + 13px); top: 50%;
+  width: 46px; height: 3px; border-radius: 2px;
+  background: var(--warning);
+  transform: translateY(-50%);
+}
+.khoanh::after {
+  content: '';
+  position: absolute; right: calc(100% + 10px); top: 50%;
+  width: 12px; height: 12px;
+  border-right: 3px solid var(--warning);
+  border-top: 3px solid var(--warning);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* ⚠ Khung nằm sát mép TRÁI của ảnh thì mũi tên bên trái thò ra ngoài khung và
+   bị `overflow: hidden` CẮT MẤT — chỉ còn một cái cụt. Khi đó dùng lớp này để
+   lật mũi tên sang phải. Đã dính đúng lỗi này ở bước 2 (khung ở --l: 2%). */
+.khoanh.mui-phai::before { right: auto; left: calc(100% + 13px); }
+.khoanh.mui-phai::after {
+  right: auto; left: calc(100% + 10px);
+  border-right: none; border-top: none;
+  border-left: 3px solid var(--warning);
+  border-bottom: 3px solid var(--warning);
+}
+
+/* ── 7. Kết quả ── */
+.ket-hang { display: flex; flex-direction: row; justify-content: center; gap: 18px; }
+.ket-o {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 24px 30px; border-radius: 17px;
+  background: var(--nen-2); border: 1px solid var(--vien); box-shadow: var(--bong);
+}
+.ket-o b {
+  font-size: 38px; font-weight: 900; letter-spacing: -0.03em;
+  color: var(--primary-dark);
+}
+.ket-o span { font-size: 17px; color: var(--chu-mem); }
+.ket-luuy {
+  max-width: 880px;
+  font-size: var(--co-than); line-height: 1.5; color: var(--chu-mem);
+}
+.ket-luuy b { color: var(--chu); font-weight: 800; }
+
+.tien-do {
+  position: absolute; left: 0; bottom: 0;
+  height: 5px; width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transition: width 0.42s ease;
+  z-index: 3;
+}
+
+/* ══ CHUYỂN ĐỘNG THÊM ════════════════════════════════════════════════════
+   ⚠ Chỉ `transform` và `opacity`. Khung vàng nhấp nháy hai nhịp rồi đứng yên —
+   đủ để mắt tìm ra chỗ cần bấm mà không nhấp nháy suốt slide. */
+.khoanh { opacity: 0; transform: scale(1.12); }
+.slide-element.visible .khoanh {
+  opacity: 1; transform: none;
+  transition: opacity .34s ease .42s, transform .46s cubic-bezier(.2, .9, .3, 1.2) .42s;
+  animation: gd-nhay 1.5s ease-in-out .95s 2;
+}
+@keyframes gd-nhay {
+  0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--warning) 22%, transparent),
+                         0 0 22px color-mix(in srgb, var(--warning) 40%, transparent); }
+  50%      { box-shadow: 0 0 0 11px color-mix(in srgb, var(--warning) 9%, transparent),
+                         0 0 30px color-mix(in srgb, var(--warning) 22%, transparent); }
+}
+.buoc-so { opacity: 0; transform: scale(.72); }
+.slide-element.visible .buoc-so {
+  opacity: 1; transform: none;
+  transition: opacity .3s ease, transform .44s cubic-bezier(.2, .9, .3, 1.4);
+}
+.ket-o { opacity: 0; transform: translateY(12px); }
+.slide-element.visible .ket-o {
+  opacity: 1; transform: none;
+  transition: opacity .4s ease, transform .48s cubic-bezier(.2, .9, .3, 1.15);
+}
+.slide-element.visible .ket-o:nth-child(2) { transition-delay: .13s; }
+.slide-element.visible .ket-o:nth-child(3) { transition-delay: .26s; }
+.hang-buoc span { opacity: 0; transform: translateY(8px); }
+/* ⚠ TỔ HỢP, không phải hậu duệ: `.hang-buoc` chính LÀ cái `.slide-element`,
+   mà một phần tử không phải con cháu của chính nó — viết cách ra là luật không
+   bao giờ khớp và cả hàng chữ kẹt ở `opacity: 0`. Bộ soát bố cục vẫn báo ĐẠT
+   vì phần tử trong suốt vẫn có hộp đúng kích thước. */
+.slide-element.visible.hang-buoc span {
+  opacity: 1; transform: none;
+  transition: opacity .34s ease, transform .4s ease;
+}
+.hang-buoc span:nth-child(3) { transition-delay: .09s; }
+.hang-buoc span:nth-child(5) { transition-delay: .18s; }
+.hang-buoc span:nth-child(7) { transition-delay: .27s; }
+.hang-buoc span:nth-child(9) { transition-delay: .36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .khoanh, .buoc-so, .ket-o, .hang-buoc span {
+    opacity: 1; transform: none; transition: none; animation: none;
+  }
+}

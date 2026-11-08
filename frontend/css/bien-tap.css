@@ -1,0 +1,1603 @@
+/* ====================================================================== */
+/*  BIÊN TẬP — bố cục ba cột của trang dựng video (gộp 15/09/2026)         */
+/*                                                                        */
+/*  Trái: danh sách dự án · Giữa: sân khấu (khung deck) · Phải: bảng sửa.  */
+/*  Trước đây sửa deck phải mở một LỚP PHỦ toàn màn hình, tức sửa và dựng  */
+/*  là hai chế độ không nhìn thấy nhau.                                   */
+/*                                                                        */
+/*  ⚠ Mọi màu/cỡ/khoảng cách đi qua token trong `tokens.css` — `verify:css` */
+/*     chặn mã màu viết thẳng.                                            */
+/* ====================================================================== */
+
+/* Ba cột: danh sách co được, sân khấu ăn hết phần thừa, bảng sửa cố định.
+   `minmax(0, 1fr)` chứ không `1fr`: mặc định ô lưới không co dưới nội dung
+   của nó, nên khung deck rộng sẽ đẩy cả hàng tràn ra ngoài. */
+.dashboard-shell.bt-ba-cot {
+  display: grid;
+  grid-template-columns: var(--bt-cot-trai) minmax(0, 1fr) var(--bt-cot-phai);
+  gap: 0;
+  align-items: stretch;
+}
+.dashboard-shell.bt-ba-cot .slide-list { order: 1; }
+.dashboard-shell.bt-ba-cot .bt-san-khau { order: 2; }
+.dashboard-shell.bt-ba-cot .bt-bang-sua { order: 3; }
+/* Form dựng video nằm trong tab "Dựng video" của bảng phải. Khi rời tab, nó
+   được trả về shell — ở đó phải ẩn, không thì hiện thành cột thứ tư. */
+.dashboard-shell.bt-ba-cot > .render-machine { display: none; }
+
+@media (max-width: 1180px) {
+  /* Hẹp thì bỏ cột danh sách xuống dưới sân khấu, giữ bảng sửa bên phải:
+     thứ người dùng đang sửa phải luôn nhìn thấy. */
+  .dashboard-shell.bt-ba-cot { grid-template-columns: minmax(0, 1fr) var(--bt-cot-phai); }
+  .dashboard-shell.bt-ba-cot .slide-list { grid-column: 1 / -1; order: 3; }
+}
+
+/* ------------------------------------------------- cột danh sách khi hẹp */
+/* Cụm `.actions` rộng 293px và KHÔNG co được (78+118+38+38 + 3 khe — đã ghi
+   ở `app.css` chỗ khai `.project-row`). Cột này chỉ 380px, nên lưới 3 cột cũ
+   bóp tên dự án còn một hai ký tự: chụp ảnh thấy đúng chữ “t.”.
+   Xếp lại thành HAI HÀNG — số + tên ở trên, cụm nút ở dưới — thay vì bỏ chữ
+   trên nút: nút chỉ-icon thì phải rê chuột mới biết nó làm gì. */
+/* ⚠ KÉO CẢ KHUNG BA CỘT SÁT ĐƯỜNG KẺ CỦA THANH DỌC.
+   `pages.css` cho body `padding-left: calc(--nav-w + --sp-12)` — 12px đó nằm
+   GIỮA đường kẻ menu và cột danh sách, mà bên phải cột thì không có gì tương
+   đương (đường kẻ phải chính là viền của cột). Hệ quả: tính từ đường kẻ, lề
+   trái 24px còn lề phải 12px — đúng chỗ chủ dự án chỉ ra ba lần, và mấy lần
+   trước tôi đo TRONG panel nên không thấy.
+   Kéo lại bằng margin âm cho ĐÚNG trang này; cột giữa là `minmax(0, 1fr)` nên
+   nó nuốt 12px dôi ra, hai cột kia giữ nguyên bề rộng.
+   ⚠ Đổi số ở đây thì phải đổi cả công thức `.app-bar-home` ngay trên. */
+.dashboard-shell.bt-ba-cot {
+  margin-left: calc(var(--sp-12) * -1);
+  /* Bên phải cũng vậy: `body` chừa `--sp-12` ở mép phải, nên bảng sửa (và cả
+     thanh cuộn của nó) đứng cách mép cửa sổ một đoạn trong khi không có đường
+     kẻ nào ở đó để canh. Kéo nốt cho sát. */
+  margin-right: calc(var(--sp-12) * -1);
+  /* ⚠ PHẢI nới `width` theo. `.dashboard-shell` khai `width: 100%`, nên lề âm
+     chỉ ĐẨY cả khối đi chứ không làm nó rộng thêm — đo được: mép trái về đúng
+     56 mà mép phải cũng lùi theo, vẫn hụt 24px so với mép cửa sổ. */
+  width: calc(100% + var(--sp-12) * 2);
+}
+.bt-ba-cot .slide-list { min-width: 0; }
+/* ⚠ Cột thứ BA đã sống lại (16/09/2026) — nay là NGÀY CẬP NHẬT.
+   Từ 15/09 nó bị ép về hai cột vì cụm nút hành động đã gỡ, và nhãn cột thứ ba
+   bị `display: none`. Hệ quả khi thêm ngày vào: ô ngày không có cột nào để
+   vào, lưới tự đẩy nó XUỐNG HÀNG HAI, nằm dưới tên dự án — đo được đúng vậy.
+   Ai thêm cột nữa thì sửa CẢ BA chỗ: `app.css` (.project-row), chỗ này, và
+   khối cột hẹp bên dưới. */
+.bt-ba-cot .slide-list .project-row { row-gap: var(--sp-8); }
+
+/* Hàng công cụ trên cột danh sách: cho XUỐNG DÒNG. Cột chỉ 380px mà hàng có
+   Nguồn + Làm mới + Dọn rác; bỏ chữ ở một nút vẫn chưa đủ chỗ, và thứ bị cắt
+   lại là nút cuối — chụp ảnh thấy đúng chữ "Dọn (". */
+/* MỘT hàng cho ô tìm + ba nút (Nguồn · Làm mới · Dọn rác). Trước đây chúng rơi
+   xuống ba dòng vì có thêm ô lọc trạng thái — ô đó đã bỏ. */
+.bt-ba-cot .slide-list .list-title { flex-wrap: nowrap; gap: var(--sp-6); }
+/* Nút "Làm mới" ở hàng công cụ: ẨN (16/09/2026) — nút ↻ trên khung slide đã
+   gánh cả việc quét lại danh sách (xem `san-khau.js#lamMoi`).
+   ⚠ ẨN chứ KHÔNG gỡ khỏi DOM: ba chỗ khác bám vào chính nút này —
+   `render-page.js` gắn trình xử lý quét, `don-rac.js` nghe click để tính lại
+   dung lượng, `render-layout.js` dựa vào nó khi xếp lại hàng công cụ. Nút ẩn
+   vẫn nhận `.click()`, nên đường quét vẫn nguyên vẹn. */
+.bt-ba-cot .slide-list #refreshList { display: none; }
+.bt-ba-cot .slide-list .rl-cum-nut { flex-wrap: nowrap; gap: var(--sp-6); }
+/* Hàng còn lại của `.header-tools` (chỉ còn nút Hướng dẫn) — ẩn: thanh trên đã
+   có nút "?" và thanh dọc có mục Hướng dẫn, ba đường vào cùng một chỗ là thừa. */
+/* ⚠ HẬU DUỆ, không phải con trực tiếp. Bản cũ là
+   `.slide-list > .panel-head > .header-tools`; khi cột chia hai tab
+   (16/09/2026) thì `.panel-head` lùi vào trong `.rl-pane[data-pane="duan"]`,
+   selector con-trực-tiếp HẾT KHỚP và luật ẩn này im lặng mất tác dụng — đúng
+   kiểu hỏng không ai thấy cho tới lúc nút Hướng dẫn hiện lại ở cột. */
+.bt-ba-cot .slide-list .panel-head > .header-tools { display: none; }
+
+/* Bóp lề cột danh sách: 380px mà lề trái + lề hàng + cột STT ăn mất ~58px,
+   nhìn ra một dải trống chạy dọc. */
+.bt-ba-cot .slide-list { padding-left: var(--sp-6); padding-right: var(--sp-6); }
+/* Cột 70px cho ngày: "15/09/2026" ở 11px tabular đo được 62px. Nhãn cột "Ngày
+   cập nhật" nhỉnh hơn vài px nhưng đã `nowrap` nên chỉ tràn vào khe, không rớt
+   dòng. ⚠ Mỗi px lấy thêm ở đây là một px bớt của hàng "N slide · trạng thái":
+   hàng đó cần 201px và cột chữ chỉ còn 203px — xem khối ngay dưới. */
+/* ⚠ BỎ CỘT STT ở bố cục ba cột (16/09/2026) — chủ dự án chỉ ra ba lần rằng
+   "border bên trái vẫn bị rộng", và ĐÂY chính là nó. Đo trước khi bỏ: tên dự án
+   bắt đầu cách mép cột 44px trong khi ngày kết thúc cách mép phải 15px. Cái
+   44px đó là lề hàng 8 + rãnh số 22 + khe 8, mà con số chỉ rộng 8px — phần còn
+   lại là không khí. Không có cách nào vừa giữ rãnh số vừa thu lề: rãnh CHÍNH
+   LÀ lề. Nay tên và ngày cùng cách mép 12px.
+   Số vẫn nằm trong DOM (`<ol>` + `.row-index`), chỉ ẩn ở bố cục này — bố cục
+   rộng cũ vẫn hiện bình thường. */
+/* Cột STT giữ NGUYÊN như cũ (trả lại 16/09/2026 — tôi tự ý gỡ, chủ dự án chỉ
+   yêu cầu thu lề). Lề trái nay do `margin-left` âm của cả khung lo, không phải
+   do bỏ cột này. Số trong hàng tiêu đề (`.stt-hang`) thì ẩn — hai chỗ cùng
+   hiện là đánh số hai lần. */
+.bt-ba-cot .slide-list .stt-hang { display: none; }
+.bt-ba-cot .slide-list .project-row {
+  padding-left: var(--sp-6); padding-right: var(--sp-6);
+  grid-template-columns: 20px minmax(0, 1fr) 70px;
+  column-gap: var(--sp-6);
+}
+.bt-ba-cot .slide-list .list-head {
+  padding-left: var(--sp-6); padding-right: var(--sp-6);
+  grid-template-columns: 20px minmax(0, 1fr) 70px; column-gap: var(--sp-6);
+}
+/* Số căn TRÁI, không căn giữa: rãnh chỉ 20px, căn giữa là con số lùi vào 6px
+   nữa và lề trái lại trông rộng ra. */
+.bt-ba-cot .slide-list .row-index { justify-self: start; }
+/* Nhãn cột cuối căn PHẢI cho thẳng với ngày bên dưới (xem `.project-ngay`). */
+.bt-ba-cot .slide-list .list-head > span:last-child {
+  white-space: nowrap; justify-self: end; text-align: right;
+}
+/* Hàng "6 slide · Sẵn sàng · ⓘ · 🗑" KHÔNG được rớt dòng. Cột tên hẹp lại còn
+   ~218px sau khi nhường 76px cho cột ngày, mà hàng này đo được ~210px — chỉ
+   cần một trạng thái dài hơn là cái thùng rác rơi xuống một dòng riêng (đã
+   thấy đúng vậy ở deck "Đã có video"). Nay khe hẹp hơn và CHỮ TRẠNG THÁI co
+   lại bằng dấu ba chấm; hai nút icon vẫn `flex: none` nên không bao giờ mất. */
+.bt-ba-cot .slide-list .project-meta { flex-wrap: nowrap; gap: var(--sp-4); min-width: 0; }
+/* ⚠ `flex: none` cho viên "N slide": không khai thì nó co theo mặc định của
+   flex và chữ rớt thành hai dòng ("9" / "slide") — viên tròn cao gấp đôi mọi
+   thứ quanh nó. Đo hàng dài nhất: 62 + 78 + 20 + 20 + 3 khe = 198px trong
+   ~218px, thừa chỗ; chỉ cần cấm co là đủ. */
+.bt-ba-cot .slide-list .project-slide-count {
+  flex: none; white-space: nowrap; padding-inline: 0;
+}
+/* Ba chỗ bóp thêm cho vừa ĐÚNG hàng dài nhất. Đo thật trong app: cột chữ 197px,
+   mà hàng cần 61 (viên slide) + 90 ("Đang thiết kế") + 18 (ⓘ) + 34 (thung rac)
+   + 3 khe = 221px. Không bóp thì trạng thái dài bị cắt còn "Đã có vi…".
+   Nay: khe 4px · viên slide hẹp 4px · thùng rác 24px thay vì 34px. */
+/* Hai icon phụ nhỏ hơn hẳn chữ cạnh nó: chúng là nút PHỤ, để to ngang nhãn
+   trạng thái thì hàng nhìn như bốn thứ ngang vai nhau. */
+.bt-ba-cot .slide-list .delete-project-btn {
+  width: 20px; min-width: 20px; height: 20px; padding: 0;
+}
+.bt-ba-cot .slide-list .delete-project-btn .ic-o svg { width: 14px; height: 14px; }
+.bt-ba-cot .slide-list .project-status {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- sân khấu */
+.bt-san-khau {
+  display: flex; flex-direction: column; min-width: 0; min-height: 0;
+  border-right: 1px solid var(--line);
+}
+/* Khung deck. `place-items:center` để bản xem trước đứng giữa ở mọi khổ —
+   deck dọc 9:16 và deck ngang 16:9 dùng chung đúng ô này. */
+.sk-khung {
+  position: relative; flex: 1 1 auto; min-height: 0;
+  display: grid; place-items: center;
+  /* ⚠ ĐỆM PHẢI RỘNG HƠN ba bên kia, chừa chỗ cho cụm thu/phóng đứng dọc ở mép
+     phải. `vuaKhung()` cho deck lấp đầy đúng phần còn lại của ô, nên không
+     chừa là cụm nút nằm ĐÈ lên deck — đã đo đúng vậy.
+     Chừa ở BÊN PHẢI chứ không bên dưới: deck dọc 9:16 bị chặn bởi CHIỀU CAO
+     nên mất bề ngang không làm nó nhỏ đi chút nào; chỉ deck ngang mới mất ~5%
+     bề ngang. Chừa bên dưới thì cả hai khổ đều nhỏ lại. */
+  padding: var(--sp-14) var(--sp-40) var(--sp-14) var(--sp-14); overflow: hidden;
+  /* KHÔNG tô nền ở đây: nền của deck mới là hình ảnh của video, thêm một mảng
+     màu quanh nó chỉ làm mắt so sánh hai thứ không liên quan. */
+}
+/* ⚠ KHÔNG đặt width/height ở đây. Cỡ thật và `transform: scale()` do
+   `san-khau.js#vuaKhung()` đặt sau khi ĐO `.slide-container` trong tài liệu
+   con — đặt 100% ở đây là đè lên phép đo đó, và deck khổ ngang 1232px lại mọc
+   thanh cuộn trong cột giữa. */
+/* Thẻ bọc mang cỡ SAU khi thu; iframe bên trong giữ cỡ THẬT của deck rồi
+   `scale()` từ góc trên trái. Xem `san-khau.js#vuaKhung()` để biết vì sao
+   không phóng quanh tâm. */
+/* `position: relative` để lớp video bám ĐÚNG khung deck — xem `.sk-video`. */
+.sk-vung { display: block; position: relative; overflow: hidden; }
+/* ⚠ KHÔNG tô nền: nền thật là của chính deck (previewHtml.js đã ép
+   html/body trong suốt). Tô ở đây là vẽ ra một mảng sáng ở hai bên deck
+   dọc — và luật này nằm CUỐI tệp nên nó thắng mọi luật thêm ở trên. */
+.sk-frame { display: block; width: 100%; height: 100%; border: 0;
+  border-radius: var(--radius-md); background: none; }
+.sk-bao {
+  position: absolute; inset: 0; display: grid; place-items: center; gap: var(--sp-8);
+  padding: var(--sp-20); text-align: center;
+  color: var(--text-faint); font-size: var(--text-sm);
+}
+.sk-bao.sk-loi { color: var(--danger); }
+.sk-vong {
+  width: 20px; height: 20px; border-radius: var(--radius-pill);
+  border: 2px solid var(--control-line); border-top-color: var(--brand);
+  animation: sk-quay 0.8s linear infinite;
+}
+@keyframes sk-quay { to { transform: rotate(360deg); } }
+
+/* ── Lớp VIDEO đè lên khung deck ──────────────────────────────────────────
+   Nút ▶ ở thanh điều khiển mở tệp mp4 đã dựng NGAY TẠI ĐÂY, không mở cửa sổ
+   mới. Lớp nằm trong `.sk-khung` (`position: relative`) chứ không phủ toàn
+   màn hình: dải slide và bảng sửa vẫn dùng được trong lúc xem.
+   ⚠ Nền `--overlay-strong` để phần thừa quanh video không lộ deck bên dưới —
+   deck và video cùng khổ nhưng khung có lề, thấy viền deck ló ra là mắt tưởng
+   video bị lệch. */
+.sk-video {
+  position: absolute; inset: 0; z-index: var(--z-base);
+  background: var(--overlay-strong);
+}
+/* `inset: 0` của lớp trên đã là ĐÚNG khung deck (`.sk-vung` mang khổ deck sau
+   khi thu/phóng), nên video chỉ việc lấp đầy. `object-fit: contain` là lưới an
+   toàn cho ca lệch khổ — deck dọc mà tệp mp4 lại 16:9 thì thà có viền đen còn
+   hơn méo hình. ⚠ KHÔNG chừa padding ở đây: chừa là video nhỏ hơn khung slide
+   một vành, nhìn ra ngay vì nền deck và nền video cùng màu. */
+.sk-video-v {
+  display: block; width: 100%; height: 100%; object-fit: contain;
+  border-radius: var(--radius-md);
+}
+/* Dự án video (GĐ3.4): khung xem bản dựng KHÔNG có video slide — chỗ của nó là nền đen như bản xuất. */
+.sk-nen-den { background: var(--dx-qua-cuoi); }
+.sk-video-dong {
+  position: absolute; top: var(--sp-10); right: var(--sp-10);
+  width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--overlay); color: var(--chu-tren-phu);
+  font-size: var(--text-lg); line-height: var(--leading-none); cursor: pointer;
+}
+.sk-video-dong:hover { background: var(--overlay-strong); }
+/* Lối thoát THỨ HAI, ở góc TRÁI — chỗ mắt tìm tới trước khi tìm dấu ×. */
+.sk-video-lui {
+  position: absolute; top: var(--sp-10); left: var(--sp-10);
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-12);
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--overlay); color: var(--chu-tren-phu);
+  font-size: var(--text-sm); cursor: pointer;
+}
+.sk-video-lui:hover { background: var(--overlay-strong); }
+.sk-video-lui .btn-icon { background: none; box-shadow: none; color: inherit; }
+.sk-video-lui svg { width: 14px; height: 14px; }
+/* Dòng "Đang phát video…" — nhỏ, cạnh nút quay lại. Chấm nhấp nháy để không ai
+   tưởng khung deck đứng hình: deck và video cùng khổ, cùng chỗ, nhìn na ná. */
+/* Dòng "Đang phát video…" nằm ở ĐÁY và CĂN GIỮA khung video. Trên đỉnh nó
+   chen với nút "Quay lại" và dấu ×; dưới đáy thì nó tự đứng một mình. */
+.sk-video-nhan {
+  position: absolute; left: 0; right: 0; bottom: var(--sp-12);
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-6);
+  color: var(--chu-tren-phu); font-size: var(--text-xs); opacity: 0.85;
+  pointer-events: none;
+}
+.sk-video-cham {
+  width: 7px; height: 7px; border-radius: var(--radius-pill);
+  background: var(--ok); animation: sk-nhay 1.4s ease-in-out infinite;
+}
+@keyframes sk-nhay { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* Nhãn "Áp dụng tiếng dưới đây cho" đứng ngay trên hai nút phạm vi. */
+.bs-pv-nhan { margin-bottom: var(--sp-4); }
+
+/* ── Cụm THU/PHÓNG ở góc dưới bên trái khung slide ───────────────────────
+   Chuyển từ thanh điều khiển xuống đây (16/09/2026): nó tác động lên khung nên
+   đứng cạnh khung thì mắt nối được nguyên nhân với kết quả. Nền mờ để đọc được
+   trên cả deck tối lẫn deck kem. */
+/* DỌC, ở MÉP PHẢI, xếp từ trên xuống: [+] · thanh trượt · [−] · % · vừa khung.
+   Nút cộng trên cùng vì kéo lên = to hơn, đọc theo chiều trực giác.
+   Đặt dưới nút Làm mới (`top` chừa 44px) để hai cụm không chồng nhau. */
+.sk-zoom {
+  position: absolute; right: var(--sp-2); bottom: var(--sp-10); z-index: var(--z-nav);
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-4);
+  /* Rộng đúng 36px để nằm gọn trong dải đệm 40px của `.sk-khung`. */
+  width: 36px; padding: var(--sp-6) var(--sp-2);
+  border-radius: var(--radius-pill);
+  background: var(--panel-mo); backdrop-filter: blur(6px);
+}
+/* Thanh trượt DỌC. `writing-mode: vertical-lr` + `direction: rtl` là cách
+   Chromium 111+ dựng range dọc; `appearance: slider-vertical` đã bỏ. */
+.sk-zoom .sk-zoom-truot {
+  writing-mode: vertical-lr; direction: rtl;
+  width: 18px; height: 72px;
+}
+.sk-zoom .sk-zoom-nut { width: 26px; height: 26px; }
+.sk-zoom .sk-zoom-so { min-width: 0; font-size: var(--text-xs); }
+.sk-zoom-nut {
+  width: 24px; height: 24px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-pill);
+  background: none; color: var(--text-soft);
+  font-size: var(--text-lg); line-height: var(--leading-none); cursor: pointer;
+}
+.sk-zoom-nut:hover { background: var(--surface); color: var(--text); }
+.sk-zoom-nut .btn-icon { background: none; box-shadow: none; color: inherit; }
+.sk-zoom-nut svg { width: 14px; height: 14px; }
+.sk-zoom-truot { flex: none; }
+.sk-zoom-so {
+  min-width: 34px; text-align: center;
+  color: var(--text-faint); font-size: var(--text-xs); font-variant-numeric: tabular-nums;
+}
+
+/* ── Nút LÀM MỚI ở góc trên bên phải khung ────────────────────────────────
+   Nút "quét lại thư mục" ở cột danh sách chỉ quét lại DANH SÁCH; khung xem
+   trước không liên quan. Nút này dựng lại bản xem trước và chụp lại ảnh slide.
+   ⚠ Cần `z-index`: lớp video (`.sk-video`) nằm trong `.sk-vung`, mà `.sk-vung`
+   do `mo()` thêm vào SAU nút này trong DOM — không nâng thì lúc xem video nút
+   bị lớp video phủ mất. */
+/* Không viền, không nền — chỉ nét icon, cùng lối với mọi nút icon khác trên
+   trang. Nó nằm trong vùng lề quanh khung deck nên vẫn đọc được nét. */
+.sk-cong-cu {
+  position: absolute; top: var(--sp-10); right: var(--sp-10); z-index: var(--z-nav);
+  width: 30px; height: 30px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-md);
+  background: none; color: var(--text-faint);
+  cursor: pointer; transition: color 0.14s ease, background 0.14s ease;
+}
+.sk-cong-cu:hover { color: var(--text); background: var(--surface); }
+.sk-cong-cu .btn-icon { background: none; box-shadow: none; color: inherit; }
+.sk-cong-cu svg { width: 15px; height: 15px; }
+.sk-cong-cu.dang-quay svg { animation: sk-quay 0.8s linear infinite; }
+
+/* Dải slide dưới đáy sân khấu. Ảnh thu nhỏ do app tự chụp trong cửa sổ ẩn —
+   xem `main/anhSlide.js`. Ô chưa có ảnh thì hiện số + dòng chữ đầu của slide. */
+.sk-dai { border-top: 1px solid var(--line); padding: var(--sp-8) var(--sp-12); }
+.sk-dai-tren {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-8); margin-bottom: var(--sp-6);
+}
+.sk-dai-nhan { color: var(--text-soft); font-size: var(--text-sm); font-weight: var(--weight-bold); }
+.sk-dai-nhan b { color: var(--text-faint); font-weight: var(--weight-normal); }
+/* ══ DANH SÁCH DỰ ÁN — bộ mặt mới (16/09/2026) ═══════════════════════════
+   Trước đây mỗi dòng chỉ cách nhau một đường kẻ mảnh, chọn dòng thì đổi nền
+   xám: nhìn ra một cái bảng thô. Nay mỗi dự án là một THẺ có viền và bo góc,
+   dòng đang chọn có vạch xanh bên trái — mắt bắt được ngay đang đứng ở đâu mà
+   không phải dò theo màu nền.
+
+   ⚠ Viền + nền đặt ở `.bt-ba-cot` chứ không sửa `.project-row` gốc trong
+   `app.css`: bố cục rộng cũ vẫn dùng kiểu bảng, và `app.css` còn phục vụ mấy
+   trang khác. */
+.bt-ba-cot .slide-list .project-list { gap: var(--sp-8); }
+.bt-ba-cot .slide-list .project-row {
+  position: relative;
+  /* Viền SIÊU NHẸ (`--control-line-faint`, 7% đen ở nền sáng): 57 thẻ xếp dọc,
+     mỗi thẻ một khung đậm là cả cột thành lưới ô vuông. Viền chỉ cần đủ để
+     tách thẻ khỏi nền, không cần đọc ra. */
+  border: 1px solid var(--vien-mo);
+  border-bottom: 1px solid var(--vien-mo);
+  border-radius: var(--radius-md);
+  /* ⚠ --surface-mo chu KHONG --panel. Do 20/09/2026 o theme toi: the du an ra
+     #32312f (do sang 49) tren nen cot #262624 (38) — ca cot thanh mot day khoi
+     sang, dung cai chu du an keu. Te hon: hang DANG CHON do duoc 51, tuc chi
+     hon hang thuong DUNG 2 bac do sang, nen dau hieu "dang o day" gan nhu chi
+     con cai vien xanh ganh.
+     --surface-mo ra #2a2a28 (42), khop dung nut nguon giong doc chua chon —
+     khoang cach voi hang dang chon gian tu 2 len 9 bac.
+     Hover van chi doi mau vien (luat ngay duoi); luat hover trong app.css co
+     do uu tien thap hon luat nay nen no khong doi nen — giu nguyen nhu truoc. */
+  background: var(--surface-mo);
+  padding-top: var(--sp-10); padding-bottom: var(--sp-10);
+  transition: border-color 0.14s ease, background 0.14s ease;
+}
+.bt-ba-cot .slide-list .project-row:hover { border-color: var(--control-line); }
+/* Dòng ĐANG CHỌN: chỉ viền xanh + nền xanh rất nhạt. Vạch 3px bên trái đã bỏ
+   (16/09/2026) — viền quanh thẻ đã đủ nói, thêm một vạch nữa là hai dấu hiệu
+   cho cùng một điều. */
+.bt-ba-cot .slide-list .project-row.selected {
+  border-color: var(--brand-vien); background: var(--brand-mo);
+}
+/* Dòng "Xem thêm": khung nét đứt, rộng hết hàng — nó là một LỜI MỜI, không
+   phải một dự án, nên không được trông giống mấy thẻ ở trên. */
+.bt-ba-cot .slide-list .row-xem-them {
+  border: 1px dashed var(--control-line); background: none; padding: 0;
+}
+.bt-ba-cot .slide-list .row-xem-them:hover { border-color: var(--brand); }
+.bt-ba-cot .slide-list .xem-them-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-8); padding: var(--sp-10);
+  border: 0; border-radius: var(--radius-md);
+  background: none; color: var(--brand-dam); font-size: var(--text-sm); cursor: pointer;
+}
+.bt-ba-cot .slide-list .xem-them-cong {
+  display: grid; place-items: center; width: 20px; height: 20px;
+  border: 1px solid currentColor; border-radius: var(--radius-pill);
+  font-size: var(--text-sm); line-height: var(--leading-none);
+}
+/* Ô TÌM: kính lúp nằm trong, ô cao hơn một bậc cho ra dáng thanh tìm kiếm. */
+.bt-ba-cot .slide-list .list-tim-o {
+  position: relative; flex: 1 1 auto; min-width: 0; display: block;
+}
+.bt-ba-cot .slide-list .list-tim-icon {
+  position: absolute; left: var(--sp-10); top: 50%; transform: translateY(-50%);
+  background: none; box-shadow: none; color: var(--text-mo); pointer-events: none;
+}
+.bt-ba-cot .slide-list .list-tim-icon svg { width: 15px; height: 15px; }
+.bt-ba-cot .slide-list .list-tim {
+  width: 100%; height: 38px; padding-left: var(--sp-32);
+  border-radius: var(--radius-md);
+}
+/* Nút thư mục nguồn: ô vuông có viền, cùng chiều cao với ô tìm. */
+.bt-ba-cot .slide-list .list-title [data-source-root-select] {
+  flex: none; width: 38px; height: 38px; padding: 0;
+  display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: none; color: var(--text-soft);
+}
+.bt-ba-cot .slide-list .list-title [data-source-root-select]:hover {
+  border-color: var(--control-line); color: var(--text); background: var(--surface);
+}
+
+/* HÀNG CHÂN cột danh sách: tổng số dự án + dung lượng, và nút Dọn rác.
+   `margin-top: auto` ghim nó xuống đáy cột dù danh sách ngắn hay dài. */
+/* ⚠ Cột phải là FLEX DỌC thì `margin-top: auto` của hàng chân mới đẩy được nó
+   xuống đáy. `.slide-list` vốn `overflow-y: auto` trên cả cột — để nguyên thì
+   hàng chân chỉ nằm ngay sau dòng cuối của danh sách (đo được: cách đáy 447px).
+   Nay CHỈ danh sách cuộn, đầu cột và chân cột đứng yên. */
+.bt-ba-cot .slide-list {
+  display: flex; flex-direction: column; overflow: hidden;
+  /* Đệm dưới BẰNG 0: hàng chân tự có đệm riêng, cộng thêm 16px của cột nữa là
+     nó lửng lơ cách đáy một quãng (chủ dự án chỉ ra). */
+  padding-bottom: 0;
+}
+/* ⚠ `align-content: start` là BẮT BUỘC. `.project-list` là LƯỚI; cho nó
+   `flex: 1 1 auto` để chiếm hết chiều cao còn lại thì các hàng lưới GIÃN RA
+   lấp đầy — mỗi dòng dự án cao bằng nửa cột (đã chụp thấy). Ghim hàng về đầu
+   là chúng giữ đúng chiều cao nội dung, phần dư để trống. */
+.bt-ba-cot .slide-list .project-list {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; align-content: start;
+}
+.bt-ba-cot .slide-list .list-chan {
+  margin-top: auto; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-8); padding: var(--sp-6) var(--sp-6) var(--sp-4);
+  border-top: 1px solid var(--line);
+  color: var(--text-faint); font-size: var(--text-xs);
+}
+.bt-ba-cot .slide-list .list-chan b { color: var(--text-soft); font-weight: var(--weight-bold); }
+.bt-ba-cot .slide-list .list-chan .refresh-btn { flex: none; }
+/* Nút Dọn dẹp: rê chuột chỉ đổi nền, KHÔNG hiện viền (chủ dự án chốt 03/10/2026) — thắng
+   `.refresh-btn:hover` (app.css) vốn trả lại viền. */
+.bt-ba-cot .slide-list .list-chan .refresh-btn:hover { border-color: transparent; }
+
+/* Hai nút < > ở cuối hàng tiêu đề dải slide — đi tới/lui một slide.
+   `margin-left: auto` đẩy chúng sang mép phải, kể cả khi nhãn "Đang tạo ảnh…"
+   đang hiện ở giữa. */
+.sk-dai-dieu { margin-left: auto; display: inline-flex; gap: var(--sp-2); }
+.sk-dai-nut {
+  width: 22px; height: 22px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint); cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.sk-dai-nut:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+.sk-dai-nut:disabled { color: var(--text-mo); cursor: default; }
+.sk-dai-nut .btn-icon { background: none; box-shadow: none; color: inherit; }
+.sk-dai-nut svg { width: 14px; height: 14px; }
+
+/* Nhãn "Đang tạo ảnh…" thay cho nút "Chụp đủ ảnh" cũ: việc chụp nay tự chạy
+   trong cửa sổ ẩn (xem `main/anhSlide.js`) nên không còn gì để bấm, chỉ còn
+   một dòng cho biết dải sắp có ảnh. */
+.sk-dai-chu { flex: none; color: var(--text-faint); font-size: var(--text-xs); }
+.sk-dai-cuon { display: flex; gap: var(--sp-6); overflow-x: auto; padding-bottom: var(--sp-4); }
+.sk-o {
+  flex: none; width: 128px; display: grid; gap: 2px; text-align: left;
+  padding: var(--sp-6) var(--sp-8);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: none; color: var(--text-soft); cursor: pointer;
+}
+.sk-o:hover { border-color: var(--brand); }
+.sk-o.dang-o { border-color: var(--brand); color: var(--brand-text); background: var(--brand); }
+.sk-o-so { font-size: var(--text-xs); font-weight: var(--weight-bold); }
+.sk-o-chu {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: var(--text-xs);
+}
+/* Ô CÓ ẢNH: bỏ hết lề, ảnh phủ kín, số slide nổi lên góc trái trên.
+   Ảnh giữ nguyên tỉ lệ của deck (chụp đúng vùng khung) nên deck dọc ra ô
+   dọc, deck ngang ra ô ngang — không phải ép khổ nào cả. */
+.sk-o.co-anh {
+  width: auto; padding: 0; overflow: hidden; position: relative;
+  border-color: var(--control-line-faint);
+}
+.sk-o-anh { display: block; height: 76px; width: auto; }
+.sk-o.co-anh .sk-o-so {
+  position: absolute; top: var(--sp-4); left: var(--sp-6);
+  padding: 0 var(--sp-4); border-radius: var(--radius-sm);
+  background: var(--overlay); color: var(--chu-tren-phu);
+}
+
+/* --------------------------------------------------------------- bảng sửa */
+/* `overflow: hidden` ở CỘT, để chỉ `.bs-than` cuộn. Thiếu nó thì cả cột
+   cuộn và hàng tab trôi lên khỏi khung — chụp ảnh thấy chữ tab bị cắt. */
+.bt-bang-sua {
+  display: flex; flex-direction: column; min-width: 0; min-height: 0;
+  overflow: hidden;
+}
+/* ⚠ `flex: none`. Ô flex mặc định CO ĐƯỢC (`flex-shrink: 1`), nên khi thân
+   bảng dài hơn cột thì hàng tab bị bóp lại và chữ trong tab bị cắt mất nửa
+   trên — chụp ảnh mới thấy. Hàng trạng thái dưới đáy cũng vậy. */
+.bs-tab {
+  flex: none;
+  display: flex; gap: var(--sp-4); padding: var(--sp-8) var(--sp-8) 0;
+  border-bottom: 1px solid var(--line); overflow-x: auto;
+}
+/* 5 tab trong 320px = ~64px mỗi tab. `flex: 1 1 0` + `min-width: 0` để
+   chúng tự chia đều và chữ tự cắt, thay vì tab cuối bị đẩy khỏi khung —
+   hàng có `overflow-x: auto` nhưng thanh cuộn ngang cho 5 mục là dở. */
+.bs-tab-nut {
+  flex: 1 1 0; min-width: 0; display: grid; justify-items: center; gap: 2px;
+  padding: var(--sp-6) var(--sp-4) var(--sp-8);
+  border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+  background: none; color: var(--text-faint);
+  font-size: var(--text-2xs); cursor: pointer;
+}
+.bs-tab-nut > span:last-child {
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bs-tab-nut:hover { color: var(--text-soft); }
+/* Tab ĐANG CHỌN: chữ + nét dưới lấy MÀU CHỮ (gần như đen ở nền sáng), không
+   lấy màu thương hiệu. Xanh nhạt trên nền trắng gần bằng độ đậm của chữ xám ở
+   hai tab kia — nhìn vào không biết đang đứng tab nào (chủ dự án chỉ ra
+   16/09/2026). Đen thì chênh lệch đọc ra ngay, không cần nhìn kỹ. */
+.bs-tab-nut.dang-chon { color: var(--text); border-bottom-color: var(--text); }
+.bs-tab-nut { border-radius: var(--radius-md) var(--radius-md) 0 0; transition: background 0.14s ease; }
+.bs-tab-nut:hover { background: var(--surface-mo); }
+.bs-tab-nut svg { width: 15px; height: 15px; }
+.bs-tab-nut .btn-icon { background: none; box-shadow: none; }
+
+.bs-than { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--sp-16) var(--sp-14); }
+/* KHỐI — một phần việc, CHỈ MỘT viền bao ngoài (xem `gomKhoi()` bên
+   bang-sua.js).
+   ⚠ `padding: 0` + `overflow: hidden`. Bản đầu có đệm ngang `--sp-8` nên nền
+   mềm của mỗi hàng dừng lại cách viền khối 8px — nhìn ra hai cái khung lồng
+   nhau, và cột 360px mất 16px bề ngang cho một khoảng trắng không nói gì.
+   `overflow: hidden` để nền hàng đầu/cuối bị cắt theo góc bo của khối. */
+.bs-khoi {
+  border: 1px solid var(--vien-mo); border-radius: var(--radius-md);
+  padding: 0; margin-bottom: var(--sp-16); overflow: hidden;
+}
+.bs-khoi:last-child { margin-bottom: 0; }
+.bs-trong { padding: var(--sp-20) 0; color: var(--text-faint); font-size: var(--text-sm); text-align: center; }
+.bs-mo { color: var(--text-faint); font-size: var(--text-sm); }
+
+.bs-pham-vi { display: flex; gap: var(--sp-4); margin-bottom: var(--sp-14); }
+/* Hai THẺ phạm vi (đổi 16/09/2026). Trước đây là cặp nút "gạt" trong một rãnh
+   mềm — gọn, nhưng hai nhãn trần "Toàn bộ video" / "Slide này (1)" không nói
+   được cái nào áp cho gì, mà đây đúng là chỗ chọn sai thì sửa nhầm chín slide.
+   Nay mỗi bên là một thẻ có icon và một dòng nói rõ nó làm gì. */
+.bs-pham-vi { gap: var(--sp-8); }
+.bs-pham-vi button {
+  flex: 1 1 0; min-width: 0;
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-10);
+  /* KHÔNG viền ở mọi trạng thái (03/10/2026) — thẻ đang chọn nổi bằng nền nhấn, rê chuột bằng nền đậm hơn. */
+  border: 0; border-radius: var(--radius-md);
+  background: var(--surface-mo); color: var(--text-soft);
+  font-size: var(--text-xs); text-align: left; cursor: pointer;
+  transition: background 0.14s ease;
+}
+.bs-pham-vi button:hover { background: var(--surface); }
+.bs-pham-vi button.dang-chon {
+  background: var(--brand-mo); color: var(--text);
+}
+.bs-pham-vi .btn-icon {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px;
+  border-radius: var(--radius-sm); background: var(--surface); box-shadow: none;
+  color: var(--text-faint);
+}
+.bs-pham-vi button.dang-chon .btn-icon { background: var(--panel); color: var(--brand-dam); }
+.bs-pham-vi .btn-icon svg { width: 16px; height: 16px; }
+.bs-pv-chu { display: grid; gap: 1px; min-width: 0; }
+.bs-pv-chu b { color: inherit; font-size: var(--text-sm); font-weight: var(--weight-bold); }
+.bs-pv-chu i {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+}
+.bs-pham-vi button.dang-chon .bs-pv-chu b { color: var(--brand-dam); }
+
+/* ⚠ KHÔNG dùng đường kẻ ngăn giữa các hàng. Mười mấy hàng, mỗi hàng một
+   gạch ngang là bảng trông như một cái bảng tính — tách bằng KHOẢNG TRỐNG
+   thì mắt vẫn nhóm đúng mà nhẹ hơn hẳn. */
+.bs-hang {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-10); padding: var(--sp-10) 0;
+}
+/* ⚠ Phải khai LẠI `grid-template-columns` và `justify-content`. Hàng ngang
+   đặt `justify-content: space-between` cho flex; đổi sang grid thì thuộc
+   tính đó căn TRACK chứ không căn item, mà cột ngầm lại là `auto` — nên vỏ
+   ô chọn co theo nội dung. Đo được: hai vỏ rộng 180px và 241px trong cùng
+   một hàng 282px, dài ngắn khác nhau tuỳ chữ bên trong. */
+/* ⚠ Cùng LỀ NGANG với hàng ngang bên dưới. Hàng ngang có nền mềm nên được
+   `padding: 8px 10px`; hàng dọc để trần nên trước đây `padding: 10px 0` — hai
+   loại hàng xen kẽ thì nhãn của chúng lệch nhau đúng 10px, nhìn ra ngay
+   (chủ dự án chỉ: "Nhạc nền đang bị lùi vào hơn Âm lượng"). */
+.bs-hang.bs-doc {
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  justify-content: stretch; gap: var(--sp-8);
+  padding-inline: var(--sp-10);
+}
+/* Hàng công tắc và hàng màu ngồi trong một ô nền mềm — chúng là một dòng
+   ngắn, để trần thì trôi lửng giữa khoảng trắng. */
+.bs-hang.bs-bat, .bs-hang:not(.bs-doc) {
+  padding: var(--sp-8) var(--sp-10);
+  border-radius: var(--radius-md); background: var(--surface-mo);
+}
+.bs-nhan {
+  display: flex; align-items: center; gap: var(--sp-6); min-width: 0;
+  font-size: var(--text-sm);
+}
+/* `min-width: 0` ở CẢ HAI vế: mặc định ô flex không co dưới nội dung, nên
+   mã màu `#1A0D14` đẩy nhãn ra khỏi khung thay vì tự cắt. */
+.bs-hang > * { min-width: 0; }
+
+/* ── TAB PHỤ ĐỀ ──────────────────────────────────────────────────────────
+   Dựng theo ảnh mẫu chủ dự án gửi 16/09/2026. Khác ảnh mẫu đúng một chỗ: cụm
+   bốn ô màu xếp 2×2 thay vì một hàng ngang — ảnh mẫu rộng ~1100px, cột phải ở
+   đây 330px nên một hàng bốn ô thì mỗi ô còn ~70px, không đủ cho một mã hex. */
+
+/* ĐẦU TAB: ô icon + tên phần + mô tả + công tắc chi phối cả tab. */
+.bs-dau-tab {
+  display: flex; align-items: center; gap: var(--sp-10);
+  margin-bottom: var(--sp-14); padding-bottom: var(--sp-14);
+  border-bottom: 1px solid var(--vien-mo);
+}
+.bs-dau-ic {
+  flex: none; display: grid; place-items: center; width: 36px; height: 36px;
+  border-radius: var(--radius-md); background: var(--brand-mo);
+  color: var(--brand-dam); box-shadow: none;
+}
+.bs-dau-ic svg { width: 19px; height: 19px; }
+.bs-dau-chu { display: grid; gap: 1px; min-width: 0; margin-right: auto; }
+.bs-dau-chu b { color: var(--text); font-size: var(--text-base); font-weight: var(--weight-bold); }
+.bs-dau-chu i {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+}
+
+/* CỤM MÀU 2×2. Mỗi ô: nhãn nhỏ ở trên, chấm màu + mã hex ở dưới. */
+.bs-cum-luoi { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-8); }
+.bs-cum-o { display: grid; gap: var(--sp-4); min-width: 0; }
+.bs-cum-o > span:first-child {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-faint); font-size: var(--text-2xs);
+}
+.bs-cum-mau-o, .bs-cum-so {
+  display: flex; align-items: center; gap: var(--sp-6);
+  height: 32px; padding: 0 var(--sp-8);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-sm);
+  background: var(--panel);
+}
+.bs-cum-mau-o input[type="color"] {
+  flex: none; width: 18px; height: 18px; padding: 0;
+  border: 1px solid var(--control-line); border-radius: var(--radius-pill);
+  background: none; cursor: pointer;
+}
+.bs-cum-mau-o input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.bs-cum-mau-o input[type="color"]::-webkit-color-swatch { border: 0; border-radius: var(--radius-pill); }
+/* ⚠ Mã hex dùng PHÔNG CHUNG, không để `<code>` rơi về monospace hệ điều hành —
+   cùng lý do đã ghi ở `.bs-mau code`. */
+.bs-cum-mau-o code {
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-soft); font-family: var(--font-ui);
+  font-size: var(--text-2xs); font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums; letter-spacing: 0.02em; text-transform: uppercase;
+}
+/* Ô CHƯA ĐẶT (chưa chọn màu viền): chấm màu mờ đi, mã hiện dấu gạch. */
+.bs-cum-o.chua-dat .bs-cum-mau-o input[type="color"] { opacity: 0.35; }
+.bs-cum-o.chua-dat .bs-cum-mau-o code { color: var(--text-faint); }
+.bs-cum-x {
+  flex: none; width: 18px; height: 18px; padding: 0;
+  border: 0; border-radius: var(--radius-pill);
+  background: none; color: var(--text-faint);
+  font-size: var(--text-md); line-height: var(--leading-none); cursor: pointer;
+}
+.bs-cum-x:hover { background: var(--surface); color: var(--text); }
+.bs-cum-o.chua-dat .bs-cum-x { display: none; }
+/* Ô SỐ có đơn vị dính bên phải (% · px). */
+.bs-cum-so { flex: none; }
+.bs-cum-so input {
+  width: 46px; padding: 0; border: 0; background: none;
+  color: var(--text); font: inherit; font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums; text-align: right;
+}
+.bs-cum-so input:focus { outline: none; }
+.bs-cum-so input::-webkit-outer-spin-button,
+.bs-cum-so input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.bs-cum-so em {
+  flex: none; color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+}
+
+/* Thanh kéo Khoảng cách: rộng hết hàng, nằm dưới nhãn (ô số đã lên cùng dòng
+   với nhãn, xem `truotSo` bên bang-sua.js). */
+.bs-truot-day { width: 100%; }
+/* Ô số trong NHÃN: KHÔNG viền, không nền — nó đứng ở chỗ của một GIÁ TRỊ (như
+   `.bs-so` ở mọi hàng khác), không phải chỗ của một ô nhập. Vẫn gõ sửa được.
+   `flex: none` + `margin-left: auto` để nhãn đẩy nó sát mép phải. */
+.bs-nhan .bs-cum-so {
+  flex: none; margin-left: auto;
+  height: auto; padding: 0;
+  border: 0; background: none;
+}
+.bs-nhan .bs-cum-so input {
+  width: 34px; color: var(--text-faint); font-weight: var(--weight-bold);
+}
+.bs-nhan .bs-cum-so input:focus { color: var(--text); }
+
+/* Nút U trong thanh kiểu chữ — gạch chân cho khớp nghĩa. */
+.bs-chu-gach { text-decoration: underline; }
+/* Hàng hai của thanh kiểu chữ (B/I/U · căn lề): đẩy hai cụm về hai đầu. */
+.bs-chu-hai { margin-top: var(--sp-6); justify-content: space-between; }
+.bs-chu-hai .bs-chu-can { margin-left: 0; }
+/* Ô màu chữ ở HÀNG MỘT, ngay sau cỡ chữ — nó là một thuộc tính của chữ, không
+   phải một nút gạt như B/I/U. */
+.bs-chu .bs-chu-mau { margin-left: auto; }
+
+/* Ô LỜI THOẠI: hai nút chuyển slide ở mép phải nhãn, bộ đếm ký tự ở chân. */
+.bs-script-dieu { display: inline-flex; align-items: center; gap: var(--sp-4); margin-left: auto; }
+.bs-script-nut {
+  display: grid; place-items: center; width: 22px; height: 22px; padding: 0;
+  border: 1px solid var(--vien-mo); border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint); cursor: pointer;
+}
+.bs-script-nut:hover:not(:disabled) { border-color: var(--control-line); color: var(--text); }
+.bs-script-nut:disabled { opacity: 0.4; cursor: default; }
+.bs-script-nut .btn-icon { background: none; box-shadow: none; color: inherit; }
+.bs-script-nut svg { width: 13px; height: 13px; }
+.bs-script-chan { display: flex; align-items: center; gap: var(--sp-8); }
+.bs-script-chan .bs-script-tt { flex: 1 1 auto; min-width: 0; }
+.bs-script-dem {
+  flex: none; color: var(--text-faint); font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── HÀNG CÓ MÔ TẢ (tab Âm thanh) ────────────────────────────────────────
+   Icon to lên thành một ô vuông mềm, nhãn xếp hai dòng: tên ở trên, một câu
+   nói nó làm gì ở dưới. Tên như "Tiếng hiện từng phần" không tự giải thích
+   được, mà đây là ba thứ người ta chỉnh ít nhất nên hay quên nhất. */
+/* ⚠ MỌI CON SỐ Ở ĐÂY ĐỀU ĐÃ ĐO, đừng nới cho "thoáng". Hàng rộng 330px và
+   phải nhét đủ: đệm 10+10 · icon 24 · khe 8 · nhãn · khe 8 · ô chọn 100 · khe 8
+   · nút nghe 30. ĐO SAU KHI ĐẶT: nhãn được 127px, mà tên dài nhất ("Tiếng hiện
+   từng phần") cần 125px và mô tả dài nhất cần 121px — vừa đủ, dư 2px.
+   Nới icon lên 34 hay ô chọn lên 112 là tên hàng lập tức cụt thành
+   "Tiếng chuyển …" (đã đo đúng như vậy trước khi siết lại). */
+.bs-hang-to { padding: var(--sp-10); gap: var(--sp-8); }
+.bs-nhan-to { flex: 1 1 auto; gap: var(--sp-8); align-items: center; }
+.bs-nhan-to .bs-ico {
+  flex: none; display: grid; place-items: center; width: 24px; height: 24px;
+  border-radius: var(--radius-sm); background: var(--surface); box-shadow: none;
+  color: var(--text-soft);
+}
+.bs-nhan-to .bs-ico svg { width: 15px; height: 15px; }
+.bs-nhan-chu { display: grid; gap: 1px; min-width: 0; }
+.bs-nhan-chu b { font-size: var(--text-sm); font-weight: var(--weight-bold); }
+.bs-nhan-chu i {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+}
+/* ⚠ Ô chọn ở hàng có mô tả phải có BỀ NGANG CỐ ĐỊNH, không phải phần trăm.
+   Cột phải chỉ 360px; để `max-width: 46%` thì ô co theo độ dài nhãn bên trái và
+   "Dramatic" rút thành "Go…", "Sparkle" thành "Spar…" — mất luôn tác dụng của
+   một ô chọn. Nay ô giữ 112px, phần thiếu thì NHÃN nhường (nó có mô tả đỡ lưng,
+   cắt bớt vẫn đoán ra). */
+.bs-hang-to .bs-chon { flex: none; width: 100px; max-width: none; }
+.bs-nhan-chu b {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Nút NGHE THỬ: tròn, nền nhấn rất nhạt. Nó là việc phụ cạnh ô chọn nên không
+   được to bằng, nhưng phải đủ rõ để biết bấm được. */
+.bs-nghe {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px;
+  padding: 0; border: 0; border-radius: var(--radius-pill);
+  background: var(--brand-mo); color: var(--brand-dam); cursor: pointer;
+  transition: background 0.14s ease;
+}
+.bs-nghe:hover { background: var(--brand-vien); }
+.bs-nghe.dang-phat { background: var(--brand); color: var(--brand-text); }
+/* ⚠ `color: inherit` — `.btn-icon` bên app.css ép `--text-soft` với độ ưu tiên
+   (0,1,0), nuốt hết thừa kế; thiếu dòng này thì icon ▶ ra màu xám, không phải
+   màu nhấn, và lúc đang phát thì chìm hẳn vào nền xanh đặc. */
+.bs-nghe .btn-icon { background: none; box-shadow: none; color: inherit; }
+.bs-nghe svg { width: 14px; height: 14px; }
+/* Con số % của thanh Âm lượng: màu nhấn, để mắt bắt được giá trị ngay giữa
+   một hàng toàn chữ xám. */
+.bs-hang.bs-truot-ngang .bs-so { color: var(--brand-dam); }
+
+/* ── BÊN TRONG một KHỐI ──────────────────────────────────────────────────
+   Hàng KHÔNG có khung riêng nữa: mỗi hàng chỉ một NÉT DƯỚI, hàng cuối cùng
+   không có nét nào — viền của khối đã là nét dưới của nó rồi. Khung-trong-khung
+   là hai lần nói cùng một điều, mà lại làm cột trông chật.
+
+   ⚠ Mấy luật này phải đứng SAU khối `.bs-hang` ở trên. Chúng cùng độ ưu tiên
+   (0,2,0) với `.bs-hang:not(.bs-doc)`, nên thắng thua CHỈ theo thứ tự trong tệp;
+   dời lên trên là `padding` viết tắt của luật kia ghi đè `padding-inline` ở đây
+   và chữ lại dính sát viền khối. */
+.bs-khoi > .bs-hang:not(:last-child),
+.bs-khoi > .bs-pham-vi:not(:last-child) {
+  border-bottom: 1px solid var(--vien-mo);
+}
+.bs-khoi .bs-hang { border-radius: 0; padding-block: var(--sp-12); padding-inline: var(--sp-12); }
+/* Cụm "Áp dụng tiếng dưới đây cho" + hai nút phạm vi là MỘT cụm, nên nét dưới
+   chỉ kẻ dưới cụm chứ không kẻ giữa nhãn và nút. */
+.bs-khoi > .bs-phu { padding: var(--sp-10) var(--sp-12) 0; }
+.bs-khoi > .bs-pham-vi {
+  margin-bottom: 0; padding: 0 var(--sp-12) var(--sp-10);
+}
+/* Khối ĐÈN chỉ có MỘT thẻ con. Bỏ lề và góc bo của nó để nó lấp đầy khối —
+   không thì hai cái khung bo góc lồng nhau, cách nhau đúng 10px. */
+.bs-khoi > .bs-den { margin: 0; border-radius: 0; }
+.bs-so { color: var(--text-faint); font-weight: var(--weight-bold); }
+/* Ô chọn TỰ DỰNG. Nút gọn nằm cùng dòng với nhãn; danh sách bung ra là một
+   bảng riêng gắn vào <body> (để không bị `overflow` của cột phải cắt mất). */
+.bs-chon { flex: 0 1 auto; min-width: 0; max-width: 62%; }
+.bs-chon-nut {
+  width: 100%; display: flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-md);
+  background: var(--surface-mo); color: var(--text);
+  font-size: var(--text-sm); text-align: left; cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease;
+}
+.bs-chon-nut:hover, .bs-chon-nut[aria-expanded="true"] {
+  border-color: var(--brand); background: var(--surface);
+}
+.bs-chon-chu { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bs-chon-mui {
+  flex: none; width: 7px; height: 7px;
+  border-right: 1.5px solid var(--text-faint); border-bottom: 1.5px solid var(--text-faint);
+  transform: rotate(45deg) translate(-2px, -2px);
+}
+.bs-chon-bang {
+  position: fixed; z-index: var(--z-pop); max-height: 280px; overflow-y: auto;
+  padding: var(--sp-6); border: 1px solid var(--line);
+  border-radius: var(--radius-md); background: var(--bg);
+  box-shadow: var(--shadow-md);
+}
+.bs-chon-muc {
+  width: 100%; display: block; padding: var(--sp-8) var(--sp-10);
+  border: 0; border-radius: var(--radius-sm); background: none;
+  color: var(--text-soft); font-size: var(--text-sm); text-align: left; cursor: pointer;
+}
+.bs-chon-muc:hover, .bs-chon-muc:focus { background: var(--surface); color: var(--text); outline: none; }
+.bs-chon-muc.dang-chon { background: var(--brand); color: var(--brand-text); }
+/* Icon nhỏ đứng trước nhãn (mặt trời / mức độ / vị trí). */
+.bs-ico { background: none; box-shadow: none; color: var(--text-faint); }
+.bs-ico svg { width: 13px; height: 13px; }
+
+/* Viên màu: vỏ bo tròn ôm lấy chấm màu + mã hex. */
+.bs-mau {
+  display: inline-flex; align-items: center; gap: var(--sp-8); flex: none;
+  padding: var(--sp-4) var(--sp-10) var(--sp-4) var(--sp-4);
+  border-radius: var(--radius-pill); background: var(--surface);
+}
+.bs-mau input[type="color"] {
+  width: 22px; height: 22px; padding: 0; border: 0;
+  border-radius: var(--radius-pill); background: none; cursor: pointer;
+}
+/* Chrome vẽ ruột ô màu có lề riêng — gỡ để chấm tròn đầy vỏ. */
+.bs-mau input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.bs-mau input[type="color"]::-webkit-color-swatch { border: 0; border-radius: var(--radius-pill); }
+.bs-mau-khoa { opacity: 0.85; }
+.bs-o-mau {
+  width: 22px; height: 22px; border-radius: var(--radius-pill);
+  border: 1px solid var(--control-line-faint);
+}
+/* ⚠ PHẢI khai `font-family`. `<code>` không khai gì thì trình duyệt rơi về
+   phông monospace MẶC ĐỊNH của hệ điều hành (Consolas trên Windows) — chữ hẹp,
+   nét mảnh, chữ O với số 0 gần như một; chủ dự án báo là khó nhìn. Mã màu chỉ
+   có 6 ký tự HEX, không cần cột thẳng hàng kiểu mã nguồn, nên dùng phông chung
+   của app cho khớp với mọi chữ khác trong bảng.
+   `tabular-nums` giữ các chữ số cùng bề ngang để mã không nhảy ngang khi đổi
+   màu; `uppercase` vì HEX viết hoa dễ đọc hơn và cũng là cách app ghi sẵn. */
+.bs-mau code {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-soft); font-size: var(--text-xs);
+  font-family: var(--font-ui); font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums; letter-spacing: 0.02em; text-transform: uppercase;
+}
+
+/* Cặp nút tông màu: một rãnh nền mềm, nút đang chọn nổi lên. */
+/* Cặp nút tông màu: rãnh nền mềm, nút đang chọn nổi lên. Bo `--radius-md`
+   chứ không `--radius-pill`: hai chữ ba ký tự trong viên tròn vo trông như
+   hai hạt đậu, mà chúng là nút bấm thật. */
+.bs-chip {
+  display: flex; gap: var(--sp-4); flex: none;
+  padding: var(--sp-4); border-radius: var(--radius-md);
+  background: var(--surface-mo);
+}
+.bs-chip-nut {
+  flex: none; min-width: 64px; padding: var(--sp-6) var(--sp-12);
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-soft); font-size: var(--text-sm); cursor: pointer;
+}
+.bs-chip-nut.dang-chon { background: var(--brand); border-color: transparent; color: var(--brand-text); }
+
+/* Mỗi ngọn đèn là MỘT THẺ mềm: nó gom 3 thứ (màu, độ sáng, vị trí) nên để
+   trần giữa các hàng khác thì không thấy đâu là ranh giới của nó. */
+.bs-den {
+  margin: var(--sp-10) 0; padding: var(--sp-12);
+  border-radius: var(--radius-lg); background: var(--surface-mo);
+}
+/* Ba hàng trong khối đèn cùng một khuôn: nhãn có icon bên trái, thứ chỉnh
+   bên phải. Riêng lưới 15 vị trí thì xuống dòng — 5 cột không nhét cạnh nhãn
+   được trong cột 360px. */
+.bs-den-hang {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-10); padding: var(--sp-6) 0;
+}
+/* ⚠ Phải khai LẠI `grid-template-columns` và `justify-content`. Hàng ngang
+   đặt `justify-content: space-between` cho flex; đổi sang grid thì thuộc tính
+   đó căn TRACK chứ không căn item, mà cột ngầm là `auto` — nên lưới 15 vị trí
+   co theo nội dung và dồn hết sang trái. Đúng cái bẫy đã dính ở `.bs-hang`. */
+.bs-den-hang.bs-den-doc {
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  justify-content: stretch; gap: var(--sp-6);
+}
+.bs-den-hang .bs-cham { flex: 0 1 190px; }
+
+/* Tab con hai ngọn đèn. Xếp dọc thì mỗi ngọn chiếm gần nửa màn hình (màu + 5
+   mức sáng + lưới 15 vị trí) nên phải cuộn mới thấy ngọn thứ hai — mà người ta
+   hay chỉnh hai ngọn SO VỚI NHAU. */
+.bs-den-tab {
+  display: flex; gap: var(--sp-4); margin-bottom: var(--sp-10);
+  padding: var(--sp-4); border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+.bs-den-tab-nut {
+  flex: 1 1 0; padding: var(--sp-6); border: 0;
+  border-radius: var(--radius-pill); background: none;
+  color: var(--text-faint); font-size: var(--text-xs); cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.bs-den-tab-nut:hover { color: var(--text-soft); }
+.bs-den-tab-nut.dang-chon {
+  background: var(--bs-den-mau); color: var(--brand-text);
+  font-weight: var(--weight-bold);
+}
+
+/* Ô sửa lời thoại — đặt cuối tab Phụ đề. */
+.bs-script {
+  width: 100%; resize: vertical; min-height: 78px;
+  padding: var(--sp-10);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-md);
+  background: var(--surface-mo); color: var(--text);
+  font-family: inherit; font-size: var(--text-sm); line-height: var(--leading-normal);
+}
+.bs-script:focus { outline: none; border-color: var(--brand); background: var(--surface); }
+.bs-script-tt { min-height: 14px; color: var(--text-faint); font-size: var(--text-xs); }
+
+.bs-phu {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin: var(--sp-10) 0 var(--sp-6);
+  color: var(--text-faint); font-size: var(--text-xs);
+}
+.bs-phu em { font-style: normal; }
+/* Nhãn chính của tiêu đề nhóm ĐẬM + TO hơn ghi chú (03/10/2026): trước cả hàng cùng --text-faint cỡ xs
+   nên "Ánh sáng nền" chìm ngang dòng ghi chú bên cạnh. */
+.bs-phu > span:not(.btn-icon) {
+  color: var(--text); font-size: var(--text-sm); font-weight: var(--weight-semibold);
+}
+.bs-cham, .bs-luoi { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-6); }
+/* Bo góc `--radius-md` (12px) trên ô cao 30px: ở `--radius-sm` (8px) mấy ô
+   này đọc ra vuông, mà đây là bộ chọn mềm chứ không phải bảng. Nền mềm thay
+   cho viền: 20 ô mỗi ô một khung là quá nhiều đường nét cho một khối. */
+.bs-cham-o, .bs-luoi-o {
+  height: 30px; padding: 0; border: 0;
+  border-radius: var(--radius-md); background: var(--surface-mo);
+  cursor: pointer; position: relative;
+  transition: background 0.14s ease, transform 0.14s ease;
+}
+.bs-cham-o::after, .bs-luoi-o::after {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: 6px; height: 6px; border-radius: var(--radius-pill);
+  background: var(--text-mo);
+  transition: background 0.14s ease, width 0.14s ease, height 0.14s ease;
+}
+.bs-cham-o:hover, .bs-luoi-o:hover { background: var(--surface); }
+.bs-cham-o:active, .bs-luoi-o:active { transform: scale(0.94); }
+/* ⚠ Chấm đang chọn lấy màu CỦA NGỌN ĐÈN, không phải màu nhấn chung: hai
+   khối đèn chỉ khác nhau ở màu, tô chung một màu là nhìn y hệt nhau.
+   `--bs-den-mau` do `bang-sua.js` đặt từ giá trị ô màu; chưa có thì lùi về
+   màu nhấn để không bao giờ ra chấm vô hình.
+   ⚠ KHÔNG khai giá trị mặc định cho biến này ở đây — `verify:css` chặn mọi
+   token khai ngoài `tokens.css`, mà giá trị lùi trong `var()` đã đủ. */
+.bs-cham-o.dang-chon::after, .bs-luoi-o.dang-chon::after {
+  background: var(--bs-den-mau, var(--brand)); width: 9px; height: 9px;
+}
+/* Độ sáng: chấm TO DẦN theo mức (low → ultra), chọn rồi vẫn giữ đúng cỡ của mức — chỉ đổi màu.
+   Trước đây năm chấm bằng nhau nên không nhìn ra mức nào sáng hơn (03/10/2026). */
+.bs-cham-o:nth-child(1)::after, .bs-cham-o.dang-chon:nth-child(1)::after { width: 4px; height: 4px; }
+.bs-cham-o:nth-child(2)::after, .bs-cham-o.dang-chon:nth-child(2)::after { width: 6px; height: 6px; }
+.bs-cham-o:nth-child(3)::after, .bs-cham-o.dang-chon:nth-child(3)::after { width: 9px; height: 9px; }
+.bs-cham-o:nth-child(4)::after, .bs-cham-o.dang-chon:nth-child(4)::after { width: 12px; height: 12px; }
+.bs-cham-o:nth-child(5)::after, .bs-cham-o.dang-chon:nth-child(5)::after { width: 15px; height: 15px; }
+
+.bs-trangthai {
+  flex: none;
+  padding: var(--sp-6) var(--sp-14); border-top: 1px solid var(--line);
+  color: var(--text-faint); font-size: var(--text-xs);
+}
+.bs-trangthai.bs-loi { color: var(--danger); }
+
+/* ══════════════════════════════════ THANH TRÊN CÙNG ══════════════════ */
+/* Tên deck ở giữa thanh. `min-width: 0` + cắt chữ: tên deck có thể rất dài
+   ("voicestudio-local-elevenlabs-alternative") và nó KHÔNG được đẩy cụm nút
+   bên phải ra khỏi màn hình. */
+.tb-giua { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; padding: 0 var(--sp-16); }
+.tb-ten-deck {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text); font-size: var(--text-md); font-weight: var(--weight-bold);
+}
+.tb-luu {
+  display: inline-flex; align-items: center; gap: var(--sp-6); flex: none;
+  margin-right: var(--sp-6); color: var(--text-faint); font-size: var(--text-xs);
+}
+.tb-luu .btn-icon { background: none; box-shadow: none; }
+.tb-luu svg { width: 13px; height: 13px; }
+.tb-nut-tron {
+  flex: none; display: grid; place-items: center;
+  width: 30px; height: 30px; padding: 0; border: 0;
+  border-radius: var(--radius-md); background: none;
+  color: var(--text-soft); font-size: var(--text-md); cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.tb-nut-tron:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+.tb-nut-tron:disabled { color: var(--text-mo); cursor: default; }
+.tb-nut-tron .btn-icon { background: none; box-shadow: none; }
+.tb-nut-tron svg { width: 16px; height: 16px; }
+/* Nút PHỤ có chữ trên thanh ("Dự án mới"): KHÔNG viền (chủ dự án 23/10/2026) — nền chỉ hiện khi rê, nhẹ hơn nút chính "Tạo video". */
+.tb-nut-phu {
+  flex: none; display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-12); border: 0; border-radius: var(--radius-md);
+  background: none; color: var(--text-soft); font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  white-space: nowrap; cursor: pointer; transition: background 0.14s ease, color 0.14s ease;
+}
+.tb-nut-phu:hover { background: var(--surface); color: var(--text); }
+.tb-nut-phu .btn-icon { background: none; box-shadow: none; }
+.tb-nut-phu svg { width: 16px; height: 16px; }
+.tb-nut-chinh {
+  flex: none; display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-12); border-radius: var(--radius-md);
+  font-size: var(--text-sm); font-weight: var(--weight-bold); cursor: pointer;
+  transition: background 0.14s ease, opacity 0.14s ease;
+}
+/* ⚠ Đây mới là nút "Tạo video" người dùng NHÌN THẤY trên thanh trên — `.start`
+   ở `app.css` là nút thật nhưng nằm trong hộp tuỳ chọn, bị ẩn. Đổi màu mà quên
+   chỗ này thì đo ra "background-image: none" trong khi nút bên kia đã có dải.
+   Dùng chung dải với nút chính của tab AI (`--nut-ai-nen`). */
+.tb-nut-chinh { border: 0; background: var(--nut-ai-nen); color: var(--nut-ai-chu); }
+.tb-nut-chinh:hover:not(:disabled) { opacity: 0.88; }
+.tb-nut-chinh:disabled { opacity: 0.45; cursor: default; }
+
+/* -- DONG THONG BAO TREN THANH TREN --------------------------------------
+   #renderStatus nay nam trong .app-bar-phai, ben trai nut Huong dan (dat cho
+   o thanh-tren.js#dung). Luat goc `.status` trong app.css dung cho mot khoi
+   trong bang: padding 8/12 va margin-top 10px. Tren mot thanh cao 58px thi hai
+   so do day no lech khoi truc, nen phai khai lai o day.
+   CANH BAO ve be ngang: .app-bar-phai la `flex: 0 0 auto`, tuc no PHINH ra
+   theo con. Cau dai nhat do duoc la "Da mo thu muc video cua
+   uniface-face-analysis-library." — de tu do thi cum phai an het cho cua ten
+   deck o giua. Nen phai co max-width + cat bang ba cham; nguyen cau doc duoc
+   qua `title` (core.js dat). */
+.app-bar-phai #renderStatus {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 320px;
+  margin: 0;
+  padding: var(--sp-4) var(--sp-10);
+  border-radius: var(--radius-md);
+  background: var(--surface-mo);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  white-space: nowrap;
+}
+/* Cat bang ba cham: trong mot flex container, con PHAI co min-width: 0 thi
+   text-overflow moi an — khong thi no cu gian ra theo chu. */
+.app-bar-phai #renderStatus > span:last-child {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Cua so hep: cat ngan them, uu tien ten deck o giua thanh. */
+@media (max-width: 1180px) {
+  .app-bar-phai #renderStatus { max-width: 180px; }
+}
+
+/* -- DANG DUNG NGAM ----------------------------------------------------
+   Dong hop Tao video khong dung luot dung, nen nut phai tu noi ra: icon xoay,
+   chu doi (ca hai do thanh-tren.js#veNutTao dat), va mot vet sang chay qua.
+   CANH BAO: vet sang la ::after phu len, KHONG phai doi background cua nut —
+   nen nut da la mot dai mau (--nut-ai-nen); ghi de len la mat dai, ma giu dai
+   roi chay background-position thi chinh dai do troi theo. */
+.tb-nut-chinh.dang-dung { position: relative; overflow: hidden; }
+.tb-nut-chinh.dang-dung::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 35%, var(--accent-glow) 50%, transparent 65%);
+  background-size: 300% 100%;
+  animation: tb-chay 1.6s linear infinite;
+  pointer-events: none;   /* vet sang khong duoc nuot cu bam mo lai hop */
+}
+.tb-nut-chinh.dang-dung .btn-icon svg { animation: sk-quay 0.9s linear infinite; }
+@keyframes tb-chay {
+  from { background-position: 100% 0; }
+  to   { background-position: -100% 0; }
+}
+/* May dat "giam chuyen dong" thi dung yen — chu va icon van noi du trang thai. */
+@media (prefers-reduced-motion: reduce) {
+  .tb-nut-chinh.dang-dung::after { animation: none; }
+  .tb-nut-chinh.dang-dung .btn-icon svg { animation: none; }
+}
+/* ⚠ Ép `color`: `.btn-icon` có quy tắc màu riêng ở `app.css` nên trên nền dải
+   màu tối nó vẫn ra đen — cùng lỗi đã gặp ở nút chính của tab AI. */
+.tb-nut-chinh .btn-icon, .tb-nut-chinh svg { background: none; box-shadow: none; color: var(--nut-ai-chu); }
+.tb-nut-chinh svg { width: 15px; height: 15px; }
+
+/* Thanh trên chia ĐÚNG hai phần theo cột bên dưới: khối logo rộng bằng thanh
+   dọc + cột danh sách dự án, phần còn lại là của tên deck và cụm nút. Nhờ vậy
+   đường kẻ dọc dưới logo nối thẳng với mép cột danh sách, mắt đọc ra hai vùng
+   chứ không phải một hàng nút rải đều.
+   ⚠ `box-sizing` của `.app-bar-home` là `border-box` (luật chung), nên trừ
+   phần lề trái của chính thanh vào bề rộng chứ không cộng thêm. */
+.app-bar.dashboard-header .app-bar-home {
+  /* Đường kẻ dọc dưới logo phải trùng mép phải cột danh sách.
+     Từ 16/09/2026 cột danh sách bắt đầu NGAY tại đường kẻ của thanh dọc (xem
+     `.bt-ba-cot` bên dưới, `margin-left` âm), nên mép phải của nó là
+     `--nav-w + --bt-cot-trai`. Khối logo bắt đầu ở lề trong của thanh trên
+     (`--sp-14`) và `box-sizing: border-box`, nên trừ số đó ra:
+     56 + 340 − 14 = 382 ⇒ mép phải 14 + 382 = 396. */
+  width: calc(var(--nav-w) + var(--bt-cot-trai) - var(--sp-14));
+  /* ⚠ VẠCH NGĂN VẼ BẰNG `::after`, KHÔNG phải `border-right`.
+     Viền chạy HẾT chiều cao khối — đo 19/09/2026: 52px trong một thanh cao
+     58px, tức một đường kẻ gần như chia đôi cả thanh trên, trong khi việc của
+     nó chỉ là nói "hết khối logo, sang tên dự án". Chủ dự án yêu cầu ngắn lại.
+     Pseudo-element mới đặt được chiều cao riêng và canh giữa theo chiều dọc;
+     `border-right` thì không. */
+  position: relative;
+  border-right: 0;
+  border-radius: 0;
+  margin-right: var(--sp-4);
+}
+.app-bar.dashboard-header .app-bar-home::after {
+  content: '';
+  position: absolute;
+  top: 50%; right: 0;
+  width: 1px; height: 26px;
+  transform: translateY(-50%);
+  background: var(--line);
+}
+/* Khối logo ở thanh này KHÔNG bấm được (`cursor: default`), nên hover chỉ cần
+   giữ viền trong suốt; vạch ngăn nay là `::after` nên hover không đụng tới. */
+.app-bar.dashboard-header .app-bar-home:hover { border-color: transparent; }
+@media (max-width: 1180px) {
+  /* Hẹp thì cột danh sách tụt xuống dưới, không còn gì để canh theo. */
+  .app-bar.dashboard-header .app-bar-home { width: auto; }
+  .app-bar.dashboard-header .app-bar-home::after { display: none; }
+}
+
+/* Cây bút đổi tên + nhãn khổ, đứng cạnh tên deck trên thanh. */
+/* Nhãn khổ trên thanh: cùng bộ icon với nhãn ở bảng dự án (xem `.nhan-khung`
+   trong app.css) — hai chỗ nói cùng một điều thì phải nhìn giống nhau. */
+.tb-khung {
+  flex: none; margin-left: var(--sp-6); padding: 0;
+  display: inline-flex; align-items: center;
+  color: var(--text-faint);
+}
+.tb-khung.nhan-ngang { color: var(--info); }
+.tb-khung .btn-icon { background: none; box-shadow: none; display: inline-flex; color: inherit; }
+.tb-khung svg { width: 13px; height: 13px; display: block; }
+.tb-but { margin-left: var(--sp-4); }
+.tb-but svg { width: 14px; height: 14px; }
+/* Hai nút video (ⓘ + thư mục) cạnh nút đổi tên — thanh-tren.js#veNutVideo. Dấu ⓘ
+   chỉ để RÊ VÀO (bảng thông tin), không bấm: con trỏ dấu hỏi như dấu cũ ở danh sách. */
+.tb-vid { margin-left: 0; }
+.tb-vid svg { width: 15px; height: 15px; }
+#tbThongTin { cursor: help; }
+/* Đang sửa tên: viền ô nhập quanh chính dòng chữ, không nhảy sang hộp khác —
+   nhảy hộp thì chữ đổi chỗ một nhịp ngay lúc mắt đang nhìn nó. */
+.tb-ten-deck.dang-sua {
+  padding: var(--sp-2) var(--sp-8); border-radius: var(--radius-sm);
+  background: var(--surface); outline: 1px solid var(--brand);
+  white-space: nowrap; overflow: visible;
+}
+
+/* Nút loa đang TẮT: đổi icon sang loa-gạch và nhạt màu đi, để nhìn là biết
+   ngay chứ không phải bấm thử. */
+.tb-nut-tron.dang-tat { color: var(--text-mo); }
+.tb-nut-tron.dang-tat:hover { color: var(--text-soft); }
+
+/* ══════════════════════════ THANH ĐIỀU KHIỂN dưới khung ═════════════ */
+/* MỘT hàng, không xuống dòng: xuống dòng thì hai nút cuối rơi xuống dưới,
+   trông như một hàng nút lạc. Chỉ thanh tiến độ co được — mọi thứ khác
+   `flex: none` nên chúng giữ nguyên cỡ và thanh nhường chỗ. */
+.tp-thanh-phat {
+  display: flex; align-items: center; gap: var(--sp-6); flex-wrap: nowrap;
+  padding: var(--sp-10) var(--sp-12);
+  border-top: 1px solid var(--line);
+}
+/* ⚠ KHÔNG nền đặc. Trước là một viên tròn xanh thương hiệu 34px — thứ đậm
+   nhất cả thanh, trong khi nó chỉ là một nút ngang hàng với nút mở thư mục ở
+   đầu kia. Nay cùng dáng với `.tp-nut`, chỉ to hơn một chút vì là nút hay bấm
+   nhất. Trạng thái CÓ/KHÔNG có video đọc bằng màu chữ như hai nút bên phải. */
+.tp-chay {
+  flex: none; display: grid; place-items: center;
+  width: 30px; height: 30px; padding: 0; border: 0;
+  border-radius: var(--radius-md); background: none; color: var(--text-soft);
+  cursor: pointer; transition: background 0.14s ease, color 0.14s ease;
+}
+.tp-chay:not(:disabled) { color: var(--ok); }
+.tp-chay:disabled { color: var(--text-mo); cursor: not-allowed; }
+.tp-chay:hover:not(:disabled) { background: var(--surface); }
+/* `color: inherit` là BẮT BUỘC — xem cảnh báo ở `.btn-icon` trong app.css. */
+.tp-chay .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tp-chay svg { width: 15px; height: 15px; }
+/* KHÔNG in đậm: nó là đồng hồ chạy nền, không phải nhãn cần đọc trước. Đậm
+   lên thì nó là thứ nặng nhất cả thanh trong khi chẳng ai bấm vào. */
+.tp-gio {
+  flex: none; white-space: nowrap; color: var(--text-soft); font-size: var(--text-sm);
+  font-weight: var(--weight-normal); font-variant-numeric: tabular-nums;
+}
+/* Thanh tiến độ: phần đã chạy vẽ bằng biến `--tp-phan` (JS đặt), không phải
+   một phần tử con đổi width — đỡ một lượt bố cục mỗi 100ms. */
+.tp-thanh {
+  flex: 1 1 40px; min-width: 32px; height: 6px; position: relative;
+  border-radius: var(--radius-pill); background: var(--surface); cursor: pointer;
+}
+.tp-thanh .tp-da {
+  position: absolute; inset: 0 auto 0 0; width: var(--tp-phan, 0%);
+  border-radius: var(--radius-pill); background: var(--brand);
+}
+.tp-thanh.tp-tat { cursor: default; opacity: 0.5; }
+.tp-nut {
+  flex: none; display: grid; place-items: center;
+  width: 30px; height: 30px; padding: 0; border: 0;
+  border-radius: var(--radius-md); background: none; color: var(--text-soft);
+  cursor: pointer; transition: background 0.14s ease, color 0.14s ease;
+}
+.tp-nut:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+.tp-nut:disabled { color: var(--text-mo); cursor: default; }
+.tp-nut.dang-tat { color: var(--text-mo); }
+.tp-nut .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tp-nut svg { width: 15px; height: 15px; }
+
+/* Hai nút "Mở video cuối" / "Mở trong thư mục" trong form: ẩn ở MỌI chỗ form
+   xuất hiện — thanh điều khiển dưới khung đã có nút mở thư mục.
+   ⚠ ẨN chứ KHÔNG gỡ khỏi DOM: `jobs.js` giữ tham chiếu thẳng vào chúng. */
+#bsChoGiong #videoLink, #bsChoGiong #revealOutput,
+#bsHopThan #videoLink, #bsHopThan #revealOutput { display: none !important; }
+
+/* Icon trước tiêu đề "Ánh sáng nền" — mọi nhãn khác trong bảng đều có icon,
+   thiếu mỗi dòng này thì nó tụt ra khỏi hàng lối. */
+/* ⚠ Icon phải DÍNH vào chữ "Ánh sáng nền", không trôi sang mép trái.
+   `.bs-phu` là flex `space-between` cho hai đầu (nhãn | ghi chú); thêm phần tử
+   thứ BA là nó chia đều ba chỗ và icon bay ra một góc. Cho icon `position:
+   absolute`... không: đơn giản hơn là cho nó `margin-right` âm khoảng cách rồi
+   ghim vào nhãn bằng `order` — nhưng gọn nhất là cho cả cụm icon+nhãn dồn về
+   trái bằng `margin-right: auto` trên NHÃN. */
+/* ⚠ `align-items: center` cho HÀNG NÀY. `.bs-phu` gốc căn theo BASELINE — hợp
+   khi cả hàng là chữ, nhưng icon không có baseline nên trình duyệt kê đáy hộp
+   icon lên ngang chân chữ và nó ngồi CAO HƠN nhãn (chủ dự án chỉ ra). */
+.bs-den-pv { align-items: center; }
+.bs-den-pv .btn-icon {
+  background: none; box-shadow: none;
+  width: 18px; height: 18px; margin-right: var(--sp-6);
+  /* MỐC MỞ ĐẦU khối riêng → icon xanh biển, xem `.bs-nhan-moc`. */
+  color: var(--info);
+}
+.bs-den-pv .btn-icon svg { width: 14px; height: 14px; }
+.bs-den-pv > span:not(.btn-icon) { margin-right: auto; }
+
+/* ── THANH CÔNG CỤ CHỮ (tab Phụ đề) ──────────────────────────────────────
+   Một hàng: phông · cỡ · B · I · ba nút căn lề · ô màu. Cho XUỐNG DÒNG khi
+   hẹp thay vì ép một hàng: cột 360px vừa đủ, nhưng người dùng kéo cửa sổ nhỏ
+   lại thì thà rớt dòng còn hơn tràn ra ngoài. */
+/* ⚠ MỘT HÀNG trong cột 360px là chật, đã phải bóp từng thứ mới vừa (đo: cột
+   chữ 312px; bản đầu tràn thành hai hàng, cao 75px). Ai thêm nút vào thanh này
+   thì đo lại, đừng đoán. */
+.bs-chu {
+  display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2);
+  padding: var(--sp-4); border-radius: var(--radius-md); background: var(--surface-mo);
+}
+.bs-chu .bs-chon { flex: 0 1 auto; min-width: 0; }
+/* Ô PHÔNG co giãn, ô CỠ giữ nguyên bề ngang — tên phông dài ngắn khác nhau,
+   còn cỡ chữ luôn hai chữ số. */
+.bs-chu .bs-chu-phong { flex: 1 1 64px; min-width: 64px; }
+.bs-chu .bs-chu-phong .bs-chon-nut { padding-inline: var(--sp-6); }
+.bs-chu .bs-chu-co { flex: none; }
+/* ⚠ `padding-inline` chứ không để 0: con số 18/24 dính sát viền trái trông như
+   bị cắt. Vẫn đủ hẹp để cả thanh nằm một hàng. */
+.bs-chu .bs-chu-co .bs-chon-nut { min-width: 48px; padding-inline: var(--sp-6); }
+/* Hai ô chọn trong thanh: BO NHẸ thôi. `--radius-md` (12px) trên ô cao 28px
+   đọc ra gần như viên thuốc, lạc hẳn với mấy nút vuông cạnh nó. */
+.bs-chu .bs-chon-nut { border-radius: var(--radius-sm); }
+.bs-chu-nut {
+  flex: none; width: 24px; height: 26px; padding: 0;
+  display: grid; place-items: center;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  background: none; color: var(--text-soft);
+  font-size: var(--text-sm); cursor: pointer;
+}
+.bs-chu-nut:hover { background: var(--surface); color: var(--text); }
+/* Nút đang bật: nền xanh nhạt + chữ đậm màu thương hiệu, đúng lối của mấy
+   thanh công cụ soạn thảo — viền không đủ rõ ở cỡ 28px. */
+.bs-chu-nut.dang-chon {
+  background: var(--brand); color: var(--brand-text); border-color: transparent;
+}
+.bs-chu-dam { font-weight: var(--weight-bold); }
+.bs-chu-nghieng { font-style: italic; font-family: var(--font-ui); }
+.bs-chu-can { display: inline-flex; gap: 1px; }
+/* Ô màu trong thanh: bỏ mã hex đi cho gọn — rê chuột vào vẫn đọc được, mà một
+   hàng bảy thứ thì 44px của chuỗi "#FFFFFF" là thứ dễ bỏ nhất. */
+.bs-chu-mau { flex: none; gap: 0; padding: 0; }
+.bs-chu-mau code { display: none; }
+/* ⚠ Ô màu PHẢI CÓ VIỀN. Màu mặc định của phụ đề là TRẮNG, mà nền bảng cũng
+   trắng — không viền thì ô biến mất, người dùng không biết bấm vào đâu. */
+.bs-chu-mau input[type="color"] {
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-sm);
+}
+/* Hàng nhãn "Kiểu chữ" đứng trên, thanh nằm dưới — thanh dài, để cùng dòng
+   với nhãn là nó chỉ còn một nửa cột. */
+.bs-chu-o { gap: var(--sp-6); }
+
+/* Icon của MỐC MỞ ĐẦU khối riêng (Tông màu): xanh biển như mốc "Ánh sáng nền",
+   để mắt biết phần mới bắt đầu từ đâu. Chỉ ICON đổi màu, chữ giữ nguyên — đổi
+   cả dòng là nó tranh chỗ với giá trị bên phải. */
+.bs-nhan-moc .bs-ico { color: var(--info); }
+
+/* Thanh trượt NẰM CÙNG DÒNG với nhãn (ô Âm lượng). Nhãn co theo chữ, thanh
+   nuốt phần còn lại. */
+.bs-hang.bs-truot-ngang { display: flex; align-items: center; gap: var(--sp-10); }
+.bs-hang.bs-truot-ngang .bs-nhan { flex: none; }
+.bs-hang.bs-truot-ngang input[type="range"] { flex: 1 1 auto; min-width: 0; }
+
+/* ── CÔNG TẮC (thay ô đánh dấu) ───────────────────────────────────────────
+   Vẫn là `<input type="checkbox">` thật, chỉ vẽ lại: `appearance: none` bỏ
+   hình hệ điều hành, nền là rãnh, `::after` là núm trượt.
+   ⚠ `appearance` PHẢI có cả tiền tố `-webkit-`: thiếu nó thì trên một số bản
+   Chromium ô vuông gốc vẫn vẽ đè lên nền mình đặt. */
+.bs-tac {
+  appearance: none; -webkit-appearance: none;
+  flex: none; position: relative; box-sizing: border-box;
+  width: 36px; height: 20px; margin: 0; padding: 0; border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--control-line);
+  cursor: pointer; transition: background 0.16s ease;
+}
+.bs-tac::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: var(--radius-pill);
+  background: var(--panel);
+  transition: transform 0.16s ease;
+}
+.bs-tac:checked { background: var(--brand); }
+.bs-tac:checked::after { transform: translateX(16px); }
+.bs-tac:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* ── PHẦN GIỌNG ĐỌC ở tab "Âm thanh" ─────────────────────────────────────
+   Tab này DỜI CẢ `.render-machine` vào `#bsChoGiong` (đúng như tab "Cài đặt"
+   dời vào hộp thoại Tạo video), rồi ẩn phần không thuộc về nó. KHÔNG bóc từng
+   nút ra khỏi form: 108 luật trong `render-layout.css` neo theo
+   `.render-machine`, ra khỏi đó là đứt sạch — danh sách chọn giọng mất
+   `position: fixed` và đổ thành một đống chữ chồng nhau (đã dính 16/09/2026). */
+/* Khe TRÊN cho cả phần Giọng đọc: nó là một PHẦN KHÁC, không phải khối thứ tư
+   trong dãy. 16px như giữa các khối là chưa đủ để mắt thấy chỗ ngắt. */
+/* -- Cho bao "Giong doc dang o trong hop Tao video" --
+   Thay cho khoang trang 330px luc hop giu form. Mot the mo, khong vien dam:
+   no la LOI NHAN tam thoi, khong phai mot muc thiet lap. */
+.bs-giong-tam {
+  display: flex; align-items: center; gap: var(--sp-10);
+  margin-top: var(--sp-10); padding: var(--sp-12);
+  border: 1px dashed var(--control-line);
+  border-radius: var(--radius-md);
+  background: var(--surface-mo);
+}
+.bs-giong-tam > .btn-icon { flex: none; background: none; box-shadow: none; color: var(--text-faint); }
+.bs-giong-tam > .btn-icon svg { width: 18px; height: 18px; display: block; }
+.bs-giong-tam > div { display: grid; gap: var(--sp-2); min-width: 0; }
+.bs-giong-tam b { color: var(--text); font-size: var(--text-md); font-weight: var(--weight-semibold); }
+.bs-giong-tam em {
+  color: var(--text-faint); font-size: var(--text-xs); font-style: normal;
+}
+.bs-giong-tam-nut {
+  flex: none; margin-left: auto;
+  padding: var(--sp-6) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-sm);
+  background: none; color: var(--text);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.bs-giong-tam-nut:hover { background: var(--surface); border-color: var(--control-line-noi); }
+
+#bsChoGiong { margin-top: var(--sp-10); }
+#bsChoGiong .render-machine {
+  padding: 0; height: auto; max-height: none; overflow: visible;
+}
+/* Ẩn mọi thứ KHÔNG phải giọng đọc: nút Tạo video, bảng tiến độ, nhãn bước 2,
+   và trong khối thông số thì chỉ chừa ba khối `[data-advanced-engine]`. */
+#bsChoGiong .form-actions,
+#bsChoGiong .render-state,
+#bsChoGiong .rl-buoc.mo,
+/* Khối đầu trang "Dựng video / Dự án đang chọn…" — bỏ ở tab này: tên deck đã
+   nằm trên thanh trên cùng, và tab Âm thanh không phải chỗ giới thiệu quy trình. */
+#bsChoGiong .rl-dau,
+#bsChoGiong .advanced-body > *:not([data-advanced-engine]) { display: none; }
+/* Ba nút nguồn giọng: MỘT HÀNG, mỗi nút xếp DỌC (icon trên, chữ dưới).
+   ⚠ Bản trước xếp ba nút thành ba hàng vì giữ nguyên kiểu NGANG của bố cục cũ
+   (icon trái, hai dòng chữ phải): ở cột 360px mỗi nút chỉ còn ~100px cho chữ
+   nên "Tải file / Có sẵn file đọc" vỡ xuống bốn dòng. Xoay dọc thì chữ được
+   dùng CẢ bề ngang của nút (~88px sau đệm) và cỡ chữ hạ một bậc — đo lại:
+   không dòng nào vỡ. Muốn quay lại hàng ngang thì phải đo lại từ đầu. */
+#bsChoGiong .rl-giong { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-6); }
+#bsChoGiong .rl-giong button {
+  width: 100%; flex-direction: column; align-items: flex-start;
+  gap: var(--sp-6); padding: var(--sp-8); text-align: left;
+}
+#bsChoGiong .rl-giong-icon { width: 26px; height: 26px; border-radius: var(--radius-sm); }
+#bsChoGiong .rl-giong-icon svg { width: 15px; height: 15px; }
+#bsChoGiong .rl-giong-chu { width: 100%; gap: 0; }
+#bsChoGiong .rl-giong button b { font-size: var(--text-xs); }
+#bsChoGiong .rl-giong button em { font-size: var(--text-2xs); }
+#bsChoGiong .rl-giong button b,
+#bsChoGiong .rl-giong button em {
+  display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Hàng "Giọng đọc | Chất lượng audio" vốn là HAI CỘT cho cột phải 480px của bố
+   cục cũ. Ở đây cột chỉ 360px nên mỗi ô còn ~147px — tên giọng dài cắt cụt
+   ngay. Dồn thành một cột, mỗi ô rộng hết hàng. */
+#bsChoGiong .field-hai-cot { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-12); }
+#bsChoGiong .voice-box,
+#bsChoGiong .voice-cur,
+#bsChoGiong select { width: 100%; max-width: 100%; }
+
+/* ── HỘP THOẠI "TẠO VIDEO" ───────────────────────────────────────────────
+   Chứa CHÍNH `.render-machine` (dời nút DOM vào), và chỉ hiện phần "Tuỳ chỉnh
+   video" + hàng nút thật. Xem `bang-sua.js#moHopTao`. */
+.bs-hop { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; }
+.bs-hop-nen { position: absolute; inset: 0; background: var(--overlay); }
+.bs-hop-khung {
+  position: relative; width: min(560px, calc(100vw - var(--sp-32)));
+  max-height: calc(100vh - var(--sp-32));
+  display: flex; flex-direction: column;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--panel); box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.bs-hop-dau {
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-14) var(--sp-16);
+  border-bottom: 1px solid var(--line);
+}
+.bs-hop-dau .btn-icon { background: none; box-shadow: none; color: var(--info); }
+.bs-hop-dau svg { width: 16px; height: 16px; }
+/* Nút MỞ THƯ MỤC trên thanh tiêu đề. `margin-left: auto` chuyển sang nút này
+   (nó đứng trước nút đóng) — để nguyên ở `.bs-hop-x` thì hai nút dính nhau ở
+   mép phải mà cả cụm không bị đẩy sang. */
+.bs-hop-tm {
+  margin-left: auto; width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint); cursor: pointer;
+}
+.bs-hop-tm:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+.bs-hop-tm:disabled { cursor: default; opacity: 0.45; }
+/* ⚠ `color: inherit` — `.btn-icon` bên app.css tự đặt `--text-soft` với độ ưu
+   tiên (0,1,0) nên nuốt hết thừa kế; thiếu dòng này thì icon không đổi màu lúc
+   rê chuột và cũng không mờ đi lúc bị chặn. */
+.bs-hop-tm .btn-icon { background: none; box-shadow: none; color: inherit; }
+.bs-hop-tm svg { width: 16px; height: 16px; }
+.bs-hop-x {
+  width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint);
+  font-size: var(--text-lg); line-height: var(--leading-none); cursor: pointer;
+}
+.bs-hop-x:hover { background: var(--surface); color: var(--text); }
+.bs-hop-than { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--sp-6) var(--sp-16) var(--sp-16); }
+.bs-hop-than .render-machine { padding: 0; height: auto; max-height: none; overflow: visible; }
+/* Phụ đề đang tắt — nói trước khi dựng (bang-sua.js#moHopTao). */
+.bs-hop-canh {
+  margin-bottom: var(--sp-12); padding: var(--sp-8) var(--sp-12);
+  border-radius: var(--radius-sm); font-size: var(--text-sm);
+  color: var(--warn-text); background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+/* Chỉ chừa "2. Tuỳ chỉnh video", bảng tiến độ và hàng nút thật. */
+#bsHopThan .rl-dau,
+/* Cả HAI nhãn bước đều ẩn: "1. Giọng đọc" không thuộc hộp này, còn
+   "2. Tuỳ chỉnh video" thì thừa — thanh tiêu đề của hộp đã nói rõ đang làm gì. */
+#bsHopThan .rl-buoc,
+#bsHopThan .rl-giong,
+#bsHopThan [data-pane],
+#bsHopThan [data-advanced-engine] { display: none; }
+/* ⚠ Hàng "Tốc độ | Độ phân giải" vốn là HAI CỘT cho cột phải 480px. Trong hộp
+   560px, trừ lề, mỗi ô còn ~230px: ba nút tốc độ rớt xuống dòng và dãy nút độ
+   phân giải bị cắt mất nút cuối (đo trên ảnh chụp). Dồn một cột, mỗi phần một
+   hàng đầy đủ. */
+#bsHopThan .field-doi { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-14); }
+#bsHopThan .field-doi > * { min-width: 0; }
+#bsHopThan .speed-row { flex-wrap: wrap; }
+#bsHopThan .size-toggle { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+
+/* Nút rộng hết hàng trong bảng sửa (Chép toàn bộ phụ đề). */
+.bs-nut-rong {
+  width: 100%; display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-8); padding: var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: none; color: var(--text); font-size: var(--text-sm); cursor: pointer;
+}
+.bs-nut-rong:hover { background: var(--surface); }
+.bs-nut-rong .btn-icon { background: none; box-shadow: none; }
+.bs-nut-rong svg { width: 15px; height: 15px; }
+/* "Chỉnh phụ đề" ngay dưới ô lời thoại (tab Nội dung). */
+.bs-pd-nut { margin-top: var(--sp-8); }
+
+/* Nút thư mục ở thanh phát đã chuyển lên thanh trên (11/10/2026) — chỉ còn luật tắt. */
+.tp-nut:disabled { cursor: not-allowed; }
+
+/* Tiêu đề cột danh sách: nhỏ lại HAI bậc so với bản gốc (13 → 11px) và bỏ
+   nét đậm. Nó là NHÃN CỘT, không phải tiêu đề trang; để ngang cỡ tên dự án
+   ngay bên dưới là mắt đọc nó trước cái đáng đọc. */
+.bt-ba-cot .slide-list .list-head {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--text-faint);
+}
+
+/* ── Hàng gộp "Lưới nền": công tắc + ô màu trên cùng một dòng ─────────────
+   Hai điều khiển nói về CÙNG một cái lưới nên đứng chung một hàng; tách ra hai
+   hàng thì "Màu lưới" trông như một thiết lập khác, và tắt lưới rồi nó vẫn ngồi
+   đó không rõ còn tác dụng gì. */
+.bs-bat-mau { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-10); }
+.bs-bat-mau-dk { display: flex; align-items: center; gap: var(--sp-10); flex: none; }
+/* Tắt lưới thì ô màu mờ đi — VẪN bấm được (đổi màu trước rồi bật sau là chuyện
+   thường), chỉ là nói cho biết nó đang chưa có tác dụng. */
+.bs-bat-mau.bs-tat .bs-mau { opacity: 0.45; }
+
+/* ══ TAY CẦM KÉO GIÃN CỘT ═════════════════════════════════════════════════
+   Hai đường kẻ ngăn ba cột nay bấm vào kéo được — xem `cot-keo.js`.
+   ⚠ Vệt BẮT CHUỘT rộng 9px nhưng vệt NHÌN THẤY chỉ 1px ở giữa. Làm cả dải 9px
+   sáng lên thì nó thành một thanh chắn to đùng giữa hai cột; còn để vùng bắt
+   đúng 1px thì phải rê chuột trúng một sợi tóc mới cầm được. */
+.dashboard-shell.bt-ba-cot { position: relative; }
+.bt-keo {
+  position: absolute; top: 0; bottom: 0;
+  width: 9px;
+  margin-left: calc(var(--sp-4) * -1); margin-right: calc(var(--sp-4) * -1);
+  z-index: var(--z-base);
+  cursor: col-resize;
+  background: none; border: 0;
+}
+.bt-keo[hidden] { display: none; }
+.bt-keo::before {
+  content: '';
+  position: absolute; top: 0; bottom: 0; left: var(--sp-4);
+  width: 1px;
+  background: none;
+  transition: background 0.12s ease;
+}
+/* ⚠ HOVER KHÔNG ĐỔI MÀU. Con trỏ đã đổi thành mũi tên hai chiều (`col-resize`)
+   — đó là tín hiệu đủ và đúng nghĩa; tô thêm đường kẻ là hai lần nói cùng một
+   điều, mà đường kẻ sáng lên còn kéo mắt về một chỗ không có nội dung gì.
+   Giữ màu cho hai trường hợp KHÔNG có con trỏ để dựa vào: đang kéo thật, và
+   khi đi tới bằng bàn phím (lúc đó chuột không ở đây). */
+.bt-keo:focus-visible::before,
+.bt-keo.dang-keo::before { background: var(--brand); }
+.bt-keo:focus-visible { outline: none; }
+/* Đang kéo thì KHOÁ chọn chữ và ép con trỏ cho cả trang: rê nhanh là chuột
+   chạy ra khỏi vệt 9px, không khoá thì con trỏ nhấp nháy và trang bôi đen chữ
+   lung tung. */
+body.bt-dang-keo { user-select: none; cursor: col-resize; }
+
+/* ══ THANH KIỂU CHỮ: GOM MỘT HÀNG KHI BẢNG SỬA ĐỦ RỘNG ═══════════════════
+   Trước đây thanh này CHIA CỨNG hai hàng (phông · cỡ ở trên, B/I/U · căn lề ở
+   dưới) vì ở cột 360px mà nhét tám thứ một hàng thì ô phông còn ~40px — tên
+   phông không đọc được. Nay cột kéo giãn được (`cot-keo.js`), nên chuyện đủ
+   chỗ hay không KHÔNG còn cố định: hỏi thẳng bề ngang của bảng sửa bằng
+   container query, rộng thì gom một hàng, hẹp thì tự về hai hàng.
+
+   ⚠ Ngưỡng 430px là ĐO RA, không phải chọn cho tròn: tám điều khiển cộng khe
+   hở chiếm ~300px, chừa ô phông tối thiểu 96px mới đọc được tên như "Segoe UI",
+   cộng padding hai bên của bảng. Hạ ngưỡng xuống là ô phông lại bị bóp.
+
+   ⚠ Phải khai `container-type` trên CHÍNH cột bảng sửa. Khai trên `.bs-chu-o`
+   thì nó tự hỏi bề ngang của chính nó — mà bề ngang đó do hàng quyết định, hoá
+   ra vòng tròn, trình duyệt bỏ qua luật. */
+.bt-bang-sua { container-type: inline-size; container-name: bangsua; }
+
+@container bangsua (min-width: 430px) {
+  /* ⚠ PHẢI VIẾT ĐỦ `.bs-hang.bs-doc.bs-chu-o` (0,3,0). Container query KHÔNG
+     cộng thêm độ ưu tiên nào cả: viết `.bs-chu-o` trần (0,1,0) là thua
+     `.bs-hang.bs-doc` (0,2,0) ở trên, và luật này im lặng không chạy — đo
+     19/09/2026: kéo bảng sửa ra tận 520px mà thanh vẫn hai hàng.
+     ⚠ Và `.bs-hang.bs-doc` là GRID một cột, không phải flex — nên đổi bố cục ở
+     đây là đổi `grid-template-columns`, đặt `flex-direction` vào vô nghĩa. */
+  .bs-hang.bs-doc.bs-chu-o {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  /* Nhãn "Kiểu chữ" chiếm trọn hàng trên — nó là tên của cả cụm; kéo nó vào
+     hàng điều khiển thì lại bóp mất chỗ vừa giành được. */
+  .bs-chu-o > .bs-nhan { grid-column: 1 / -1; }
+  /* Cụm B/I/U · căn lề thôi không còn là "hàng hai" nữa. */
+  .bs-chu-o > .bs-chu-hai { margin-top: 0; }
+}

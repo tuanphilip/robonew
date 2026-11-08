@@ -1,0 +1,962 @@
+/* Tách từ render-layout.js (02/09/2026, audit Phase 2.1). */
+/* --- 1. Đảo cột. Dùng order chứ không đổi DOM: đổi DOM là mọi phép kiểm
+   tự động bám theo thứ tự phần tử đều lệch. --- */
+.dashboard-shell .slide-list { order: 1; border-left: 0; border-right: 1px solid var(--line); }
+.dashboard-shell .render-machine { order: 2; }
+
+/* --- 3. Ba bước có số --- */
+.rl-buoc { display: flex; align-items: center; gap: var(--sp-8); margin: 0 0 var(--sp-14); }
+/* Ô tick "Đọc lại giọng" nhảy lên CÙNG HÀNG với mốc "2 THÔNG SỐ", nằm mép
+   phải. Nó chỉ có một dòng chữ, để riêng một hàng là tốn cả hàng cho một ô
+   vuông nhỏ — mà nó cũng đúng là một thông số. */
+.rl-buoc .rl-tick { margin-left: auto; }
+.rl-buoc .rl-tick.check { margin: 0 0 0 auto; padding: 0; border: 0; background: none;
+  font-size: var(--text-sm); }
+/* PHẢI có !important: .check khai display:flex nên thuộc tính hidden một
+   mình không giấu được nó (cạm bẫy đã gặp ở Preview Editor). */
+.rl-buoc .rl-tick[hidden] { display: none !important; }
+/* ⚠ TỪNG LÀ SỐ THỨ TỰ ("1." / "2."). Nay là ICON trong một ô vuông mềm — xem
+   `render-layout.js#nhan()` để biết vì sao bỏ số.
+   `color: inherit` trên `.btn-icon` là BẮT BUỘC: luật gốc của nó ép
+   `--text-soft` với độ ưu tiên (0,1,0), nuốt hết thừa kế. */
+.rl-buoc i {
+  flex: none; display: grid; place-items: center; width: 26px; height: 26px;
+  border-radius: var(--radius-sm); background: var(--surface); color: var(--text);
+  font-style: normal;
+}
+.rl-buoc i.btn-icon { box-shadow: none; }
+.rl-buoc i svg { width: 15px; height: 15px; }
+/* Mốc "1 GIỌNG ĐỌC" / "2 THÔNG SỐ": đậm và rõ hơn — chúng là tiêu đề chia
+   phần, trước đây mờ ngang với chữ chú thích. */
+/* Chữ THƯỜNG, hoa mỗi chữ đầu. Viết hoa toàn bộ + giãn chữ đọc chậm hơn
+   hẳn, mà đây là hai đầu mục ngắn chứ không phải nhãn hệ thống. */
+.rl-buoc span { color: var(--text); font-size: var(--text-base); font-weight: var(--weight-bold);
+  letter-spacing: -0.01em; text-transform: none; }
+/* Mốc thứ hai (lớp .mo) KHÔNG mờ chữ nữa — nó vẫn là một đầu mục ngang hàng
+   với mốc thứ nhất. Chỉ chấm số nhạt đi một chút cho biết chưa tới lượt. */
+.rl-buoc.mo span { color: var(--text); }
+.rl-buoc.mo i { color: var(--text); }
+
+/* --- Ô CHỌN FILE giọng đọc: vùng thả + thẻ file --------------------------
+   Khung NÉT ĐỨT cho vùng chọn: nó là chỗ đưa thứ gì đó vào, khác hẳn mấy khối
+   đặc xung quanh. Sau khi chọn thì file hiện thành một THẺ riêng bên dưới —
+   tên, dung lượng, thời lượng, nghe thử, bỏ đi. Xem `project-list.js#veTheFile`. */
+.file-tha {
+  display: flex; align-items: center; gap: var(--sp-10);
+  padding: var(--sp-12);
+  border: 1px dashed var(--control-line); border-radius: var(--radius-md);
+  background: var(--surface-mo); cursor: pointer;
+  transition: border-color 0.14s ease;
+}
+.file-tha:hover { border-color: var(--brand); }
+.file-tha-ic {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px;
+  border-radius: var(--radius-sm); background: var(--surface);
+  color: var(--brand-dam); box-shadow: none;
+}
+.file-tha-ic svg { width: 16px; height: 16px; }
+/* `flex: 1 1 auto` chứ không chỉ `margin-right: auto`: lề tự động đẩy phần
+   còn lại sang phải nhưng KHÔNG cho ô chữ lớn ra, nên bề ngang của nó vẫn tính
+   theo nội dung rồi bị co — nhãn cụt dù hàng còn thừa chỗ. */
+.file-tha-chu { flex: 1 1 auto; display: grid; gap: 1px; min-width: 0; margin-right: auto; }
+/* ⚠ `nowrap` + `flex: none` cho nút. Thiếu một trong hai thì ở cột 360px cả ô
+   chọn lẫn nhãn cùng co, và "Chọn file giọng đọc" gãy làm hai dòng ngay giữa
+   cụm từ ("Chọn file / giọng đọc") — đọc ra như hai thứ khác nhau. */
+/* ⚠ `width: auto` là phần QUAN TRỌNG. `.file-picker` gốc khai `width: 100%`
+   (app.css) — đo được: nó chiếm 306/332px của hàng và ô chữ bị ép còn 0px, nhãn
+   biến mất hẳn. `flex: none` một mình không cứu được vì nó vẫn tôn trọng
+   `width: 100%`. */
+.file-tha .file-picker { flex: none; width: auto; }
+.file-tha-chu b {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text); font-size: var(--text-sm); font-weight: var(--weight-bold);
+}
+.file-tha-chu i {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+}
+/* Đã có file rồi thì lời mời thu lại một bậc: thẻ file bên dưới mới là thứ cần
+   nhìn. Không ẩn hẳn — đổi file là việc thường, giấu đi thì phải đi tìm. */
+.file-tha.co-file { padding: var(--sp-8) var(--sp-12); background: none; }
+.file-tha.co-file .file-tha-chu i { display: none; }
+
+.file-the {
+  display: flex; align-items: center; gap: var(--sp-10);
+  margin-top: var(--sp-10); padding: var(--sp-10) var(--sp-12);
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--panel);
+}
+.file-the[hidden] { display: none !important; }
+.file-the-ic {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px;
+  border-radius: var(--radius-sm); background: var(--surface);
+  color: var(--text-soft); box-shadow: none;
+}
+.file-the-ic svg { width: 16px; height: 16px; }
+.file-the-chu { display: grid; gap: 1px; min-width: 0; margin-right: auto; }
+.file-the-chu b {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--text); font-size: var(--text-sm); font-weight: var(--weight-bold);
+}
+.file-the-chu i {
+  color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+.file-the-nut {
+  flex: none; display: grid; place-items: center; width: 28px; height: 28px;
+  padding: 0; border: 0; border-radius: var(--radius-sm);
+  background: var(--brand-mo); color: var(--brand-dam); cursor: pointer;
+  transition: background 0.14s ease;
+}
+.file-the-nut:hover { background: var(--brand-vien); }
+/* ⚠ `color: inherit` — `.btn-icon` ép `--text-soft` với độ ưu tiên (0,1,0) nên
+   nuốt thừa kế; thiếu dòng này thì cả hai nút ra icon xám như nhau, mất luôn
+   dấu hiệu "nút đỏ là nút xoá". */
+.file-the-nut .btn-icon { background: none; box-shadow: none; color: inherit; }
+.file-the-nut svg { width: 14px; height: 14px; }
+.file-the-nut.xoa { background: var(--danger-bg); color: var(--delete-text); }
+.file-the-nut.xoa:hover { background: var(--danger-bg-hover); }
+
+/* --- 2. Hàng ba lựa chọn giọng đọc --- */
+/* Rộng bằng mọi khối khác trong cột — bỏ chặn 520px, xem ghi chú ở mục
+   "MỌI khối trong cột phải rộng BẰNG NHAU" bên dưới. */
+.rl-giong { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-8);
+  margin: 0 0 var(--sp-16); }
+/* Icon TRÁI, hai dòng chữ PHẢI. Trước đây hai dòng xếp dọc và căn giữa; thêm
+   icon vào giữa thì cả nút mất trục, nên chuyển hẳn sang canh trái. */
+/* Nút CHƯA chọn: viền nhạt hơn một bậc và chữ mờ hơn một bậc so với trước —
+   ba nút cạnh nhau mà nút nào cũng đậm thì phải đọc mới biết cái nào đang bật. */
+.rl-giong button { display: flex; align-items: center; gap: var(--sp-10);
+  padding: var(--sp-10); text-align: left;
+  border: 0; border-radius: var(--radius-md);
+  background: var(--surface-mo); color: var(--text-mo); font: inherit; cursor: pointer; }
+/* color: inherit để icon mờ/rõ ĐỒNG BỘ với chữ của chính nút đó. Đặt cứng
+   --text-soft thì nút chưa chọn có chữ mờ mà icon vẫn đậm, nhìn lệch nhau. */
+.rl-giong-icon { flex: none; display: grid; place-items: center;
+  width: 30px; height: 30px; border-radius: var(--radius-md);
+  background: var(--surface); color: inherit; }
+/* Nút ĐANG CHỌN có nền đặc; chip icon phải đổi theo, nếu không nó là một ô mờ
+   nằm trên nền đặc — --chip-trung-tinh là xám không lật theo theme, đúng việc. */
+.rl-giong button.active .rl-giong-icon { background: var(--chip-trung-tinh); color: inherit; }
+/* .btn-icon tự đặt color: var(--text-soft) với độ ưu tiên (0,1,0) nên màu thừa
+   kế không thắng — phải nói thẳng inherit (cùng bẫy đã gặp ở .rl-dau-icon). */
+.rl-giong-icon .btn-icon { color: inherit; background: none; box-shadow: none; }
+.rl-giong-icon svg { width: 17px; height: 17px; }
+.rl-giong-chu { display: grid; gap: var(--sp-2); min-width: 0; }
+/* Cả HAI dòng trong ba nút đều đậm lên: dòng dưới trước ở 600 + mờ 0.8 nên
+   đọc như chú thích bỏ đi được, trong khi nó nói rõ nút đó làm gì. */
+.rl-giong button b { font-size: var(--text-md); font-weight: var(--weight-bold); }
+.rl-giong button em { font-size: var(--text-xs); font-weight: var(--weight-semibold); font-style: normal; opacity: 0.9; }
+/* Nút ĐANG CHỌN: nền XÁM NHẸ, chữ và icon màu chữ thường.
+   Trước đây là khối đen đặc chữ trắng (--selected-bg/--selected-text) cho cùng
+   ngôn ngữ với nút "Tạo video", nhưng ở đây nó quá nặng: "Tạo video" là một nút
+   duy nhất ở cuối cột, còn đây là một trong ba ô đứng cạnh nhau — đổ đen nguyên
+   ô làm cả hàng mất cân.
+   ⚠ KHÔNG viết màu xám cứng: --surface-strong đã tự lật theo theme (xám nhạt
+   trên nền sáng, trắng mờ trên nền tối) nên chữ --text luôn đủ tương phản. Viết
+   #eee + #000 thì nền tối thành chữ đen trên nền gần đen. */
+/* Nền --surface (nhạt) chứ không --surface-strong: ba ô đứng cạnh nhau, chỉ cần
+   đủ để mắt bắt ra ô nào đang bật, không cần thành một mảng xám rõ. Viền và màu
+   chữ đã gánh phần phân biệt rồi.
+   ⚠ Chip icon của ô đang chọn PHẢI giữ --chip-trung-tinh: hạ nó xuống --surface
+   nữa thì chip trùng luôn với nền ô, coi như biến mất. */
+/* Đang chọn: nền đậm hơn một bậc (--surface-mo → --surface) và chữ rõ hẳn.
+   Không viền — hai bậc nền cộng hai bậc màu chữ đã đủ tách. */
+.rl-giong button.active { color: var(--text); background: var(--surface); }
+
+/* Giấu hai công tắc cũ — vẫn để trong DOM vì mã cũ đọc trạng thái từ chúng.
+   KHÔNG dùng dấu ">" ở đây: cuối hàm boot() mọi thứ bị gói vào .rl-than nên
+   .tabs hết là con trực tiếp, luật con-trực-tiếp không khớp và công tắc cũ
+   hiện lại. Đã dính một lần. */
+.render-machine .tabs,
+.render-machine .mode-toggle:not(.size-toggle) { display: none; }
+
+/* Ô tên dự án: ẨN. Tên deck đã in đậm ở dòng đang chọn bên cột trái, lặp
+   lại lần nữa ngay đầu cột phải là hai nhãn nói cùng một điều. Chỗ đó dành
+   cho tiêu đề của chính cột này. */
+.render-machine .selected-box { display: none; }
+/* ── Khối đầu trang: tiêu đề + deck đang chọn, trên một tấm nền có ảnh ──
+   Ảnh nền đặt "background-size: auto 100%" + neo PHẢI, KHÔNG dùng "cover".
+   Lý do đo được: tấm ảnh tỉ lệ ~4,2:1 còn khối này ~9:1, nên "cover" phải
+   phóng theo bề ngang rồi cắt trên/dưới — cắt đúng vào cái bảng vỗ, thứ duy
+   nhất mang thông tin trong ảnh. Neo theo CHIỀU CAO thì bảng vỗ luôn vừa
+   khít khối, và phần trống bên trái do --rl-dau-bg lấp. Mép trái tấm ảnh đã
+   được làm mờ dần sẵn nên chỗ nối không thành vệt.
+   ⚠ --rl-dau-bg PHẢI đúng bằng màu mép trái của ảnh; đổi ảnh thì đo lại. */
+.rl-dau {
+  position: relative; overflow: hidden;
+  margin: 0 0 var(--sp-18); padding: var(--sp-14) var(--sp-16);
+  border-radius: var(--radius-lg);
+  background-color: var(--rl-dau-bg);
+  background-image: var(--rl-dau-anh);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: auto 100%;
+}
+/* Chữ chỉ được chiếm phần trái. Không chặn bề ngang thì tên deck dài chạy
+   thẳng vào dưới cái bảng vỗ và không đọc được chữ nào. */
+.rl-dau-hang { display: flex; align-items: center; gap: var(--sp-12); max-width: 66%; }
+.rl-dau-icon {
+  flex: none; display: grid; place-items: center; width: 34px; height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--rl-dau-chip); color: var(--rl-dau-nhan);
+}
+.rl-dau-icon svg { width: 19px; height: 19px; }
+/* ⚠ color: inherit BẮT BUỘC. `.btn-icon` tự đặt `color: var(--text-soft)`
+   (app.css:586) với độ ưu tiên (0,1,0), mà màu THỪA KẾ từ .rl-dau-icon không
+   bao giờ thắng một luật nhắm thẳng — dù luật kia ít lớp hơn. Thiếu dòng này
+   thì icon ra xám chì chứ không xanh; đo được pathFill = rgba(19,19,21,0.8).
+   Cùng cách vá đã dùng cho `.copy-name-btn .btn-icon` (app.css:769). */
+.rl-dau-icon .btn-icon { color: inherit; background: none; box-shadow: none; }
+/* min-width:0 để khối chữ co lại được — thiếu nó thì flex item giữ nguyên bề
+   ngang nội dung và max-width ở trên vô tác dụng. */
+.rl-dau-chu { min-width: 0; }
+/* --text-lg chứ không phải --text-xl: tiêu đề nay đứng cạnh một icon và trên
+   một tấm nền có hình, hai thứ đó đã gánh phần "gây chú ý" rồi. */
+.rl-tieude { margin: 0; font-size: var(--text-lg);
+  font-weight: var(--weight-bold); letter-spacing: -0.02em; }
+/* Tên deck xuống DÒNG RIÊNG dưới tiêu đề. Trước đây nó nằm cùng hàng, nên
+   tên dài đẩy tiêu đề co lại rồi cả hàng xuống dòng ở chỗ tuỳ hứng. */
+.rl-deck { margin-top: var(--sp-2); color: var(--text-soft);
+  font-size: var(--text-md); font-weight: var(--weight-semibold);
+  overflow-wrap: anywhere; }
+.rl-deck b { color: var(--rl-dau-nhan); font-weight: var(--weight-bold); }
+.rl-deck.trong { color: var(--text-faint); }
+/* Dòng dẫn: nằm DƯỚI cả cụm icon + chữ, canh theo mép trái của khối. */
+.rl-phu { margin: var(--sp-10) 0 0; max-width: 66%;
+  color: var(--text-soft); font-size: var(--text-md); }
+
+/* Dòng log/lỗi chuyển xuống CUỐI bảng các bước.
+   Ở trên đầu cột nó chen giữa tiêu đề và nội dung, đẩy mọi thứ xuống mỗi
+   lần có thông báo. Ở cuối bảng thì nó nằm đúng chỗ người ta nhìn khi muốn
+   biết chuyện gì đang xảy ra. */
+.render-state #renderStatus {
+  display: block; margin: var(--sp-12) 0 0; padding: var(--sp-8) var(--sp-12);
+  border: 0; border-top: 1px solid var(--line); border-radius: 0;
+  background: none; color: var(--danger-text);
+  /* KHÔNG in đậm: đây là dòng thông báo, không phải tiêu đề. Đậm 800 làm
+     nó tranh chỗ với chính tiêu đề bảng ngay phía trên. */
+  font-size: var(--text-sm); font-weight: var(--weight-medium); line-height: var(--leading-normal);
+}
+
+/* Bảng tiến trình lúc CHƯA CHẠY: gập lại còn ĐÚNG MỘT DÒNG.
+   Năm bước mở sẵn chiếm gần nửa chiều cao cột phải trong khi chưa có gì
+   chạy, mà bên dưới khối Thông số lại phải cuộn trong một ô cao 100px —
+   chỗ trống và chỗ chật nằm ngay cạnh nhau. Bấm Tạo video thì nó tự bung
+   (setRenderState bỏ lớp .cho). */
+.render-state.cho { opacity: 0.72; }
+.render-state.cho .state-dot { background: var(--text-faint); animation: none; }
+.render-state.cho .render-steps,
+.render-state.cho .state-list,
+.render-state.cho #renderStatus { display: none; }
+.render-state.cho { padding-block: var(--sp-10); }
+
+
+/* --- 4 + 5. MỌI khối trong cột phải rộng BẰNG NHAU ---
+   Khối trên (Giọng đọc, Thông số, hàng nút) bị chặn 520px và căn giữa, còn
+   bảng 5 bước để width 100% — cột rộng 625px nên hai bên lệch nhau 52px
+   mỗi mép. Nhìn ra là hàng nút "lệch sang phải" và phần trên "bé hơn phần
+   dưới", trong khi thật ra chỉ là hai mức chặn khác nhau. Bỏ chặn hết —
+   kể cả tiêu đề cột và mấy mốc "1 GIỌNG ĐỌC" / "2 THÔNG SỐ", vì chúng cũng
+   bị chặn 520px nên thụt vào 50px so với chính nội dung nằm dưới. */
+.render-machine .field,
+.render-machine .tabs,
+.render-machine .check,
+.render-machine .mode-toggle,
+.render-machine .speed-presets,
+.render-machine .form-actions,
+.render-machine .advanced-settings,
+.render-machine .status,
+.render-machine .selected-box {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* --- 1 + 2. Trạng thái ĐÃ XONG là màu XANH LÁ ---
+   Bản cũ chấm đầu bảng và dấu tích đều lấy màu nhấn (xanh biển nhạt), cùng
+   màu với lúc đang chạy — nhìn vào không biết đã xong hay đang chạy dở.
+   Xong thì phải khác hẳn. */
+.render-state.done .state-dot {
+  background: var(--ok);
+  box-shadow: none;
+  animation: none;
+}
+.render-state.done .render-steps li.done::before {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.render-state.done .render-steps li.done { color: var(--text-soft); }
+
+
+
+/* --- Ô chọn file: nút RA NGOÀI, tên file có khung riêng ---
+   Bản cũ bọc cả hai trong MỘT khung: nút "Chọn file" nằm lọt trong đó nên
+   nhìn như một nhãn chứ không như nút bấm được, còn tên file thì không có
+   ranh giới riêng. Nay hai phần đứng cạnh nhau, mỗi phần một vai. */
+.render-machine .file-picker {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+  gap: var(--sp-8);
+}
+.render-machine .file-picker-button {
+  min-height: 36px;
+  padding: var(--sp-8) var(--sp-14);
+  border: 1px solid var(--control-line-faint);
+  border-radius: var(--radius-md);
+  background: none;
+  font-size: var(--text-sm);
+}
+.render-machine .file-picker:hover .file-picker-button { background: var(--surface); }
+.render-machine .file-picker-name {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 var(--sp-12);
+  border: 1px solid var(--control-line-faint);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+/* --- Hai ô tick của Edge TTS về CÙNG MỘT DÒNG ---
+   Chúng ngắn, cùng nhóm, mỗi cái chiếm trọn một dòng là tốn hai dòng cho
+   hai chữ. Ô tick tự nó đã nói trạng thái nên không cần thêm viền/nền. */
+.render-machine [data-advanced-engine="edgetts"] .check {
+  display: inline-flex;
+  width: auto;
+  margin: 0;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.render-machine .hang-tick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-18);
+  margin: var(--sp-8) 0 var(--sp-12);
+}
+
+
+/* --- Khối THÔNG SỐ: phẳng như phần còn lại ---
+   Nó đang có nền kem và hai đường viền riêng, thành một cái hộp lồng trong
+   cột — trong khi mọi khối khác đều phẳng trên nền trang. */
+.render-machine .advanced-settings {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+/* Khoảng cách giữa mốc "2 THÔNG SỐ" và nội dung: mốc đã có margin-bottom
+   10px rồi, thêm padding-top nữa là hở gần 25px cho một đường phân cách
+   không tồn tại. */
+.render-machine .advanced-body {
+  border: 0;
+  padding: 0;
+}
+.render-machine .advanced-settings { margin-top: 0; }
+
+/* --- Nhãn "ElevenLabs API key" + trạng thái ngay cạnh --- */
+.render-machine .api-key-field .field-label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+}
+.render-machine .api-key-field .field-label > span:first-child {
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--text);
+}
+/* Ô dán API key: cùng khuôn với mọi ô nhập khác trong cột.
+   Bản cũ nó là khối cao 54px chiếm trọn bề ngang cho một chuỗi ký tự —
+   to hơn hẳn ô "Giọng đọc" ngay dưới, mà lại là thứ dán một lần rồi thôi.
+   Đưa về hàng nhãn-trái / ô-phải như các trường còn lại. */
+/* Một HÀNG NGANG: [viên nhãn] [viên số dư] [ô dán key] [nút].
+   Bản cũ là lưới nhãn-trái / ô-phải, nên cột nhãn ngốn 132px cho hai chữ
+   "API Key" rồi câu số dư nối đuôi vào đó — một dòng chữ dài lẫn giữa tên
+   trường. Tách ra thành hai viên riêng thì mỗi thứ tự nói phần của nó. */
+.render-machine .api-key-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+  margin: 0 0 var(--sp-10);
+}
+.render-machine .api-key-field .field-label {
+  flex: 0 0 auto;
+  /* align-items: center chứ KHÔNG baseline. Luật .api-key-field .field-label
+     ở trên đặt baseline, mà icon là một hình cao 15px đứng trên đường chân
+     chữ nên nó nhô lên so với chữ 13px. */
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) 0;
+  /* Không viền, không nền: hàng này đã có ô dán key đóng khung rồi; thêm hai
+     cái vỏ nữa quanh hai chữ là ba khung con trong một hàng. */
+  border: 0;
+  background: none;
+}
+/* Viên số dư. Xám khi chưa biết, XANH LÁ khi đã đọc được số credit — cùng
+   bộ màu với viên "Hoàn thành" ở bảng tiến trình. */
+.render-machine .api-key-field .config-state {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-12);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+}
+.render-machine .api-key-field .config-state.ok { color: var(--good-text); background: var(--ok-bg); }
+.render-machine .api-key-field .config-state .btn-icon { width: auto; height: auto; background: none; color: inherit; }
+.render-machine .api-key-field .config-state .btn-icon svg { width: 14px; height: 14px; }
+/* Ô dán key ăn hết phần còn lại của hàng. */
+.render-machine .api-key-field .api-key-row { flex: 1 1 260px; min-width: 0; }
+.render-machine .api-key-field input {
+  min-height: 36px;
+  padding: var(--sp-8) var(--sp-12);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+/* Dòng trạng thái cạnh nhãn: chữ THƯỜNG, không đậm. Nó là ghi chú, không
+   phải nhãn — để đậm là hai thứ cùng cân nặng nằm cạnh nhau. */
+.render-machine .config-state {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--text-faint);
+}
+.render-machine .config-state.ok { color: var(--ok); }
+.render-machine .config-state.thieu { color: var(--danger); }
+
+/* Icon tròn trước nhãn và số thứ tự của mốc: bỏ nền.
+   Chúng chỉ là dấu dẫn mắt, không phải nút — mỗi cái một chấm xám làm cột
+   lấm tấm y như thanh trái trước đây. */
+.render-machine .field-icon,
+.rl-buoc i,
+.rl-buoc.mo i { background: none; box-shadow: none; }
+/* Icon dẫn nhãn: nhạt hơn chữ nó dẫn. Nó là dấu hiệu nhận dạng nhanh, không
+   phải nội dung — đậm ngang chữ là hai thứ tranh nhau. Khung .field-icon rộng
+   22px, hình 15px cho cân với cỡ chữ nhãn (12px). */
+.render-machine .field-icon { width: auto; color: var(--text-faint); }
+.render-machine .field-icon svg { width: 15px; height: 15px; }
+/* Chìa khoá vẽ chéo góc nên hình bao của nó gần kín ô 15px, trông to hơn hẳn
+   micro hay tia sáng bên cạnh dù cùng cỡ. Hạ riêng nó xuống 13px cho bằng
+   MẮT nhìn, không phải bằng con số. */
+.render-machine .field-icon[data-icon="khoa"] svg { width: 13px; height: 13px; }
+
+
+/* Ô chọn giọng. Ô gõ tay Voice ID ĐÃ RỜI sang popup (nút "Tự điền ID giọng"
+   cạnh nhãn), nên chỗ này chỉ còn một ô — bỏ luôn lưới hai cột cũ. */
+.render-machine .voice-pick { display: block; min-width: 0; }
+
+/* Nút mở popup ID: một dòng chữ xanh lục cạnh nhãn "Giọng đọc", không khung.
+   Có khung là nó thành nút thứ hai chọi với ô chọn giọng ngay bên dưới, mà
+   đây chỉ là lối đi phụ cho người đã có sẵn Voice ID. */
+.render-machine .voice-id-mo {
+  padding: 0; border: 0; background: none;
+  color: var(--good-text); font: inherit; font-size: var(--text-sm);
+  font-weight: var(--weight-semibold); cursor: pointer;
+}
+.render-machine .voice-id-mo:hover { text-decoration: underline; }
+
+/* ── Ô tích tròn ──────────────────────────────────────────────────────────
+   appearance: none là bắt buộc. Ô tích của trình duyệt là phần tử vẽ sẵn:
+   border-radius không bo được nó, background không đổi được nền lúc tích.
+   Bỏ hẳn hình mặc định rồi tự dựng — vòng tròn rỗng lúc chưa tích, tô
+   --ok kèm dấu tích lúc đã tích. */
+.render-machine .check input[type="checkbox"] {
+  appearance: none;
+  flex: none;
+  position: relative;
+  /* 13px chứ không 18px: đúng bằng nút chọn Độ phân giải ở hàng dưới (đo
+     được 13x13). Cùng màu mà khác cỡ thì vẫn đọc ra là hai thứ. Cả nhãn đều
+     bấm được nên ô nhỏ không làm khó thao tác. */
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-pill);
+  background: var(--field-bg);
+  cursor: pointer;
+}
+.render-machine .check input[type="checkbox"]:hover { border-color: var(--chon); }
+/* Đang chọn: viền đổi màu + một CHẤM ĐẶC ở giữa, y như nút chọn Độ phân giải
+   ở hàng dưới. Trước đây tô kín cả ô rồi vẽ dấu tích — cùng một bảng mà hai
+   kiểu đánh dấu khác nhau thì đọc ra là hai nhóm chẳng liên quan.
+   --chon lấy bằng cách CHỤP một radio mặc định rồi đọc pixel giữa chấm, nên
+   hai thứ trùng màu tuyệt đối chứ không phải áng chừng. */
+.render-machine .check input[type="checkbox"]:checked { border-color: var(--chon); }
+.render-machine .check input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  /* inset 4px trên ô 13px cho chấm 5px — đúng tỉ lệ chấm của radio mặc định. */
+  inset: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--chon);
+}
+
+/* ── Popup tự điền Voice ID ───────────────────────────────────────────────
+   Lớp phủ giữa màn hình chứ không phải bảng bung neo vào nút: bảng bung nằm
+   ngay trên ô chọn giọng, mà ô đó lại đang mở/đóng danh sách của chính nó —
+   hai lớp bung chồng nhau là chuột bấm đâu cũng trúng nhầm.
+   z: --z-modal, trên mọi thứ trong trang. */
+.render-machine .idpop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--sp-20);
+  background: var(--overlay);
+}
+.render-machine .idpop-hop {
+  width: min(440px, 100%);
+  padding: var(--sp-20);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
+}
+.render-machine .idpop-tieu {
+  color: var(--text); font-size: var(--text-lg); font-weight: var(--weight-bold);
+}
+.render-machine .idpop-dan {
+  margin: var(--sp-8) 0 var(--sp-14);
+  color: var(--text-soft); font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+.render-machine .idpop-hang { display: flex; align-items: stretch; gap: var(--sp-8); min-width: 0; }
+/* Ô nhập trong popup KHÔNG nằm trong .field nên nó không dính luật ô nhập
+   chung của app — đo được nó ra viền mặc định của trình duyệt: 2px inset màu
+   xám, bo góc 0, nền đen. Chép đúng bộ của .field input ở app.css xuống đây. */
+.render-machine .idpop-hang input {
+  flex: 1; min-width: 0;
+  min-height: 40px;
+  padding: var(--sp-8) var(--sp-12);
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-md);
+  background: var(--field-bg);
+  color: var(--text);
+  font: inherit; font-size: var(--text-sm);
+}
+/* Nút cùng viền, cùng độ bo, cùng chiều cao với ô nhập bên cạnh — trước đây
+   nút để radius-sm còn ô nhập của app là radius-md, hai kiểu cạnh nhau. */
+.render-machine .idpop-nut {
+  flex: none; padding: 0 var(--sp-14); min-height: 40px;
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  white-space: nowrap; cursor: pointer;
+}
+.render-machine .idpop-nut:hover { background: var(--surface-strong); }
+.render-machine .idpop-nut[disabled] { opacity: 0.45; cursor: default; }
+.render-machine .idpop-nut.chinh {
+  border-color: transparent; background: var(--primary-bg); color: var(--primary-text);
+}
+/* Kết quả kiểm. Hai trạng thái, phân biệt bằng MÀU CHỮ + viền nhạt cùng tông —
+   không tô nền đặc, kẻo một câu báo ngắn thành mảng màu to giữa popup. */
+.render-machine .idpop-kq {
+  margin-top: var(--sp-10);
+  padding: var(--sp-8) var(--sp-10);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  color: var(--text-soft); font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+.render-machine .idpop-kq.dat { border-color: var(--ok-line); color: var(--good-text); }
+.render-machine .idpop-kq.hong { border-color: var(--danger-line); color: var(--danger-text); }
+.render-machine .idpop-cuoi {
+  display: flex; justify-content: flex-end; gap: var(--sp-8);
+  margin-top: var(--sp-16);
+}
+
+/* --- O API key: o dan + nut Luu + nut Xoa tren cung mot dong --- */
+.render-machine .api-key-row {
+  display: flex; align-items: stretch; gap: var(--sp-6); min-width: 0;
+}
+.render-machine .api-key-row input { flex: 1; min-width: 0; }
+.render-machine .api-key-nut {
+  flex: none; padding: 0 var(--sp-14);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+  font: inherit; font-weight: var(--weight-semibold); font-size: var(--text-md); cursor: pointer;
+  white-space: nowrap;
+}
+.render-machine .api-key-nut:hover { border-color: var(--accent); }
+.render-machine .api-key-nut[disabled] { opacity: 0.45; cursor: default; }
+/* Nút Xoá: chỉ còn cái thùng rác, vuông bằng chiều cao ô dán bên cạnh. */
+.render-machine .api-key-nut.xoa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  padding: 0;
+  /* Trần, chỉ còn cái thùng rác đỏ. Rê chuột mới hiện nền. */
+  border-color: transparent;
+  color: var(--danger);
+  background: none;
+}
+.render-machine .api-key-nut.xoa:hover {
+  border-color: transparent;
+  background: var(--danger-bg);
+}
+.render-machine .api-key-nut.xoa .btn-icon { width: auto; height: auto; background: none; color: inherit; }
+.render-machine .api-key-nut.xoa .btn-icon svg { width: 16px; height: 16px; }
+/* Da luu khoa: o chi con la cho hien dau sao, khong go duoc nua. */
+.render-machine .api-key-row input[readonly] {
+  color: var(--text-faint); letter-spacing: 0.18em; cursor: default;
+}
+
+/* --- Bo chon giong tu dung ---
+   Thay cho <select>: option cua trinh duyet chi nhan chu thuan, khong nhet
+   duoc so thu tu, ten dam, va nut nghe thu tren tung dong. */
+.render-machine .voice-box { position: relative; min-width: 0; }
+.render-machine .voice-cur {
+  display: flex; align-items: center; gap: var(--sp-8); width: 100%;
+  padding: var(--sp-8) var(--sp-10); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+  font: inherit; text-align: left; cursor: pointer; min-width: 0;
+}
+/* Cùng nền, cùng viền với ô Chất lượng audio ngay bên phải — nó là <select>
+   nên ăn luật ô nhập chung, còn nút này là <button> nên trước đó lấy nền
+   --surface của nút. */
+.render-machine .field-hai-cot .voice-cur {
+  background: var(--field-bg);
+  border-color: var(--control-line);
+}
+.render-machine .voice-cur:hover { border-color: var(--accent); }
+.render-machine .voice-cur-ten {
+  flex: 1; min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.render-machine .voice-cur-mui {
+  flex: none; width: 0; height: 0;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-faint);
+}
+
+/* Danh sach bung ra. z-index cao vi no phai phu len cac o ke duoi. */
+/* ⚠ PHAI la fixed, khong phai absolute.
+   To tien .rl-than co overflow-y: auto (cot nay cuon duoc), ma mot phan tu
+   absolute nam trong khung cuon thi bi khung do CAT CUT — nang z-index bao
+   nhieu cung vo ich. Them nua, thanh nut "Tao video" la sticky co z-index
+   rieng nen no con de len tren.
+   fixed thoat ca hai: no thoat khoi moi khung cuon, va z-index cao thi de
+   len tren thanh nut. Doi lai phai tu tinh toa do bang JS — xem ham
+   datViTriPop() trong render-page.js. */
+.render-machine .voice-pop {
+  position: fixed; z-index: var(--z-bar);
+  max-height: 340px; overflow-y: auto;
+  padding: var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--panel); box-shadow: var(--shadow-md);
+}
+.render-machine .voice-nhom {
+  padding: var(--sp-8) var(--sp-8) var(--sp-4); color: var(--text-faint);
+  font-size: var(--text-xs); font-weight: var(--weight-bold); letter-spacing: 0.08em;
+}
+.render-machine .voice-row {
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-6) var(--sp-8); border-radius: var(--radius-sm); cursor: pointer;
+}
+.render-machine .voice-row:hover,
+.render-machine .voice-row.hover { background: var(--surface); }
+.render-machine .voice-row.chon { background: var(--surface); }
+/* font-weight ghi RO 400: o nay nam trong .field-label voi chu dam, khong
+   dat lai thi ca so thu tu lan dong mo ta deu bi dam theo. */
+.render-machine .voice-stt {
+  flex: none; width: 24px; text-align: right;
+  color: var(--text-faint); font-size: var(--text-sm); font-weight: var(--weight-normal);
+  font-variant-numeric: tabular-nums;
+}
+.render-machine .voice-info { flex: 1; min-width: 0; }
+.render-machine .voice-ten {
+  display: block; font-weight: var(--weight-semibold); font-size: var(--text-base); color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.render-machine .voice-phu {
+  display: block; margin-top: 1px; font-size: var(--text-sm); font-weight: var(--weight-normal);
+  color: var(--text-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Nut NGHE THU o cuoi moi dong — va cung la nut nghe thu cua Beeknoee.
+   ⚠ KHONG NEN, KHONG VIEN. Day la mot nut phu nam trong mot hang da co vien
+   cua rieng no; them mot vien tron nua thanh hai lop khung long nhau. Chi hover
+   moi hien nen nhat, dung nep cua nut Cai dat o hang tab.
+   ⚠ Trang thai bao bang LOP chu khong bang chu: `.dang-tai` luc doi tieng ve,
+   `.dang` luc dang phat. Ghi `textContent` len nut la xoa mat icon. */
+.render-machine .voice-play {
+  flex: none; width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-pill);
+  background: none; color: var(--text-soft);
+  line-height: var(--leading-none); cursor: pointer;
+}
+.render-machine .voice-play svg { width: 17px; height: 17px; }
+.render-machine .voice-play:hover:not([disabled]) { background: var(--surface); color: var(--text); }
+.render-machine .voice-play[disabled] { opacity: 0.45; cursor: default; }
+.render-machine .voice-play.dang { color: var(--accent); background: var(--surface); }
+.render-machine .voice-play.dang-tai { opacity: 0.55; }
+/* Nut Beeknoee dung chung lop `.voice-play` nen phai go phan dang cua
+   `.api-key-nut` (nen + vien + be ngang theo chu). */
+.render-machine .api-key-nut.voice-play {
+  /* ⚠ `align-self: center` — BAT BUOC, khong phai cho dep.
+     Hang `.api-key-row` de `align-items: stretch`, ma nut nay co `height: 28px`
+     co dinh nen stretch khong ap duoc va no roi ve DAU hang. Do 19/09/2026:
+     tam nut o 780 trong khi tam o chon va tam nhan "Giong doc" deu o 787 —
+     loa cao hon 7px, lech han ca hang. O chon cao 42px, nut 28px.
+     KHONG DUNG DAU HUYEN O DAY - khoi nay nam trong tep CSS thuong, nhung giu
+     cung nep voi cac khoi khac trong tep de khoi phai nho ngoai le. */
+  align-self: center;
+  padding: 0; border: 0; background: none;
+  font-size: inherit; font-weight: inherit;
+}
+.render-machine .api-key-nut.voice-play:hover:not([disabled]) { background: var(--surface); }
+.render-machine .voice-trong {
+  padding: var(--sp-12) var(--sp-10); color: var(--text-soft); font-size: var(--text-md);
+}
+
+
+/* --- Bảng thông tin video ---
+   Dấu ⓘ nay ở THANH TRÊN cạnh nút đổi tên (thanh-tren.js#tbThongTin, 11/10/2026);
+   trước đó ở từng dòng danh sách, trước nữa là một khung riêng cạnh 5 bước. Bảng
+   nổi dưới đây dùng chung, do render-layout.js#dauThongTin vẽ. */
+.vid-bang {
+  position: fixed; z-index: var(--z-pop);
+  min-width: 210px; padding: var(--sp-12) var(--sp-12);
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--panel); color: var(--text);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-ui); text-align: left;
+  pointer-events: none;
+}
+.vid-bang dl { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-6) var(--sp-12); margin: 0; }
+.vid-bang dt { color: var(--text-faint); font-size: var(--text-xs); font-weight: var(--weight-bold); }
+.vid-bang dd {
+  margin: 0; color: var(--text); font-size: var(--text-xs); font-weight: var(--weight-semibold);
+  text-align: right; white-space: nowrap;
+}
+
+/* --- 3. Dải đầu trang: ẩn hẳn sau khi đã chuyển nút đi (xem depDauTrang) --- */
+/* Lớp .rl-an đã bỏ (10/09/2026): thanh trên nay là thanh THẬT của app — mang
+   logo, chuông, đổi nền và nút tài khoản — chứ không còn là phần thừa sau khi
+   depDauTrang() bê hết nút xuống cột danh sách. */
+/* Cum Source + Lam moi o hang tieu de.
+   .list-title dung justify-content: space-between, ma sau khi nhac Source
+   len thi hang co BA con: h2, Source, Lam moi. De nguyen thi Source roi ra
+   giua hang, khong dung canh Lam moi nhu yeu cau. Boc hai nut vao mot cum
+   de space-between chi con hai phan: tieu de trai, cum nut phai. */
+.list-title .rl-cum-nut { display: flex; align-items: center; gap: var(--sp-4); flex: 0 0 auto; }
+/* Cụm nút nay là con thứ HAI của .panel-head (xem depDauTrang), nằm hàng
+   riêng dưới tiêu đề. Phải ép xếp dọc, không thì hai con lại đứng cạnh
+   nhau đúng cái cảnh vừa sửa.
+   (KHÔNG dùng dấu huyền quanh tên lớp trong chú thích này — cả khối nằm
+   trong template literal, một dấu là đóng chuỗi CSS giữa chừng.) */
+.panel-head { flex-direction: column; align-items: stretch; gap: var(--sp-8); }
+/* Hai nút hướng dẫn GIỮ CHỮ, chỉ rút ngắn bằng CSS ở nhãn gốc.
+   Bản trước bỏ hết chữ cho gọn hàng — kết quả là hai dấu hỏi xám nhỏ mà
+   chính chủ dự án cũng không nhận ra là nút gì, hỏi "ba nút đi đâu rồi".
+   Gọn mà không tìm thấy thì không phải gọn. */
+.panel-head .header-tools {
+  display: flex; flex-wrap: wrap; gap: var(--sp-6); justify-content: flex-end; }
+/* Cụm hướng dẫn ở mốc "1. Giọng đọc": đẩy sát mép phải, cùng hàng với chữ.
+   Chữ NHỎ và KHÔNG đậm — đây là lối thoát cho người đang bí, không phải
+   thứ tranh chú ý với chính cái mốc nó đứng cạnh. Để đậm 800 như cũ thì
+   hai nút nặng ngang tiêu đề bước, mắt không biết nhìn đâu trước. */
+.rl-buoc .rl-hd { margin-left: auto; display: flex; gap: var(--sp-6); flex: 0 0 auto; }
+/* BỎ HẲN VỎ NÚT — nay chúng là hai đường dẫn bằng chữ, cùng lối với nút
+   "Xem thêm" ở cuối danh sách dự án: không viền, không nền, rê chuột thì
+   nhích lên một bậc màu.
+   (Ghi chú cũ ở đây nói "giữ nguyên vỏ nút, đừng đụng vào" — đó là yêu cầu
+   của đợt trước; 11/09/2026 chủ dự án đổi ý, chốt lại là dạng chữ.)
+   ⚠ Phải khai đủ min-height/padding/border: vỏ đến từ BA chỗ chồng lên nhau —
+   luật a{} toàn cục (đệm 10/14, bo tròn 999px, nền --accent), .refresh-btn
+   (min-height 42px) và .panel-head .guide-header-btn (padding-inline). Thiếu
+   một cái là nút vẫn còn dấu vết vỏ. */
+.rl-buoc .rl-hd .guide-header-btn {
+  white-space: nowrap;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  /* --text-mo (40%) chứ không --text-faint (55%): hai đường dẫn này đứng ngay
+     cạnh mốc "1. Giọng đọc", là thứ phụ — lùi hẳn ra sau rồi mới nổi lên khi
+     rê chuột. Bậc rê chuột giữ nguyên --text-soft nên chênh lệch còn rõ hơn. */
+  color: var(--text-mo);
+}
+/* Thắng .refresh-btn:hover (0,2,0) vốn trả lại nền + viền. */
+.rl-buoc .rl-hd .guide-header-btn:hover {
+  background: none;
+  border-color: transparent;
+  color: var(--text-soft);
+}
+/* ⚠ PHẢI nhắm vào chính SPAN, không phải thẻ a bọc ngoài.
+   Dòng 61 có .rl-buoc span { font-size: 13.5px; font-weight: 950 } — nhắm
+   THẲNG vào span, mà chữ của nút nằm trong span con. Đặt font trên thẻ a
+   chỉ là thừa kế, và thừa kế luôn thua một rule nhắm trực tiếp, dù rule kia
+   ít lớp hơn. Đó là lý do hai lần sửa trước không hề đổi được gì.
+   Chừa .btn-icon ra — nó chứa SVG, không phải chữ. */
+.rl-buoc .rl-hd .guide-header-btn span:not(.btn-icon) {
+  /* 12px/600 thay cho 11px/400. Cỡ cũ chọn để hai nút đừng nặng ngang tiêu đề
+     bước — nay đã bỏ vỏ nên chúng nhẹ sẵn, giữ 11px/400 thì thành chữ mờ khó
+     đọc chứ không còn giống một đường dẫn bấm được. */
+  font-size: var(--text-sm); font-weight: var(--weight-semibold); letter-spacing: 0;
+  /* MÀU cũng phải đặt ở đây, không đặt trên thẻ a. Cùng lý do với font ngay
+     trên: .rl-buoc span nhắm thẳng vào span nên màu trên thẻ a (chỉ là thừa
+     kế) không tới nơi. Đo được nút ra 40% mà chữ vẫn 100% — chỉ mỗi icon mờ. */
+  color: var(--text-mo); }
+.rl-buoc .rl-hd .guide-header-btn:hover span:not(.btn-icon) { color: var(--text-soft); }
+
+/* --- Khoảng cách giữa các hàng trong khối Thông số ---
+   Rule .advanced-body .field trong index.html đặt margin trên/dưới = 0, nên
+   các hàng DÍNH SÁT nhau: "Chất lượng audio" đè lên "Giọng đọc" ngay trên.
+   Thuộc tính gap của lưới chỉ giãn BÊN TRONG một hàng, không giãn giữa hai
+   hàng. (Không dùng dấu huyền ở đây — cả khối nằm trong template literal.) */
+.render-machine .advanced-body .field + .field { margin-top: var(--sp-14); }
+/* Ô nhập và ô chọn cùng một cỡ chữ. Trước đây chúng thừa hưởng cỡ của body
+   nên to hơn hẳn nhãn 12px bên trái — nhìn ra là "cái to cái nhỏ". */
+.render-machine .advanced-body .field select,
+.render-machine .advanced-body .field input:not([type="radio"]):not([type="checkbox"]) {
+  font-size: var(--text-md); }
+
+/* Hai o chon cua Beeknoee (Model · Giong doc) phai TRONG GIONG o chon cua
+   ElevenLabs ngay tren no. Do 18/09/2026: `#beeVoice` ra chu 13px DAM 700 va bo
+   goc 12px, trong khi `#elevenFormat` la 12px, 400, bo 8px — hai o canh nhau
+   trong cung mot bang ma nhin ra hai bo giao dien.
+   Chu dam o day con gay hieu nham: ten giong dam hon ca nhan "Giong doc" ben
+   trai, doc ra nhu mot tieu de chu khong phai mot gia tri dang chon. */
+.render-machine .advanced-body [data-advanced-engine="beeknoee"] select {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  border-radius: var(--radius-sm);
+}
+/* Riêng hàng Giọng đọc + Chất lượng audio: ô chọn phải BẰNG nút chọn giọng
+   ngay bên trái nó. Đo được lệch hẳn — nút giọng cao 31px, chữ 12px, bo 8px;
+   ô chất lượng 42px, 13px, bo 12px. Hai ô đứng cạnh nhau mà cao thấp khác
+   nhau nhìn như hai bộ giao diện.
+   PHẢI viết đủ ba lớp và đặt ngay đây: luật ngay trên là (0,3,1), viết ở
+   app.css với hai lớp (0,2,1) thì thua — đã đo, bo góc đổi được mà cỡ chữ
+   thì không. */
+.render-machine .advanced-body .field-hai-cot select,
+.render-machine .field-hai-cot .voice-cur {
+  min-height: 34px;
+  padding: var(--sp-6) var(--sp-10);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+/* Vì sao ép min-height cho CẢ HAI thay vì để chúng tự cao.
+   Cùng cỡ chữ, cùng lề trong rồi mà vẫn lệch 2px: hộp chữ bên trong một
+   select do trình duyệt tự dựng, cao hơn hộp chữ của một button. Đo được
+   31px với 33px. Không có cách nào chỉnh gián tiếp cho khớp — chốt thẳng
+   một con số cho cả hai là hết chuyện. */
+.panel-head .guide-header-btn { padding-inline: var(--sp-8); font-size: var(--text-sm); }
+
+/* --- 2. Khối THÔNG SỐ: bỏ ô cuộn lồng trong trang ---
+   Một vùng cuộn nằm trong một vùng cuộn là kiểu dễ lạc nhất: lăn chuột ở
+   giữa khối thì khối cuộn, lăn ở mép thì cả cột cuộn. Cho nó cao tự nhiên,
+   phần dài ra đã có vùng cuộn của cả cột lo. */
+.render-machine .advanced-body,
+.render-machine .advanced-settings .advanced-body {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+
+/* --- 4. Nút render ghim đáy cột --- */
+.render-machine { display: flex; flex-direction: column; }
+.rl-than { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+.render-machine .render-primary-actions {
+  position: sticky; bottom: 0; z-index: var(--z-base); margin: 0;
+  /* Đệm TRÊN 24px chứ không 14px: hàng nút này ghim đáy cột nên nó luôn nằm
+     ngay dưới dòng cuối của khối Thông số, 14px làm ba nút dính vào ô Tốc độ
+     ở trên. Đệm dưới 8px để nút không chạm mép cột. */
+  padding: var(--sp-24) 0 var(--sp-8);
+  background: linear-gradient(to top, var(--body-bg) 72%, transparent);
+  /* Ba nút CHIA ĐỀU bề ngang thay vì dồn cục vào giữa. Chúng cùng một
+     nhóm việc (tạo / xem / mở thư mục) nên đứng thành hàng đều nhau đọc ra
+     là ba lựa chọn ngang hàng. */
+  /* LƯỚI cột tự sinh, KHÔNG dùng flex: với flex thì mỗi nút vẫn giữ một
+     phần bề rộng nội dung riêng nên ba nút lệch nhau ~10px (đã đo
+     205/203/195). Lưới cho mỗi cột đúng 1fr là ba nút bằng nhau tuyệt đối,
+     mà nút nào ẩn thì cột đó cũng biến mất theo. */
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  gap: var(--sp-10); align-items: stretch;
+}
+.render-machine .render-primary-actions > * { min-width: 0; }
+/* "Mở video cuối" và "Mở trong thư mục": KHÔNG viền lúc thường. Chúng đứng
+   cạnh nút Tạo video vốn là một mảng màu đặc — thêm hai khung viền nữa thì
+   hàng nút lấm tấm ba cái hộp. Rê chuột mới hiện nền, vẫn không vẽ viền.
+   (Viền của #videoLink gỡ ngay tại luật gốc bên dưới, không đặt chồng ở đây:
+   luật đó cùng độ ưu tiên mà đứng sau nên sẽ thắng.) */
+.render-machine .render-primary-actions .reveal-output-btn {
+  border-color: transparent;
+  background: none;
+}
+.render-machine .render-primary-actions .reveal-output-btn:hover {
+  border-color: transparent;
+  background: var(--surface);
+}
+.render-machine .render-primary-actions [hidden] { display: none !important; }
+/* "Mở video cuối" vốn là chữ link trần — cho nó cùng KHUÔN với hai nút kia
+   (cùng cao, cùng lề trong), nhưng KHÔNG viền: nay cả ba nút trong hàng đều
+   trần, chỉ nút Tạo video có mảng màu. */
+.render-machine .render-primary-actions #videoLink {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 36px; padding: 0 var(--sp-14);
+  border: 1px solid transparent; border-radius: var(--radius-md);
+  color: var(--text); background: none;
+  font-size: var(--text-sm); font-weight: var(--weight-bold); text-decoration: none;
+}
+.render-machine .render-primary-actions #videoLink:hover { background: var(--surface); }
+/* KHÔNG phóng to nút này nữa: nó đứng ngay cạnh "Mở trong thư mục" (12px /
+   36px), phóng lên 14.5px/50px là hai nút lệch hẳn nhau. */
+.render-machine .render-primary-actions .start { min-height: 38px; font-size: var(--text-sm); }
+
+/* --- Giọng TRÊN MÁY (render/vieneu-panel.js): thẻ kiểm máy → tải → đo tốc độ --- */
+.render-machine .vn-the {
+  display: flex; flex-direction: column; gap: var(--sp-6);
+  padding: var(--sp-10) var(--sp-12); margin-bottom: var(--sp-10);
+  border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface);
+}
+.render-machine .vn-chu { margin: 0; font-size: var(--text-sm); color: var(--text); line-height: var(--leading-normal); }
+.render-machine .vn-chu.loi { color: var(--danger-text); }
+.render-machine .vn-chu.tot { color: var(--good-text); }
+.render-machine .vn-chu.cham { color: var(--warn-text); }
+.render-machine .vn-chu.yeu { color: var(--danger-text); }
+.render-machine .vn-phu { margin: 0; font-size: var(--text-xs); color: var(--text-faint); }
+.render-machine .vn-phu.canh { color: var(--warn-text); }
+.render-machine .vn-may {
+  display: grid; grid-template-columns: auto 1fr; gap: var(--sp-2) var(--sp-10); margin: 0;
+  font-size: var(--text-xs);
+}
+.render-machine .vn-may dt { color: var(--text-faint); }
+.render-machine .vn-may dd { margin: 0; color: var(--text-soft); min-width: 0; overflow-wrap: anywhere; }
+.render-machine .vn-thanh { height: var(--sp-6); border-radius: var(--radius-pill); background: var(--line); overflow: hidden; }
+.render-machine .vn-thanh i { display: block; height: 100%; background: var(--accent); transition: width var(--dur-fast) linear; }
+.render-machine .vn-hang { display: flex; flex-wrap: wrap; gap: var(--sp-6); }
+.render-machine .vn-nut {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-12);
+  border: 1px solid var(--accent); border-radius: var(--radius-sm);
+  background: var(--accent); color: var(--accent-contrast);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.render-machine .vn-nut.phu { background: var(--surface); color: var(--text); border-color: var(--line); }
+.render-machine .vn-nut.phu:hover { border-color: var(--accent); }
+/* Hai nút chọn bản mô hình (Bản đầy đủ fp32 / Bản nhẹ int8) — vieneu-panel.js veChonBan(). */
+.render-machine .vn-ban { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+.render-machine .vn-chon {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-2); min-width: 0;
+  padding: var(--sp-6) var(--sp-12); text-align: left;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); font: inherit; cursor: pointer;
+}
+.render-machine .vn-chon b { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+.render-machine .vn-chon small { font-size: var(--text-xs); color: var(--text-faint); overflow-wrap: anywhere; }
+.render-machine .vn-chon:hover:not(:disabled) { border-color: var(--accent); }
+.render-machine .vn-chon.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; cursor: default; }
+.render-machine .vn-chon:disabled:not(.on) { opacity: 0.55; cursor: not-allowed; }

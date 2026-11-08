@@ -1,0 +1,7 @@
+Đưa một bản vá lên máy chủ thật, làm đúng bốn bước.
+Bước một là chạy hết bộ kiểm ngay tại máy mình. Bước hai là đẩy lên một nhánh riêng chứ không đẩy thẳng vào nhánh chính. Bước ba là chạy thử trên máy chủ giống máy thật. Và bước bốn là mở dần cho một phần người dùng trước.
+Bước một làm việc rẻ nhất trước. Lỗi bắt được ở máy mình rẻ hơn gấp nhiều lần lỗi bắt trên máy chủ. Bộ kiểm chạy hai phút, ngắn hơn một lần đẩy hỏng rồi quay lại.
+Bước hai là mỗi thay đổi một nhánh riêng, để nhánh chính luôn ở trạng thái chạy được. Bước ba là máy chủ thử phải giống máy thật, vì khác cấu hình thì kiểm chỉ cho vui.
+Bước bốn thì đừng mở cho tất cả cùng lúc. Mở cho năm phần trăm người dùng rồi xem số liệu trong một giờ. Số liệu yên thì mở tiếp, có gì lạ thì đóng lại trong một phút.
+Chỗ hay hỏng là bỏ bước vì đang vội. Vá gấp mà bỏ bước chạy thử là đổi một sự cố lấy hai. Lúc vội chính là lúc quy trình có giá trị nhất.
+Bốn bước, làm đủ mỗi lần. Làm đủ thì nhanh hơn làm tắt rồi ngồi sửa.

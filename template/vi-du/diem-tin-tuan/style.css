@@ -1,0 +1,252 @@
+/* ══ MẪU ĐIỂM TIN TUẦN NGANG 16:9 (TIN-07) ═════════════════════════════════
+ *
+ * Khung thiết kế **1232 × 693**. Mọi `px` là px CỦA KHUNG; bộ ghi phóng bằng
+ * `zoom`. ⚠ VÙNG AN TOÀN [100, 493] — `.than` khai bằng padding.
+ *
+ * ⚠ VÌ SAO PHẢI LÀ KHUNG NGANG: mỗi tin là **số thứ tự lớn bên trái, chữ ở
+ * giữa, ảnh bên phải** — ba khối nằm cạnh nhau, đọc lướt được trong hai giây.
+ * Khung dọc buộc xếp chồng, và lúc đó nó thành một danh sách dọc dài chứ
+ * không còn là một mục tin.
+ *
+ * ⚠ KHÁC `TIN-06` Bản tin & số liệu: cái kia đào sâu MỘT chủ đề, cái này lướt
+ * NHIỀU tin ngắn. Đừng gộp hai mẫu.
+ *
+ * ══ TÔNG MÀU: MỰC ĐEN TRÊN GIẤY TRẮNG NGÀ + MỘT MÀU NHẤN ═════════════════
+ * ⚠ ĐÂY LÀ MẪU NỀN SÁNG (`visuals.colorMode: "cream"`). Nền sáng thì
+ * `subtitles.color` phải là mực đậm — mặc định của bộ ghi là TRẮNG.
+ *
+ * ⚠ CHỈ MỘT màu nhấn. Bản tin nhiều màu đọc ra như quảng cáo; một màu duy
+ * nhất thì mắt biết ngay đâu là chỗ cần nhìn.
+ *
+ * ⚠ `theme.variables` trong preview-settings.json phải trùng CẢ TÊN LẪN GIÁ
+ * TRỊ với bảng dưới — trình sửa ghi đè `:root` lúc quay.
+ */
+:root {
+  /* ══ BẢNG MÀU CHUẨN — ĐỪNG ĐỔI TÊN ═══════════════════════════════════ */
+  --bg-dark: #faf7f0;
+  --primary: #b5342a;
+  --primary-light: #d2544a;
+  --primary-dark: #7d1f18;
+  --accent: #3c3831;
+  --accent-light: #6a6459;
+  --info: #2f5f86;
+  --success: #1f7a52;
+  --warning: #a8620f;
+  --danger: #b5342a;
+
+  /* ── Tên đọc được, bắc cầu ── */
+  --nen: var(--bg-dark);
+  --nen-2: #ffffff;
+  --chu: #14120f;
+  --chu-mem: #45403a;
+  --chu-mo: #7b746a;
+  --nhan-mau: var(--primary);
+  --vien: rgba(40, 32, 22, 0.16);
+  --ke: rgba(40, 32, 22, 0.26);
+  --bong: 0 8px 22px rgba(46, 36, 22, 0.10);
+
+  /* ── Dải an toàn ── */
+  --an-toan-tren: 100px;
+  --an-toan-duoi: 200px;
+  --le: 76px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ⚠ PHẢI bằng `subtitles.fontSize` trong preview-settings.json. */
+  --subtitle-font-size: 22px;
+  --subtitle-bottom: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #ece6da;
+  color: var(--chu);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+.main-wrapper { height: 100%; display: grid; place-items: center; }
+
+/* ⚠ Bộ ghi GHI ĐÈ width/height/zoom lúc quay; giá trị đây chỉ để xem trước. */
+.slide-container {
+  position: relative;
+  width: 1232px; height: 693px;
+  overflow: hidden;
+  background: var(--nen);
+  border-radius: 18px;
+}
+.slide {
+  position: absolute; inset: 0;
+  display: flex; opacity: 0;
+  transition: opacity 0.42s ease;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* Nền giấy báo: vân sợi rất nhạt, không lưới kỹ thuật. */
+.nen { position: absolute; inset: 0; }
+.nen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(0deg, var(--vien) 0 1px, transparent 1px 7px);
+  opacity: 0.4;
+  mask-image: radial-gradient(ellipse 92% 88% at 50% 46%, #000 14%, transparent 84%);
+}
+.nen-1 { background: radial-gradient(ellipse 72% 84% at 50% 12%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 66%), var(--nen); }
+.nen-2 { background: radial-gradient(ellipse 54% 76% at 12% 40%, color-mix(in srgb, var(--primary) 8%, transparent), transparent 64%), var(--nen); }
+.nen-3 { background: radial-gradient(ellipse 54% 76% at 88% 40%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 64%), var(--nen); }
+.nen-4 { background: radial-gradient(ellipse 56% 74% at 12% 72%, color-mix(in srgb, var(--primary) 8%, transparent), transparent 64%), var(--nen); }
+.nen-5 { background: radial-gradient(ellipse 56% 74% at 88% 26%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 64%), var(--nen); }
+.nen-6 { background: radial-gradient(ellipse 84% 90% at 50% 50%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 70%), var(--nen); }
+
+/* ══ DẢI AN TOÀN KHAI BẰNG PADDING ═══════════════════════════════════════ */
+.than {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  padding: var(--an-toan-tren) var(--le) var(--an-toan-duoi);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 22px;
+}
+.than.giua { align-items: center; text-align: center; gap: 26px; }
+
+/* ══ HỢP ĐỒNG VỚI ĐƯỜNG DỰNG — số `.slide-element` mỗi slide PHẢI bằng số câu
+ * của dòng script tương ứng (trừ slide đầu một câu). ĐỪNG đổi tên lớp. */
+.slide-element {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(5px);
+  transition: opacity 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 0.42s ease;
+}
+.slide-element.visible { opacity: 1; transform: none; filter: none; }
+
+/* ── 1. Bìa ── */
+.bia-nhan {
+  display: flex; flex-direction: row; align-items: center; gap: 11px;
+  font-size: 21px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--primary);
+}
+.cham {
+  width: 11px; height: 11px; border-radius: 50%; background: currentColor;
+  box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 16%, transparent);
+}
+.bia-ngay {
+  display: flex; flex-direction: row; align-items: baseline; gap: 10px;
+  font-size: 118px; font-weight: 900; letter-spacing: -0.045em; line-height: 1;
+  color: var(--chu);
+  font-variant-numeric: tabular-nums;
+}
+.bia-ngay i { font-style: normal; font-size: 62px; color: var(--primary); }
+.bia-ngay span {
+  font-size: 30px; font-weight: 800; letter-spacing: 0.02em; color: var(--chu-mo);
+  margin-left: 6px;
+}
+.bia-so {
+  display: flex; flex-direction: row; align-items: center; gap: 18px;
+  font-size: 22px; font-weight: 800; letter-spacing: 0.06em; color: var(--chu-mem);
+}
+.bia-ke { display: block; width: 110px; height: 2px; background: var(--ke); }
+
+/* ── 2–6. Một mục tin ──
+   ⚠ Ba khối NẰM NGANG: số lớn · chữ · ảnh. Đó là lý do mẫu này phải là khung
+   ngang; xếp dọc thì nó thành một danh sách dài chứ không còn là mục tin. */
+.than-tin { justify-content: center; gap: 18px; }
+.tin-dau { display: flex; flex-direction: row; align-items: center; gap: 24px; }
+.tin-so {
+  font-size: 86px; font-weight: 900; line-height: 1;
+  letter-spacing: -0.05em; color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+/* Kẻ ngang mảnh ngăn giữa các mục — chữ ký của mẫu. */
+.tin-ke { flex: 1; height: 2px; background: var(--ke); }
+
+.tin-than {
+  display: grid; grid-template-columns: 1fr 230px; gap: 40px;
+  align-items: center;
+}
+.tin-chu { display: flex; flex-direction: column; gap: 13px; }
+.tin-tieu-de {
+  font-size: 46px; font-weight: 900; line-height: 1.1;
+  letter-spacing: -0.032em; color: var(--chu);
+}
+.tin-tom { font-size: 24px; line-height: 1.46; color: var(--chu-mem); }
+.tin-tom b { color: var(--chu); font-weight: 800; }
+.tin-nguon {
+  font-size: 16px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--chu-mo);
+}
+
+.tin-anh { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.tin-anh img {
+  display: block; width: 230px; height: 230px;
+  border-radius: 12px; object-fit: cover;
+  background: #000;
+  box-shadow: var(--bong), 0 0 0 1px var(--vien);
+}
+/* ⚠ Chú thích ảnh KHÔNG phải trang trí. Hai trong năm tin ở đây dùng ảnh
+   MINH HOẠ chứ không phải ảnh chính đối tượng — không ghi rõ là nói dối người
+   xem bằng hình. */
+.tin-anh figcaption {
+  font-size: 13px; line-height: 1.32; color: var(--chu-mo);
+  max-width: 230px;
+}
+
+/* ── 7. Tin nổi bật + hỏi khán giả ── */
+.ket-khoi { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.ket-nhan {
+  padding: 7px 17px; border-radius: 999px;
+  background: var(--primary); color: #fff;
+  font-size: 15px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+}
+.ket-tieu-de {
+  max-width: 940px;
+  font-size: 54px; font-weight: 900; line-height: 1.12;
+  letter-spacing: -0.035em; color: var(--chu);
+}
+.ket-tieu-de em { font-style: normal; color: var(--primary); }
+.ket-vi-sao { font-size: 24px; line-height: 1.45; color: var(--chu-mem); }
+.ket-vi-sao b { color: var(--chu); font-weight: 800; }
+.ket-hoi {
+  padding: 15px 28px; border-radius: 15px;
+  background: var(--nen-2); border: 1px solid var(--vien); box-shadow: var(--bong);
+  font-size: 23px; font-weight: 700; color: var(--chu);
+}
+
+.tien-do {
+  position: absolute; left: 0; bottom: 0;
+  height: 5px; width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transition: width 0.42s ease;
+  z-index: 3;
+}
+
+/* ══ CHUYỂN ĐỘNG THÊM ════════════════════════════════════════════════════
+   ⚠ Chỉ `transform` và `opacity`. Kẻ ngang mọc ra từ trái — động tác của một
+   dòng tin vừa được gạch xuống. */
+.tin-ke { transform: scaleX(0); transform-origin: left center; }
+.slide-element.visible .tin-ke {
+  transform: scaleX(1);
+  transition: transform .55s cubic-bezier(.2, .8, .3, 1) .12s;
+}
+.tin-so { opacity: 0; transform: translateX(-12px); }
+.slide-element.visible .tin-so {
+  opacity: 1; transform: none;
+  transition: opacity .38s ease, transform .44s cubic-bezier(.2, .9, .3, 1.15);
+}
+.tin-anh img { opacity: 0; transform: scale(.93); }
+.slide-element.visible .tin-anh img {
+  opacity: 1; transform: none;
+  transition: opacity .44s ease .1s, transform .52s cubic-bezier(.2, .9, .3, 1.15) .1s;
+}
+.bia-ke { transform: scaleX(0); }
+.slide-element.visible .bia-ke {
+  transform: scaleX(1);
+  transition: transform .5s cubic-bezier(.2, .8, .3, 1) .2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tin-ke, .bia-ke { transform: scaleX(1); transition: none; }
+  .tin-so, .tin-anh img { opacity: 1; transform: none; transition: none; }
+}

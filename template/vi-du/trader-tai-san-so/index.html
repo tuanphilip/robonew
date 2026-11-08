@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trader tài sản số — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu bảng điện ban đêm: navy đen, xanh lãi đỏ lỗ, số mono, biểu đồ dừng lỗ — hợp tiền số, trading, tài chính." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-hero">
+          <div class="tt-chip-row"><span class="tt-chip">Tài sản số</span><span class="tt-rule"></span><span class="tt-count">01 · 07</span></div>
+          <h1 class="tt-title tt-title-hero">Thua Vì Lệnh To,<br/><em>Không Phải Vì Coin.</em></h1>
+          <p class="tt-lede">Năm quy tắc giữ vốn của người đi đường dài.</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-head">
+          <div class="tt-chip-row"><span class="tt-chip">Quy tắc 1</span><span class="tt-rule"></span><span class="tt-count">02 · 07</span></div>
+          <h2 class="tt-title">Một Lệnh,<br/><em>Một Phần Trăm.</em></h2>
+        </div>
+        <div class="slide-element fade-up tt-body">Thua mười lệnh liên tiếp vẫn còn chín mươi phần trăm vốn — trò chơi chưa kết thúc.</div>
+        <div class="slide-element fade-up tt-card tt-card-list">
+          <div class="tt-row"><i class="fa-solid fa-wallet"></i><span>Vốn <b class="tt-so">100.000.000đ</b></span></div>
+          <div class="tt-row"><i class="fa-solid fa-percent"></i><span>Rủi ro mỗi lệnh <b class="tt-so tt-xanh">1.000.000đ</b></span></div>
+          <div class="tt-row tt-row-mark"><i class="fa-solid fa-shield-halved"></i><span><mark>Cháy 10 lệnh vẫn còn 90 triệu</mark></span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-head">
+          <div class="tt-chip-row"><span class="tt-chip">Quy tắc 2</span><span class="tt-rule"></span><span class="tt-count">03 · 07</span></div>
+          <h2 class="tt-title">Dừng Lỗ<br/><em>Đặt Trước.</em></h2>
+        </div>
+        <div class="slide-element fade-up tt-body">Chưa biết thoát ở đâu thì chưa được vào — quyết định lúc tỉnh táo, đừng quyết lúc đang đỏ tài khoản.</div>
+        <div class="slide-element fade-up tt-card tt-card-chart">
+          <div class="tt-chart-bar"><i class="fa-solid fa-chart-line"></i><span>Kịch bản viết trước khi vào lệnh</span></div>
+          <svg class="tt-chart" viewBox="0 0 320 120" preserveAspectRatio="none" aria-hidden="true">
+            <rect x="0" y="98" width="320" height="22" fill="rgba(234,57,67,.12)"/>
+            <line x1="0" y1="98" x2="320" y2="98" stroke="#ea3943" stroke-width="2" stroke-dasharray="7 5"/>
+            <g stroke-width="2">
+              <line x1="18" y1="62" x2="18" y2="94" stroke="#ea3943"/><rect x="11" y="68" width="14" height="20" fill="#ea3943"/>
+              <line x1="52" y1="58" x2="52" y2="92" stroke="#16c784"/><rect x="45" y="64" width="14" height="22" fill="#16c784"/>
+              <line x1="86" y1="66" x2="86" y2="96" stroke="#ea3943"/><rect x="79" y="72" width="14" height="18" fill="#ea3943"/>
+              <line x1="120" y1="50" x2="120" y2="88" stroke="#16c784"/><rect x="113" y="56" width="14" height="24" fill="#16c784"/>
+              <line x1="154" y1="40" x2="154" y2="72" stroke="#16c784"/><rect x="147" y="46" width="14" height="20" fill="#16c784"/>
+              <line x1="188" y1="46" x2="188" y2="70" stroke="#ea3943"/><rect x="181" y="50" width="14" height="14" fill="#ea3943"/>
+              <line x1="222" y1="30" x2="222" y2="62" stroke="#16c784"/><rect x="215" y="36" width="14" height="20" fill="#16c784"/>
+              <line x1="256" y1="22" x2="256" y2="50" stroke="#16c784"/><rect x="249" y="26" width="14" height="18" fill="#16c784"/>
+              <line x1="290" y1="12" x2="290" y2="38" stroke="#16c784"/><rect x="283" y="16" width="14" height="16" fill="#16c784"/>
+            </g>
+          </svg>
+          <div class="tt-chart-chu"><span class="tt-do">— — dừng lỗ đặt trước</span><span class="tt-xanh">xanh tăng · đỏ giảm</span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-head">
+          <div class="tt-chip-row"><span class="tt-chip">Quy tắc 3</span><span class="tt-rule"></span><span class="tt-count">04 · 07</span></div>
+          <h2 class="tt-title">Ví Nóng,<br/><em>Ví Lạnh.</em></h2>
+        </div>
+        <div class="slide-element fade-up tt-body">Sàn giữ hộ nghĩa là mình không thật sự cầm — phần lớn tài sản phải nằm ở nơi chỉ mình mở được.</div>
+        <div class="slide-element fade-up tt-card tt-card-duo">
+          <div class="tt-duo-item"><i class="fa-solid fa-fire"></i><span class="tt-pill">Ví nóng · phần nhỏ để giao dịch</span></div>
+          <div class="tt-duo-vs">còn lại</div>
+          <div class="tt-duo-item"><i class="fa-solid fa-snowflake"></i><span class="tt-pill tt-pill-xanh">Ví lạnh · phần lớn cất kỹ</span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-head">
+          <div class="tt-chip-row"><span class="tt-chip">Quy tắc 4</span><span class="tt-rule"></span><span class="tt-count">05 · 07</span></div>
+          <h2 class="tt-title">Nhật Ký<br/><em>Từng Lệnh.</em></h2>
+        </div>
+        <div class="slide-element fade-up tt-body">Không ghi lại thì mọi cú thua đều phí — cùng một sai lầm sẽ quay lại với cái tên khác.</div>
+        <div class="slide-element fade-up tt-card tt-card-shot">
+          <div class="tt-chart-bar"><i class="fa-regular fa-pen-to-square"></i><span>Ba dòng cho mỗi lệnh</span></div>
+          <div class="tt-check"><i class="fa-regular fa-square-check"></i><span>Vì sao vào — một câu</span></div>
+          <div class="tt-check"><i class="fa-regular fa-square-check"></i><span>Thoát ở đâu — viết trước</span></div>
+          <div class="tt-check"><i class="fa-regular fa-square-check"></i><span><mark>Cảm xúc lúc bấm — thật thà</mark></span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-head">
+          <div class="tt-chip-row"><span class="tt-chip">Cái bẫy</span><span class="tt-rule"></span><span class="tt-count">06 · 07</span></div>
+          <h2 class="tt-title">Đòn Bẩy<br/><em>Cắn Hai Chiều.</em></h2>
+        </div>
+        <div class="slide-element fade-up tt-body">Nhân lãi bao nhiêu thì nhân lỗ bấy nhiêu — và thị trường rung lắc là chuyện mỗi ngày.</div>
+        <div class="slide-element fade-up tt-card tt-card-bang">
+          <div class="tt-bang-row tt-bang-dau"><span>Đòn bẩy</span><span>Rung bao nhiêu là cháy</span></div>
+          <div class="tt-bang-row"><span class="tt-so">×5</span><span class="tt-so tt-do">−20%</span></div>
+          <div class="tt-bang-row"><span class="tt-so">×10</span><span class="tt-so tt-do">−10%</span></div>
+          <div class="tt-bang-row"><span class="tt-so">×20</span><span class="tt-so tt-do">−5%</span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="6">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-hero">
+          <div class="tt-chip-row"><span class="tt-chip">Chốt lại</span><span class="tt-rule"></span><span class="tt-count">07 · 07</span></div>
+          <h2 class="tt-title tt-title-hero">Giữ Vốn<br/><em>Trước Đã.</em></h2>
+        </div>
+        <div class="slide-element fade-up tt-lede tt-lede-cta">Sống sót lâu hơn thị trường mới là lợi thế thật.</div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">7</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

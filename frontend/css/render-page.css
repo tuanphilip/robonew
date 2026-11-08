@@ -1,0 +1,10 @@
+/* Dải "đang dựng" — tách từ render-page.js#veDaiDangDung (02/09/2026). */
+.dai-dang-dung { display: flex; align-items: center; gap: var(--sp-8); margin: 0 0 var(--sp-10);
+  padding: var(--sp-8) var(--sp-12); border-radius: var(--radius-md); cursor: pointer; font-size: var(--text-md);
+  border: 1px solid var(--info-line); background: var(--info-bg); }
+.dai-dang-dung:hover { filter: brightness(1.12); }
+.dai-dang-dung .ddd-chu { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dai-dang-dung .ddd-xem { flex: none; opacity: .8; font-size: var(--text-sm); text-decoration: underline; white-space: nowrap; }
+.dai-dang-dung.done { border-color: var(--ok-line); background: var(--ok-bg); }
+.dai-dang-dung.failed { border-color: var(--danger-line); background: var(--danger-bg); }
+.dai-dang-dung.cancelled { border-color: var(--idle-line); background: var(--idle-bg); }

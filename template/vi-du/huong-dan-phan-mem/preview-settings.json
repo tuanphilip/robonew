@@ -1,0 +1,64 @@
+{
+  "_ghiChu": [
+    "Thiet lap cua mau HUONG DAN PHAN MEM (GD-06) — NGANG 16:9, NEN SANG.",
+    "",
+    "⚠ `visuals.colorMode` la `cream`, khong phai `dark`.",
+    "⚠ `subtitles.color` la MUC DAM — nen xam nhat ma de phu de trang la mat sach.",
+    "⚠ `subtitles.fontSize` DE LEN `--subtitle-font-size` trong style.css; doi mot ben thi doi ca hai.",
+    "⚠ KHONG khai `visuals.backgroundFx`: nen da co luoi ke san.",
+    "⚠ `theme.variables` PHAI TRUNG CA TEN LAN GIA TRI voi :root trong style.css.",
+    "Bang duoi day duoc SINH RA tu chinh style.css chu khong go tay."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#eef1f5",
+      "--primary": "#1f6fd0",
+      "--primary-light": "#4a92e8",
+      "--primary-dark": "#14508f",
+      "--accent": "#46586c",
+      "--accent-light": "#5c6b7c",
+      "--info": "#1f6fd0",
+      "--success": "#17835a",
+      "--warning": "#c8901a",
+      "--danger": "#b5372c"
+    },
+    "customVariables": {
+      "--bg-dark": "#eef1f5",
+      "--primary": "#1f6fd0",
+      "--primary-light": "#4a92e8",
+      "--primary-dark": "#14508f",
+      "--accent": "#46586c",
+      "--accent-light": "#5c6b7c",
+      "--info": "#1f6fd0",
+      "--success": "#17835a",
+      "--warning": "#c8901a",
+      "--danger": "#b5372c"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#131c26",
+    "activeColor": "#1f6fd0",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#eef1f5",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Cách tạo video đầu tiên trong Beeknoee Studio, năm bước.",
+      "Bước một, chọn một mẫu. Mở trang mẫu dọc, ngắm qua rồi bấm tạo dự án bằng AI ở mẫu vừa ý.",
+      "Bước hai, tả nội dung. Viết vài dòng về thứ bạn muốn nói, càng rõ thì AI viết càng sát ý bạn.",
+      "Bước ba, sửa lời thoại. Mỗi slide một dòng, sửa ngay ở ô lời thoại slide này bên phải.",
+      "Bước bốn, chọn giọng đọc. Dùng giọng có sẵn của Beeknoee, hoặc tải lên file đọc của riêng bạn.",
+      "Bước năm, bấm tạo video. Nút nằm ở góc trên bên phải, bấm xong thì app tự lo phần còn lại.",
+      "Xong. Lần sau chỉ cần đổi nội dung, còn mẫu, giọng đọc và thiết lập thì vẫn giữ nguyên."
+    ]
+  }
+}

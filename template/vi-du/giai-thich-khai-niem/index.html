@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giải thích khái niệm — Beeknoee Studio</title>
+  <meta name="description" content="Mạch ẩn dụ trước, cơ chế sau, rồi số liệu chứng minh. Hợp giải thích khái niệm kinh tế, khoa học, tài chính cho người mới." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg kn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kn-hero">
+          <div class="kn-nhan">Khái niệm</div>
+          <h1 class="kn-hook">Lãi kép</h1>
+          <div class="kn-phu">thứ khiến người bắt đầu sớm bỏ xa người bắt đầu muộn</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg kn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kn-tag2">
+          <span>Hình dung</span>
+        </div>
+        <div class="slide-element fade-up kn-scene">
+          <svg viewBox="0 0 240 104" aria-hidden="true">
+            <rect x="18" y="89" width="17" height="1" rx="2" fill="var(--primary)" opacity="0.35"/>
+            <rect x="43" y="88.46312481871199" width="17" height="1.5368751812880124" rx="2" fill="var(--primary)" opacity="0.42"/>
+            <rect x="68" y="87.63801467714094" width="17" height="2.361985322859061" rx="2" fill="var(--primary)" opacity="0.49"/>
+            <rect x="93" y="86.36992337873136" width="17" height="3.630076621268643" rx="2" fill="var(--primary)" opacity="0.56"/>
+            <rect x="118" y="84.42102533459838" width="17" height="5.5789746654016215" rx="2" fill="var(--primary)" opacity="0.63"/>
+            <rect x="143" y="81.42581229970966" width="17" height="8.574187700290345" rx="2" fill="var(--primary)" opacity="0.7"/>
+            <rect x="168" y="76.82254372371884" width="17" height="13.177456276281168" rx="2" fill="var(--primary)" opacity="0.77"/>
+            <rect x="193" y="69.74789449647552" width="17" height="20.252105503524476" rx="2" fill="var(--primary)" opacity="0.8400000000000001"/>
+            <rect x="218" y="58.87504168280687" width="17" height="31.124958317193137" rx="2" fill="var(--primary)" opacity="0.91"/>
+            <line x1="10" y1="90" x2="232" y2="90" stroke="var(--primary-dark)" stroke-width="3"/>
+          </svg>
+          <div class="kn-an"><span class="kn-anso">42</span><span class="kn-antxt">lần gấp đôi một tờ giấy mỏng<br/>= cao tới mặt trăng</span></div>
+        </div>
+        <div class="slide-element fade-up kn-line">
+          <span>Không phải vì giấy dày — vì mỗi lần gấp đều <b>nhân đôi cái đã có</b>.</span>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg kn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kn-tag2">
+          <span>Cơ chế thật</span>
+        </div>
+        <div class="slide-element fade-up kn-scene">
+          <svg viewBox="0 0 240 100" aria-hidden="true">
+            <rect x="26" y="34" width="62" height="32" rx="7" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <text x="57" y="55" text-anchor="middle" font-size="15" fill="var(--primary-light)">vốn</text>
+            <rect x="152" y="34" width="62" height="32" rx="7" fill="none" stroke="var(--accent)" stroke-width="3"/>
+            <text x="183" y="55" text-anchor="middle" font-size="15" fill="var(--accent-light)">lãi</text>
+            <path d="M92 44 h54 M138 38 l10 6 l-10 6" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <path d="M183 70 q0 22 -63 22 q-63 0 -63 -22" fill="none" stroke="var(--accent)" stroke-width="3"/>
+            <path d="M51 76 l6 -8 l6 8" fill="none" stroke="var(--accent)" stroke-width="3"/>
+            <text x="120" y="90" text-anchor="middle" font-size="13" fill="var(--accent-light)">cộng thẳng vào vốn</text>
+          </svg>
+        </div>
+        <div class="slide-element fade-up kn-line">
+          <span>Phần vốn lớn hơn đó lại sinh lãi cho <b>năm sau</b>.</span>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg kn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kn-tag2">
+          <span>100 triệu · 10% mỗi năm</span>
+        </div>
+        <div class="slide-element fade-up kn-cot">
+          <div class="kn-thanh" style="height:29%"><span>~195tr</span></div><div class="kn-nam">7 năm</div>
+        </div>
+        <div class="slide-element fade-up kn-cot">
+          <div class="kn-thanh kn-cao" style="height:100%"><span>~672tr</span></div><div class="kn-nam">20 năm</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg kn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kn-scene">
+          <svg viewBox="0 0 240 106" aria-hidden="true">
+            <line x1="16" y1="92" x2="228" y2="92" stroke="var(--primary-dark)" stroke-width="3"/>
+            <path d="M16 88 C90 84 140 72 176 52 C200 38 214 24 224 14" fill="none" stroke="var(--info)" stroke-width="3.4"/>
+            <path d="M176 52 C200 38 214 24 224 14" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+            <line x1="176" y1="52" x2="176" y2="92" stroke="var(--accent)" stroke-width="2.6" stroke-dasharray="4 4"/>
+            <text x="176" y="104" text-anchor="middle" font-size="13" fill="var(--accent-light)">năm 15</text>
+          </svg>
+          <div class="kn-cap">phần lớn số tiền đến ở đoạn dốc cuối</div>
+        </div>
+        <div class="slide-element fade-up kn-canh">
+          <span class="kn-x">×</span><span>rút giữa chừng = không bao giờ nhìn thấy đoạn dốc ấy</span>
+        </div>
+        <div class="slide-element fade-up kn-line kn-mo">
+          <span>Thời gian mới là thứ làm việc, không phải bạn.</span>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg kn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kn-line">
+          <span>Lãi kép không thiên vị ai.</span>
+        </div>
+        <div class="slide-element fade-up kn-dk">
+          <span>bắt đầu sớm</span><span>ngồi yên đủ lâu</span>
+        </div>
+        <div class="slide-element fade-up kn-cta">
+          <span>Sớm hơn một năm &gt; bỏ vào nhiều tiền hơn</span>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

@@ -1,0 +1,2542 @@
+{
+ "phienBan": 2,
+ "khung": {
+  "rong": 1080,
+  "cao": 1920,
+  "fps": 30
+ },
+ "goc": {
+  "video": ""
+ },
+ "amGoc": {
+  "giong": 1,
+  "deck": 1,
+  "tatGiong": false,
+  "tatDeck": false,
+  "haNhac": {
+   "bat": false,
+   "mucDb": 12
+  }
+ },
+ "xuat": {
+  "khung": "goc",
+  "nen": "mo",
+  "mau": {
+   "sang": 1,
+   "tuongPhan": 1.06,
+   "baoHoa": 1.12
+  }
+ },
+ "media": [
+  {
+   "id": "mfb669be511",
+   "loai": "video",
+   "tep": "dung/media/fb669be51120-thanh-pho-dem.mp4",
+   "ten": "thanh-pho-dem.mp4",
+   "ms": 3500,
+   "rong": 608,
+   "cao": 1080,
+   "fps": 30,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 612576,
+   "codec": "h264",
+   "pixFmt": "yuv420p",
+   "codecTieng": ""
+  },
+  {
+   "id": "m0d8a0a8135",
+   "loai": "anh",
+   "tep": "dung/media/0d8a0a813571-ruong-bac-thang-sapa.jpg",
+   "ten": "ruong-bac-thang-sapa.jpg",
+   "ms": 0,
+   "rong": 1352,
+   "cao": 2048,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 675688,
+   "codec": "mjpeg",
+   "pixFmt": "yuvj420p",
+   "codecTieng": ""
+  },
+  {
+   "id": "m54e9fea660",
+   "loai": "anh",
+   "tep": "dung/media/54e9fea660b5-bai-bien.jpg",
+   "ten": "bai-bien.jpg",
+   "ms": 0,
+   "rong": 1352,
+   "cao": 2048,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 350180,
+   "codec": "mjpeg",
+   "pixFmt": "yuvj420p",
+   "codecTieng": ""
+  },
+  {
+   "id": "m2474958226",
+   "loai": "anh",
+   "tep": "dung/media/2474958226ef-oai-huong.jpg",
+   "ten": "oai-huong.jpg",
+   "ms": 0,
+   "rong": 1352,
+   "cao": 2048,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 232385,
+   "codec": "mjpeg",
+   "pixFmt": "yuvj420p",
+   "codecTieng": ""
+  },
+  {
+   "id": "m46956bff30",
+   "loai": "anh",
+   "tep": "dung/media/46956bff30e7-frankfurt-dem.jpg",
+   "ten": "frankfurt-dem.jpg",
+   "ms": 0,
+   "rong": 1352,
+   "cao": 2048,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 358128,
+   "codec": "mjpeg",
+   "pixFmt": "yuvj420p",
+   "codecTieng": ""
+  },
+  {
+   "id": "m27b97e77ea",
+   "loai": "video",
+   "tep": "dung/media/27b97e77ea6c-hoang-hon-paris.mp4",
+   "ten": "hoang-hon-paris.mp4",
+   "ms": 4000,
+   "rong": 1080,
+   "cao": 1920,
+   "fps": 30,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 477592,
+   "codec": "h264",
+   "pixFmt": "yuv420p",
+   "codecTieng": ""
+  },
+  {
+   "id": "m7570829776",
+   "loai": "anh",
+   "tep": "dung/media/757082977617-vien-toi-540x960.png",
+   "ten": "Lớp phủ: Viền tối",
+   "ms": 0,
+   "rong": 540,
+   "cao": 960,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 59269,
+   "codec": "png",
+   "pixFmt": "rgba",
+   "codecTieng": "",
+   "lopPhu": "vien-toi"
+  },
+  {
+   "id": "m9341b8fea5",
+   "loai": "anh",
+   "tep": "dung/media/9341b8fea504-chop-sang-540x960.png",
+   "ten": "Lớp phủ: Chớp sáng",
+   "ms": 0,
+   "rong": 540,
+   "cao": 960,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 4043,
+   "codec": "png",
+   "pixFmt": "rgba",
+   "codecTieng": "",
+   "lopPhu": "chop-sang"
+  },
+  {
+   "id": "mpv61bv",
+   "loai": "anh",
+   "tep": "dung/media/chu-mpv61bv-4deb380f.png",
+   "ten": "Chữ: TOP 5",
+   "ms": 0,
+   "rong": 741,
+   "cao": 482,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 73387,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "TOP 5",
+    "phong": "Anton",
+    "co": 300,
+    "mau": "#ffffff",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mw4gvzn",
+   "loai": "anh",
+   "tep": "dung/media/chu-mw4gvzn-d394a5c6.png",
+   "ten": "Chữ: điểm đến phải đi một lần",
+   "ms": 0,
+   "rong": 811,
+   "cao": 145,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 58470,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "điểm đến phải đi một lần",
+    "phong": "Dancing Script",
+    "co": 86,
+    "mau": "#ffd166",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": false,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mleyk8u",
+   "loai": "anh",
+   "tep": "dung/media/chu-mleyk8u-efddd2e9.png",
+   "ten": "Chữ: 5",
+   "ms": 0,
+   "rong": 334,
+   "cao": 610,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 32450,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "5",
+    "phong": "Anton",
+    "co": 380,
+    "mau": "#ffd166",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "m8h6zqh",
+   "loai": "anh",
+   "tep": "dung/media/chu-m8h6zqh-7218b91a.png",
+   "ten": "Chữ: 4",
+   "ms": 0,
+   "rong": 334,
+   "cao": 610,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 31837,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "4",
+    "phong": "Anton",
+    "co": 380,
+    "mau": "#ffd166",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mfah15c",
+   "loai": "anh",
+   "tep": "dung/media/chu-mfah15c-6a8a2f33.png",
+   "ten": "Chữ: 3",
+   "ms": 0,
+   "rong": 334,
+   "cao": 610,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 35925,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "3",
+    "phong": "Anton",
+    "co": 380,
+    "mau": "#ffd166",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mzapbpa",
+   "loai": "anh",
+   "tep": "dung/media/chu-mzapbpa-d0b003ac.png",
+   "ten": "Chữ: 2",
+   "ms": 0,
+   "rong": 334,
+   "cao": 610,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 34403,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "2",
+    "phong": "Anton",
+    "co": 380,
+    "mau": "#ffd166",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "m2qfjv0",
+   "loai": "anh",
+   "tep": "dung/media/chu-m2qfjv0-19494ec0.png",
+   "ten": "Chữ: 1",
+   "ms": 0,
+   "rong": 272,
+   "cao": 610,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 20110,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "1",
+    "phong": "Anton",
+    "co": 380,
+    "mau": "#ffd166",
+    "nen": "",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": true,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "makr11f",
+   "loai": "anh",
+   "tep": "dung/media/chu-makr11f-59680c55.png",
+   "ten": "Chữ: SA PA",
+   "ms": 0,
+   "rong": 243,
+   "cao": 127,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 4993,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "SA PA",
+    "phong": "Montserrat",
+    "co": 60,
+    "mau": "#ffffff",
+    "nen": "#000000a6",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": false,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mjq2unc",
+   "loai": "anh",
+   "tep": "dung/media/chu-mjq2unc-95f562ce.png",
+   "ten": "Chữ: BIỂN ĐẢO",
+   "ms": 0,
+   "rong": 372,
+   "cao": 127,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 7421,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "BIỂN ĐẢO",
+    "phong": "Montserrat",
+    "co": 60,
+    "mau": "#ffffff",
+    "nen": "#000000a6",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": false,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "miwqpbr",
+   "loai": "anh",
+   "tep": "dung/media/chu-miwqpbr-ac7e3e03.png",
+   "ten": "Chữ: ĐỒI OẢI HƯƠNG",
+   "ms": 0,
+   "rong": 566,
+   "cao": 127,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 11853,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "ĐỒI OẢI HƯƠNG",
+    "phong": "Montserrat",
+    "co": 60,
+    "mau": "#ffffff",
+    "nen": "#000000a6",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": false,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mfn2d05",
+   "loai": "anh",
+   "tep": "dung/media/chu-mfn2d05-22272dae.png",
+   "ten": "Chữ: FRANKFURT",
+   "ms": 0,
+   "rong": 442,
+   "cao": 127,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 7100,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "FRANKFURT",
+    "phong": "Montserrat",
+    "co": 60,
+    "mau": "#ffffff",
+    "nen": "#000000a6",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": false,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "m2bqq5w",
+   "loai": "anh",
+   "tep": "dung/media/chu-m2bqq5w-40683ff4.png",
+   "ten": "Chữ: PARIS",
+   "ms": 0,
+   "rong": 244,
+   "cao": 127,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 5087,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "PARIS",
+    "phong": "Montserrat",
+    "co": 60,
+    "mau": "#ffffff",
+    "nen": "#000000a6",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": false,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "mso4knr",
+   "loai": "anh",
+   "tep": "dung/media/chu-mso4knr-59f52ad5.png",
+   "ten": "Chữ: Bạn thích nơi nào nhất?",
+   "ms": 0,
+   "rong": 591,
+   "cao": 100,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": false,
+   "byte": 8254,
+   "codec": "",
+   "pixFmt": "",
+   "codecTieng": "",
+   "chu": {
+    "noiDung": "Bạn thích nơi nào nhất?",
+    "phong": "Be Vietnam Pro",
+    "co": 46,
+    "mau": "#111111",
+    "nen": "#ffd166",
+    "vien": 0,
+    "mauVien": "#000000",
+    "bong": false,
+    "dam": true,
+    "nghieng": false,
+    "canh": "giua"
+   }
+  },
+  {
+   "id": "m2a1700a48d",
+   "loai": "tieng",
+   "tep": "dung/media/2a1700a48da2-no-tram.wav",
+   "ten": "Hiệu ứng: Nổ trầm",
+   "ms": 2000,
+   "rong": 0,
+   "cao": 0,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": true,
+   "byte": 352844,
+   "codec": "pcm_s16le",
+   "pixFmt": "",
+   "codecTieng": "pcm_s16le"
+  },
+  {
+   "id": "m165db29b01",
+   "loai": "tieng",
+   "tep": "dung/media/165db29b01f5-vut-nhanh.wav",
+   "ten": "Hiệu ứng: Vút nhanh",
+   "ms": 400,
+   "rong": 0,
+   "cao": 0,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": true,
+   "byte": 70604,
+   "codec": "pcm_s16le",
+   "pixFmt": "",
+   "codecTieng": "pcm_s16le"
+  },
+  {
+   "id": "m5b9b264897",
+   "loai": "tieng",
+   "tep": "dung/media/5b9b264897a1-bup.wav",
+   "ten": "Hiệu ứng: Bụp",
+   "ms": 200,
+   "rong": 0,
+   "cao": 0,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": true,
+   "byte": 35324,
+   "codec": "pcm_s16le",
+   "pixFmt": "",
+   "codecTieng": "pcm_s16le"
+  },
+  {
+   "id": "m4a0ef3cf58",
+   "loai": "tieng",
+   "tep": "dung/media/4a0ef3cf58eb-dang.wav",
+   "ten": "Hiệu ứng: Tiếng dâng",
+   "ms": 2500,
+   "rong": 0,
+   "cao": 0,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": true,
+   "byte": 441044,
+   "codec": "pcm_s16le",
+   "pixFmt": "",
+   "codecTieng": "pcm_s16le"
+  },
+  {
+   "id": "m6a01beeb22",
+   "loai": "tieng",
+   "tep": "dung/media/6a01beeb2273-ting.wav",
+   "ten": "Hiệu ứng: Ting",
+   "ms": 1600,
+   "rong": 0,
+   "cao": 0,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": true,
+   "byte": 282284,
+   "codec": "pcm_s16le",
+   "pixFmt": "",
+   "codecTieng": "pcm_s16le"
+  },
+  {
+   "id": "mfe13cc95a6",
+   "loai": "tieng",
+   "tep": "dung/media/fe13cc95a6d6-cinematic.mp3",
+   "ten": "Nhạc: Điện ảnh",
+   "ms": 32000,
+   "rong": 0,
+   "cao": 0,
+   "fps": 0,
+   "xoay": 0,
+   "coTieng": true,
+   "byte": 769296,
+   "codec": "mp3",
+   "pixFmt": "",
+   "codecTieng": "mp3"
+  }
+ ],
+ "track": [
+  {
+   "id": "V2",
+   "loai": "hinh",
+   "ten": "Cảnh (ô của mẫu)",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "V3",
+   "loai": "hinh",
+   "ten": "Lớp phủ",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "V4",
+   "loai": "hinh",
+   "ten": "Ánh sáng",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "V5",
+   "loai": "hinh",
+   "ten": "Chữ lớn",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "V6",
+   "loai": "hinh",
+   "ten": "Chữ nhỏ",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "V7",
+   "loai": "hinh",
+   "ten": "Nhãn / nút",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "A4",
+   "loai": "tieng",
+   "ten": "Nhạc nền",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "A5",
+   "loai": "tieng",
+   "ten": "Tiếng hiệu ứng",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "A6",
+   "loai": "tieng",
+   "ten": "Tiếng hiệu ứng 2",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  },
+  {
+   "id": "A7",
+   "loai": "tieng",
+   "ten": "Tiếng hiệu ứng 3",
+   "khoa": false,
+   "an": false,
+   "tatTieng": false,
+   "amLuong": 1
+  }
+ ],
+ "khoi": [
+  {
+   "id": "kstimkh",
+   "track": "V2",
+   "media": "mfb669be511",
+   "neo": null,
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1.1009053497942387,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0,
+   "mo": {
+    "vaoMs": 200,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {
+    "x": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "y": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "co": [
+     {
+      "t": 0,
+      "v": 1.1009,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 1.0008,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "oCho": {
+    "so": 1,
+    "daThay": false,
+    "phu": true
+   }
+  },
+  {
+   "id": "k511rwh",
+   "track": "V2",
+   "media": "m0d8a0a8135",
+   "neo": null,
+   "batDauMs": 2500,
+   "vaoMs": 0,
+   "raMs": 2500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1.4083333333333334,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0,
+   "mo": {
+    "vaoMs": 350,
+    "raMs": 0,
+    "kieuVao": "truot-len",
+    "kieuRa": "mo",
+    "noi": true
+   },
+   "kf": {
+    "x": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "y": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "co": [
+     {
+      "t": 0,
+      "v": 1.4083,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 1.1971,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 1.291,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "oCho": {
+    "so": 2,
+    "daThay": false,
+    "phu": true
+   }
+  },
+  {
+   "id": "kir2u2c",
+   "track": "V2",
+   "media": "m54e9fea660",
+   "neo": null,
+   "batDauMs": 5000,
+   "vaoMs": 0,
+   "raMs": 2500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1.4083333333333334,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0,
+   "mo": {
+    "vaoMs": 350,
+    "raMs": 0,
+    "kieuVao": "truot-len",
+    "kieuRa": "mo",
+    "noi": true
+   },
+   "kf": {
+    "x": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "y": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "co": [
+     {
+      "t": 0,
+      "v": 1.4083,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 1.1971,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 1.291,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "oCho": {
+    "so": 3,
+    "daThay": false,
+    "phu": true
+   }
+  },
+  {
+   "id": "kkuzayw",
+   "track": "V2",
+   "media": "m2474958226",
+   "neo": null,
+   "batDauMs": 7500,
+   "vaoMs": 0,
+   "raMs": 2500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1.4083333333333334,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0,
+   "mo": {
+    "vaoMs": 350,
+    "raMs": 0,
+    "kieuVao": "truot-len",
+    "kieuRa": "mo",
+    "noi": true
+   },
+   "kf": {
+    "x": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "y": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "co": [
+     {
+      "t": 0,
+      "v": 1.4083,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 1.1971,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 1.291,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "oCho": {
+    "so": 4,
+    "daThay": false,
+    "phu": true
+   }
+  },
+  {
+   "id": "kgdrukg",
+   "track": "V2",
+   "media": "m46956bff30",
+   "neo": null,
+   "batDauMs": 10000,
+   "vaoMs": 0,
+   "raMs": 2500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1.4083333333333334,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0,
+   "mo": {
+    "vaoMs": 350,
+    "raMs": 0,
+    "kieuVao": "truot-len",
+    "kieuRa": "mo",
+    "noi": true
+   },
+   "kf": {
+    "x": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "y": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "co": [
+     {
+      "t": 0,
+      "v": 1.4083,
+      "muot": true
+     },
+     {
+      "t": 350,
+      "v": 1.1971,
+      "muot": true
+     },
+     {
+      "t": 2500,
+      "v": 1.291,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "oCho": {
+    "so": 5,
+    "daThay": false,
+    "phu": true
+   }
+  },
+  {
+   "id": "khuf1yq",
+   "track": "V2",
+   "media": "m27b97e77ea",
+   "neo": null,
+   "batDauMs": 12500,
+   "vaoMs": 0,
+   "raMs": 3500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0,
+   "mo": {
+    "vaoMs": 400,
+    "raMs": 700,
+    "kieuVao": "phong-lon",
+    "kieuRa": "mo",
+    "noi": true
+   },
+   "kf": {
+    "x": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 3500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "y": [
+     {
+      "t": 0,
+      "v": 0.5,
+      "muot": true
+     },
+     {
+      "t": 3500,
+      "v": 0.5,
+      "muot": true
+     }
+    ],
+    "co": [
+     {
+      "t": 0,
+      "v": 1,
+      "muot": true
+     },
+     {
+      "t": 3500,
+      "v": 1.1,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "oCho": {
+    "so": 6,
+    "daThay": false,
+    "phu": true
+   }
+  },
+  {
+   "id": "kkdkelg",
+   "track": "V3",
+   "media": "m7570829776",
+   "neo": null,
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 16000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 0.85
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k3avmd2",
+   "track": "V4",
+   "media": "m9341b8fea5",
+   "neo": null,
+   "batDauMs": 2400,
+   "vaoMs": 0,
+   "raMs": 360,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {
+    "mo": [
+     {
+      "t": 0,
+      "v": 0,
+      "muot": true
+     },
+     {
+      "t": 120,
+      "v": 0.765,
+      "muot": true
+     },
+     {
+      "t": 360,
+      "v": 0,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kvef9n4",
+   "track": "V4",
+   "media": "m9341b8fea5",
+   "neo": null,
+   "batDauMs": 4900,
+   "vaoMs": 0,
+   "raMs": 360,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {
+    "mo": [
+     {
+      "t": 0,
+      "v": 0,
+      "muot": true
+     },
+     {
+      "t": 120,
+      "v": 0.765,
+      "muot": true
+     },
+     {
+      "t": 360,
+      "v": 0,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "klbckqb",
+   "track": "V4",
+   "media": "m9341b8fea5",
+   "neo": null,
+   "batDauMs": 7400,
+   "vaoMs": 0,
+   "raMs": 360,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {
+    "mo": [
+     {
+      "t": 0,
+      "v": 0,
+      "muot": true
+     },
+     {
+      "t": 120,
+      "v": 0.765,
+      "muot": true
+     },
+     {
+      "t": 360,
+      "v": 0,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kc0z5il",
+   "track": "V4",
+   "media": "m9341b8fea5",
+   "neo": null,
+   "batDauMs": 9900,
+   "vaoMs": 0,
+   "raMs": 360,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {
+    "mo": [
+     {
+      "t": 0,
+      "v": 0,
+      "muot": true
+     },
+     {
+      "t": 120,
+      "v": 0.765,
+      "muot": true
+     },
+     {
+      "t": 360,
+      "v": 0,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kynsw6t",
+   "track": "V4",
+   "media": "m9341b8fea5",
+   "neo": null,
+   "batDauMs": 12400,
+   "vaoMs": 0,
+   "raMs": 360,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {
+    "mo": [
+     {
+      "t": 0,
+      "v": 0,
+      "muot": true
+     },
+     {
+      "t": 120,
+      "v": 0.765,
+      "muot": true
+     },
+     {
+      "t": 360,
+      "v": 0,
+      "muot": true
+     }
+    ]
+   },
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kwn6ax3",
+   "track": "V5",
+   "media": "mpv61bv",
+   "neo": {
+    "slide": 0,
+    "lechMs": 300
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2100,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.42,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 450,
+    "raMs": 300,
+    "kieuVao": "nay",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "ky70e7b",
+   "track": "V6",
+   "media": "mw4gvzn",
+   "neo": {
+    "slide": 0,
+    "lechMs": 800
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 1600,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.52,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 550,
+    "raMs": 350,
+    "kieuVao": "truot-len",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kqeyyto",
+   "track": "V5",
+   "media": "mleyk8u",
+   "neo": {
+    "slide": 0,
+    "lechMs": 2700
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.2,
+    "y": 0.16,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 450,
+    "raMs": 300,
+    "kieuVao": "nay",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kua0gys",
+   "track": "V5",
+   "media": "m8h6zqh",
+   "neo": {
+    "slide": 0,
+    "lechMs": 5200
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.2,
+    "y": 0.16,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 450,
+    "raMs": 300,
+    "kieuVao": "nay",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kftw2nc",
+   "track": "V5",
+   "media": "mfah15c",
+   "neo": {
+    "slide": 0,
+    "lechMs": 7700
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.2,
+    "y": 0.16,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 450,
+    "raMs": 300,
+    "kieuVao": "nay",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k255r39",
+   "track": "V5",
+   "media": "mzapbpa",
+   "neo": {
+    "slide": 0,
+    "lechMs": 10200
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.2,
+    "y": 0.16,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 450,
+    "raMs": 300,
+    "kieuVao": "nay",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k7jf9kw",
+   "track": "V5",
+   "media": "m2qfjv0",
+   "neo": {
+    "slide": 0,
+    "lechMs": 12800
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 3100,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.2,
+    "y": 0.16,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 450,
+    "raMs": 300,
+    "kieuVao": "nay",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k91hkf9",
+   "track": "V6",
+   "media": "makr11f",
+   "neo": {
+    "slide": 0,
+    "lechMs": 2900
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.8,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 800,
+    "raMs": 600,
+    "kieuVao": "quet-mem-phai",
+    "kieuRa": "quet-mem-phai",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kdh1bi9",
+   "track": "V6",
+   "media": "mjq2unc",
+   "neo": {
+    "slide": 0,
+    "lechMs": 5400
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.8,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 800,
+    "raMs": 600,
+    "kieuVao": "quet-mem-phai",
+    "kieuRa": "quet-mem-phai",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k6oqha5",
+   "track": "V6",
+   "media": "miwqpbr",
+   "neo": {
+    "slide": 0,
+    "lechMs": 7900
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.8,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 800,
+    "raMs": 600,
+    "kieuVao": "quet-mem-phai",
+    "kieuRa": "quet-mem-phai",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kq5347h",
+   "track": "V6",
+   "media": "mfn2d05",
+   "neo": {
+    "slide": 0,
+    "lechMs": 10400
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.8,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 800,
+    "raMs": 600,
+    "kieuVao": "quet-mem-phai",
+    "kieuRa": "quet-mem-phai",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k07qw97",
+   "track": "V6",
+   "media": "m2bqq5w",
+   "neo": {
+    "slide": 0,
+    "lechMs": 13000
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2900,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.8,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 800,
+    "raMs": 600,
+    "kieuVao": "quet-mem-phai",
+    "kieuRa": "quet-mem-phai",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kckzb8z",
+   "track": "V7",
+   "media": "mso4knr",
+   "neo": {
+    "slide": 0,
+    "lechMs": 13600
+   },
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2400,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.88,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 1,
+   "mo": {
+    "vaoMs": 550,
+    "raMs": 350,
+    "kieuVao": "truot-len",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k9bbsbj",
+   "track": "A5",
+   "media": "m2a1700a48d",
+   "neo": null,
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 2000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.8,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kln33ii",
+   "track": "A5",
+   "media": "m165db29b01",
+   "neo": null,
+   "batDauMs": 2300,
+   "vaoMs": 0,
+   "raMs": 400,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.55,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "khwr4s7",
+   "track": "A5",
+   "media": "m5b9b264897",
+   "neo": null,
+   "batDauMs": 2700,
+   "vaoMs": 0,
+   "raMs": 200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.6,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "km008sl",
+   "track": "A5",
+   "media": "m165db29b01",
+   "neo": null,
+   "batDauMs": 4800,
+   "vaoMs": 0,
+   "raMs": 400,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.55,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k23y97d",
+   "track": "A5",
+   "media": "m5b9b264897",
+   "neo": null,
+   "batDauMs": 5200,
+   "vaoMs": 0,
+   "raMs": 200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.6,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "khlif0a",
+   "track": "A5",
+   "media": "m165db29b01",
+   "neo": null,
+   "batDauMs": 7300,
+   "vaoMs": 0,
+   "raMs": 400,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.55,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kfkxgy6",
+   "track": "A5",
+   "media": "m5b9b264897",
+   "neo": null,
+   "batDauMs": 7700,
+   "vaoMs": 0,
+   "raMs": 200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.6,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kpew925",
+   "track": "A5",
+   "media": "m165db29b01",
+   "neo": null,
+   "batDauMs": 9800,
+   "vaoMs": 0,
+   "raMs": 400,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.55,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k41t9ak",
+   "track": "A6",
+   "media": "m4a0ef3cf58",
+   "neo": null,
+   "batDauMs": 10000,
+   "vaoMs": 0,
+   "raMs": 2500,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.45,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kbblpzz",
+   "track": "A5",
+   "media": "m5b9b264897",
+   "neo": null,
+   "batDauMs": 10200,
+   "vaoMs": 0,
+   "raMs": 200,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.6,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "kqllqjm",
+   "track": "A5",
+   "media": "m2a1700a48d",
+   "neo": null,
+   "batDauMs": 12500,
+   "vaoMs": 0,
+   "raMs": 2000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.7,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "krw45z8",
+   "track": "A6",
+   "media": "m6a01beeb22",
+   "neo": null,
+   "batDauMs": 13600,
+   "vaoMs": 0,
+   "raMs": 1600,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.45,
+   "mo": {
+    "vaoMs": 0,
+    "raMs": 0,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   }
+  },
+  {
+   "id": "k47a6tc",
+   "track": "A4",
+   "media": "mfe13cc95a6",
+   "neo": null,
+   "batDauMs": 0,
+   "vaoMs": 0,
+   "raMs": 16000,
+   "tocDo": 1,
+   "bienDoi": {
+    "x": 0.5,
+    "y": 0.5,
+    "co": 1,
+    "xoay": 0,
+    "mo": 1
+   },
+   "amLuong": 0.75,
+   "mo": {
+    "vaoMs": 1000,
+    "raMs": 2000,
+    "kieuVao": "mo",
+    "kieuRa": "mo",
+    "noi": false
+   },
+   "kf": {},
+   "cat": {
+    "trai": 0,
+    "phai": 0,
+    "tren": 0,
+    "duoi": 0
+   },
+   "lat": {
+    "ngang": false,
+    "doc": false
+   },
+   "lap": true
+  }
+ ],
+ "danhDau": [],
+ "slide": null,
+ "phuDe": null
+}

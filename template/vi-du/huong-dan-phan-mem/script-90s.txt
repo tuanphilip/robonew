@@ -1,0 +1,7 @@
+Cách tạo video đầu tiên trong Beeknoee Studio, năm bước.
+Bước một, chọn một mẫu. Mở trang mẫu dọc, ngắm qua rồi bấm tạo dự án bằng AI ở mẫu vừa ý.
+Bước hai, tả nội dung. Viết vài dòng về thứ bạn muốn nói, càng rõ thì AI viết càng sát ý bạn.
+Bước ba, sửa lời thoại. Mỗi slide một dòng, sửa ngay ở ô lời thoại slide này bên phải.
+Bước bốn, chọn giọng đọc. Dùng giọng có sẵn của Beeknoee, hoặc tải lên file đọc của riêng bạn.
+Bước năm, bấm tạo video. Nút nằm ở góc trên bên phải, bấm xong thì app tự lo phần còn lại.
+Xong. Lần sau chỉ cần đổi nội dung, còn mẫu, giọng đọc và thiết lập thì vẫn giữ nguyên.

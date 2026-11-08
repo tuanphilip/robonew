@@ -1,0 +1,1099 @@
+};
+/* ══ BẢNG MÀU CỦA BẢNG EDITOR ═══════════════════════════════════════════════
+ *
+ * ⚠ Tệp này KHÔNG phải stylesheet hai tông như app. Nó là một lớp VÁ tiêm vào
+ * trang deck của người dùng: tông tối đã do CSS của chính deck lo, còn ở đây
+ * gần như mọi khai báo màu đều là chỉnh riêng cho TÔNG SÁNG (đo được: 96 khai
+ * báo chỉ có bản sáng, chỉ 2 cặp tối/sáng cùng một thuộc tính).
+ *
+ * Vì vậy bảng màu chia hai:
+ *   :root                 — màu trung tính, áp cho cả hai tông
+ *   html.bee-light    — bảng màu tông sáng
+ *
+ * ⚠ Tên token BẮT BUỘC có tiền tố `--ed-`. CSS này sống chung trang với CSS của
+ * deck do người dùng (hoặc AI) viết; tên trần kiểu `--text` sẽ đụng biến của họ.
+ *
+ * Tên đặt theo ĐÚNG CÁI NÓ LÀ (`--ed-den-58` = đen 58%) chứ không theo vai trò:
+ * cùng một mức đen vừa làm chữ vừa làm viền vừa làm nền ở các luật khác nhau,
+ * đặt tên theo vai trò là nói sai ở hai phần ba số chỗ dùng.
+ *
+ * Giá trị giữ NGUYÊN từng con số — đây là lớp vá, không phải hệ thiết kế; gom
+ * bậc ở đây là đổi hình trong trang của người dùng mà chẳng được gì.
+ */
+/* Trung tính — cả hai tông dùng chung. */
+:root {
+  --ed-xam-06: rgba(128,128,128,0.06);
+  --ed-xam-15: rgba(128,128,128,0.15);
+  --ed-xam-16: rgba(128,128,128,0.16);
+  --ed-xam-22: rgba(128,128,128,0.22);
+  --ed-xam-28: rgba(128,128,128,0.28);
+  --ed-xam-30: rgba(128,128,128,0.30);
+  --ed-xam-35: rgba(128,128,128,0.35);
+  --ed-xam-45: rgba(128,128,128,0.45);
+  /* Màu TÊN ô trong bảng sửa. Bản gốc của deck để trắng 62% / đen 58% — nhạt
+     ngang chú thích, mà đây là tên của ô ngay bên cạnh nên phải đọc trước. */
+  --ed-nhan: rgba(255,255,255,0.88);
+  --ed-num-nut: #fff;
+  /* Màu BÀN LÀM VIỆC ở tông tối — chép đúng `--body-bg` của app ngoài.
+     Deck vốn là một trang trình chiếu nền gần như đen (#020306), hợp khi xem
+     toàn màn hình nhưng ở đây nó chỉ là cái bàn kê bảng sửa: mở trang sửa từ
+     app là thấy ngay một vệt tối sập xuống ngay dưới thanh tiêu đề. */
+  --ed-ban: #262624;
+  --ed-ban-chu: #f4f4f5;
+  --ed-cong-tac-bat: #2f9e5f;
+  /* Mách nhỏ: NGƯỢC tông với bảng. Cùng tông thì phải kẻ viền mới tách được
+     khỏi nền, mà mách nhỏ có viền nhìn như một hộp thoại con. */
+  --ed-mach-nen: rgba(244,245,247,0.97);
+  --ed-mach-chu: #14161a;
+}
+
+/* Tông sáng. */
+html.bee-light {
+  --ed-nhan: rgba(0,0,0,0.84);
+  --ed-muc: #14161a;
+  --ed-giay: #ffffff;
+  --ed-giay-96: rgba(255,255,255,0.96);
+  --ed-giay-97: rgba(255,255,255,0.97);
+  --ed-den-84: rgba(0,0,0,0.84);
+  --ed-den-78: rgba(0,0,0,0.78);
+  --ed-den-74: rgba(0,0,0,0.74);
+  --ed-den-72: rgba(0,0,0,0.72);
+  --ed-den-70: rgba(0,0,0,0.70);
+  --ed-den-62: rgba(0,0,0,0.62);
+  --ed-den-58: rgba(0,0,0,0.58);
+  --ed-den-56: rgba(0,0,0,0.56);
+  --ed-den-50: rgba(0,0,0,0.50);
+  --ed-den-48: rgba(0,0,0,0.48);
+  --ed-den-44: rgba(0,0,0,0.44);
+  --ed-den-38: rgba(0,0,0,0.38);
+  --ed-den-22: rgba(0,0,0,0.22);
+  --ed-den-14: rgba(0,0,0,0.14);
+  --ed-den-12: rgba(0,0,0,0.12);
+  --ed-den-10: rgba(0,0,0,0.10);
+  --ed-den-08: rgba(0,0,0,0.08);
+  --ed-den-05: rgba(0,0,0,0.05);
+  --ed-den-045: rgba(0,0,0,0.045);
+  --ed-den-04: rgba(0,0,0,0.04);
+  --ed-den-035: rgba(0,0,0,0.035);
+  --ed-den-03: rgba(0,0,0,0.03);
+  --ed-do: #a32626;
+  --ed-do-vien: rgba(200,40,40,0.40);
+  --ed-do-nen: rgba(200,40,40,0.08);
+  --ed-xanh: #15803d;
+  --ed-xanh-vien: rgba(22,163,74,0.40);
+  --ed-xanh-nen: rgba(22,163,74,0.08);
+  --ed-mach-nen: rgba(22,24,28,0.95);
+  --ed-mach-chu: #ffffff;
+}
+
+/* ---------------------------------------------------- áp cho CẢ HAI tông màu
+   (không gắn html.bee-light) */
+
+/* Bỏ tiêu đề "Preview Editor" + icon: đã đứng trong màn hình sửa rồi thì
+   không cần biển tên, và nó chiếm nguyên một dòng ngang bảng. */
+/* BẮT BUỘC. Thẻ button/input/select KHÔNG thừa kế font-family — chúng dùng font
+   mặc định của trình duyệt, ở đây là Arial. Đã đo: nút "Nghe thử tiếng chuyển"
+   trả về fontFamily "Arial" trong khi cả trang dùng Inter.
+   Hậu quả nhìn thấy được: dấu tiếng Việt trên các nút vẽ xấu và lệch so với
+   phần chữ xung quanh — trông như lỗi font, thực ra là lỗi thừa kế.
+   Đúng lỗi đã vá một lần ở app chính, nay tái diễn trong khung deck. */
+.theme-editor-panel button,
+.theme-editor-panel input,
+.theme-editor-panel select,
+.theme-editor-panel textarea,
+.side-controls button { font-family: inherit; }
+
+.theme-editor-title { display: none; }
+
+/* Tiêu đề từng thẻ con: BỎ. Tab ngay trên đã ghi tên rồi, để thêm một dòng
+   "TONE MÀU" ngay dưới tab "Tone màu" là nói hai lần cùng một điều. */
+.tab-card .tab-pane > .theme-editor-section-title,
+.tab-card .merged-title .theme-editor-section-title { display: none; }
+
+/* Bảng editor không có nền riêng — dùng chung nền của trang. Ba lớp nền lồng
+   nhau (trang → bảng → từng hộp) là thứ làm giao diện nhìn nặng. */
+.theme-editor-panel { background: none; box-shadow: none; padding: 0; }
+
+/* Chỉ VIỀN, không đổ bóng. Bóng làm mỗi hộp nổi lên như một thẻ rời, cộng lại
+   thành một mặt bàn lổn nhổn. Bỏ luôn blur nền vì không còn nền để làm mờ. */
+.theme-editor-section { box-shadow: none; backdrop-filter: none; }
+
+/* Khung xem slide 9:16 cũng bỏ bóng — giữ viền cho biết mép khung ở đâu. */
+.slide-container { box-shadow: none; }
+
+/* Cột nút cạnh slide: bỏ hẳn nền và viền, để mấy cái nút đứng trần. */
+.side-controls { background: none; border: 0; box-shadow: none; backdrop-filter: none; }
+.side-btn { background: none; border: 0; box-shadow: none; }
+.side-btn:hover { background: var(--ed-xam-16); }
+
+/* Nút đổi tông slide (Dark/Cream) chuyển từ TONE MÀU sang cột này. Ép về dạng
+   nút tròn cho khớp mấy nút bên dưới — bản gốc nó là nút chữ nhật có nhãn. */
+.side-tone-toggle {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  box-shadow: none;
+}
+.side-tone-toggle:hover { background: var(--ed-xam-16); }
+.side-tone-toggle span { display: none; }
+
+/* Hai đèn + hai ô màu thành HAI CỘT cân nhau, mỗi cột một cặp icon-nhãn-màu.
+   Bản gốc xếp hai nhãn một hàng rồi hai ô màu một hàng — nhãn ngắn nên hàng
+   trên thừa cả mảng trống, còn ô màu thì kéo dài hết chiều ngang. */
+.tone-color-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  align-items: center;
+}
+/* Mảng màu bên trái, tên đèn bên phải, CÙNG MỘT DÒNG.
+   Xếp dọc thì mỗi đèn ăn hai dòng mà dòng nhãn gần như trống — bảng dài ra vô
+   ích. Mảng màu neo 92px để hai đèn thẳng hàng nhau. */
+/* Nhãn đèn bên TRÁI, mảng màu bên phải — cùng chiều với hàng "Hiệu ứng" ngay
+   trên nó, nên hai hàng thẳng cột với nhau. */
+.tone-color-row > label.theme-editor-field {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.tone-color-row > label.theme-editor-field > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+}
+
+/* Nhãn "Hiệu ứng nền" / "Hiệu ứng video" cũng về cùng dòng với ô chọn. */
+.tone-top-row > label.theme-editor-field {
+  display: grid;
+  /* Cột nhãn RỘNG CỐ ĐỊNH, không auto: "Hiệu ứng nền" ngắn hơn "Hiệu ứng
+     video" 10px nên hai ô chọn lệch đúng chừng đó (đã đo 327 vs 317). */
+  grid-template-columns: 104px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.tone-top-row > label.theme-editor-field > span { margin: 0; white-space: nowrap; }
+
+/* Thẻ ÂM THANH SLIDE và NHẠC NỀN cũng xếp nhãn cạnh ô chọn như thẻ Tone màu —
+   ba thẻ nằm trong cùng một bảng, để mỗi thẻ một kiểu là mắt phải học lại bố
+   cục ở mỗi tab. */
+.doi-hang {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: center;
+  margin: 0 0 10px;
+}
+.doi-hang > label.theme-editor-field {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  min-width: 0;
+}
+.doi-hang > label.theme-editor-field > span { margin: 0; white-space: nowrap; }
+.doi-hang select,
+.doi-hang input[type="range"] { width: 100%; min-width: 0; }
+/* Nút tải nhạc đứng cạnh thanh kéo, đúng chỗ nút loa đứng ở thẻ Âm thanh
+   slide: cao bằng thanh kéo, không nới rộng, chữ không xuống dòng. */
+.am-hang > label.theme-editor-upload {
+  flex: 0 0 auto;
+  align-self: stretch;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 11px;
+  white-space: nowrap;
+}
+/* BẮT BUỘC: luật ngay trên khai display nên nó ĐÈ thuộc tính hidden — không
+   có dòng này thì đặt hidden = true mà nút vẫn hiện. Cùng cái bẫy đã dính ở
+   .tab-card .tab-pane[hidden]. */
+.am-hang > label.theme-editor-upload[hidden] { display: none !important; }
+.bgm-nhan[hidden] { display: none !important; }
+/* Tên file nhạc nền: một dòng chú thích có nhãn dẫn, không phải một chuỗi trơ.
+   Icon và chữ nhãn nhạt hơn chính tên file — tên file mới là thứ cần đọc. */
+.bgm-nhan {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 11.5px;
+}
+.bgm-nhan b { font-weight: 700; opacity: 0.62; }
+.bgm-nhan .ed-ic svg { width: 12px; height: 12px; }
+.bgm-nhan .theme-editor-file { margin: 0; font-weight: 700; }
+
+/* Bốn ô chọn màu (2 ở Tone màu + 2 ở Phụ đề): bỏ viền/nền của khung, bo tròn
+   chính mảng màu bên trong. Trình duyệt vẽ mảng màu trong shadow DOM nên phải
+   chạm tới ::-webkit-color-swatch, đặt border-radius lên thẻ input là vô ích. */
+#mainLightColor,
+#softLightColor,
+#subtitleColor,
+#subtitleActiveColor {
+  width: 100%;
+  height: 34px;
+  padding: 0;
+  border: 0 !important;
+  background: transparent !important;
+  cursor: pointer;
+}
+#mainLightColor::-webkit-color-swatch-wrapper,
+#softLightColor::-webkit-color-swatch-wrapper,
+#subtitleColor::-webkit-color-swatch-wrapper,
+#subtitleActiveColor::-webkit-color-swatch-wrapper { padding: 0; }
+#mainLightColor::-webkit-color-swatch,
+#softLightColor::-webkit-color-swatch,
+#subtitleColor::-webkit-color-swatch,
+#subtitleActiveColor::-webkit-color-swatch {
+  border: 1px solid var(--ed-xam-30);
+  border-radius: 9px;
+}
+
+/* Thẻ gộp PHỤ ĐỀ + SCRIPT — xem mergeSubtitleAndScript() để biết cấu trúc. */
+.theme-editor-section-subtitles { grid-column: 1 / -1; }
+.merged-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.merged-title .theme-editor-section-title { margin: 0 0 3px; }
+.merged-desc { font-size: 11px; font-weight: 700; opacity: 0.6; }
+.merged-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--merged-line, var(--ed-xam-22));
+}
+.merged-controls > * { margin: 0; }
+.merged-controls .subtitle-color-row { display: flex; gap: 14px; }
+.merged-controls label.theme-editor-field { min-width: 120px; }
+/* Con số px cạnh nhãn: deck tô nó bằng MÀU NHẤN, mà màu nhấn lại đi theo màu
+   chữ phụ đề — nên đổi màu phụ đề thì "18px" cũng đổi màu theo, trông như một
+   lỗi. Ép về màu chữ thường. */
+.merged-controls .theme-editor-value,
+.merged-controls .theme-editor-field span span { color: inherit; opacity: 0.75; }
+/* Ô chọn màu: bỏ viền và nền của khung bọc, để lại đúng vệt màu. */
+.merged-controls .theme-editor-swatch,
+.merged-controls .subtitle-color-row label {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.merged-script { display: grid; gap: 7px; }
+.merged-script-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* Một câu liền, KHÔNG viết hoa và KHÔNG chia hai kiểu chữ.
+   Deck để .theme-editor-section-title viết hoa toàn bộ + giãn chữ; ghép thêm
+   một mẩu chữ thường vào thì cùng một dòng mà nửa hoa nửa thường, nửa đậm nửa
+   mờ. */
+.merged-script-head .theme-editor-section-title {
+  margin: 0;
+  color: inherit;
+  opacity: 1;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.merged-script-head .merged-switch { margin: 0; flex: 0 0 auto; }
+/* Ô nhập lời thoại: deck để min-height 220px cho MỘT dòng script — thừa gấp
+   mấy lần. Hạ còn 96px và tự cao dần theo chữ (xem tuCao), trần 260px rồi mới
+   cho cuộn. */
+.merged-script .script-editor-text {
+  width: 100%;
+  min-height: 96px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.merged-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 10px;
+}
+.merged-foot-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.merged-foot-left .script-editor-hint,
+.merged-foot-left .theme-editor-status { margin: 0; }
+/* Hai nút "Xoá slide" / "Khôi phục": cùng chiều cao, cùng độ bo, cùng cỡ chữ
+   với mấy ô bên cạnh. Bản gốc để chúng cao thấp lệch nhau và chữ nhỏ hơn hẳn. */
+.merged-controls .merged-actions-top { margin: 0 0 0 auto; flex: 0 0 auto; display: flex; gap: 8px; }
+.merged-actions-top button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* --- 2. Hai ô chọn hiệu ứng bằng nhau ---
+   Bản gốc để ô "Hiệu ứng nền" co theo nội dung nên nó ngắn tủn, còn ô kia kéo
+   dài hết hàng. Chia đôi cho cân. */
+.tone-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.tone-top-row > label.theme-editor-field { margin: 0; min-width: 0; }
+.tone-top-row select { width: 100%; min-width: 0; }
+
+/* --- 3. Chữ chú thích nhỏ quá --- */
+.tone-position-head small,
+.theme-editor-hint,
+.script-editor-hint { font-size: 11.5px; }
+
+/* --- 4. Hai bảng đèn song song --- */
+/* Kẻ trên + kẻ dưới đặt Ở ĐÂY, cho CẢ CỤM — không phải cho từng thẻ.
+   Kẻ riêng từng thẻ thì hai đường kẻ chạy song song nhau thành hai khối rời,
+   trong khi việc của đường kẻ là tách cụm ánh sáng nền khỏi hàng "Hiệu ứng"
+   ngay trên. Không bo góc: khung đủ bốn cạnh biến cụm thành một hộp thoại con
+   chen giữa thẻ, còn hai đường ngang thì chỉ nói "đoạn này là một phần riêng".
+   Cột giữa 1px là chỗ cho vạch ngăn. */
+.den-doi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  gap: 0 14px;
+  margin-top: 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--merged-line, var(--ed-xam-22));
+  border-bottom: 1px solid var(--merged-line, var(--ed-xam-22));
+}
+/* Vạch phải align-self: stretch. Nó là thẻ RỖNG nên không có chữ thì không có
+   chiều cao — để mặc thì cao đúng 0px, tức vạch tàng hình. */
+.den-vach { align-self: stretch; background: var(--ed-xam-22); }
+.den-hop {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+/* Ô màu của chính ánh sáng nền, nằm ngay dưới tên. Trước đây nó ở một hàng
+   riêng phía trên, tách khỏi lưới của chính nó — đọc phải nối hai chỗ lại. */
+.den-mau { display: flex; align-items: center; }
+/* align-items: center chứ KHÔNG baseline: hàng này nay mang cả icon lẫn viên
+   màu, hai thứ cao hơn chữ — để baseline là chúng đứng trên đường chân chữ rồi
+   nhô lên. */
+.den-dau { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.den-dau b { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 900; }
+/* Icon dẫn tên đậm ngang chữ, không nhạt như icon dẫn nhãn: đây là TÊN của cả
+   thẻ, không phải một ô trong thẻ. */
+.den-dau b .ed-ic { opacity: 1; }
+.den-dau b .ed-ic svg { width: 13px; height: 13px; }
+/* Cột CHIA ĐỀU hết bề ngang, không neo px: bảng nằm co cụm một góc trái còn
+   hai phần ba thẻ bỏ trống, mà lưới này chính là hình khung video — trải rộng
+   thì vị trí đèn đọc ra đúng chỗ nó sẽ nằm.
+
+   ⚠ SỐ CỘT không đặt ở đây nữa mà do haiBangDen() ghi thẳng vào style. Deck
+   dựng từ bản mẫu cũ chỉ có 9 vị trí (3 cột) và 4 nấc sáng; neo cứng 5 cột thì
+   những deck ấy hiện 5 ô rồi xuống dòng 4 ô — vỡ bảng, và tệ hơn là chấm sáng
+   nằm lệch so với chỗ nó thật sự rơi trên video. */
+.den-luoi { display: grid; gap: 6px; }
+.den-cuong { display: grid; gap: 6px; }
+
+/* Nhãn của từng lưới con. Không viền, không nền — nó chỉ là một dòng chữ dẫn
+   cho lưới ngay bên dưới, thêm vỏ nữa là hai cái hộp lồng nhau trong một thẻ.
+   Tên ở trái, lời dặn đẩy sang phải: cùng nhịp với .den-dau ngay phía trên. */
+.den-muc { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.den-muc b { font-size: 11.5px; font-weight: 800; }
+/* Lời dẫn bên phải KHÔNG phải chữ trang trí: nó là câu DUY NHẤT nói cho biết
+   lưới bên dưới chọn cái gì. Ở 11px/0.55 nó nhạt hơn cả chú thích, đo ra
+   khoảng 5:1 — đọc được nhưng phải nhìn kỹ, mà đây là thứ liếc một cái phải
+   hiểu. Nâng lên 11.5px/0.8 (~10:1) và cho hơi đậm. */
+.den-muc small {
+  margin-left: auto;
+  opacity: 0.8;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.den-muc .ed-ic svg { width: 12px; height: 12px; }
+.den-hop .tone-position-dot { min-height: 40px; }
+.den-hop .tone-intensity-dot { min-height: 26px; }
+/* Deck chỉ có luật cỡ chấm tới nth-child(4). Mức thứ 5 ('Chói') phải tự khai,
+   không thì nó tụt về chấm bé nhất và nhìn như mức nhẹ nhất. */
+.den-hop .tone-intensity-dot:nth-child(5) span { width: 14px; height: 14px; }
+.den-hop .tone-position-dot[data-intensity="ultra"].active span { width: 19px; height: 19px; }
+
+/* --- Cách vẽ ô đèn ---
+   Bản của deck: ô đang chọn giữ nguyên chấm xám, rồi bọc quanh một quầng sáng
+   mờ + viền màu + box-shadow. Nhìn ra thứ đang chọn thì được, nhưng màu đèn
+   chỉ hiện dưới dạng vệt mờ ngoài rìa, còn cái đáng lẽ phải mang màu — chấm
+   đèn — lại xám. Đảo lại: bỏ hết quầng và viền, CHÍNH CHẤM ăn màu đèn, đặc và
+   rõ. Ô chưa chọn chỉ còn một nền rất nhạt để thấy đây là lưới. */
+.den-hop .tone-position-dot,
+.den-hop .tone-intensity-dot {
+  border-color: transparent !important;
+  /* !important vì luật nền sáng của bảng editor có độ ưu tiên cao hơn — đo
+     được rgba(0,0,0,0.1), đậm hơn hẳn mức muốn. */
+  background: var(--ed-xam-06) !important;
+  box-shadow: none;
+  transition: background 0.14s ease;
+}
+.den-hop .tone-position-dot:hover,
+.den-hop .tone-intensity-dot:hover { background: var(--ed-xam-15) !important; }
+.den-hop .tone-position-dot span,
+.den-hop .tone-intensity-dot span {
+  background: var(--ed-xam-45) !important;
+  box-shadow: none;
+}
+.den-hop .tone-position-dot.active,
+.den-hop .tone-intensity-dot.active {
+  border-color: transparent !important;
+  background: var(--ed-xam-06) !important;
+  box-shadow: none !important;
+}
+.den-hop .tone-position-dot.active span,
+.den-hop .tone-intensity-dot.active span {
+  background: var(--tone-selected-light, currentColor) !important;
+  box-shadow: none !important;
+  opacity: 1;
+}
+
+/* Số px cạnh "Cỡ chữ" / "Vị trí đáy" ăn theo màu chữ phụ đề nên đổi màu loạn
+   xạ. Đây là nhãn giao diện, không phải mẫu màu — cho thừa kế màu chữ của
+   nhãn, để cả nền sáng lẫn nền tối đều đọc được. */
+#subtitleFontSizeValue,
+#subtitleBottomValue,
+#bgmVolumeValue { color: inherit !important; }
+
+/* Ô "Màu chữ nền" / "Màu chữ đang đọc": bỏ khung và nền của ô chọn màu, để
+   trơ đúng mảng màu — khung xám bao quanh làm nhìn như nút bị vô hiệu. */
+
+/* Thứ BỊ THAY nhưng KHÔNG ĐƯỢC XOÁ. Ba chỗ dùng lớp này, đều cùng một lý do:
+   mã của deck vẫn với tay tới phần tử đó.
+     · ô số slide của SCRIPT — deck kiểm tồn tại rồi mới nạp nội dung ô script
+       (xem mergeSubtitleAndScript);
+     · bảng vị trí gốc và hàng ô màu gốc — trong đó có hai nút chuyển đèn mà
+       chonDen() bấm hộ (xem haiBangDen).
+   !important vì luật hiện của deck neo vào lớp riêng, thắng lớp này. */
+.is-hidden-dup { display: none !important; }
+.merged-scope-note {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+/* Hai NHÓM theo phạm vi: Cả deck / Slide này — xem groupByScope(). */
+.theme-editor-panel { display: block; }
+.scope-group { margin-bottom: 16px; }
+.scope-head {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-bottom: 8px;
+}
+.scope-label {
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.scope-note { font-size: 11px; font-weight: 700; opacity: 0.55; }
+.scope-body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 14px;
+}
+/* Mỗi nhóm nay chỉ còn MỘT thẻ có tab (xem gopTab), nên khung lưới 3 cột không
+   còn việc gì — để một cột cho thẻ chiếm trọn bề ngang. */
+.scope-body { grid-template-columns: minmax(0, 1fr); }
+
+/* Thẻ có tab: thanh tab trên, ruột bên dưới. */
+.tab-card { padding: 0; overflow: hidden; }
+/* Khung bốn cạnh BỎ, chỉ còn kẻ ngang — cùng lối với cụm ánh sáng nền bên
+   trong và khối tiến độ bên trang chính. Bốn cạnh thì mỗi nhóm thành một hộp
+   thoại rời, hai hộp chồng lên nhau trong một cột hẹp; kẻ ngang thì chỉ nói
+   "đoạn này là một phần riêng" mà vẫn để nội dung chạy hết bề ngang.
+
+   Nhóm TRÊN chỉ kẻ trên, nhóm DƯỚI kẻ cả trên lẫn dưới: kẻ dưới của nhóm trên
+   và kẻ trên của nhóm dưới sẽ nằm sát nhau thành hai vạch song song cách nhau
+   16px lề — nhìn như một khe hở. Một vạch là đủ để ngăn hai nhóm.
+
+   Dùng border-width chứ không border: giữ nguyên màu viền mà .theme-editor-section
+   (và luật nền sáng của nó) đã đặt, khỏi khai lại màu ở hai chỗ.
+
+   ⚠ KHÔNG dùng dấu > sau .scope-group: thẻ nằm trong .scope-body chứ không
+   phải con trực tiếp của nhóm (xem mkGroup + gopTab). Bản đầu viết > nên không
+   luật nào khớp — đo ra viền vẫn đủ bốn cạnh, bo góc vẫn 18px. */
+.scope-group .tab-card { border-radius: 0; }
+.scope-group[data-nhom="deck"] .tab-card { border-width: 1px 0 0; }
+.scope-group[data-nhom="slide"] .tab-card { border-width: 1px 0; }
+.tab-bar {
+  display: flex;
+  gap: 2px;
+  padding: 0 6px;
+  border-bottom: 1px solid var(--ed-xam-22);
+}
+.tab-btn {
+  padding: 11px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 900;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.tab-btn:hover { opacity: 0.8; }
+.tab-btn.active { opacity: 1; border-bottom-color: currentColor; }
+
+/* Thẻ con nằm TRONG thẻ ngoài: bỏ viền và bo góc riêng, nếu không thành hai
+   khung lồng nhau. */
+.tab-card .tab-pane {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+/* BẮT BUỘC: .theme-editor-section khai display nên nó đè thuộc tính hidden —
+   cùng đúng cái bẫy đã dính ở lần chia tab trước. */
+.tab-card .tab-pane[hidden] { display: none !important; }
+
+/* Công tắc BẬT PHỤ ĐỀ ở dòng tiêu đề — dạng gạt, không phải ô vuông tích.
+   Ô tích trông ngang hàng với mấy ô màu bên dưới, trong khi nó quyết định cả
+   khối đó có tác dụng hay không. */
+.merged-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.merged-switch input {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 38px;
+  height: 22px;
+  margin: 0;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ed-xam-35);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.merged-switch input::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--ed-num-nut);
+  transition: transform 0.18s ease;
+}
+.merged-switch input:checked { background: var(--ed-cong-tac-bat); }
+.merged-switch input:checked::after { transform: translateX(16px); }
+/* Chữ THƯỜNG, không đậm: cái đậm ở hàng này phải là tiêu đề "Phụ đề tự lưu
+   sau khi sửa" bên trái. Hai cụm cùng đậm thì mắt không biết đọc cái nào
+   trước, mà nhãn công tắc chỉ là chú cho cái gạt ngay cạnh nó. */
+.merged-switch span { font-size: 11.5px; font-weight: 500; opacity: 0.85; }
+
+/* ---------------------------------------------------------- riêng tông sáng
+   Danh sách này KHÔNG dò bằng mắt. Lần đầu tôi tự chọn selector và sót 7 chỗ —
+   chữ trắng nằm trên nền trắng, ảnh chụp mới lộ ra. Nay quét style.css của deck
+   lấy MỌI luật thuộc bảng editor có màu trắng (20 luật) rồi phủ đủ.
+   Script quét: scratchpad/scan-editor-css.js */
+
+/* Nền BÀN LÀM VIỆC của trang deck. Trang deck đặt html,body nền #020306, nên ở
+   chế độ sáng vẫn còn một mảng đen lớn quanh bảng editor và quanh khung máy.
+
+   Đổi được vì đây KHÔNG phải nội dung video: khung 9:16 có nền riêng, và quan
+   trọng hơn là toàn bộ khối CSS này chỉ nằm trong _preview.html. Đã kiểm bằng
+   grep: đường render không hề dùng previewHtml.js, và lớp bee-light chỉ
+   được đặt từ ?theme= mà chỉ slide-viewer.js gắn vào. Không có đường nào để nó
+   chạm tới file MP4. */
+/* ⚠ NỀN TRẮNG, KHÔNG PHẢI XÁM.
+   Bản trước dùng #f2f3f5 (xám nhạt) với các thẻ màu trắng nổi lên trên. Trên
+   màn hình lớn, phần bàn làm việc trống chiếm phần lớn khung nhìn, và mảng xám
+   rộng đó làm cả trang nhìn như bị vá chằng: vài mảnh trắng rải trên một nền
+   khác màu. Cho nền trắng luôn thì mảng trống hoà vào thẻ, mắt chỉ còn thấy
+   NỘI DUNG.
+   Làm được vì các thẻ ĐÃ CÓ VIỀN riêng (rgba(0,0,0,0.10) ở luật
+   .theme-editor-section bên dưới) — bỏ chênh lệch nền vẫn còn viền để biết mép
+   khối ở đâu. Nếu sau này ai bỏ viền đó thì phải trả nền xám về, không thì các
+   thẻ tan hết vào nhau. */
+/* Tông TỐI: đặt trước, không gắn lớp — luật nền sáng ngay dưới có thêm một lớp
+   chọn nên vẫn thắng. */
+html,
+body { background: var(--ed-ban); }
+.theme-editor-panel { color: var(--ed-ban-chu); }
+/* Thẻ mang ĐÚNG màu bàn, đục hoàn toàn. Hai điều kiện phải thoả cùng lúc:
+   · CÙNG MÀU bàn — deck để rgba(5,7,14,0.86), trên nền #262624 thành một hố đen
+     giữa trang;
+   · ĐỤC — bảng sửa nằm ĐÈ LÊN khung slide, để trong suốt là chữ của slide hiện
+     xuyên qua bảng (đã chụp thấy, đọc số liệu không nổi). Tông sáng cũng vậy:
+     thẻ ở đó là trắng 97%, không phải none. */
+.theme-editor-section { background: var(--ed-ban); }
+
+html.bee-light,
+html.bee-light body { background: var(--ed-giay); }
+
+/* Cụm nút loa / lên / xuống nằm NGOÀI khung video, trên nền bàn làm việc. Đổi
+   nền sáng mà quên chúng thì thành trắng trên trắng — chỉ nhìn ảnh chụp mới
+   thấy, vì chúng dùng bộ class riêng (side-*) chứ không phải theme-editor-*. */
+html.bee-light .side-controls {
+  background: var(--ed-den-04);
+  border-color: var(--ed-den-08);
+}
+html.bee-light .side-btn {
+  background: var(--ed-den-05);
+  border-color: var(--ed-den-12);
+  color: var(--ed-den-72);
+}
+html.bee-light .side-divider { background: var(--ed-den-10); }
+html.bee-light .side-counter { color: var(--ed-den-58); }
+
+/* Bảng âm thanh/script rời của bản deck cũ. Ở deck đã migrate thì nó ẩn, nhưng
+   phủ luôn cho chắc — deck chưa migrate mở ra vẫn đọc được. */
+html.bee-light .audio-panel,
+html.bee-light .script-panel {
+  background: var(--ed-giay-96);
+  border-color: var(--ed-den-10);
+  color: var(--ed-muc);
+}
+html.bee-light .audio-panel-divider { background: var(--ed-den-08); }
+html.bee-light .audio-nav-btn,
+html.bee-light .audio-test-btn,
+html.bee-light .audio-group select,
+html.bee-light .audio-actions button {
+  background: var(--ed-den-045);
+  border-color: var(--ed-den-12);
+  color: var(--ed-den-78);
+}
+html.bee-light .audio-group select option { background: var(--ed-giay); color: var(--ed-muc); }
+html.bee-light .audio-label { color: var(--ed-den-62); }
+
+/* Nền chung của bảng — các nhãn phụ không có luật riêng đều thừa kế từ đây. */
+html.bee-light .theme-editor-panel { color: var(--ed-muc); }
+html.bee-light .theme-editor-section {
+  border-color: var(--ed-den-10);
+  background: var(--ed-giay-97);
+}
+html.bee-light .theme-editor-section-title { color: var(--ed-den-72); }
+html.bee-light .theme-editor-field { color: var(--ed-den-58); }
+html.bee-light .theme-editor-subtitle { color: var(--ed-den-56); }
+html.bee-light .theme-editor-file { color: var(--ed-den-50); }
+html.bee-light .theme-editor-check { color: var(--ed-den-74); }
+html.bee-light .theme-editor-status { color: var(--ed-den-56); }
+html.bee-light .script-editor-hint { color: var(--ed-den-48); }
+html.bee-light .theme-editor-divider { background: var(--ed-den-10); }
+
+html.bee-light .theme-editor-field select {
+  border-color: var(--ed-den-14);
+  background: var(--ed-giay);
+  color: var(--ed-muc);
+}
+html.bee-light .theme-editor-field input[type="range"],
+html.bee-light .theme-editor-field input[type="color"] {
+  border-color: var(--ed-den-14);
+  background: var(--ed-den-045);
+  color: var(--ed-muc);
+}
+html.bee-light .theme-editor-field option { background: var(--ed-giay); color: var(--ed-muc); }
+html.bee-light .script-editor-text {
+  border-color: var(--ed-den-14);
+  background: var(--ed-den-03);
+  color: var(--ed-muc);
+}
+html.bee-light .theme-editor-upload {
+  border-color: var(--ed-den-22);
+  background: var(--ed-den-035);
+  color: var(--ed-den-74);
+}
+html.bee-light .theme-editor-ghost-button,
+html.bee-light .theme-editor-mini-select,
+html.bee-light .tone-mode-toggle,
+html.bee-light .tone-light-select {
+  border-color: var(--ed-den-14);
+  background: var(--ed-den-045);
+  color: var(--ed-muc);
+}
+/* PHẢI khai lại trạng thái ĐANG CHỌN cho tông sáng.
+   Luật ngay trên có độ ưu tiên (0,2,1) — cao hơn luật .active (0,2,0) của deck.
+   Nên ở nền sáng, nút đang chọn nhìn Y HỆT nút không chọn: người dùng bấm
+   quầng sáng thứ hai, ô màu bên dưới đổi thật nhưng hai nút không đổi gì, tưởng
+   bấm hụt. */
+html.bee-light .tone-light-select.active,
+html.bee-light .tone-mode-toggle.active {
+  border-color: var(--ed-muc);
+  background: var(--ed-muc);
+  color: var(--ed-giay);
+}
+html.bee-light .theme-editor-mini-check {
+  border-color: var(--ed-den-12);
+  background: var(--ed-den-04);
+  color: var(--ed-den-70);
+}
+html.bee-light .theme-editor-swatch span { border-color: var(--ed-den-22); }
+
+/* Ô chọn vị trí đèn. Lần quét đầu để sót cả cụm này vì regex chỉ bắt
+   tone-mode / tone-light — thiếu tone-position và tone-intensity. Chấm trắng
+   nằm trên nền trắng nên nhìn như lưới rỗng. */
+html.bee-light .tone-position-card {
+  border-color: var(--ed-den-10);
+  background: var(--ed-den-035);
+}
+html.bee-light .tone-position-head { color: var(--ed-den-58); }
+html.bee-light .tone-position-head span { color: var(--ed-den-84); }
+html.bee-light .tone-position-head small { color: var(--ed-den-44); }
+html.bee-light .tone-position-dot,
+html.bee-light .tone-intensity-dot {
+  border-color: var(--ed-den-14);
+  background: var(--ed-den-10);
+}
+/* Chấm nhỏ BÊN TRONG mỗi ô — chính nó là cái người dùng nhìn để biết đèn đang
+   ở đâu. Trắng 0.44 trên nền sáng thì gần như không thấy. */
+html.bee-light .tone-position-dot span { background: var(--ed-den-44); }
+html.bee-light .tone-intensity-dot span { background: var(--ed-den-38); }
+
+
+
+/* Nút xoá/khôi phục giữ nguyên MÀU Ý NGHĨA (đỏ / xanh lá), chỉ chỉnh lại nền
+   cho hợp nền sáng — đổi màu chúng là mất tín hiệu nguy hiểm/an toàn. */
+html.bee-light .theme-editor-danger-button {
+  border-color: var(--ed-do-vien);
+  background: var(--ed-do-nen);
+  color: var(--ed-do);
+}
+html.bee-light .theme-editor-restore-button {
+  border-color: var(--ed-xanh-vien);
+  background: var(--ed-xanh-nen);
+  color: var(--ed-xanh);
+}
+
+/* ── Icon dẫn nhãn + huy hiệu số slide ────────────────────────────────────
+   Icon do editor.js gắn, lấy từ bộ dùng chung icons.js mà previewHtml.js bơm
+   vào trang này. Nhạt hơn chữ nó dẫn: đây là dấu hiệu nhận dạng nhanh, không
+   phải nội dung — đậm ngang chữ là hai thứ tranh nhau. */
+.ed-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  opacity: 0.55;
+}
+/* Nhãn nào KHÔNG phải flex (tiêu đề nhóm, dòng tự lưu) thì icon vẫn cần khe
+   riêng — hai chỗ đó không có gap của lưới flex lo. */
+.scope-label .ed-ic,
+.theme-editor-section-title .ed-ic { margin-right: 7px; }
+.ed-ic svg { width: 14px; height: 14px; display: block; }
+/* Trong tiêu đề nhóm thì icon to hơn một nhịp, cho cân với chữ tiêu đề. */
+.scope-label .ed-ic svg { width: 15px; height: 15px; }
+/* margin chứ không trông vào khoảng trắng đầu chuỗi: .scope-label nay là
+   inline-flex, mà flex bỏ luôn khoảng trắng dẫn đầu của một item — số slide
+   dính vào tiêu đề thành "SLIDE HIỆN TẠI(1)". */
+.scope-so { margin-left: 5px; opacity: 0.6; font-weight: 700; }
+
+/* ── Icon cũ của deck sau khi đổi sang bộ chung ───────────────────────────
+   editor.js giữ nguyên thẻ <i> và chỉ thay ruột + tên lớp (xem doiIconFA).
+   Rộng 1em chứ không phải một số px cố định: CSS của deck đặt font-size riêng
+   cho từng chỗ (nút loa 15px, nút chọn quầng sáng 10px…), lấy theo em thì hình
+   ăn đúng cỡ mà deck đã định cho ký tự cũ, không phải chép lại bảng cỡ ấy. */
+.ed-fa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ed-fa > svg { width: 1em; height: 1em; display: block; }
+/* Hai nút chọn quầng sáng chỉ có font-size 10px — nét rỗng ở cỡ đó gần như
+   biến mất, trong khi ký tự FA cũ tô đặc nên vẫn rõ. Nới riêng hai chỗ này. */
+.tone-light-select .ed-fa > svg { width: 13px; height: 13px; }
+
+/* ── Mách nhỏ ─────────────────────────────────────────────────────────────
+   Hiện TỨC THÌ (không transition): nút đã bỏ chữ thì đây là chỗ duy nhất nói
+   nó làm gì, trễ nửa giây cũng là trễ. `fixed` + đặt vào body vì thẻ chứa nút
+   có overflow: hidden và vùng bảng thì cuộn dọc. */
+.ed-mach {
+  position: fixed;
+  z-index: 60;
+  padding: 5px 9px;
+  border-radius: 7px;
+  color: var(--ed-mach-chu);
+  background: var(--ed-mach-nen);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+.ed-mach.hien { opacity: 1; visibility: visible; }
+
+/* Nút đã bỏ chữ: thu về đúng một ô vuông quanh icon, bỏ lề trong của nút có
+   chữ — không thì còn lại một mảng rộng mà chỉ có cái icon nằm giữa. */
+.ed-chi-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  padding: 0;
+}
+/* Nút bỏ chữ rồi thì cái icon GÁNH toàn bộ nghĩa của nút — 12px (thừa hưởng
+   từ cỡ chữ của nút, vì .ed-fa > svg đặt 1em) là quá nhỏ cho vai trò đó.
+   Nút bên cạnh còn chữ "Khôi phục" nên icon ở đó chỉ là trang trí, cứ để
+   nguyên. */
+.ed-chi-icon .ed-fa > svg { width: 16px; height: 16px; }
+
+/* ── Ô chọn màu: chấm tròn + mã màu ───────────────────────────────────────
+   Thay cho mảng màu kéo dài hết hàng. Mảng dài chỉ cho biết MÀU, không cho
+   biết MÃ — mà mã mới là thứ người ta cần để chép sang chỗ khác.
+   Cả khối là một ô bấm được: thẻ input nằm ngay trong đó và chính nó là chấm
+   tròn, nên bấm vào chấm là mở bảng chọn màu của hệ điều hành như cũ. */
+.ed-mau {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 5px 11px 5px 6px;
+  border: 1px solid var(--ed-xam-22);
+  border-radius: 999px;
+  background: var(--ed-den-03);
+}
+.ed-mau-ma {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* ⚠ Bốn luật dưới đây PHẢI đủ ID để thắng khối #subtitleColor ở trên (nó đặt
+   width 100% + height 34px cho mảng màu kéo dài hết hàng). */
+.ed-mau > input#subtitleColor,
+.ed-mau > input#subtitleActiveColor,
+.ed-mau > input#mainLightColor,
+.ed-mau > input#softLightColor {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+.ed-mau > input#subtitleColor::-webkit-color-swatch,
+.ed-mau > input#subtitleActiveColor::-webkit-color-swatch,
+.ed-mau > input#mainLightColor::-webkit-color-swatch,
+.ed-mau > input#softLightColor::-webkit-color-swatch {
+  border: 1px solid var(--ed-xam-30);
+  border-radius: 999px;
+}
+
+/* ── Hai nút Xoá slide / Khôi phục: không vỏ khi chưa rê chuột ────────────
+   Chúng nằm cuối một thẻ đã đầy ô nhập; để nguyên vỏ màu thì hai mảng đỏ và
+   xanh hút mắt hơn cả nội dung đang sửa. Bỏ viền và nền, giữ MÀU CHỮ — màu
+   chữ mới là thứ mang ý nghĩa nguy hiểm / an toàn. Rê chuột mới hiện nền, và
+   cũng KHÔNG vẽ viền. */
+.merged-actions-top button.theme-editor-danger-button,
+.merged-actions-top button.theme-editor-restore-button {
+  border-color: transparent;
+  background: none;
+}
+.merged-actions-top button.theme-editor-danger-button:hover {
+  border-color: transparent;
+  background: var(--ed-do-nen);
+}
+.merged-actions-top button.theme-editor-restore-button:hover {
+  border-color: transparent;
+  background: var(--ed-xanh-nen);
+}
+/* Nền sáng có luật riêng cho hai nút (đặt lại border-color + background) và
+   nó đứng SAU khối này, nên phải ghi đè lại đúng bằng ba lớp chọn. */
+html.bee-light .merged-actions-top button.theme-editor-danger-button,
+html.bee-light .merged-actions-top button.theme-editor-restore-button {
+  border-color: transparent;
+  background: none;
+}
+html.bee-light .merged-actions-top button.theme-editor-danger-button:hover {
+  background: var(--ed-do-nen);
+}
+html.bee-light .merged-actions-top button.theme-editor-restore-button:hover {
+  background: var(--ed-xanh-nen);
+}
+
+/* ── Chỉnh lại nhãn có icon ───────────────────────────────────────────────
+   1. CĂN GIỮA THEO CHIỀU DỌC. Nhãn vốn là span thường, icon là một hình cao
+      14px đứng trên đường chân chữ nên nó nhô lên so với chữ 11px. Cho cả
+      nhãn thành inline-flex căn giữa thì icon và chữ nằm đúng một trục.
+   2. ĐẬM LÊN. Nhãn nền tối vốn là rgba(255,255,255,0.62), nền sáng 58% —
+      nhạt ngang chú thích, mà đây là TÊN của ô ngay bên cạnh, phải đọc được
+      trước. Cỡ chữ nhích 11px lên 12px cho khớp phần còn lại của app. */
+label.theme-editor-field > span {
+  display: inline-flex;
+  align-items: center;
+  /* ⚠ gap chứ không trông vào khoảng trắng trong markup: inline-flex bỏ hẳn
+     nút văn bản chỉ chứa khoảng trắng, nên "Cỡ chữ <b>18px</b>" dính lại
+     thành "Cỡ chữ18px". */
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ed-nhan);
+}
+/* Giá trị đang chọn in trong thẻ <b> (18px, 152px…) vẫn nhạt hơn tên nhãn. */
+label.theme-editor-field > span b { font-weight: 800; opacity: 0.66; }
+/* Icon nhỏ hơn một nhịp so với chữ 12px, và line-height 0 để nó không kéo
+   cao dòng. */
+.ed-ic { line-height: 0; }
+.ed-ic svg { width: 13px; height: 13px; }
+
+/* Dòng "Phụ đề tự lưu sau khi sửa" cũng là một tiêu đề con — cho nó cùng
+   cách bày với mấy nhãn trên. */
+.merged-foot .theme-editor-section-title,
+.merged-controls .theme-editor-section-title {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Nhãn dài KHÔNG được đè lên ô chọn ────────────────────────────────────
+   Ba hàng dưới đây chia lưới "cột nhãn rộng cố định | ô chọn". Cột cố định
+   để hai ô cạnh nhau thẳng hàng — nhưng nhãn lại khai white-space: nowrap,
+   nên nhãn nào dài hơn cột thì tràn ra và NẰM ĐÈ lên ô chọn, dù ô chọn vẫn
+   còn chỗ trống. Thấy rõ nhất ở "Tiếng hiện từng phần".
+   minmax(<cũ>, auto) giữ nguyên bề rộng tối thiểu (nhãn ngắn vẫn thẳng
+   hàng như trước) nhưng cho phép nở ra khi nhãn dài; ô chọn có minmax(0,
+   1fr) nên nó co lại nhường chỗ thay vì bị đè. */
+.tone-color-row > label.theme-editor-field,
+.tone-top-row > label.theme-editor-field {
+  grid-template-columns: minmax(104px, auto) minmax(0, 1fr);
+}
+.doi-hang > label.theme-editor-field {
+  grid-template-columns: minmax(118px, auto) minmax(0, 1fr);
+}
+
+/* ── 1. Icon trong TIÊU ĐỀ NHÓM cũng phải căn giữa ────────────────────────
+   .scope-head để align-items: baseline nên icon (hình cao 15px) đứng trên
+   đường chân chữ và nhô lên. Cho riêng nhãn thành inline-flex căn giữa —
+   giữ baseline ở .scope-head để dòng chú thích bên cạnh vẫn thẳng chân chữ
+   với tiêu đề. */
+.scope-label { display: inline-flex; align-items: center; }
+
+/* ── 2a. Ô số slide ở thẻ gộp: bỏ vỏ, chữ đủ to ───────────────────────────
+   "Slide 1 / 6" là số liệu để LIẾC, không phải nút bấm. Đóng khung cho nó là
+   mắt cứ thử bấm. Giữ chữ, bỏ nền và viền.
+   Cỡ chữ: deck để 10px — nhỏ hơn mọi chữ khác trong thẻ, mà đây lại là thứ
+   cho biết đoạn lời thoại bên dưới thuộc slide nào. 12px cho ngang hàng với
+   chú thích thường.
+   ⚠ Thẻ cha là .merged-script-head, KHÔNG phải .merged-head (đã bị xoá). */
+.merged-script-head #slideDeleteBadge {
+  margin: 0;
+  flex: 0 0 auto;
+  border-color: transparent;
+  background: none;
+  padding-inline: 0;
+  font-size: 12px;
+}
+/* Hàng đầu của tab "Âm thanh slide" (ô số slide + hai nút chuyển): BỎ HẲN.
+   Hai nút chuyển đã dời lên hàng tab của nhóm, nên ở đây là bản thứ hai của
+   cùng một nút; còn số slide thì hàng tab cũng đang ghi rồi. Ẩn chứ không xoá:
+   deck vẫn ghi số vào #editorAudioPanelSlide mỗi lần đổi slide. */
+.editor-audio-slide-header { display: none; }
+
+/* ── 2b. Âm thanh slide: nhãn TRÊN, ô chọn DƯỚI ───────────────────────────
+   Khác hai hàng còn lại (nhãn bên trái) vì ở đây ô chọn còn phải chừa chỗ
+   cho nút loa bên phải; để nhãn bên trái nữa thì ô chọn chỉ còn chừng nửa
+   cột, mà tên tiếng đang chọn ("Ascending — đi lên") lại dài. */
+.doi-hang > label.theme-editor-field.am-doc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 7px;
+}
+.am-hang {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+  min-width: 0;
+}
+.am-hang select { flex: 1 1 auto; min-width: 0; }
+/* Nút nghe thử: chỉ còn cái loa, vuông bằng chiều cao ô chọn bên cạnh. */
+.am-thu {
+  flex: 0 0 auto;
+  /* align-self + min-height, không trông vào align-items: stretch của hàng:
+     đo được nút chỉ cao 14px — đúng bằng cái icon bên trong — trong khi ô
+     chọn cạnh nó cao 33px. */
+  align-self: stretch;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  padding: 0;
+  border: 1px solid var(--ed-xam-22);
+  border-radius: 9px;
+  background: var(--ed-den-03);
+  color: inherit;
+  cursor: pointer;
+}
+.am-thu:hover { background: var(--ed-xam-06); }
+.am-thu .ed-ic { margin: 0; opacity: 0.75; }
+
+/* ── 3. Hai nút chuyển slide nằm trên hàng tab ────────────────────────────
+   Dạt sang mép phải, tách khỏi cụm tab bằng khoảng trống chứ không bằng
+   đường kẻ — hàng này đã có một đường kẻ chân rồi.
+
+   ⚠ ĐỆM ĐÁY 2px LÀ SỐ ĐO, ĐỪNG LÀM TRÒN. Hàng tab cao 39,3px nhưng CHỮ của
+   tab chỉ chiếm 523 → 538,3 (tâm 530,7) — phần còn lại là đệm 11px và vạch
+   gạch chân 2px của tab đang chọn. Căn theo tâm HỘP thì icon tụt xuống dưới
+   dòng chữ. Với đệm 2px, tâm nút rơi đúng 530,7. Đệm 4px của bản trước đẩy
+   lên 529,7 — lệch 1px, đủ để mắt thấy hàng không thẳng. */
+.tab-bar .audio-slide-nav {
+  margin: 0 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  align-self: center;
+  padding-bottom: 2px;
+}
+
+/* Hai nút này KHÔNG có vỏ khi chưa rê chuột.
+
+   Chúng đứng cùng hàng với các tab — mà tab là chữ trần, không viền không nền.
+   Thêm hai cái hộp bo góc vào đó là hàng có hai thứ ngôn ngữ khác nhau, và cái
+   hộp lại hút mắt hơn chính cụm tab. Bỏ vỏ thì còn đúng mũi tên, cùng cấp với
+   chữ bên trái. Rê chuột mới hiện nền — vừa đủ để biết nó bấm được.
+
+   ⚠ PHẢI ghi kèm bản `html.bee-light`: nền sáng có luật riêng đặt lại cả
+   nền lẫn viền cho .audio-nav-btn, mà nó có độ ưu tiên cao hơn (thêm một thẻ
+   `html`) nên một mình `.tab-bar .audio-nav-btn` là thua. */
+.tab-bar .audio-nav-btn,
+html.bee-light .tab-bar .audio-nav-btn {
+  border: 0;
+  background: none;
+  border-radius: 7px;
+  transition: background 0.12s ease;
+}
+.tab-bar .audio-nav-btn:hover,
+html.bee-light .tab-bar .audio-nav-btn:hover {
+  background: var(--ed-xam-16);

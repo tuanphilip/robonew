@@ -1,0 +1,7 @@
+Tiền giấy muốn in thêm bao nhiêu cũng được, còn Bitcoin bị khoá cứng ở hai mươi mốt triệu coin — và đó là toàn bộ câu chuyện giá trị của nó.
+Lý do đầu tiên nằm ngay trong code: tổng cung tối đa chỉ hai mươi mốt triệu. Tới nay gần hai mươi triệu coin đã được đào lên. Nghĩa là phần chưa khai thác chỉ còn hơn một triệu cho cả thế giới.
+Lý do thứ hai tên là halving, bốn năm một lần. Phần thưởng đào mỗi khối bị cắt đúng một nửa, từ mười hai phẩy năm xuống sáu phẩy hai lăm rồi ba phẩy một hai lăm. Coin mới chảy ra thị trường cứ thế chậm dần theo thời gian.
+Lý do thứ ba ít ai để ý: mất khoá là mất vĩnh viễn. Giới nghiên cứu ước tính ba tới bốn triệu coin đã nằm im trong những chiếc ví quên mật khẩu. Nên nguồn cung thật sự còn ít hơn cả con số trên giấy.
+Đặt cạnh nhau sẽ thấy khác biệt nằm ở đâu. Tiền giấy có thể in thêm tuỳ chính sách từng thời kỳ. Còn Bitcoin bị khoá cứng trong code mà không ai tự sửa được.
+Nhưng khoan, khan hiếm chưa chắc đã thắng. Bitcoin từng rơi quá nửa giá trị nhiều lần, và độ khan hiếm không đỡ nổi những cơn hoảng loạn. Vậy nên nếu tham gia, chỉ dùng tiền nhàn rỗi mà thôi.
+Khan hiếm là câu chuyện lõi làm nên giá trị Bitcoin. Hiểu nó trước rồi hãy quyết định, đừng làm ngược lại.

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chuyện có thật — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu kể chuyện sáu chặng: mỗi chặng một hình vẽ, sợi chỉ nét đứt nối các chặng và đứt hẳn ở chỗ bước ngoặt." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <!-- ══ KHO HÌNH SÁU CHẶNG ═════════════════════════════════════════════
+       Một hình cho mỗi chặng, vẽ đúng thứ đang kể. Kể chuyện mà chỉ có chữ
+       thì người xem phải tự dựng hình trong đầu — trên điện thoại, giữa lúc
+       lướt, họ không làm việc đó.
+
+       ⚠ SVG NỘI TUYẾN chứ không nhúng ảnh ngoài: deck phải dựng được offline,
+       và nét vẽ ăn theo biến màu chủ đề nên đổi bảng màu là hình đổi theo. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- Hoi: sao khong dung mot bo icon cho gon? Vi icon ta mot VAT, con
+           day can ta mot CANH. Moi canh deu co: mat dat, the gioi ve bang mau
+           LANH, va nguoi/viec ong lam ve bang mau AM. -->
+
+      <!-- MOC · hon da o tien canh, nguoi dua thu buoc toi phia sau.
+           ⚠ Dung ve duong lui xa bang hai vach cheo: o khung nho chung doc
+           thanh mot hinh tam giac sau lung nguoi. Mat dat la du. -->
+      <symbol id="ic-da" viewBox="0 0 160 92">
+        <path d="M14 78h132" stroke="var(--accent-light)" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>
+        <circle cx="50" cy="40" r="5.5" fill="var(--accent-light)" opacity=".78"/>
+        <path d="M50 45.5v15M50 60.5l-6 17.5M50 60.5l6 17.5M42.5 51h15" fill="none" stroke="var(--accent-light)" stroke-width="2.8" opacity=".78" stroke-linecap="round"/>
+        <rect x="58" y="47" width="14" height="10" rx="1.8" fill="var(--accent-light)" opacity=".42"/>
+        <path d="M96 78 90 60l11-9 16 1 8 13-6 13Z" fill="var(--primary)" opacity=".34" stroke="var(--primary)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M100 60l9-4 6 5" fill="none" stroke="var(--primary-light)" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
+        <path d="M136 42l2.2 5.4 5.4 2.2-5.4 2.2L136 57l-2.2-5.4-5.4-2.2 5.4-2.2Z" fill="var(--primary-light)"/>
+      </symbol>
+
+      <!-- CHANG 01 · con duong phat thu, cot moc, phong thu tren tay -->
+      <symbol id="ic-duong" viewBox="0 0 160 92">
+        <path d="M14 78h132" stroke="var(--accent-light)" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>
+        <path d="M22 76C36 62 54 66 66 54 78 42 74 32 88 26" fill="none" stroke="var(--accent-light)" stroke-width="2.2" opacity=".4" stroke-dasharray="6 7" stroke-linecap="round"/>
+        <path d="M40 70v-7M58 60v-7M78 44v-7" stroke="var(--accent-light)" stroke-width="2" opacity=".32" stroke-linecap="round"/>
+        <circle cx="112" cy="42" r="5" fill="var(--primary)" opacity=".9"/>
+        <path d="M112 47v15M112 62l-6 16M112 62l6 16M105 53h14" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round"/>
+        <rect x="120" y="47" width="17" height="12" rx="2" fill="var(--primary)" opacity=".3" stroke="var(--primary-light)" stroke-width="2"/>
+        <path d="M120.5 48.5 128.5 54.5l8-6" fill="none" stroke="var(--primary-light)" stroke-width="1.8" stroke-linecap="round"/>
+      </symbol>
+
+      <!-- CHANG 02 · xe cut kit day da, nguoi cui nguoi ve phia truoc -->
+      <symbol id="ic-xe" viewBox="0 0 160 92">
+        <path d="M14 78h132" stroke="var(--accent-light)" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>
+        <path d="M28 52h44l-9 18H37Z" fill="var(--primary)" opacity=".18" stroke="var(--accent-light)" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="46" cy="76" r="6" fill="none" stroke="var(--accent-light)" stroke-width="2.6"/>
+        <path d="M72 54 92 60" stroke="var(--accent-light)" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="38" cy="47" r="5.5" fill="var(--primary)" opacity=".92"/>
+        <circle cx="50" cy="44" r="4.5" fill="var(--primary)" opacity=".76"/>
+        <circle cx="61" cy="47" r="5" fill="var(--primary)" opacity=".6"/>
+        <circle cx="112" cy="38" r="5.5" fill="var(--primary)" opacity=".9"/>
+        <path d="M110 44 104 60M104 60l-7 18M104 60l8 18M105 50 92 60" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round"/>
+      </symbol>
+
+      <!-- CHANG 03 · toa lau dai, NGUOI NHO DUNG CANH de thay 26 m la bao nhieu -->
+      <symbol id="ic-laudai" viewBox="0 0 160 92">
+        <path d="M14 78h132" stroke="var(--accent-light)" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>
+        <g transform="translate(6,0)">
+          <path d="M30 78V44l7-9 7 9v6h7V28l8-10 8 10v22h7v-6l7-9 7 9v34Z" fill="var(--primary)" opacity=".26" stroke="var(--primary)" stroke-width="2.6" stroke-linejoin="round"/>
+          <path d="M52 78V64a7 7 0 0 1 14 0v14" fill="var(--primary-light)" opacity=".5"/>
+          <path d="M37 56v7M81 56v7" stroke="var(--primary-light)" stroke-width="2.6" opacity=".55" stroke-linecap="round"/>
+        </g>
+        <circle cx="120" cy="65" r="2.8" fill="var(--accent-light)" opacity=".9"/>
+        <path d="M120 68v5.5M120 73.5l-2.6 4.5M120 73.5l2.6 4.5" fill="none" stroke="var(--accent-light)" stroke-width="1.9" stroke-linecap="round"/>
+        <circle cx="136" cy="46" r="9" fill="var(--primary-light)" opacity=".14"/>
+        <circle cx="136" cy="46" r="3.4" fill="var(--primary-light)"/>
+      </symbol>
+
+      <!-- CHANG 04 · CU LAT — lang mo ong tu xay, va ong dung tach ra mot ben -->
+      <symbol id="ic-mo" viewBox="0 0 160 92">
+        <path d="M14 78h132" stroke="var(--accent-light)" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>
+        <path d="M48 78V52a16 16 0 0 1 32 0v26Z" fill="var(--primary)" opacity=".22" stroke="var(--primary)" stroke-width="2.8" stroke-linejoin="round"/>
+        <path d="M58 78V62a6 6 0 0 1 12 0v16" fill="none" stroke="var(--primary-light)" stroke-width="2.4"/>
+        <path d="M64 36V25M59 29.5h10" stroke="var(--primary)" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="114" cy="52" r="4.2" fill="var(--accent-light)" opacity=".88"/>
+        <path d="M114 56.5v11M114 67.5l-4 10.5M114 67.5l4 10.5M107.5 61h13" fill="none" stroke="var(--accent-light)" stroke-width="2.4" opacity=".88" stroke-linecap="round"/>
+      </symbol>
+
+      <!-- CHANG 05 · lau dai ben trai, tam bia di tich ben phai.
+           ⚠ Dung dat bia CHONG len lau dai: lau dai tho ra hai ben bia nen
+           doc thanh hai toa nha rieng voi mot tam the o giua. -->
+      <symbol id="ic-bia" viewBox="0 0 160 92">
+        <path d="M14 78h132" stroke="var(--accent-light)" stroke-width="1.6" opacity=".3" stroke-linecap="round"/>
+        <g opacity=".42">
+          <path d="M20 78V48l6-7 6 7v5h7V36l7-9 7 9v17h7v-5l6-7 6 7v30Z" fill="var(--primary)" stroke="var(--primary)" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M39 78V66a5.5 5.5 0 0 1 11 0v12" fill="var(--primary-light)" opacity=".6"/>
+        </g>
+        <path d="M117 22l2.6 6 6 2.6-6 2.6-2.6 6-2.6-6-6-2.6 6-2.6Z" fill="var(--primary-light)"/>
+        <rect x="94" y="44" width="46" height="34" rx="5" fill="var(--primary)" opacity=".28" stroke="var(--primary)" stroke-width="2.8"/>
+        <path d="M103 55h28M103 63h28M103 71h17" stroke="var(--primary-light)" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+      <!-- ══ SLIDE 1 · MÓC ═════════════════════════════════════════════
+           Câu móc phải nêu được CÁI LẠ mà chưa lộ kết. Ở đây cái lạ là khoảng
+           cách giữa "hòn đá" và "toà lâu đài" — người xem ở lại để biết đoạn
+           giữa đã xảy ra chuyện gì.
+           ⚠ Chưa có sợi chỉ phía trên: chuyện chưa bắt đầu. -->
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg kc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kc-canh">
+          <span class="kc-nhan">Chuyện có thật</span>
+          <span class="kc-hinh"><svg><use href="#ic-da"/></svg></span>
+          <span class="kc-chi kc-chi-duoi" aria-hidden="true"></span>
+          <p class="kc-loi">Một người đưa thư vấp phải <b>một hòn đá</b>.</p>
+        </div>
+        <h1 class="slide-element fade-up kc-hook">Ba mươi ba năm sau,<br/><em>hòn đá đó thành một toà lâu đài.</em></h1>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 2 · CHẶNG 01 · CÁI VẤP ═════════════════════════════
+           Ba khối cố định cho mỗi chặng, đừng đổi thứ tự:
+             1. sợi chỉ + hình + tên chặng
+             2. lời kể
+             3. một chi tiết CÓ SỐ
+           Số là thứ giữ cho chuyện không trôi thành cảm xúc suông: người nghe
+           bám vào con số để tin phần còn lại. -->
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg kc-bg"></div>
+        <div class="kc-ghost" aria-hidden="true">01</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kc-canh">
+          <span class="kc-chi" aria-hidden="true"></span>
+          <span class="kc-hinh"><svg><use href="#ic-duong"/></svg></span>
+          <span class="kc-chi kc-chi-duoi" aria-hidden="true"></span>
+          <span class="kc-chuong">Chặng 01 · Cái vấp</span>
+        </div>
+        <p class="slide-element fade-up kc-loi">Năm 1879.<br/><b>Một làng miền nam nước Pháp.</b></p>
+        <div class="slide-element fade-up kc-so-hop">
+          <span class="kc-so">30 km</span>
+          <span class="kc-so-chu">đi bộ mỗi ngày<br/>để phát thư</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3 · CHẶNG 02 · THÓI QUEN ═══════════════════════════ -->
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg kc-bg"></div>
+        <div class="kc-ghost" aria-hidden="true">02</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kc-canh">
+          <span class="kc-chi" aria-hidden="true"></span>
+          <span class="kc-hinh"><svg><use href="#ic-xe"/></svg></span>
+          <span class="kc-chi kc-chi-duoi" aria-hidden="true"></span>
+          <span class="kc-chuong">Chặng 02 · Thói quen</span>
+        </div>
+        <p class="slide-element fade-up kc-loi">Hôm sau ông quay lại.<br/><b>Rồi ngày nào cũng quay lại.</b></p>
+        <div class="slide-element fade-up kc-so-hop">
+          <span class="kc-so">33 năm</span>
+          <span class="kc-so-chu">nhặt đá dọc đường,<br/>chở về bằng xe cút kít</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 4 · CHẶNG 03 · CÔNG TRÌNH ══════════════════════════ -->
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg kc-bg"></div>
+        <div class="kc-ghost" aria-hidden="true">03</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kc-canh">
+          <span class="kc-chi" aria-hidden="true"></span>
+          <span class="kc-hinh"><svg><use href="#ic-laudai"/></svg></span>
+          <span class="kc-chi kc-chi-duoi" aria-hidden="true"></span>
+          <span class="kc-chuong">Chặng 03 · Công trình</span>
+        </div>
+        <p class="slide-element fade-up kc-loi">Ban ngày đưa thư.<br/><b>Ban đêm ông xây.</b></p>
+        <div class="slide-element fade-up kc-so-hop">
+          <span class="kc-so">26 m</span>
+          <span class="kc-so-chu">chiều dài lâu đài,<br/>cao 12 m</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 5 · CHẶNG 04 · CÚ LẬT ══════════════════════════════
+           ⚠ Lớp `kc-lat` đặt trên chính `.slide`. Nó làm SỢI CHỈ ĐỨT, khung
+           hình sáng lên và tên chặng đổi màu. Đây là chỗ DUY NHẤT trong deck
+           sợi chỉ đứt — dùng ở chặng khác là mất hẳn ý nghĩa của nó. -->
+      <div class="slide kc-lat" data-slide-id="4">
+        <div class="slide-bg kc-bg"></div>
+        <div class="kc-ghost" aria-hidden="true">04</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kc-canh">
+          <span class="kc-chi" aria-hidden="true"></span>
+          <span class="kc-hinh"><svg><use href="#ic-mo"/></svg></span>
+          <span class="kc-chi kc-chi-duoi" aria-hidden="true"></span>
+          <span class="kc-chuong">Chặng 04 · Cú lật</span>
+        </div>
+        <p class="slide-element fade-up kc-loi">Ông xin được chôn trong chính công trình của mình.<br/><b>Luật không cho phép.</b></p>
+        <div class="slide-element fade-up kc-so-hop">
+          <span class="kc-so">8 năm</span>
+          <span class="kc-so-chu">xây thêm một lăng mộ,<br/>bắt đầu ở tuổi 78</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6 · CHẶNG 05 · CÒN LẠI ═════════════════════════════
+           Kết KHÔNG rút ra bài học hộ người xem. Chỉ đặt xuống một sự thật
+           cuối cùng rồi dừng — câu chốt tự nó nói. -->
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg kc-bg"></div>
+        <div class="kc-ghost" aria-hidden="true">05</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up kc-canh">
+          <span class="kc-chi" aria-hidden="true"></span>
+          <span class="kc-hinh"><svg><use href="#ic-bia"/></svg></span>
+          <span class="kc-chuong">Chặng 05 · Còn lại</span>
+        </div>
+        <p class="slide-element fade-up kc-dong">Ông mất một năm sau khi xây xong.<br/><em>Nửa thế kỷ sau, nước Pháp xếp nó vào di tích quốc gia.</em><span class="kc-tong"><span>33 năm</span><i>·</i><span>26 m</span><i>·</i><span>1 người</span></span></p>
+        </div>
+      </div>
+</div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

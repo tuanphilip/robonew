@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết —
+     toàn bộ style.css bên cạnh viết cho khung ngang. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Khái niệm on-chain — mẫu giải thích 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         ⚠ MỌI HÌNH LÀ SVG ĐẶT THẲNG TRONG HTML — không thư viện, không ảnh:
+         deck phải dựng được OFFLINE, hình phải đổi màu theo bảng "Tông màu",
+         và sửa số liệu là sửa thẳng toạ độ. Hình KHÔNG mang `.slide-element`
+         nên không ăn nhịp bấm và không kéo hộp bao mà `kiemDeck` đo. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-be" aria-hidden="true">
+        <svg viewBox="0 0 380 330" fill="none">
+          <circle class="quang quang-a" cx="148" cy="188" r="96" />
+          <circle class="quang quang-b" cx="238" cy="150" r="84" />
+
+          <!-- hai đồng tài sản rót vào một cái bể -->
+          <g class="dong-xu xu-a">
+            <circle cx="112" cy="70" r="34" />
+            <text x="112" y="80">A</text>
+          </g>
+          <g class="dong-xu xu-b">
+            <circle cx="268" cy="70" r="34" />
+            <text x="268" y="80">B</text>
+          </g>
+          <path class="tia-rot tia-a" d="M124 106c14 22 24 34 36 44" />
+          <path class="tia-rot tia-b" d="M256 106c-14 22-24 34-36 44" />
+
+          <!-- cái bể -->
+          <path class="be-vien" d="M92 158h196v76A98 26 0 0 1 92 234Z" />
+          <path class="be-nuoc" d="M96 196h188v38A94 22 0 0 1 96 234Z" />
+          <ellipse class="be-mieng" cx="190" cy="158" rx="98" ry="26" />
+          <path class="song-be" d="M118 206c18 10 40 10 58 0s40-10 58 0" />
+          <path class="song-be mo" d="M124 226c16 9 36 9 52 0s36-9 52 0" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tem-chu">On-chain · Giải thích</div>
+        <div class="slide-element tieu-de-lon">Bể thanh khoản<br />là cái gì</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. KHÔNG CẦN NGƯỜI KHỚP LỆNH — 3 câu / 3 phần tử ═══════════════
+         Chữ trái, SƠ ĐỒ LUỒNG phải. Sơ đồ có nhãn trên từng mũi tên; ở khung
+         dọc 390px nhãn đè lên chính mũi tên nó đang chú thích. -->
+    <div class="slide" data-slide="1" data-bo-cuc="so-do">
+      <div class="nen nen-2"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Khác chỗ nào</div>
+          <div class="slide-element tieu-de">Không đợi người bán</div>
+          <ul class="gach">
+            <li class="slide-element">Sàn thường: <b>người mua phải gặp người bán</b></li>
+            <li class="slide-element">Sàn phi tập trung: đổi thẳng với một <b>cái bể có sẵn</b></li>
+          </ul>
+        </div>
+
+        <div class="so-do-luong" aria-hidden="true">
+          <svg viewBox="0 0 340 300" fill="none">
+            <g class="hop hop-nguoi">
+              <rect x="30" y="12" width="280" height="56" rx="14" />
+              <text x="170" y="46">Người đổi</text>
+            </g>
+
+            <g class="ten ten-xuong">
+              <path d="M120 72v44" /><path d="m114 110 6 8 6-8" />
+            </g>
+            <text class="nhan-ten ben-trai" x="108" y="99">đưa A</text>
+
+            <g class="ten ten-len">
+              <path d="M220 116V72" /><path d="m214 78 6-8 6 8" />
+            </g>
+            <text class="nhan-ten ben-phai" x="232" y="99">nhận B</text>
+
+            <g class="hop hop-be">
+              <rect x="30" y="120" width="280" height="72" rx="16" />
+              <text x="170" y="152">Bể thanh khoản</text>
+              <text class="phu" x="170" y="176">chứa sẵn cả A lẫn B</text>
+            </g>
+
+            <g class="ten ten-cham">
+              <path d="M170 196v44" /><path d="m164 234 6 8 6-8" />
+            </g>
+            <text class="nhan-ten ben-phai" x="184" y="222">ai đó góp vào</text>
+
+            <g class="hop hop-gop">
+              <rect x="30" y="244" width="280" height="52" rx="14" />
+              <text x="170" y="276">Nhà cung cấp thanh khoản</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. PHÍ — 3 câu / 3 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="noi-dung-hinh">
+      <div class="nen nen-3"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Đổi lại được gì</div>
+          <div class="slide-element tieu-de">Một phần phí của mỗi lượt đổi</div>
+          <ul class="gach">
+            <li class="slide-element">Người bỏ tiền vào gọi là <b>nhà cung cấp thanh khoản</b></li>
+            <li class="slide-element">Ba phần nghìn nghe bé — nhưng <b>cộng dồn theo số lượt</b></li>
+          </ul>
+        </div>
+
+        <div class="o-so-to" aria-hidden="true">
+          <div class="ost-nhan">Phí mỗi lượt đổi</div>
+          <div class="ost-so">0,3<i>%</i></div>
+          <div class="ost-chu">chia cho những người<br />đang góp tiền trong bể</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. TVL — 3 câu / 3 phần tử ═════════════════════════════════════
+         Biểu đồ vùng CHIẾM HẾT BỀ NGANG, nằm giữa tiêu đề và hai gạch đầu
+         dòng. Mười mốc theo tháng ở khung dọc 390px thì mỗi mốc cách nhau 30px
+         — đường bẹp thành một vệt và mất luôn hình dáng "rút ra rồi vào lại",
+         tức mất đúng thứ slide đang chỉ. Đường vẽ dần bằng `stroke-dashoffset`
+         lúc slide thành `.active`. -->
+    <div class="slide" data-slide="3" data-bo-cuc="bieu-do-lon">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="do-dau">
+          <div class="nhan">Đo bằng gì</div>
+          <div class="chu-giai"><span class="cg">Tổng tiền trong các bể · tỉ đô</span></div>
+        </div>
+        <div class="slide-element tieu-de">TVL: tổng tiền đang nằm trong bể</div>
+
+        <div class="bieu-do-tvl" aria-hidden="true">
+          <svg viewBox="0 0 620 170" fill="none">
+            <g class="luoi">
+              <path d="M40 38.6h560" /><path d="M40 75.7h560" />
+              <path d="M40 112.9h560" /><path d="M40 150h560" />
+            </g>
+            <g class="truc">
+              <text x="32" y="43">60</text><text x="32" y="80">40</text>
+              <text x="32" y="117">20</text><text x="32" y="155">0</text>
+            </g>
+            <path class="vung" d="M40 116.6 102 105.4 164 92.4 227 68.3 289 53.4 351 73.9 413 83.1 476 66.4 538 42.3 600 27.4 600 150 40 150Z" />
+            <path class="duong" d="M40 116.6 102 105.4 164 92.4 227 68.3 289 53.4 351 73.9 413 83.1 476 66.4 538 42.3 600 27.4" />
+            <g class="cham">
+              <circle cx="413" cy="83.1" r="5" />
+              <circle class="cuoi" cx="600" cy="27.4" r="6.5" />
+            </g>
+            <text class="chu-mo-ta" x="413" y="104">người rút ra</text>
+            <text class="chu-mo-ta sang" x="600" y="18">vào lại</text>
+          </svg>
+        </div>
+
+        <ul class="gach mot-hang">
+          <li class="slide-element">Lên xuống theo <b>cả giá tài sản lẫn niềm tin</b></li>
+          <li class="slide-element">Nhìn đường này là thấy người ta đang rút hay đang vào</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 5. CÁI BẪY — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Cái bẫy</div>
+        <div class="slide-element tieu-de">Tổn thất tạm thời</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Giá hai tài sản lệch nhau nhiều: <b>rút ra ít hơn bỏ vào</b></li>
+          <li class="slide-element">Phí thu được có thể không bù nổi khoản chênh đó</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="mo-dau">
+      <div class="nen nen-6"></div>
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Không phải<br />tài khoản tiết kiệm</div>
+        <div class="slide-element phu-de">Nó là một vị thế — và vị thế nào cũng có giá</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--primary": "#d8f34a",
+      "--primary-light": "#edff9e",
+      "--primary-dark": "#7d9410",
+      "--accent": "#ff5d73",
+      "--accent-light": "#a7a1d8",
+      "--info": "#7b6ee8",
+      "--success": "#5ce6a0",
+      "--bg-dark": "#171233"
+    },
+    "customVariables": {
+      "--primary": "#d8f34a",
+      "--primary-light": "#edff9e",
+      "--primary-dark": "#7d9410",
+      "--accent": "#ff5d73",
+      "--accent-light": "#a7a1d8",
+      "--info": "#7b6ee8",
+      "--success": "#5ce6a0",
+      "--bg-dark": "#171233"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.24,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#d8f34a",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#171233",
+    "gridEnabled": false,
+    "gridLight": "#7b6ee8",
+    "iconGlow": "#d8f34a",
+    "iconBacklight": "#7b6ee8",
+    "iconLight": "#edff9e",
+    "mainLight": "#ff8a3d",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#7b6ee8",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "soft",
+    "backgroundFx": "stars"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Đố bạn một câu. Hành tinh nào nóng nhất Hệ Mặt Trời?",
+      "Bốn lựa chọn. Sao Thuỷ, Sao Kim, Trái Đất, hay Sao Hoả?",
+      "Ba giây suy nghĩ, đừng vội lướt qua.",
+      "Đáp án là Sao Kim. Không phải Sao Thuỷ, dù Sao Thuỷ nằm gần Mặt Trời hơn hẳn. Bề mặt Sao Kim nóng tới bốn trăm sáu mươi lăm độ C.",
+      "Là tại bầu khí quyển. Chín mươi sáu phần trăm khí quyển Sao Kim là khí cacbonic, giữ nhiệt lại không cho thoát ra. Sao Thuỷ gần hơn nhưng gần như không có khí quyển, nên đêm xuống lạnh tới âm một trăm tám mươi độ.",
+      "Bạn đoán đúng không? Gõ đáp án của bạn vào phần bình luận."
+    ],
+    "transitionSounds": [
+      "rise",
+      "minimal",
+      "minimal",
+      "boom",
+      "chime",
+      "chord"
+    ],
+    "revealSounds": [
+      "ping",
+      "click",
+      "tick",
+      "bell",
+      "pop",
+      "sparkle"
+    ]
+  }
+}

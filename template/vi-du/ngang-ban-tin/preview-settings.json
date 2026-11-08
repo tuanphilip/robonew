@@ -1,0 +1,72 @@
+{
+  "_ghiChu": [
+    "Thiet lap cua mau BAN TIN & SO LIEU (TIN-06) — NGANG 16:9, NEN SANG.",
+    "",
+    "⚠ `visuals.colorMode` la `cream`, khong phai `dark`. Trinh sua doc khoa nay de",
+    "ve khung xem truoc; de `dark` thi app ve nen toi trong khi deck la nen giay.",
+    "",
+    "⚠ `subtitles.color` la MUC DAM (#1c1917). Bo ghi mac dinh ve phu de TRANG",
+    "(--subtitle-color: #ffffff) — tren nen giay la chu trang tren giay trang, mat",
+    "sach. Day la cho de quen nhat khi lam mau nen sang.",
+    "",
+    "⚠ `subtitles.fontSize` o day DE LEN --subtitle-font-size trong style.css. Hai",
+    "cho co y de cung mot so; doi mot ben thi doi ca hai.",
+    "",
+    "⚠ KHONG khai `visuals.backgroundFx`: nen giay co luoi ke san, chong them hieu",
+    "ung dong la chu kho doc ma may yeu thi rot khung hinh.",
+    "",
+    "⚠ KHOÁ `theme.variables` PHẢI TRÙNG CẢ TÊN LẪN GIÁ TRỊ với bảng màu trong",
+    "style.css. Trình sửa đọc file này và GHI ĐÈ :root lúc quay, nên lệch giá trị là",
+    "video ra MÀU CŨ trong khi mở deck bằng trình duyệt vẫn thấy màu mới — đúng bẫy đã",
+    "dính ngày 18/09/2026 khi đổi tông năm mẫu ngang. Đổi bảng màu thì đổi CẢ HAI,",
+    "kèm `visuals.backgroundColor` = `--bg-dark`."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#f4f1ea",
+      "--primary": "#c2410c",
+      "--primary-light": "#ea6a2e",
+      "--primary-dark": "#7c2d12",
+      "--accent": "#1d4ed8",
+      "--accent-light": "#3b82f6",
+      "--info": "#1d4ed8",
+      "--success": "#15803d"
+    },
+    "customVariables": {
+      "--bg-dark": "#f4f1ea",
+      "--primary": "#c2410c",
+      "--primary-light": "#ea6a2e",
+      "--primary-dark": "#7c2d12",
+      "--accent": "#1d4ed8",
+      "--accent-light": "#3b82f6",
+      "--info": "#1d4ed8",
+      "--success": "#15803d"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#1c1917",
+    "activeColor": "#c2410c",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#f4f1ea",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Chip nội địa vừa vượt mốc sản lượng cả năm chỉ trong ba quý.",
+      "Chuyện đã xảy ra như sau. Nhà máy chạy ba ca liên tục từ đầu tháng bảy. Đơn đặt hàng hiện đã kín tới hết quý một năm sau.",
+      "Sản lượng đạt một trăm hai mươi tám phần trăm kế hoạch quý. Nhà máy tuyển thêm bốn nghìn hai trăm việc làm mới. Và đơn hàng thì đã kín chín tháng tới.",
+      "Giám đốc nhà máy nói rằng họ không tăng ca để chạy theo đơn hàng. Họ tăng ca vì lần đầu tiên có đủ đơn hàng để mà chạy.",
+      "Thị trường phản ứng theo hai hướng. Phía ủng hộ cho rằng chuỗi cung ứng trong nước sẽ bớt phụ thuộc nhập khẩu. Phía dè dặt thì chỉ ra rằng sản lượng tăng nhanh nhưng biên lợi nhuận vẫn mỏng.",
+      "Câu hỏi còn bỏ ngỏ là giữ nhịp được bao lâu. Ba ca liên tục là giải pháp ngắn hạn chứ không phải năng lực thật. Và chưa có kế hoạch mở rộng dây chuyền nào được công bố.",
+      "Hãy theo dõi con số của quý sau. Bản tin này cập nhật vào tuần đầu mỗi tháng."
+    ]
+  }
+}

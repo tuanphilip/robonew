@@ -1,0 +1,253 @@
+/* Tách từ version-badge.js (02/09/2026, audit Phase 2.1). */
+/* ⚠ Luật của Ô SỐ HIỆU Ở GÓC (`.ver-so`, id mang tên cũ) đã xoá cùng chính
+   ô đó — 16/09/2026, xem chú thích đầu `version-badge.js`. Tệp này giờ chỉ còn
+   bảng "Có gì mới?". */
+
+/* ══ Bảng "Có gì mới?" ═════════════════════════════════════════════════════
+ * HỘP THOẠI GIỮA MÀN HÌNH, không phải bảng bung ở góc (đổi 12/09/2026).
+ * Bản trước neo vào ô số hiệu (z 20) nên nút "?" (z 21) đè lên — xem chú
+ * thích đầu version-badge.js. Ở giữa màn hình thì không còn gì để tranh chỗ,
+ * và nền mờ phủ luôn cả nút "?" lẫn nút cập nhật.
+ * Vỏ ngoài theo đúng nếp của mọi hộp thoại khác trong app: --overlay + blur,
+ * thân --panel + --shadow-lg.
+ */
+#bee-changelog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--sp-24);
+  background: var(--overlay);
+  backdrop-filter: blur(3px);
+  font-family: var(--font-ui);
+  animation: beeClNen var(--dur-fast) ease;
+}
+@keyframes beeClNen { from { opacity: 0; } to { opacity: 1; } }
+
+/* Cao tối đa 86vh, cuộn Ở TRONG thân: đầu bảng và chân bảng phải đứng yên —
+   16 bản mà cuộn cả hộp thì nút Đóng trôi mất khỏi màn hình. */
+#bee-changelog .cl-hop {
+  display: flex;
+  flex-direction: column;
+  width: min(620px, 94vw);
+  max-height: 86vh;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--shadow-lg);
+  animation: beeClHop var(--dur-slow) ease;
+}
+@keyframes beeClHop {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- đầu bảng ---------------------------------------------------------- */
+#bee-changelog .cl-dinh {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-14);
+  padding: var(--sp-20) var(--sp-24);
+  border-bottom: 1px solid var(--line);
+}
+#bee-changelog .cl-bieu {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--info-bg);
+  color: var(--info);
+}
+#bee-changelog .cl-bieu .btn-icon { width: auto; height: auto; color: inherit; background: none; }
+#bee-changelog .cl-bieu svg { width: 20px; height: 20px; }
+#bee-changelog h2 {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+}
+#bee-changelog .cl-x {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-faint);
+  font: inherit;
+  font-size: var(--text-2xl);
+  line-height: var(--leading-none);
+  cursor: pointer;
+}
+#bee-changelog .cl-x:hover { background: var(--surface); color: var(--text); }
+
+/* ---- thân: trục dọc các bản -------------------------------------------- */
+#bee-changelog .cl-than {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sp-20) var(--sp-24);
+}
+#bee-changelog .cl-doc { position: relative; margin: 0; padding: 0; list-style: none; }
+/* Sợi dọc vẽ MỘT LẦN cho cả danh sách, không phải mỗi mục một đoạn: bấm "xem
+   tất cả" là số mục đổi, mà đoạn nối thì không cần biết điều đó. */
+#bee-changelog .cl-doc::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+}
+#bee-changelog .cl-ban { position: relative; margin: 0 0 var(--sp-20); padding-left: var(--sp-28); }
+#bee-changelog .cl-ban:last-child { margin-bottom: 0; }
+/* Các bản cũ nằm sau nút "Xem tất cả phiên bản" ở chân bảng. */
+#bee-changelog .cl-ban.an { display: none; }
+/* Quầng --panel quanh chấm là để CẮT sợi dọc chạy phía sau nó. */
+#bee-changelog .cl-cham {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-pill);
+  background: var(--text-mo);
+  box-shadow: 0 0 0 4px var(--panel);
+}
+#bee-changelog .cl-ban.nay .cl-cham {
+  background: var(--info);
+  box-shadow: 0 0 0 3px var(--panel), 0 0 0 6px var(--info-bg);
+}
+
+#bee-changelog .cl-hang {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-10);
+  width: 100%;
+  padding: var(--sp-2) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+#bee-changelog .cl-so { font-size: var(--text-xl); font-weight: var(--weight-bold); }
+#bee-changelog .cl-ngay {
+  color: var(--text-faint);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+#bee-changelog .cl-nay {
+  padding: var(--sp-2) var(--sp-10);
+  border-radius: var(--radius-pill);
+  background: var(--ok-bg);
+  color: var(--ok);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+#bee-changelog .cl-mui {
+  margin-left: auto;
+  width: auto;
+  height: auto;
+  color: var(--text-faint);
+  background: none;
+  transition: transform var(--dur-fast) ease;
+}
+#bee-changelog .cl-mui svg { width: 18px; height: 18px; }
+#bee-changelog .cl-ban.mo .cl-mui { transform: rotate(180deg); }
+
+/* ---- hộp ghi chú của một bản -------------------------------------------- */
+#bee-changelog .cl-noi {
+  margin-top: var(--sp-10);
+  padding: var(--sp-14) var(--sp-16);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+#bee-changelog .cl-ban:not(.mo) .cl-noi { display: none; }
+/* Bản ĐANG DÙNG nhuộm xanh: mở bảng ra là mắt rơi ngay vào nó. */
+#bee-changelog .cl-ban.nay .cl-noi { background: var(--info-bg); }
+#bee-changelog .cl-noi ul { margin: 0; padding: 0; list-style: none; }
+#bee-changelog .cl-noi li {
+  position: relative;
+  margin: 0 0 var(--sp-10);
+  padding-left: var(--sp-18);
+  color: var(--text-soft);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+#bee-changelog .cl-noi li:last-child { margin-bottom: 0; }
+#bee-changelog .cl-noi li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--text-mo);
+}
+#bee-changelog .cl-ban.nay .cl-noi li::before { background: var(--info); }
+#bee-changelog .cl-trong {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+
+/* ---- chân bảng ---------------------------------------------------------- */
+#bee-changelog .cl-chan {
+  flex: none;
+  display: flex;
+  align-items: center;
+  /* flex-end + margin-right:auto bên .cl-tatca, KHÔNG phải space-between: bấm
+     'Xem tất cả phiên bản' là nút đó biến mất, mà space-between với một con
+     duy nhất thì nút Đóng nhảy từ phải sang trái. */
+  justify-content: flex-end;
+  gap: var(--sp-12);
+  padding: var(--sp-14) var(--sp-24);
+  border-top: 1px solid var(--line);
+}
+#bee-changelog .cl-tatca {
+  display: inline-flex;
+  align-items: center;
+  margin-right: auto;
+  gap: var(--sp-8);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--info);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+#bee-changelog .cl-tatca:hover { text-decoration: underline; }
+#bee-changelog .cl-tatca .btn-icon { width: auto; height: auto; color: inherit; background: none; }
+#bee-changelog .cl-tatca svg { width: 16px; height: 16px; }
+#bee-changelog .cl-dong {
+  padding: var(--sp-8) var(--sp-20);
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+#bee-changelog .cl-dong:hover { background: var(--surface); }
+
+/* ⚠ Nút tròn KIỂM TRA CẬP NHẬT ở góc và ô chữ kết quả của nó đã xoá cùng ô số
+   hiệu — 16/09/2026. Việc đó nay nằm ở hàng "Phiên bản" trong bảng Cài đặt
+   (`login.css`, `.tk-ver-*`; nút ở đó là `#bee-check-update` — ĐANG DÙNG, đừng
+   nhầm với nút đã xoá). */

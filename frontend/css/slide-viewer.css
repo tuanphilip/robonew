@@ -1,0 +1,43 @@
+/* Tách từ slide-viewer.js (02/09/2026, audit Phase 2.1). */
+/* Thanh trên cùng KHÔNG khai lại ở đây — dùng .app-bar trong app-bar.css,
+   chung với trang danh sách. Trước đây chỗ này tự khai màu viết cứng
+   (#111a2e, #3d7dff…) nên lớp phủ không đổi theo theme và thêm nút phải
+   sửa hai nơi.
+   KHÔNG dùng dấu backtick trong khối này: cả hàm là một template literal,
+   backtick đóng chuỗi sớm và biến thành mã — đã dính thật, lỗi hiện ra là
+   "bar is not defined" chứ không hề nhắc tới CSS. */
+/* Lớp phủ theo ĐÚNG theme của app — cả thanh trên lẫn bảng Preview Editor
+   bên trong iframe (theme truyền qua ?theme= khi dựng URL, xem load()).
+   KHÔNG dùng dấu backtick trong khối này: cả hàm là một template literal,
+   backtick đóng chuỗi sớm và lớp phủ tắt hẳn (cạm bẫy #56, đã dính 2 lần —
+   nay có phép kiểm tự động chặn). */
+#bee-viewer{position:fixed;inset:0;z-index:var(--z-viewer);display:flex;
+  flex-direction:column;background:var(--bg)}
+#bee-viewer .app-bar{border-radius:0}
+#bee-viewer .stage{flex:1;display:flex;align-items:center;justify-content:center;
+  overflow:auto;padding:var(--sp-16)}
+/* Deck chiếm TRỌN khung — không bó vào khung điện thoại.
+   Trang deck là một trang desktop hoàn chỉnh: Preview Editor bên trái,
+   khung 9:16 ở giữa, cụm nút audio/lên/xuống nằm NGOÀI khung. Ép iframe
+   vào hộp 430px 9:16 thì chỉ còn thấy khung điện thoại, editor bị cắt sạch
+   và cụm nút bị dồn đè lên slide. Chính trang deck tự canh giữa lấy. */
+#bee-viewer .stage.full{padding:0;align-items:stretch}
+#bee-viewer iframe{width:100%;height:100%;border:0;background:#000;display:block}
+/* Video cũng là khung dọc 9:16 — giữ nguyên tỉ lệ, đừng kéo giãn. */
+#bee-viewer video{max-width:min(430px,100%);max-height:calc(100vh - 90px);
+  border:1px solid var(--line);border-radius:var(--radius-md);background:#000}
+#bee-viewer .err{color:var(--danger-text);padding:var(--sp-20);white-space:pre-wrap;font-size:var(--text-md);
+  max-width:620px;line-height:var(--leading-relaxed)}
+/* Đang tải: giữa khung, vòng quay + chữ trung tính.
+   Lớp .stage phải là mốc định vị, không thì inset:0 bám ra tận overlay và
+   khối này nhảy lên đè cả thanh tiêu đề.
+   (Không dùng dấu huyền — cả khối nằm trong template literal.) */
+#bee-viewer .stage{position:relative}
+#bee-viewer .dangtai{position:absolute;inset:0;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-14);
+  color:var(--text-faint);font-size:var(--text-md);font-weight:var(--weight-semibold);letter-spacing:0.01em;
+  pointer-events:none}
+#bee-viewer .dangtai .vong{width:30px;height:30px;border-radius:var(--radius-pill);
+  border:2.5px solid color-mix(in srgb, var(--status-idle) 25%, transparent);border-top-color:var(--text-faint);
+  animation:bee-quay 0.75s linear infinite}
+@keyframes bee-quay{to{transform:rotate(360deg)}}

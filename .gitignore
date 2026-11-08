@@ -1,0 +1,34 @@
+# Binaries & build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+build/bin/
+robonew.exe
+
+# Node & Frontend
+node_modules/
+frontend/dist/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Secrets & Local Config
+settings.json
+*.env
+*.key
+*.pem
+
+# Generated project outputs (large media)
+projects/*/output/
+projects/*/*.mp4
+projects/*/*.mp3
+projects/*/*.jpg
+projects/*/_recording.html
+projects/ad-*
+projects/demo-ai-*
+
+# OS
+.DS_Store
+Thumbs.db

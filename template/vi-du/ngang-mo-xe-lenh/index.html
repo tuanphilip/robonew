@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết —
+     toàn bộ style.css bên cạnh viết cho khung ngang. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Mổ xẻ một lệnh — mẫu sổ giao dịch 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         ⚠ MỌI HÌNH LÀ SVG ĐẶT THẲNG TRONG HTML — không thư viện, không ảnh:
+         deck phải dựng được OFFLINE, hình phải đổi màu theo bảng "Tông màu",
+         và sửa số liệu là sửa thẳng toạ độ. Hình KHÔNG mang `.slide-element`
+         nên không ăn nhịp bấm và không kéo hộp bao mà `kiemDeck` đo. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-so" aria-hidden="true">
+        <svg viewBox="0 0 380 330" fill="none">
+          <!-- trang sổ lệnh, hơi nghiêng như tờ giấy đặt vội trên bàn -->
+          <g class="trang-so">
+            <rect class="giay" x="40" y="36" width="272" height="258" rx="10" />
+            <path class="le-do" d="M78 36v258" />
+            <g class="dong-ke">
+              <path d="M96 84h190" /><path d="M96 116h190" /><path d="M96 148h152" />
+              <path d="M96 244h190" /><path d="M96 272h122" />
+            </g>
+            <!-- biểu đồ nhỏ dán trong sổ -->
+            <rect class="o-bieu-do" x="96" y="166" width="190" height="62" rx="6" />
+            <path class="net-gia" d="M106 210 132 216 156 222 178 206 202 190 228 196 252 178 276 172" />
+            <circle class="cham-ra" cx="156" cy="222" r="5" />
+          </g>
+
+          <!-- con dấu đỏ, xoay nhẹ -->
+          <g class="con-dau">
+            <circle class="vanh-dau" cx="286" cy="252" r="52" />
+            <circle class="vanh-dau trong" cx="286" cy="252" r="42" />
+            <text class="chu-dau" x="286" y="246">ĐÃ</text>
+            <text class="chu-dau" x="286" y="274">ĐÓNG</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tem-ho-so">Sổ lệnh · Mổ xẻ</div>
+        <div class="slide-element tieu-de-lon">Một lệnh thua,<br />hỏng ở chỗ nào</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. THÔNG SỐ LỆNH — 3 câu / 3 phần tử ═══════════════════════════
+         Ba thẻ nằm NGANG, mỗi thẻ một `.slide-element` nên nó hiện đúng lúc
+         người dẫn đọc tới con số đó. Ba thẻ cạnh nhau là để so ngay ba mức giá;
+         ở khung dọc phải xếp chồng và mất thế so sánh. -->
+    <div class="slide" data-slide="1" data-bo-cuc="ba-the">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="nhan">Lệnh mở hôm thứ ba</div>
+        <div class="hang-the">
+          <div class="slide-element the the-vao">
+            <div class="the-nhan">Giá vào</div>
+            <div class="the-so">42 000</div>
+            <div class="the-chu">Mốc gốc của cả lệnh</div>
+          </div>
+          <div class="slide-element the the-lo">
+            <div class="the-nhan">Cắt lỗ</div>
+            <div class="the-so">41 000</div>
+            <div class="the-chu">Rủi một nghìn mỗi đơn vị</div>
+          </div>
+          <div class="slide-element the the-dich">
+            <div class="the-nhan">Mục tiêu</div>
+            <div class="the-so">45 000</div>
+            <div class="the-chu">Rủi một để lấy ba</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. GIÁ ĐI THẾ NÀO — 3 câu / 3 phần tử ══════════════════════════
+         Biểu đồ đường CHIẾM HẾT BỀ NGANG, nằm giữa tiêu đề và hai gạch đầu
+         dòng. Bốn mức giá nằm ngang kèm nhãn ở lề trái chỉ đọc được ở khung
+         ngang: ở khung dọc 390px, bốn nhãn chồng lên nhau và đè lên chính
+         đường giá. Đường vẽ dần bằng `stroke-dashoffset` lúc slide `.active`. -->
+    <div class="slide" data-slide="2" data-bo-cuc="bieu-do-lon">
+      <div class="nen nen-3"></div>
+      <div class="than">
+        <div class="nhan">Giá đã đi thế nào</div>
+        <div class="slide-element tieu-de">Xuống gần cắt lỗ, rồi vượt mục tiêu</div>
+
+        <div class="bieu-do-lenh" aria-hidden="true">
+          <svg viewBox="0 0 620 170" fill="none">
+            <g class="muc">
+              <path class="muc-dich" d="M150 30h450" />
+              <path class="muc-vao" d="M150 86h450" />
+              <path class="muc-doi" d="M150 112h450" />
+              <path class="muc-lo" d="M150 140h450" />
+            </g>
+            <g class="nhan-muc">
+              <text class="m-dich" x="140" y="35">Mục tiêu 45 000</text>
+              <text class="m-vao" x="140" y="91">Vào 42 000</text>
+              <text class="m-doi" x="140" y="117">Dời lên 41 600</text>
+              <text class="m-lo" x="140" y="145">Cắt lỗ 41 000</text>
+            </g>
+
+            <path class="duong-gia" d="M150 86 200 98 250 130 300 120 340 112 390 98 450 74 510 54 560 40 600 30" />
+            <circle class="cham-vao" cx="150" cy="86" r="6" />
+            <g class="cham-ra">
+              <circle cx="340" cy="112" r="9" />
+              <path d="M335 107l10 10M345 107l-10 10" />
+            </g>
+            <!-- ⚠ Nhãn nằm TRÊN CAO, nối xuống chấm bằng một vạch chỉ. Đặt nó ngay
+                 cạnh chấm (y=92) thì chính vạch đứt "Vào 42 000" ở y=86 gạch ngang
+                 qua giữa chữ — đo 18/09/2026. Dải y 56–70 là chỗ duy nhất ở đây
+                 không có vạch mức nào lẫn đường giá đi qua. -->
+            <path class="chi-ra" d="M340 70v33" />
+            <text class="chu-ra" x="340" y="64">lệnh đóng ở đây</text>
+          </svg>
+        </div>
+
+        <ul class="gach mot-hang">
+          <li class="slide-element">Hai tiếng đầu giá <b>xuống gần chạm cắt lỗ</b></li>
+          <li class="slide-element">Lúc nó bật lên thì lệnh đã đóng rồi</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 4. CHUYỆN GÌ ĐÃ XẢY RA — 2 câu / 2 phần tử ═════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="noi-dung">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Chuyện đã xảy ra</div>
+        <div class="slide-element tieu-de">Cắt lỗ bị dời lên vì sợ</div>
+        <div class="slide-element the-dan">
+          Giá quét qua <b>đúng chỗ vừa dời tới</b>, rồi đi tiếp về hướng ban đầu.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5. BÀI HỌC — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan">Bài học</div>
+        <div class="slide-element tieu-de">Không phải "đừng dời cắt lỗ"</div>
+        <ul class="gach">
+          <li class="slide-element">Cắt lỗ đặt <b>theo biểu đồ</b>, không đặt theo cảm giác</li>
+          <li class="slide-element">Dời nó vì sợ là đổi một kế hoạch lấy một phản xạ</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="mo-dau">
+      <div class="nen nen-6"></div>
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Ghi lại từng lệnh,<br />kể cả lệnh thắng</div>
+        <div class="slide-element phu-de">Sổ lệnh là thứ duy nhất nói thật sau sáu tháng</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

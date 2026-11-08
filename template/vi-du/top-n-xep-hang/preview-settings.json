@@ -1,0 +1,89 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--primary": "#f5c451",
+      "--primary-light": "#ffe9a8",
+      "--primary-dark": "#a8842c",
+      "--accent": "#8c7340",
+      "--accent-light": "#d9bf86",
+      "--info": "#b9a06a",
+      "--success": "#7ec8a0",
+      "--bg-dark": "#0d0b08"
+    },
+    "customVariables": {
+      "--primary": "#f5c451",
+      "--primary-light": "#ffe9a8",
+      "--primary-dark": "#a8842c",
+      "--accent": "#8c7340",
+      "--accent-light": "#d9bf86",
+      "--info": "#b9a06a",
+      "--success": "#7ec8a0",
+      "--bg-dark": "#0d0b08"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#f5c451",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#0d0b08",
+    "gridEnabled": false,
+    "gridLight": "#8c7340",
+    "iconGlow": "#f5c451",
+    "iconBacklight": "#8c7340",
+    "iconLight": "#d9bf86",
+    "mainLight": "#f5c451",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#8c7340",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "soft",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Năm thứ trong nhà bạn bẩn hơn bồn cầu. Và thứ bẩn nhất thì ngày nào bạn cũng cầm lên.",
+      "Hạng năm, tay nắm cửa và công tắc đèn. Bẩn gấp ba lần bệ bồn cầu. Cả nhà chạm vào mấy chục lần mỗi ngày, mà gần như không ai lau.",
+      "Hạng tư, chiếc điện thoại đang nằm trong tay bạn. Gấp mười lần. Bạn mang nó vào nhà vệ sinh, rồi đặt thẳng lên bàn ăn.",
+      "Hạng ba, bồn rửa bát. Gấp một trăm lần. Thức ăn thừa cộng nước ấm, lại ẩm suốt cả ngày.",
+      "Hạng hai, cái thớt. Gấp hai trăm lần. Mỗi nhát dao để lại một rãnh, và rửa qua loa thì không tới được đáy rãnh.",
+      "Và hạng một, miếng rửa bát. Gấp hai trăm nghìn lần. Bạn đang dùng thứ bẩn nhất nhà để lau sạch mọi thứ khác.",
+      "Miếng rửa bát nên thay mỗi tuần, hoặc luộc năm phút mỗi tối. Nhà bạn còn thứ gì đáng vào danh sách này không?"
+    ],
+    "transitionSounds": [
+      "dramatic",
+      "minimal",
+      "minimal",
+      "bass",
+      "bass",
+      "boom",
+      "chord"
+    ],
+    "revealSounds": [
+      "tick",
+      "click",
+      "click",
+      "tick",
+      "tick",
+      "bell",
+      "sparkle"
+    ]
+  }
+}

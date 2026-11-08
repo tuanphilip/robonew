@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết —
+     toàn bộ style.css bên cạnh viết cho khung ngang. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Phân tích biểu đồ nến — mẫu giao dịch 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         Slide đầu một câu thì bảng nhịp gộp mọi phần tử vào một cú bấm
+         (HOOK_SENTENCE_COUNTS), nên hai phần tử ở đây hiện cùng lúc.
+
+         ⚠ MỌI BIỂU ĐỒ TRONG DECK NÀY LÀ SVG ĐẶT THẲNG TRONG HTML — không thư
+         viện, không ảnh. Ba lý do:
+           · deck phải dựng được OFFLINE, thư viện tải qua mạng là hỏng bản dựng;
+           · hình phải đổi màu theo bảng "Tông màu", ảnh thì không;
+           · sửa số liệu là sửa thẳng toạ độ trong HTML, không cần công cụ nào.
+         Hình KHÔNG mang lớp `.slide-element`: nó là trang trí, không ăn nhịp
+         bấm nào và không kéo hộp bao mà `kiemDeck` đo. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-nen" aria-hidden="true">
+        <svg viewBox="0 0 380 330" fill="none">
+          <circle class="quang quang-len" cx="126" cy="196" r="92" />
+          <circle class="quang quang-xuong" cx="262" cy="150" r="80" />
+
+          <!-- một cây nến TĂNG cỡ lớn, có chú thích các phần -->
+          <g class="cay-len cay-to">
+            <path class="bong" d="M126 300V56" />
+            <rect class="than-nen" x="96" y="108" width="60" height="150" rx="6" />
+          </g>
+          <!-- một cây nến GIẢM đứng cạnh, nhỏ hơn -->
+          <g class="cay-xuong cay-to">
+            <path class="bong" d="M262 264V78" />
+            <rect class="than-nen" x="232" y="112" width="60" height="118" rx="6" />
+          </g>
+
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Đọc biểu đồ nến<br />trong ba phút</div>
+        <div class="slide-element phu-de">Bốn con số · Một đường trung bình · Một cột khối lượng</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. GIẢI PHẪU MỘT CÂY NẾN — 3 câu / 3 phần tử ═══════════════════
+         Chữ trái, SƠ ĐỒ GIẢI PHẪU phải. Đây là thứ khung dọc 9:16 không đặt
+         nổi: sơ đồ có nhãn hai bên, ở khung 390px thì nhãn đè lên chính cây
+         nến đang chú thích. -->
+    <div class="slide" data-slide="1" data-bo-cuc="giai-phau">
+      <div class="nen nen-2"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Một cây nến</div>
+          <div class="slide-element tieu-de">Bốn con số, gói trong một hình</div>
+          <ul class="gach">
+            <li class="slide-element">Mở · đóng · cao nhất · thấp nhất của <b>một khoảng thời gian</b></li>
+            <li class="slide-element">Bóng nến là chỗ giá đã chạm tới rồi <b>bị đẩy ngược về</b></li>
+          </ul>
+        </div>
+
+        <div class="so-do-nen" aria-hidden="true">
+          <svg viewBox="0 0 360 300" fill="none">
+            <g class="cay-len cay-to">
+              <path class="bong" d="M180 276V24" />
+              <rect class="than-nen" x="146" y="96" width="68" height="126" rx="6" />
+            </g>
+
+            <g class="chu-thich">
+              <path class="chi" d="M180 24h96" />
+              <circle class="cham-chi" cx="180" cy="24" r="4.5" />
+              <text x="284" y="29">cao nhất</text>
+
+              <path class="chi" d="M214 96h62" />
+              <circle class="cham-chi" cx="214" cy="96" r="4.5" />
+              <text x="284" y="101">đóng cửa</text>
+
+              <path class="chi" d="M146 222H70" />
+              <circle class="cham-chi" cx="146" cy="222" r="4.5" />
+              <text class="ben-trai" x="62" y="227">mở cửa</text>
+
+              <path class="chi" d="M180 276H70" />
+              <circle class="cham-chi" cx="180" cy="276" r="4.5" />
+              <text class="ben-trai" x="62" y="281">thấp nhất</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. XANH VÀ ĐỎ — 2 câu / 2 phần tử ══════════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="hai-the">
+      <div class="nen nen-3"></div>
+      <div class="than">
+        <div class="nhan">Xanh và đỏ</div>
+        <div class="cot-doi">
+          <div class="slide-element the the-len">
+            <div class="the-dau">
+              <span class="the-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 17.5 10 11l4 4 6-7" /><path d="M14 4.5h6v6" />
+                </svg>
+              </span>
+              <div class="the-nhan">Nến xanh</div>
+            </div>
+            <div class="the-chu">Đóng <b>cao hơn</b> mở — phiên đó người mua thắng</div>
+          </div>
+          <div class="slide-element the the-xuong">
+            <div class="the-dau">
+              <span class="the-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 6.5 10 13l4-4 6 7" /><path d="M14 19.5h6v-6" />
+                </svg>
+              </span>
+              <div class="the-nhan">Nến đỏ</div>
+            </div>
+            <div class="the-chu">Thân dài tới đâu là bên thắng <b>thắng đậm tới đó</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. CHUỖI NẾN + ĐƯỜNG TRUNG BÌNH — 3 câu / 3 phần tử ════════════
+         Biểu đồ nến CHIẾM HẾT BỀ NGANG, nằm giữa tiêu đề và hai gạch đầu dòng.
+         Mười bốn cây nến cạnh nhau ở khung dọc 390px thì mỗi cây rộng 5px —
+         không còn phân biệt được thân với bóng, tức mất luôn thứ đang dạy.
+         Đường trung bình vẽ dần bằng `stroke-dashoffset` lúc slide `.active`. -->
+    <div class="slide" data-slide="3" data-bo-cuc="bieu-do-lon">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="do-dau">
+          <div class="nhan">Cả một chuỗi</div>
+          <div class="chu-giai">
+            <span class="cg cg-ma">Trung bình 3 phiên</span>
+          </div>
+        </div>
+        <div class="slide-element tieu-de">Một cây nến không nói gì, chuỗi nến mới nói</div>
+
+        <div class="bieu-do-nen" aria-hidden="true">
+          <svg viewBox="0 0 620 170" fill="none">
+            <g class="luoi">
+              <path d="M18 20h594" /><path d="M18 65h594" /><path d="M18 110h594" /><path d="M18 155h594" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M39 147.4V124.5" />
+              <rect class="than-nen" x="30" y="132.1" width="18" height="10.2" rx="2" />
+            </g>
+            <g class="cay-xuong">
+              <path class="bong" d="M81 142.3V127.0" />
+              <rect class="than-nen" x="72" y="132.1" width="18" height="5.1" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M123 139.7V116.8" />
+              <rect class="than-nen" x="114" y="121.9" width="18" height="15.3" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M165 124.5V106.6" />
+              <rect class="than-nen" x="156" y="114.3" width="18" height="7.6" rx="2" />
+            </g>
+            <g class="cay-xuong">
+              <path class="bong" d="M207 129.6V109.2" />
+              <rect class="than-nen" x="198" y="114.3" width="18" height="10.2" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M249 127.0V101.6" />
+              <rect class="than-nen" x="240" y="106.6" width="18" height="17.9" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M291 109.2V86.3" />
+              <rect class="than-nen" x="282" y="93.9" width="18" height="12.7" rx="2" />
+            </g>
+            <g class="cay-xuong">
+              <path class="bong" d="M333 104.1V83.7" />
+              <rect class="than-nen" x="324" y="93.9" width="18" height="5.1" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M375 101.6V73.6" />
+              <rect class="than-nen" x="366" y="78.7" width="18" height="20.3" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M417 83.7V58.3" />
+              <rect class="than-nen" x="408" y="65.9" width="18" height="12.8" rx="2" />
+            </g>
+            <g class="cay-xuong">
+              <path class="bong" d="M459 78.7V55.7" />
+              <rect class="than-nen" x="450" y="65.9" width="18" height="7.7" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M501 76.1V50.7" />
+              <rect class="than-nen" x="492" y="55.7" width="18" height="17.9" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M543 58.3V32.8" />
+              <rect class="than-nen" x="534" y="40.5" width="18" height="15.2" rx="2" />
+            </g>
+            <g class="cay-len">
+              <path class="bong" d="M585 45.6V20.1" />
+              <rect class="than-nen" x="576" y="25.2" width="18" height="15.3" rx="2" />
+            </g>
+            <path class="duong-ma" d="M123 130.4 L165 124.5 L207 120.2 L249 115.1 L291 108.3 L333 99.9 L375 90.5 L417 81.2 L459 72.7 L501 65.1 L543 56.6 L585 40.5" />
+          </svg>
+        </div>
+
+        <ul class="gach mot-hang">
+          <li class="slide-element">Đường trung bình <b>làm phẳng nhiễu</b> để thấy hướng đi chung</li>
+          <li class="slide-element">Giá trên đường trung bình là tăng, dưới là giảm</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 5. KHỐI LƯỢNG — 3 câu / 3 phần tử ══════════════════════════════
+         Chữ trái, cột khối lượng phải. Cột nào vượt ngưỡng thì đổi màu —
+         chính là ý "gấp ba mức trung bình". -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung-hinh">
+      <div class="nen nen-5"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Khối lượng</div>
+          <div class="slide-element tieu-de">Thứ xác nhận cây nến</div>
+          <ul class="gach">
+            <li class="slide-element">Nến tăng mạnh mà khối lượng thấp: <b>vài lệnh nhỏ đẩy giá</b></li>
+            <li class="slide-element">Cùng cây nến đó, khối lượng gấp ba: <b>tiền thật đang vào</b></li>
+          </ul>
+        </div>
+
+        <div class="bieu-do-kl" aria-hidden="true">
+          <div class="bd-nhan">Khối lượng mỗi phiên<em>vạch đứt là mức trung bình</em></div>
+          <svg viewBox="0 0 370 140" fill="none">
+            <path class="vach-tb" d="M6 74h352" />
+            <rect class="cot-kl" x="12" y="85.9" width="16" height="36.1" rx="2" />
+            <rect class="cot-kl" x="37" y="93.5" width="16" height="28.5" rx="2" />
+            <rect class="cot-kl" x="62" y="72.6" width="16" height="49.4" rx="2" />
+            <rect class="cot-kl" x="87" y="80.2" width="16" height="41.8" rx="2" />
+            <rect class="cot-kl" x="112" y="87.8" width="16" height="34.2" rx="2" />
+            <rect class="cot-kl" x="137" y="66.9" width="16" height="55.1" rx="2" />
+            <rect class="cot-kl" x="162" y="59.3" width="16" height="62.7" rx="2" />
+            <rect class="cot-kl" x="187" y="84.0" width="16" height="38.0" rx="2" />
+            <rect class="cot-kl manh" x="212" y="51.7" width="16" height="70.3" rx="2" />
+            <rect class="cot-kl" x="237" y="63.1" width="16" height="58.9" rx="2" />
+            <rect class="cot-kl" x="262" y="89.7" width="16" height="32.3" rx="2" />
+            <rect class="cot-kl manh" x="287" y="55.5" width="16" height="66.5" rx="2" />
+            <rect class="cot-kl manh" x="312" y="40.3" width="16" height="81.7" rx="2" />
+            <rect class="cot-kl manh" x="337" y="34.6" width="16" height="87.4" rx="2" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 6. CÁI BẪY — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="noi-dung">
+      <div class="nen nen-6"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Cái bẫy</div>
+        <div class="slide-element tieu-de">Nến kể chuyện cũ, không hứa chuyện mới</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Mẫu hình chỉ mô tả <b>cái đã xảy ra</b>, không phải cái sắp xảy ra</li>
+          <li class="slide-element">Ai bán "mẫu hình chắc thắng" thì thứ họ bán là khoá học</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 7. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="6" data-bo-cuc="mo-dau">
+      <div class="nen nen-7"></div>
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Bắt đầu bằng<br />ba thứ là đủ</div>
+        <div class="slide-element phu-de">Bốn con số · Một đường trung bình · Một cột khối lượng</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

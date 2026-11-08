@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<script src="preload-shim.js"></script>
+<script src="giong.js"></script>
+<script src="api-shim.js"></script>
+
+  <meta charset="UTF-8" />
+  <!--
+    Content-Security-Policy — chốt cuối, đứng độc lập với mọi phép kiểm khác.
+
+    ⚠ VÌ SAO CẦN: trang này nạp 65 KB JS cũ trích từ web_server.py và mở deck do
+    AI/người dùng viết. Nếu có gì đó nhét được HTML vào trang, CSP là thứ duy
+    nhất còn chặn nó tải script từ máy chủ lạ hoặc gửi dữ liệu ra ngoài.
+
+    · `connect-src` KHÔNG có http/https — giao diện không hề gọi mạng trực tiếp,
+      mọi thứ đi qua IPC (IPC không chịu CSP). Nên chặn sạch = không có đường
+      tuồn dữ liệu ra ngoài, kể cả khi bị chèn mã.
+    · `script-src` không có 'unsafe-inline': thẻ script nội tuyến duy nhất đã
+      tách ra `boot-defaults.js` chính vì lý do này. ĐỪNG thêm script nội tuyến.
+    · `style-src` PHẢI có 'unsafe-inline': các module tự dựng thẻ <style> và gán
+      element.style — cả hai đều tính là style nội tuyến.
+    · `img-src data:` cho ảnh QR (sinh bằng toDataURL, không tải từ đâu).
+    · `file:` liệt kê tường minh vì trang chạy bằng file:// — ở scheme này
+      'self' không khớp đáng tin.
+    · `frame-src` CHỈ `bee-deck:` — khung deck ở ORIGIN RIÊNG (src/main/khungDeck.js).
+      Khung `file://` là CÙNG origin với trang này: mã deck với thẳng được
+      `top.beeknoee` / `top.fetch` / `top.document` (đo 10/10/2026). Đừng thêm lại `file:`.
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beeknoee Studio</title>
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <!-- Thanh menu dùng chung cho trang này VÀ lớp phủ xem slide/video. -->
+  <!-- Token (màu, chữ, khoảng cách) — nạp TRƯỚC mọi CSS khác, xem css/tokens.css -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="app-bar.css" />
+  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+  <!-- Font nạp TỪ MÁY, không qua Google Fonts: app desktop phải chạy được khi
+       không có mạng, và mỗi lần mở app cũng không nên báo IP người dùng đi đâu.
+       Thẻ <link> do preload chèn (cần đường dẫn tuyệt đối tới resources/), xem
+       ghi chú ở preload.js. -->
+  <!-- CSS tách ra file (02/09/2026): trước đây 1.544 dòng nằm inline ở đây và
+       11 module tự tiêm <style> bằng template literal (cạm bẫy dấu huyền).
+       THỨ TỰ các <link> = thứ tự các thẻ <style> từng được tiêm, đừng đảo. -->
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/version-badge.css" />
+  <link rel="stylesheet" href="css/help-hub.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="css/render-layout.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <!-- Bảng tài khoản 3 tab + hồ sơ người mua dùng chung Bee Account (28/09/2026) -->
+  <link rel="stylesheet" href="css/ho-so.css" />
+  <link rel="stylesheet" href="css/ai-caidat.css" />
+  <link rel="stylesheet" href="css/ai-tao.css" />
+  <link rel="stylesheet" href="css/agent-tab.css" />
+  <link rel="stylesheet" href="css/checkout.css" />
+  <link rel="stylesheet" href="css/guide.css" />
+  <link rel="stylesheet" href="css/first-run.css" />
+  <link rel="stylesheet" href="css/slide-viewer.css" />
+  <!-- Bo cuc ba cot cua trang bien tap (san khau + bang sua). Nap SAU
+       render-layout.css: no de len mot vai luat bo cuc o do. -->
+  <link rel="stylesheet" href="css/bien-tap.css" />
+  <link rel="stylesheet" href="css/updater-ui.css" />
+  <link rel="stylesheet" href="css/zoom-badge.css" />
+  <link rel="stylesheet" href="css/render-page.css" />
+  <link rel="stylesheet" href="css/don-rac.css" />
+  <link rel="stylesheet" href="css/du-an-pop.css" />
+  <link rel="stylesheet" href="css/timeline.css" />
+  <link rel="stylesheet" href="css/dung.css" />
+</head>
+<body class="theme-light">
+
+  <!-- Thanh menu DÙNG CHUNG — cùng bộ class với lớp phủ xem slide/video.
+       Logo to đã thay bằng nút nhà nhỏ: nó vừa là dấu hiệu thương hiệu vừa là
+       chỗ đứng cho các nút chức năng sau này. Thêm nút thì thả vào
+       `.app-bar-tools`, mọi màn hình đều có ngay. Xem `app-bar.css`. -->
+  <header class="app-bar dashboard-header">
+    <button type="button" class="app-bar-home" title="Về danh sách dự án" data-app-home>
+      <img src="assets/beeknoee-mark.svg" alt="Beeknoee" class="mark-dark" />
+      <img src="assets/beeknoee-mark-light.svg" alt="" class="mark-light" />
+      <span class="app-bar-hieu">
+        <b class="app-bar-name">Beeknoee Studio</b>
+        <em>Sáng tạo • Tạo nên • Cảm hứng</em>
+      </span>
+    </button>
+    <div class="app-bar-tools header-tools">
+      <!-- MỘT nút, trỏ vào MỤC LỤC hướng dẫn (không có dấu #), không phải hai
+           nút vào hai bài. Hai bài đó nằm sẵn trong mục lục, mà đặt hai nút
+           cạnh mốc "1. Giọng đọc" thì chúng dài hơn cả tên mốc. -->
+      <a class="refresh-btn icon-btn guide-header-btn" href="/elevenlabs-guide" target="_blank" rel="noreferrer"><span class="btn-icon" data-icon="help">?</span><span>Hướng dẫn</span></a>
+      <!-- ĐÃ GỠ hai nút:
+           · "Upload" — di sản bản web, bấm vào chỉ ra một trang thông báo, mà
+             thông báo còn chỉ sai tên nút.
+           · "Thư mục làm việc" — đẻ ra một bộ thư mục THỨ HAI ở chỗ khác rồi
+             trỏ nguồn sang đó, đúng cái việc bộ cài đã làm sẵn. Giữ lại chỉ làm
+             người dùng vô tình rời khỏi thư mục cài. Mã `workspace:create` vẫn
+             còn trong main.js, chưa xoá — gỡ nút trước, quan sát rồi mới dọn.
+           "Source" GIỮ LẠI: là đường duy nhất trỏ vào deck nằm ngoài thư mục cài. -->
+      <button class="refresh-btn icon-btn" type="button" id="btnAITaoVideo" style="background:var(--primary,#ff6a00);color:#fff;font-weight:600;" title="Tạo slide & kịch bản tự động bằng AI"><span class="btn-icon">✨</span><span>AI Tạo Video</span></button>
+      <button class="refresh-btn icon-btn" type="button" id="btnCaiDatAI" title="Cài đặt AI (Custom LLM Endpoint)"><span class="btn-icon">🤖</span><span>Cài đặt AI</span></button>
+      <button class="refresh-btn icon-btn icon-only" type="button" data-source-root-select title="Chọn thư mục nguồn" aria-label="Thư mục nguồn"><span class="btn-icon" data-icon="folder">⌕</span></button>
+      <!-- Nút "Làm mới" và huy hiệu số dự án đã chuyển xuống tiêu đề danh sách:
+           cả hai đều nói về danh sách, để trên này là nhắc lại hai lần. -->
+    </div>
+    <!-- Cụm bên PHẢI thanh trên: chuông, đổi nền, tài khoản.
+
+         ⚠ PHẢI đứng NGOÀI `.header-tools`. `render-layout.js#depDauTrang()` bê
+         nguyên cả `.header-tools` xuống cột danh sách dự án, nên thứ gì nằm
+         trong đó sẽ đi theo và biến mất khỏi thanh trên — đúng chỗ nút đổi nền
+         đã nằm trước đây (và vì thế nó phải bị ẩn bằng CSS).
+
+         Icon đổi theme vẽ bằng SVG thay cho ký tự ☾ ☀: ký tự phụ thuộc font hệ
+         thống nên mỗi máy một nét, có máy còn ra emoji màu. -->
+    <div class="app-bar-phai">
+      <!-- ĐÃ GỠ hai nút (15/09/2026, chủ dự án yêu cầu):
+           · Chuông thông báo — bấm vào chỉ hiện "chưa có thông báo nào".
+           · Đổi nền sáng/tối — chuyển vào menu ⋯ của thanh trên (thanh-tren.js),
+             cùng "Thư mục nguồn" và "Dọn tệp dựng dở". Chức năng KHÔNG mất,
+             chỉ đổi chỗ: ba việc này đều làm thưa, để ngoài thì chiếm chỗ của
+             hai nút dùng liên tục (Xem trước / Tạo video).
+           Cụm còn lại do `render/thanh-tren.js` dựng vào đây lúc chạy. -->
+      <!-- Nút tài khoản do pages.js dựng rồi chèn vào đây. -->
+    </div>
+  </header>
+
+  <main class="dashboard-shell bt-ba-cot">
+    <section class="render-machine panel">
+      <div class="selected-box">
+        <div>
+          <strong id="selectedName">Chưa chọn dự án</strong>
+        </div>
+      </div>
+
+      <div class="status warn" id="renderStatus" hidden></div>
+
+      <div class="tabs">
+        <button class="tab active" data-engine="elevenlabs" type="button"><span class="tab-icon">🎙</span><span>ElevenLabs</span></button>
+        <button class="tab" data-engine="vbee" type="button"><span class="tab-icon">🇻🇳</span><span>Vbee TTS</span></button>
+        <button class="tab" data-engine="edgetts" type="button"><span class="tab-icon">⚡</span><span>Edge TTS</span></button>
+        <button class="tab" data-engine="beeknoee" type="button"><span class="tab-icon">🐝</span><span>Beeknoee AI</span></button>
+        <button class="tab" data-engine="vieneu" type="button"><span class="tab-icon">💻</span><span>Trên máy</span></button>
+      </div>
+
+      <div data-pane="elevenlabs">
+        <div class="mode-toggle" aria-label="Chọn kiểu ElevenLabs">
+          <label><input type="radio" name="elevenMode" value="upload" checked /> Tải file</label>
+          <label><input type="radio" name="elevenMode" value="tts" /> API</label>
+        </div>
+        <div data-eleven-mode-pane="upload">
+          <!-- Ô CHỌN FILE dựng lại 16/09/2026: khung nét đứt cho ra dáng chỗ thả
+               file, và sau khi chọn thì file hiện thành một THẺ RIÊNG bên dưới
+               có tên, dung lượng, thời lượng, nút nghe thử và nút bỏ. Trước đây
+               tất cả gói trong một dòng "Chọn file | Chưa chọn file" — chọn xong
+               chỉ thấy đúng cái tên, không biết đã lấy nhầm file dài 20 giây
+               hay file đúng, mà muốn bỏ thì phải chọn đè một file khác. -->
+          <label class="file-tha" for="elevenFile">
+            <span class="btn-icon file-tha-ic" data-icon="upload"></span>
+            <span class="file-tha-chu">
+              <b>Chọn file giọng đọc</b>
+              <i>MP3, WAV, M4A · tối đa 200MB</i>
+            </span>
+            <span class="file-picker">
+              <input id="elevenFile" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg" />
+              <span class="file-picker-button">Chọn file</span>
+            </span>
+          </label>
+          <div class="file-the" id="elevenFileThe" hidden>
+            <span class="btn-icon file-the-ic" data-icon="nhac"></span>
+            <span class="file-the-chu">
+              <!-- ⚠ GIỮ NGUYÊN id `elevenFileName` và thuộc tính `data-duong`:
+                   `project-list.js#veMp3DaChon` và đường dựng video đều tra
+                   đúng hai thứ này. -->
+              <b id="elevenFileName">Chưa chọn file</b>
+              <i id="elevenFileTin"></i>
+            </span>
+            <button type="button" class="file-the-nut" id="elevenFileNghe"
+                    title="Nghe thử" aria-label="Nghe thử"><span class="btn-icon" data-icon="play"></span></button>
+            <button type="button" class="file-the-nut xoa" id="elevenFileXoa"
+                    title="Bỏ file này" aria-label="Bỏ file này"><span class="btn-icon" data-icon="trash"></span></button>
+          </div>
+        </div>
+        <div data-eleven-mode-pane="tts" hidden>
+          <div class="api-key-panel" id="elevenApiKeyPanel">
+            <label class="field api-key-field">
+              <span class="field-label"><span class="field-icon" data-icon="khoa"></span><span>API Key</span></span><span class="config-state" id="elevenApiKeyState">Chưa kiểm tra</span>
+              <span class="api-key-row">
+                <input id="elevenApiKey" type="password" autocomplete="off" placeholder="Dán API key" />
+                <button type="button" class="api-key-nut" id="elevenApiKeyLuu">Lưu</button>
+                <button type="button" class="api-key-nut xoa" id="elevenApiKeyXoa" hidden title="Xoá API key" aria-label="Xoá API key"><span class="btn-icon" data-icon="trash"></span></button>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div data-pane="vbee" hidden>
+        <div class="api-key-panel" id="vbeePanel">
+          <label class="field api-key-field">
+            <span class="field-label"><span class="field-icon" data-icon="khoa"></span><span>Vbee App ID</span></span>
+            <span class="api-key-row">
+              <input id="vbeeAppId" type="text" autocomplete="off" placeholder="Nhập Vbee App ID" />
+            </span>
+          </label>
+          <label class="field api-key-field" style="margin-top: 8px;">
+            <span class="field-label"><span class="field-icon" data-icon="khoa"></span><span>Vbee Token</span></span>
+            <span class="api-key-row">
+              <input id="vbeeToken" type="password" autocomplete="off" placeholder="Dán Vbee Token" />
+              <button type="button" class="api-key-nut" id="vbeeLuu">Lưu</button>
+            </span>
+          </label>
+          <label class="field" style="margin-top: 8px;">
+            <span class="field-label"><span class="field-icon" data-icon="mic"></span><span>Giọng đọc Vbee</span><span class="config-state" id="vbeeVoiceState">Sẵn sàng</span></span>
+            <span class="api-key-row">
+              <select id="vbeeVoiceSelect"></select>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div data-pane="edgetts" hidden>
+      </div>
+
+      <div data-pane="beeknoee" hidden>
+        <div class="api-key-panel" id="beeApiKeyPanel">
+          <label class="field api-key-field">
+            <span class="field-label"><span class="field-icon" data-icon="khoa"></span><span>API Key Beeknoee</span></span><span class="config-state" id="beeApiKeyState">Chưa kiểm tra</span>
+            <span class="api-key-row">
+              <input id="beeApiKey" type="password" autocomplete="off" placeholder="Dán API key (sk-bee-…)" />
+              <button type="button" class="api-key-nut" id="beeApiKeyLuu">Lưu</button>
+              <button type="button" class="api-key-nut xoa" id="beeApiKeyXoa" hidden title="Xoá API key" aria-label="Xoá API key"><span class="btn-icon" data-icon="trash"></span></button>
+            </span>
+          </label>
+          <!-- KHÔNG kèm dòng gợi ý lấy key ở đây: bài "Hướng dẫn lấy API +
+               Voice ID" (tab Beeknoee Platform) đã nói đủ — chủ dự án chốt
+               29/08: hint lặp lại hướng dẫn chỉ làm chật khung. -->
+        </div>
+      </div>
+
+      <!-- GIỌNG TRÊN MÁY (VieNeu-TTS, miễn phí, chạy CPU — python/tts/vieneu.py). Thẻ `#vnThe` do
+           render/vieneu-panel.js dựng theo trạng thái: kiểm máy → tải mô hình → đo tốc độ. -->
+      <div data-pane="vieneu" hidden>
+        <div class="vn-the" id="vnThe" aria-live="polite"></div>
+        <label class="field">
+          <span class="field-label"><span class="field-icon" data-icon="mic"></span><span>Giọng đọc</span><span class="config-state" id="vnVoiceState"></span></span>
+          <span class="api-key-row">
+            <select id="vnVoice"></select>
+            <button type="button" class="api-key-nut voice-play" id="vnNghe" title="Nghe thử giọng đang chọn (đọc một câu ngắn ngay trên máy)"><span class="btn-icon" data-icon="loa"></span></button>
+          </span>
+        </label>
+      </div>
+
+      <div class="form-actions render-primary-actions">
+        <button class="start" id="startRender" type="button" ><span class="btn-icon" data-icon="play">▶</span><span>Tạo video</span></button>
+        <button class="icon-btn stop-render-btn" id="stopRender" type="button" hidden><span class="btn-icon" data-icon="stop">■</span><span>Dừng tạo</span></button>
+        <a class="small-link icon-btn" id="videoLink" href="#" target="_blank" rel="noreferrer" hidden><span class="btn-icon" data-icon="play"></span><span>Mở video cuối</span></a>
+        <button class="icon-btn reveal-output-btn" id="revealOutput" type="button" hidden><span class="btn-icon" data-icon="folder">⌕</span><span>Mở trong thư mục</span></button>
+      </div>
+
+      <div class="render-state" id="renderState" hidden>
+        <!-- Đầu bảng: dấu hiệu + tên trạng thái + hai viên thông tin.
+             Viên TRÁI là việc đang làm kèm phần trăm; viên PHẢI là tổng thời
+             gian đã chạy. Cả hai do jobs.js điền, không viết cứng. -->
+        <div class="state-head">
+          <span class="rs-bieu" aria-hidden="true"><span class="btn-icon" data-icon="bolt"></span></span>
+          <strong id="stateTitle">Trạng thái tạo video</strong>
+          <span class="rs-vien rs-chay" id="rsTienDo" hidden></span>
+          <span class="rs-vien rs-thoigian" id="rsDaChay" hidden></span>
+        </div>
+        <!-- Năm bước do buildRenderSteps() điền, KHÔNG viết cứng (cạm bẫy #44):
+             nhãn và thứ tự chỉ khai báo một chỗ trong render-page.js. -->
+        <ol class="render-steps" id="renderSteps"></ol>
+        <ol class="state-list" id="stateList"></ol>
+        <!-- Chân bảng: nhắc đang dựng cho DECK NÀO. Hàng đợi cho phép xếp
+             nhiều deck, mà bảng này chỉ vẽ một — thiếu dòng này thì nhìn vào
+             không biết mấy phút vừa rồi là của dự án nào. -->
+        <div class="rs-chan" id="rsChan" hidden>
+          <span class="btn-icon" data-icon="phim"></span>
+          <span class="rs-chan-chu">
+            <span>Đang tạo video cho dự án</span>
+            <b id="rsDuAn"></b>
+          </span>
+        </div>
+      </div>
+
+      <!-- Khối nâng cao LUÔN mở: không tiêu đề, không nút gập.
+           Phải là <div>, KHÔNG phải <details> bỏ <summary>: `<details>` thiếu
+           `<summary>` thì trình duyệt tự chèn một nút "Details" của riêng nó —
+           bỏ được nút của mình lại mọc nút của Chromium. -->
+      <div class="advanced-settings" id="advancedSettings">
+        <div class="advanced-body">
+          <div data-advanced-engine="elevenlabs">
+            <div data-eleven-mode-pane="tts" hidden>
+              <!-- GIỌNG ĐỌC và CHẤT LƯỢNG AUDIO chung một hàng, nhãn NẰM TRÊN ô.
+                   Khác kiểu nhãn-bên-trái của hàng Tốc độ bên dưới, vì hai ô này
+                   rộng: ô chọn giọng phải chứa được tên giọng dài, ô chất lượng
+                   chứa "MP3 44.1 kHz (128 kbps)". Nhãn bên trái nữa là mỗi ô chỉ
+                   còn chừng một phần ba hàng.
+                   Ô ID gõ tay ĐÃ RỜI khỏi hàng này — nay nằm trong popup mở bằng
+                   nút "Tự điền ID giọng". Lý do: dán một ID sai vào ô trần thì
+                   không ai kiểm, lỗi chỉ nổ giữa lúc dựng video. Trong popup thì
+                   bắt buộc kiểm với ElevenLabs xong mới cho lưu. -->
+              <div class="field field-hai-cot">
+                <div class="hc-o">
+                  <span class="field-label"><span class="field-icon" data-icon="mic"></span><span>Giọng đọc<span id="elevenVoiceCount"></span></span><span class="config-state" id="elevenVoiceState"></span><button type="button" class="voice-id-mo" id="elevenVoiceIdMo">Tự điền ID giọng</button></span>
+                  <span class="voice-pick">
+                  <!-- ⚠ KHÔNG dùng <select> nữa. Ba thứ chủ dự án cần — số thứ tự,
+                       tên in đậm tách khỏi phần mô tả, và nút nghe thử trên TỪNG
+                       dòng — đều không làm được trong <option>: trình duyệt chỉ
+                       nhận chữ thuần ở đó. Chromium 130 (Electron 33) chưa có
+                       `appearance: base-select`, thứ duy nhất cho phép nhét HTML
+                       vào option. Nên dựng danh sách bằng tay. -->
+                  <span class="voice-box" id="elevenVoiceBox">
+                    <button type="button" class="voice-cur" id="elevenVoiceCur"
+                            aria-haspopup="listbox" aria-expanded="false">
+                      <span class="voice-cur-ten" id="elevenVoiceCurTen">— chọn từ tài khoản —</span>
+                      <span class="voice-cur-mui" aria-hidden="true"></span>
+                    </button>
+                    <div class="voice-pop" id="elevenVoicePop" role="listbox"
+                         aria-label="Chọn giọng đọc" hidden></div>
+                  </span>
+                  </span>
+                </div>
+                <!-- Chất lượng file đọc. Danh sách do máy chủ Python gửi xuống
+                     (`output_formats`), KHÔNG viết cứng ở đây — chỉ một nơi biết
+                     định dạng nào dùng được. -->
+                <span class="hc-ngan" aria-hidden="true"></span>
+                <div class="hc-o">
+                  <span class="field-label"><span class="field-icon" data-icon="song"></span><span>Chất lượng audio</span><span class="config-state" id="elevenFormatState"></span></span>
+                  <select id="elevenFormat"></select>
+                </div>
+              </div>
+              <!-- Giá trị ĐÃ CHỐT của Voice ID. Vẫn là nguồn duy nhất mà mọi chỗ
+                   khác đọc (jobs.js, danhDauGiongDangChon, kiemNguonGiongDoc), chỉ
+                   khác là không gõ thẳng vào được nữa: ô chọn ghi vào đây, popup
+                   ID cũng chỉ ghi vào đây SAU KHI ElevenLabs xác nhận. -->
+              <input id="elevenVoice" type="hidden" />
+              <!-- Popup tự điền Voice ID.
+                   Nằm ngay đây chứ không dựng bằng JS: markup tĩnh thì nút và ô
+                   có id cố định, phép kiểm giao diện tìm được, và không phải
+                   nhét một khối HTML vào chuỗi template (bẫy verify:tpl).
+                   KHÔNG lưu được nếu chưa kiểm thành công — xem tts-panel.js. -->
+              <div class="idpop" id="elevenIdPop" hidden>
+                <div class="idpop-hop" role="dialog" aria-modal="true" aria-labelledby="elevenIdPopTieu">
+                  <div class="idpop-tieu" id="elevenIdPopTieu">Tự điền Voice ID</div>
+                  <p class="idpop-dan">Dán Voice ID lấy từ ElevenLabs. App sẽ hỏi ElevenLabs xem API key của bạn có dùng được giọng đó không rồi mới cho lưu — kiểm thử không tốn credit.</p>
+                  <div class="idpop-hang">
+                    <input id="elevenIdO" type="text" placeholder="dán Voice ID" autocomplete="off" spellcheck="false" />
+                    <button type="button" class="idpop-nut" id="elevenIdKiem">Kiểm tra</button>
+                  </div>
+                  <div class="idpop-kq" id="elevenIdKq" role="status" hidden></div>
+                  <div class="idpop-cuoi">
+                    <button type="button" class="idpop-nut" id="elevenIdHuy">Huỷ</button>
+                    <button type="button" class="idpop-nut chinh" id="elevenIdLuu">Lưu</button>
+                  </div>
+                </div>
+              </div>
+              <label class="check">
+                <input id="elevenForce" type="checkbox" />
+                Tạo lại giọng, bỏ qua bản đã lưu
+              </label>
+            </div>
+          </div>
+
+          <div data-advanced-engine="beeknoee" hidden>
+            <label class="field">
+              <span class="field-label"><span class="field-icon" data-icon="sao"></span><span>Model</span><span class="config-state" id="beeModelState"></span></span>
+              <!-- Danh sách dựng sẵn theo tài liệu platform.beeknoee.com/docs/text-to-speech,
+                   do BEE_MODELS trong render-page.js đổ vào — KHÔNG viết cứng option ở đây,
+                   một nơi khai báo thôi (cùng lý do với renderSteps). -->
+              <select id="beeModel"></select>
+            </label>
+            <label class="field">
+              <span class="field-label"><span class="field-icon" data-icon="mic"></span><span>Giọng đọc</span><span class="config-state" id="beeVoiceState"></span></span>
+              <span class="api-key-row">
+                <select id="beeVoice"></select>
+                <!-- Nghe thử = đọc THẬT một câu chào ngắn bằng model + giọng
+                     đang chọn (platform không có bản mẫu tĩnh như ElevenLabs).
+                     Tốn vài đồng lẻ lần đầu mỗi giọng, có cache theo phiên. -->
+                <button type="button" class="api-key-nut voice-play" id="beeNghe" title="Nghe thử giọng đang chọn (đọc một câu ngắn, tốn vài đồng lẻ lần đầu)"><span class="btn-icon" data-icon="loa"></span></button>
+              </span>
+            </label>
+            <label class="check">
+              <input id="beeForce" type="checkbox" />
+              Tạo lại giọng, bỏ qua bản đã lưu
+            </label>
+          </div>
+
+          <div data-advanced-engine="edgetts" hidden>
+            <label class="field">
+              <span class="field-label"><span class="field-icon" data-icon="mic"></span><span>Giọng Edge TTS</span></span>
+              <input id="edgeVoice" type="text" value="vi-VN-HoaiMyNeural" />
+            </label>
+            <label class="check">
+              <input id="edgeForce" type="checkbox" />
+              Tạo lại giọng, bỏ qua bản đã lưu
+            </label>
+            <label class="check">
+              <input id="edgePerSlide" type="checkbox" />
+              Tạo từng slide
+            </label>
+          </div>
+
+          <div data-advanced-engine="vieneu" hidden>
+            <label class="check">
+              <input id="vieneuForce" type="checkbox" />
+              Tạo lại giọng, bỏ qua bản đã lưu
+            </label>
+          </div>
+
+          <!-- TỐC ĐỘ và ĐỘ PHÂN GIẢI dùng CHUNG một hàng.
+               Trước đây mỗi thứ chiếm một hàng của lưới `.advanced-body .field`,
+               mà cột nhãn của lưới ấy rộng `minmax(132px, 0.72fr)`: đo được nhãn
+               "Tốc độ video" ăn 351px trong khi chữ chỉ dài chừng 90px. Hai hàng
+               là hai vệt trống to bằng nửa bảng. Gộp lại còn một hàng, nhãn co
+               đúng bề ngang chữ.
+               Bỏ luôn mức 1.25: bốn nút `flex: 1 1 0` kéo giãn hết 408px, đẩy nút
+               cuối ra cách ô nhập gần 400px, nhìn như hai nhóm rời nhau. Ba nút cỡ
+               tự nhiên thì nằm sát ngay cạnh con số đang gõ — đúng thứ chúng thay.
+               Giáp ranh hai nhóm là MỘT vạch đứng mờ (`.doi-ngan`), không phải dấu
+               chấm đặt ở đầu từng nhãn: chấm đầu dòng nói "đây là một nhóm" hai
+               lần, còn vạch đặt đúng chỗ giáp ranh nói một lần và rõ hơn. -->
+          <!-- "Tốc độ", không phải "tốc độ audio": con số này tăng tốc giọng đọc,
+               mà cả bản quay lại chạy theo nhịp giọng đọc — nên video ra ngắn đúng
+               bằng tỉ lệ đó. Đo lại 11/09/2026 bằng render thật trên deck 6 slide:
+               giọng 50,568s ở 1.0 xuống 33,720s ở 1.5 (1,4996×), video 51,60s
+               xuống 34,63s. -->
+          <!-- Vạch ngang chia bảng làm hai phần: bên trên là giọng đọc (tuỳ
+               engine mà khác nhau), bên dưới là thông số video (chung cho mọi
+               engine). Đặt ở ĐÂY, ngoài ba khối data-advanced-engine, nên engine
+               nào cũng có một vạch — nhét vào trong thì phải chép ba lần và sẽ
+               có ngày lệch nhau. -->
+          <div class="hang-ngan" aria-hidden="true"></div>
+          <div class="field field-doi">
+            <div class="doi-o">
+              <span class="field-label"><span class="field-icon" data-icon="dongho"></span><span>Tốc độ</span></span>
+              <div class="speed-row">
+                <!-- ⚠ KHÔNG dùng type="number" — nó chính là chỗ nuốt mất số của
+                     người dùng. Gõ dấu phẩy kiểu Việt ("1,25") thì Chromium coi ô
+                     là không hợp lệ và `.value` trả về CHUỖI RỖNG, nên
+                     `Number('' || 1.1)` ra 1.1: người dùng gõ 1,25 mà app đọc 1.1,
+                     không một lời nào. Và `min`/`max` KHÔNG chặn `.value` — đặt 5
+                     thì đọc ra 5. Cả hai đã đo trên chính Chromium của app
+                     (13/09/2026). Nay là ô chữ, `docTocDo()` tự đổi phẩy thành
+                     chấm và kẹp về [0,5 – 2]; `inputmode="decimal"` vẫn mở bàn
+                     phím số trên máy cảm ứng. -->
+                <input id="renderSpeed" type="text" inputmode="decimal" autocomplete="off"
+                       aria-describedby="renderSpeedNote" value="1.1" />
+                <div class="speed-presets" aria-label="Chọn nhanh tốc độ video">
+                  <button class="speed-preset active" type="button" data-speed="1.1">1.1</button>
+                  <button class="speed-preset" type="button" data-speed="1.15">1.15</button>
+                  <button class="speed-preset" type="button" data-speed="1.2">1.2</button>
+                </div>
+                <!-- Chỉ hiện khi app phải sửa số người dùng gõ. Nằm TRONG
+                     `.speed-row` (đã `flex-wrap`) nên nó xuống hàng riêng, không
+                     bóp méo hàng ô nhập + ba nút. -->
+                <p id="renderSpeedNote" class="speed-note" role="status" hidden></p>
+              </div>
+            </div>
+            <span class="doi-ngan" aria-hidden="true"></span>
+            <!-- Hai lựa chọn thì dùng nút chọn, không dùng ô xổ: xổ ra chỉ để thấy
+                 đúng hai dòng là thừa một cú bấm. Dùng lại đúng khuôn
+                 `.mode-toggle` của cặp "Tải file / API" ngay bên trên. -->
+            <div class="doi-o">
+              <span class="field-label"><span class="field-icon" data-icon="khung"></span><span>Độ phân giải</span></span>
+              <!-- ⚠ HAI BỘ, hiện theo KHỔ CỦA DECK đang chọn (xem `apKhungDeck`).
+                   Deck dọc mà dựng khổ ngang thì video mất 68% hình mà không báo
+                   gì — nay `pipeline.js` chặn, nhưng chặn xong người dùng vẫn
+                   phải hiểu vì sao. Không cho chọn sai ngay từ đầu vẫn hơn. -->
+              <div class="mode-toggle size-toggle" id="renderSize" aria-label="Chọn độ phân giải">
+                <label data-khung="doc"><input type="radio" name="renderSize" value="1080x1920" checked /> 1080 × 1920</label>
+                <label data-khung="doc"><input type="radio" name="renderSize" value="720x1280" /> 720 × 1280</label>
+                <label data-khung="ngang" hidden><input type="radio" name="renderSize" value="1920x1080" /> 1920 × 1080</label>
+                <label data-khung="ngang" hidden><input type="radio" name="renderSize" value="1280x720" /> 1280 × 720</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SÂN KHẤU: khung xem trước của deck, thường trú giữa trang.
+         Dựng bởi render/san-khau.js. Bảng sửa bên phải dựng bởi
+         render/bang-sua.js. Cả hai với sang khung qua render/deck-cau.js. -->
+    <section class="bt-san-khau" id="sanKhau"></section>
+    <aside class="bt-bang-sua panel" id="bangSua"></aside>
+
+    <aside class="slide-list panel">
+      <!-- HÀNG TAB cột trái. Tab nào đang mở thì nhớ trong localStorage — xem cot-tab.js.
+           Tab "Tạo bằng AI" ĐÃ GỠ (16/10/2026): tạo / sửa video bằng AI nay đi qua tab "AI agent"
+           (Codex / Claude điều khiển Studio bằng tool studio_*). -->
+      <!-- Còn MỘT tab (AI agent) từ 16/10/2026 — "Thư viện" dời sang bảng phải (render/tab-phai.js) ⇒ hàng tab
+           ẩn đi, khung chat chiếm cả cột. Giữ nguyên DOM: cot-tab.js / agentChat vẫn gọi __beeMoTab('agent'). -->
+      <div class="rl-tab" role="tablist" aria-label="Chế độ cột dự án" hidden>
+        <!-- Tab "Dự án" ĐÃ BỎ (03/10/2026): danh sách dự án nay là HỘP BẬT LÊN mở từ
+             nút "Dự án:" trước tên dự án trên thanh trên cùng (render/thanh-tren.js). -->
+        <!-- Tab "AI agent" (03/10/2026): chat với Codex (gói ChatGPT) hoặc Claude (khoá
+             API / Beeknoee Platform) — agent điều khiển Studio qua tool studio_*.
+             Thân do agent-tab.js dựng; lõi ở src/agentChat/. -->
+        <button type="button" class="rl-tab-nut dang-chon" data-pane="agent"
+          role="tab" aria-selected="true" aria-controls="paneAgent"><span class="btn-icon"
+          data-icon="bolt"></span><span>AI agent</span></button>
+        <!-- Bánh răng "Cài đặt AI" ĐÃ BỎ (03/10/2026): bảng khoá AI bật lên từ menu chọn
+             agent dưới ô nhập (agent-tab.js). -->
+      </div>
+
+      <div class="rl-pane" data-pane="agent" id="paneAgent" role="tabpanel"></div>
+
+      <!-- Thân "Thư viện" (media cho TRÌNH DỰNG — kéo sang timeline): thu-vien.js dựng ruột NGAY lúc nạp, rồi
+           render/tab-phai.js DỜI nguyên nút này sang tab "Thư viện" của bảng phải (16/10/2026). -->
+      <div class="rl-pane" data-pane="thuvien" id="paneThuVien" role="tabpanel" hidden></div>
+
+      <!-- HỘP DỰ ÁN (03/10/2026): không còn là tab. Vẫn NẰM TRONG `.slide-list` để
+           giữ nguyên mọi luật `.bt-ba-cot .slide-list …` của danh sách và mọi id mà
+           project-list.js / don-rac.js tra; chỉ hiện ra kiểu `position: fixed` dưới
+           nút "Dự án:" của thanh trên (css/du-an-pop.css, render/thanh-tren.js).
+           ⚠ KHÔNG mang lớp `.rl-pane`: moTab (cot-tab.js) ẩn/hiện mọi `.rl-pane`
+           trong cột theo tab đang mở. -->
+      <div class="duan-pop" id="paneDuAn" role="dialog" aria-label="Danh sách dự án" hidden>
+      <div class="panel-head">
+        <!-- Một tiêu đề duy nhất, một cỡ chữ, một màu. Trước đây "Danh sách" là
+             `.kicker` 11px chữ mờ còn phần sau là <h2> — hai cỡ chọi nhau.
+             Số dự án do buildProjectRows() điền, KHÔNG viết cứng (cạm bẫy #44). -->
+        <!-- Tiêu đề <h2> "Danh sách dự án (N)" ĐÃ BỎ: nó chiếm nguyên hàng
+             trên cùng của cột chỉ để lặp lại điều mà header cột ngay bên dưới
+             đã nói. Chỗ đó nay là ô tìm kiếm — thứ duy nhất cứu được khi danh
+             sách lên hàng trăm dự án. Số lượng chuyển xuống header cột. -->
+        <div class="list-title">
+          <!-- Kính lúp NẰM TRONG ô tìm. Trước đây ô trần không có dấu hiệu gì,
+               chỉ còn mỗi chữ mờ "Tìm dự án…" — nhìn ra một ô nhập bất kỳ. -->
+          <span class="list-tim-o">
+            <span class="btn-icon list-tim-icon" data-icon="tim" aria-hidden="true"></span>
+            <input id="timDuAn" class="list-tim" type="search" placeholder="Tìm dự án…"
+              autocomplete="off" spellcheck="false" aria-label="Tìm dự án theo tên" />
+          </span>
+          <button class="refresh-btn icon-btn icon-only" id="refreshList" type="button" title="Quét lại thư mục nguồn" aria-label="Làm mới"><span class="btn-icon" data-icon="refresh">↻</span></button>
+          <!-- Đặt Ở ĐÂY chứ không ở góc dưới phải: việc này thuộc về thư mục
+               dự án, và góc kia đã đặc tới 58px (xem chú thích đầu don-rac.js). -->
+        </div>
+      </div>
+      <!-- Nhãn cột NGẮN: cột chỉ 340px, ba nhãn dài ăn hết chỗ của chính dữ
+           liệu bên dưới. "#" thay "Stt", "Cập nhật" thay "Ngày cập nhật". -->
+      <div class="list-head">
+        <span>#</span>
+        <span>Dự án</span>
+        <span>Cập nhật</span>
+      </div>
+      <ol class="project-list" id="projectList">
+      </ol>
+      <!-- HÀNG CHÂN cột: số dự án + dung lượng thư mục nguồn, và nút Dọn rác.
+           Chuyển xuống đây 16/09/2026: hai con số ấy là THÔNG TIN TỔNG, không
+           phải nhãn cột — để trên đầu thì chúng chen vào chỗ của tiêu đề cột,
+           mà người dùng đọc chúng rất thưa. Nút Dọn rác đi cùng vì nó thao tác
+           trên đúng thư mục mà hai số đó nói tới.
+           ⚠ `data-project-size` do don-rac.js điền, `data-project-count` do
+           project-list.js điền — giữ nguyên hai thuộc tính, chỉ đổi chỗ. -->
+      <div class="list-chan">
+        <span class="list-chan-so">Tổng <b data-project-count>—</b> dự án<span
+          data-project-size title="Tổng dung lượng thư mục nguồn"></span></span>
+        <button class="refresh-btn icon-btn" id="donRac" type="button" title="Dọn tệp dựng dở trong thư mục nguồn"><span class="btn-icon" data-icon="trash">🗑</span><span>Dọn dẹp</span></button>
+      </div>
+      </div>
+    </aside>
+  </main>
+
+
+  <script src="boot-defaults.js"></script>
+  <!-- Dựng thanh menu dùng chung. PHẢI nạp trước slide-viewer.js vì lớp phủ
+       gọi window.__beeAppBar khi mở. -->
+  <script src="icons.js"></script>
+  <script src="app-bar.js"></script>
+  <script src="eleven-voices.js"></script>
+  <!-- Trang Dựng video (tách 02/09/2026): 4 module định nghĩa, render-page.js điều phối.
+       THỨ TỰ: core trước (đặt window.__renderPage), điều phối sau cùng. -->
+  <script src="render/core.js"></script>
+  <!-- Cau noi toi khung xem truoc cua deck. PHAI nap truoc moi mo-dun
+       nao doc/ghi khung do (bang sua, dai slide) — xem deck-cau.js. -->
+  <script src="render/deck-cau.js"></script>
+  <script src="render/project-list.js"></script>
+  <script src="render/tts-panel.js"></script>
+  <script src="render/vieneu-panel.js"></script>
+  <script src="render/jobs.js"></script>
+  <!-- Sân khấu + bảng sửa. PHẢI nạp SAU tts-panel/jobs: tab 'Dựng video'
+       DỜI nguyên nút `.render-machine` vào bảng, mà hai tệp kia giữ tham
+       chiếu thẳng vào các ô bên trong nó. -->
+  <script src="render/san-khau.js"></script>
+  <script src="render/bang-sua.js"></script>
+  <!-- Tab riêng của bảng phải ("Thuộc tính", "Thư viện") — sau bang-sua (gắn sau khung của nó). -->
+  <script src="render/tab-phai.js"></script>
+  <!-- Thanh trên cùng. Nạp SAU bang-sua: nó soi trạng thái hoàn tác/lưu
+       của bảng, và bấm hộ nút #startRender trong form dựng video. -->
+  <script src="render/thanh-tren.js"></script>
+  <!-- Thanh điều khiển dưới khung xem trước. Nạp SAU san-khau (dùng zoom của nó)
+       và SAU jobs.js (bấm hộ #videoLink / #revealOutput trong form dựng video). -->
+  <script src="render/thanh-phat.js"></script>
+  <!-- TRINH DUNG VIDEO (docs/video-editor/KE-HOACH.md): mo hinh + ngan hoan tac DUNG CHUNG voi
+       tien trinh chinh (src/dung, nap kieu UMD), roi kho trang thai RP.dung - TRUOC timeline. -->
+  <script src="dung/moHinh.js"></script>
+  <script src="dung/nganLenh.js"></script>
+  <script src="render/chu-tieu-de.js"></script>
+  <script src="render/dung-kho.js"></script>
+  <script src="render/dung-mcp.js"></script>
+  <!-- Timeline kieu Premiere duoi khung xem truoc - SAU thanh-phat (nghe video) va san-khau (anh thu nho). -->
+  <script src="render/timeline.js"></script>
+  <script src="render/timeline-sua.js"></script>
+  <script src="render/dung-khung.js"></script>
+  <script src="render/dung-xem.js"></script>
+  <script src="render/bang-khoi.js"></script>
+  <!-- Dự án VIDEO TRỐNG (chỉ timeline, không slide) — sau dung-kho/thanh-tren/bang-khoi vì gọi vào cả ba. -->
+  <script src="render/du-an-video.js"></script>
+  <!-- Phụ đề: MỘT bộ chỉnh cho deck lẫn dự án video (bật/tắt, kiểu chữ) — bang-khoi + timeline gọi. -->
+  <script src="render/kieu-phu-de.js"></script>
+  <script src="render/giong-khoi.js"></script>
+  <script src="render/them-slide.js"></script>
+  <script src="render-page.js"></script>
+  <script src="don-rac.js"></script>
+  <!-- Màn hình cài đặt lần đầu: tự ẩn nếu model Whisper đã có. -->
+  <script src="first-run.js"></script>
+  <!-- Sau icons.js để nút tài khoản dùng được bộ icon dùng chung. -->
+  <!-- Form hồ sơ Bee Account — PHẢI trước login.js (bảng tài khoản gọi window.__beeHoSo) -->
+  <script src="ho-so.js"></script>
+  <script src="login.js"></script>
+  <script src="ai-caidat.js"></script>
+  <!-- Hàng tab cột trái + bộ vẽ markdown của khung chat (tách từ tab "Tạo bằng AI" đã gỡ). -->
+  <script src="cot-tab.js"></script>
+  <!-- Tab "AI agent". SAU cot-tab.js: dùng bộ chuyển tab và bộ vẽ markdown của nó. -->
+  <script src="agent-tab.js"></script>
+  <script src="thu-vien.js"></script>
+  <script src="pages.js"></script>
+  <script src="checkout.js"></script>
+  <!-- Sau render-page.js: nó chỉ sắp lại những phần tử mà file kia đã dựng. -->
+  <script src="render-layout.js"></script>
+  <script src="cot-keo.js"></script>
+  <!-- Xem slide trong app thay vì mở cửa sổ trắng (link /slide/... của server cũ). -->
+  <script src="slide-viewer.js"></script>
+  <!-- Dải báo có bản mới. Tự ẩn khi không có gì để báo. -->
+  <script src="updater-ui.js"></script>
+  <!-- So hieu ban app o goc duoi ben phai. -->
+  <script src="guide.js"></script>
+  <script src="changelog.js"></script>
+  <script src="version-badge.js"></script>
+  <!-- Sau version-badge.js: nút "?" neo ngay TRÊN số hiệu bản, hai thứ phải
+       khớp vị trí nhau. Đổi chỗ một cái thì nhớ đổi cái kia. -->
+  <script src="help-hub.js"></script>
+  <script src="zoom-badge.js"></script>
+
+</body>
+</html>

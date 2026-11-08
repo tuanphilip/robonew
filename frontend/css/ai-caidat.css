@@ -1,0 +1,255 @@
+/* Popup CÀI ĐẶT AI — xem `ai-caidat.js`.
+   Mọi màu/cỡ/khoảng cách đi qua `tokens.css`, không có giá trị viết cứng. */
+.ai-hop { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; }
+.ai-nen { position: absolute; inset: 0; background: var(--overlay); }
+.ai-khung {
+  /* 560 chứ không 460: ở 460 thì id model dài kiểu
+     `nvidia/nemotron-3-super-120b-a12b:free` bị cắt đuôi ngay trong danh sách,
+     mà đuôi mới là chỗ phân biệt các bản của cùng một model. */
+  position: relative; width: min(560px, calc(100vw - var(--sp-32)));
+  max-height: calc(100vh - var(--sp-32));
+  display: flex; flex-direction: column;
+  border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--panel); box-shadow: var(--shadow-lg); overflow: hidden;
+}
+.ai-dau {
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-14) var(--sp-16);
+  border-bottom: 1px solid var(--line);
+}
+.ai-dau .btn-icon { background: none; box-shadow: none; color: var(--brand-dam); }
+.ai-dau .ai-dau-canh { color: var(--vang); }
+.ai-dau svg { width: 16px; height: 16px; }
+.ai-x {
+  margin-left: auto; width: 28px; height: 28px; padding: 0;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint);
+  font-size: var(--text-lg); line-height: var(--leading-none); cursor: pointer;
+}
+.ai-x:hover { background: var(--surface); color: var(--text); }
+.ai-than { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--sp-16); }
+.ai-cho { padding: var(--sp-20) 0; color: var(--text-faint); font-size: var(--text-sm); text-align: center; }
+
+/* Một hàng = nhãn trên, ô nhập dưới. Nhãn bên trái thì ô nhập chỉ còn ~240px,
+   mà endpoint là một URL dài. */
+.ai-hang { display: grid; gap: var(--sp-6); margin-bottom: var(--sp-12); }
+.ai-hang > span:first-child {
+  display: flex; align-items: center; gap: var(--sp-6);
+  color: var(--text-soft); font-size: var(--text-sm); font-weight: var(--weight-semibold);
+}
+.ai-nhan-icon { flex: none; display: grid; place-items: center; color: var(--text-faint); }
+.ai-nhan-icon svg { width: 14px; height: 14px; }
+/* Dấu tích "đã có khoá": xanh lá, ngay cạnh nhãn. */
+.ai-hang .ai-tich { flex: none; display: grid; place-items: center; color: var(--ok); }
+.ai-hang .ai-tich svg { width: 14px; height: 14px; }
+.ai-hang input[type="text"], .ai-hang input[type="password"],
+.ai-hang input[type="number"], .ai-hang select {
+  width: 100%; height: 36px; padding: 0 var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  color: var(--text); background: var(--panel); font: inherit; font-size: var(--text-sm);
+}
+/* Ô đã khoá (đã có API key): con trỏ phải nói ra là KHÔNG GÕ ĐƯỢC. `readonly`
+   mà con trỏ vẫn là hình chữ I thì tay cứ bấm vào rồi gõ, không có gì xảy ra và
+   cũng không có gì giải thích. */
+.ai-hang input[readonly] { cursor: not-allowed; background: var(--surface); color: var(--text-faint); }
+.ai-hang input[readonly]:focus { border-color: var(--control-line); }
+.ai-hang input:focus, .ai-hang select:focus { outline: none; border-color: var(--brand); }
+
+.ai-khoa, .ai-model { display: flex; gap: var(--sp-6); }
+.ai-khoa input, .ai-model input { flex: 1 1 0; width: 0; min-width: 0; }
+.ai-xoa, .ai-nut-phu {
+  flex: none; height: 36px; padding: 0 var(--sp-12);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: none; color: var(--text); font: inherit; font-size: var(--text-sm);
+  font-weight: var(--weight-semibold); cursor: pointer; white-space: nowrap;
+}
+.ai-xoa:hover, .ai-nut-phu:hover:not(:disabled) { background: var(--surface); }
+.ai-nut-phu:disabled, .ai-nut-chinh:disabled { opacity: 0.6; cursor: default; }
+.ai-ghi {
+  margin: calc(var(--sp-6) * -1) 0 var(--sp-14);
+  color: var(--text-faint); font-size: var(--text-2xs); line-height: var(--leading-normal);
+}
+.ai-co { color: var(--ok); }
+.ai-chua { color: var(--text-soft); }
+
+/* ── lưới chọn nhà cung cấp ────────────────────────────────────────────── */
+/* `auto-fit` + `minmax`: hộp cài đặt hẹp thì hai cột, rộng thì ba — không cần
+   một @media nào, và thêm nhà thứ sáu cũng không phải sửa lại gì. */
+.ai-nha-luoi { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: var(--sp-8); }
+.ai-nha {
+  position: relative;
+  display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-10);
+  /* KHÔNG viền, thay bằng một mảng nền nhạt. Năm cái khung vuông xếp lưới đọc
+     ra "một cái bảng"; năm mảng nền đọc ra "năm lựa chọn" — mà đây đúng là năm
+     lựa chọn loại trừ nhau. */
+  border: 0; border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  text-align: left; cursor: pointer;
+}
+.ai-nha:hover { background: var(--surface-strong); }
+/* Nhà đang chọn: viền thương hiệu + một vòng mỏng. Không tô nền đậm — logo
+   Claude/Gemini có màu riêng, nền đậm dưới chúng là hai màu đánh nhau. */
+/* Đang chọn: vẫn là vòng mảnh màu thương hiệu, nhưng nay nó là dấu hiệu DUY
+   NHẤT trên thẻ nên đọc ra ngay giữa bốn thẻ trần kia. */
+.ai-nha.dang-chon { background: var(--brand-nhat); box-shadow: inset 0 0 0 1px var(--brand); }
+.ai-nha-logo { flex: none; display: grid; place-items: center; }
+.ai-nha-logo svg { width: 20px; height: 20px; }
+/* Tên XUỐNG DÒNG chứ không cắt ba chấm: đo ở cột 128px thì "Beeknoee Platform"
+   và "OpenAI-compatible" đều bị cắt thành "Beeknoee Pl…" / "OpenAI-com…" —
+   mà tên nhà cung cấp bị cắt thì hết tác dụng làm nhãn. */
+.ai-nha-ten { flex: 1 1 auto; min-width: 0; line-height: var(--leading-tight); }
+/* Chấm "đã có khoá": nhiều nhà cùng lúc thì đây là cách duy nhất thấy ngay
+   mình đã dán key cho nhà nào mà không phải bấm vào từng cái. */
+.ai-nha-cham { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+
+/* ── địa chỉ API đã biết sẵn ───────────────────────────────────────────── */
+.ai-hang-doc { display: grid; gap: var(--sp-6); }
+.ai-diachi-san { display: flex; align-items: center; gap: var(--sp-8); }
+.ai-diachi-san[hidden] { display: none; }
+.ai-diachi-san code {
+  flex: 1 1 auto; min-width: 0;
+  padding: var(--sp-6) var(--sp-8);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text-soft);
+  font-size: var(--text-xs);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ai-nut-lien {
+  flex: none; padding: 0; border: 0; background: none;
+  color: var(--brand-dam); font: inherit; font-size: var(--text-xs);
+  font-weight: var(--weight-semibold); text-decoration: underline; cursor: pointer;
+}
+.ai-goi-nho { color: var(--text-faint); font-size: var(--text-2xs); line-height: var(--leading-normal); }
+.ai-hang textarea {
+  width: 100%; padding: var(--sp-8) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  color: var(--text); background: var(--panel);
+  font: inherit; font-size: var(--text-sm); line-height: var(--leading-normal);
+  resize: vertical;
+}
+.ai-hang textarea:focus { outline: none; border-color: var(--brand); }
+
+.ai-nangcao { margin: var(--sp-6) 0 var(--sp-14); }
+.ai-nangcao summary {
+  margin-bottom: var(--sp-10); color: var(--text-soft);
+  font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer;
+}
+
+.ai-nut { display: flex; gap: var(--sp-8); }
+.ai-nut-chinh {
+  flex: 1 1 auto; height: 38px; padding: 0 var(--sp-14);
+  border: 0; border-radius: var(--radius-md);
+  background: var(--brand); color: var(--brand-text);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-bold); cursor: pointer;
+}
+.ai-nut-chinh:hover:not(:disabled) { background: var(--brand-dam); }
+
+.ai-kq {
+  margin-top: var(--sp-12); padding: var(--sp-10) var(--sp-12);
+  border-radius: var(--radius-md); background: var(--surface-strong);
+  color: var(--text-soft); font-size: var(--text-sm); line-height: var(--leading-normal);
+}
+.ai-kq[hidden] { display: none; }
+.ai-kq-tot { color: var(--ok); }
+.ai-kq-xau { color: var(--delete-text); }
+
+/* ══ BỘ CHỌN MODEL ═══════════════════════════════════════════════════════
+   Thay `<datalist>` — xem chú thích dài ở `ai-caidat.js`. */
+.ai-model-o { position: relative; flex: 1 1 0; width: 0; min-width: 0; }
+.ai-model-o input { width: 100%; }
+.ai-model-ds {
+  /* ⚠ `fixed`, KHÔNG PHẢI `absolute`. Thân popup (`.ai-than`) có
+     `overflow-y: auto`, và khối cuộn cắt cụt cả con `absolute` của nó — danh
+     sách đứt ngang ở mép dưới popup (ảnh 19/09/2026). `fixed` + toạ độ do
+     `datChoDs()` trong `ai-caidat.js` tính đưa hộp ra khỏi vùng bị cắt; trần
+     chiều cao cũng do đó đặt, theo chỗ THẬT còn lại quanh ô nhập. */
+  position: fixed; z-index: var(--z-modal);
+  display: flex; flex-direction: column; min-height: 0;
+  max-height: min(360px, 60vh);   /* chốt chặn khi JS chưa kịp chạy */
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--panel); box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.ai-model-ds[hidden] { display: none; }
+
+/* ── ô Tìm: nằm TRONG hộp, không cuộn theo danh sách ──────────────────── */
+.ai-model-tim {
+  flex: none; display: flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-10);
+  border-bottom: 1px solid var(--line);
+}
+.ai-model-tim-icon { display: flex; flex: none; color: var(--text-faint); }
+.ai-model-tim-icon svg { width: 14px; height: 14px; }
+.ai-model-tim input {
+  flex: 1 1 0; width: 0; min-width: 0;
+  height: auto; padding: 0; border: 0; background: none;
+  color: var(--text); font-size: var(--text-sm);
+}
+.ai-model-tim input:focus { outline: none; box-shadow: none; }
+
+/* Khối cuộn của danh sách. Trần chiều cao nằm ở hộp ngoài, khối này chỉ ăn
+   phần còn lại — nhờ vậy ô Tìm không bao giờ bị đẩy khuất. */
+.ai-model-ls {
+  flex: 1 1 auto; min-height: 0;
+  overflow: auto; overscroll-behavior: contain;
+  padding: var(--sp-4);
+}
+/* Đầu nhóm: tên nhà cung cấp + số model của nhà đó. Dính lại khi cuộn để lúc
+   nào cũng biết đang xem nhóm nào. */
+.ai-model-nhom {
+  position: sticky; top: calc(var(--sp-4) * -1);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-8);
+  margin: var(--sp-4) 0 var(--sp-2);
+  padding: var(--sp-4) var(--sp-8);
+  background: var(--panel);
+  color: var(--text-faint); font-size: var(--text-xs);
+  font-weight: var(--weight-bold); letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ai-model-nhom em { font-style: normal; color: var(--text-faint); }
+/* Logo + ten nha o dau nhom. Danh sach nay gom model cua NHIEU nha nen mot
+   dong chu hoa khong du: logo la thu nhan ra truoc khi kip doc. */
+.ai-model-nhom-ten {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ai-model-nhom-logo { flex: none; background: none; box-shadow: none; color: inherit; }
+.ai-model-nhom-logo svg { width: 13px; height: 13px; display: block; }
+/* Nhan tien to ben phai mot dong model — chi co o nha kieu tong hop, noi id
+   mang san dang `hang/ten`. Mo va nho: no la ghi chu, khong phai ten model. */
+.ai-model-tien {
+  float: right; margin-left: var(--sp-8);
+  color: var(--text-faint); font-size: var(--text-2xs);
+  font-style: normal; font-weight: var(--weight-semibold);
+}
+/* Huy hieu nha canh nhan "Model" trong bang cai dat. */
+.ai-model-nha {
+  display: inline-flex; align-items: center; gap: var(--sp-4);
+  margin-left: var(--sp-8);
+  padding: 0 var(--sp-6);
+  border-radius: var(--radius-sm);
+  background: var(--surface-mo);
+  color: var(--text-faint); font-size: var(--text-2xs); font-weight: var(--weight-semibold);
+}
+.ai-model-nha .btn-icon { background: none; box-shadow: none; color: inherit; }
+.ai-model-nha svg { width: 11px; height: 11px; display: block; }
+.ai-model-dong {
+  padding: var(--sp-6) var(--sp-8); border-radius: var(--radius-sm);
+  color: var(--text); font-size: var(--text-sm); cursor: pointer;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ai-model-dong:hover, .ai-model-dong.dang-sang { background: var(--surface); }
+.ai-model-trong {
+  padding: var(--sp-10) var(--sp-8);
+  color: var(--text-faint); font-size: var(--text-sm);
+}
+
+/* ── CHẾ ĐỘ NEO (03/10/2026): bảng bật lên CẠNH NÚT chọn AI dưới ô nhập, không phủ
+   tối màn hình. Lớp nền vẫn còn (bấm ra ngoài là đóng) nhưng trong suốt; toạ độ,
+   bề ngang, trần chiều cao của khung do `datChoKhung()` (ai-caidat.js) đặt. */
+.ai-hop-neo { display: block; }
+.ai-hop-neo .ai-nen { background: none; }
+.ai-hop-neo .ai-khung { position: fixed; border-radius: var(--radius-md); }

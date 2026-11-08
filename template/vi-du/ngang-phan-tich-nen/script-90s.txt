@@ -1,0 +1,7 @@
+Đọc biểu đồ nến trong ba phút, không cần thuộc lòng bảng mẫu hình nào.
+Một cây nến kể đúng bốn con số. Giá mở cửa, giá đóng cửa, giá cao nhất và giá thấp nhất trong một khoảng thời gian. Thân nến là đoạn giữa giá mở và giá đóng, còn hai cái bóng là chỗ giá đã chạm tới rồi bị đẩy ngược về.
+Nến xanh nghĩa là đóng cao hơn mở, phiên đó người mua thắng. Nến đỏ thì ngược lại, và thân nến dài tới đâu là bên thắng thắng đậm tới đó.
+Nhìn cả một chuỗi nến thì mới ra chuyện. Đường trung bình động làm phẳng nhiễu để thấy hướng đi chung. Giá nằm trên đường trung bình là xu hướng tăng, nằm dưới là xu hướng giảm.
+Khối lượng là thứ xác nhận. Một cây nến tăng mạnh mà khối lượng thấp thì chỉ là vài lệnh nhỏ đẩy giá lên. Cũng cây nến đó với khối lượng gấp ba mức trung bình mới là tiền thật đang vào.
+Cái bẫy là đọc nến như đọc lời tiên tri. Mẫu hình nến chỉ kể chuyện đã xảy ra, nó không hứa chuyện sắp xảy ra. Ai bán cho bạn một mẫu hình chắc thắng thì thứ họ bán là khoá học, không phải lợi nhuận.
+Bốn con số, một đường trung bình, một cột khối lượng. Bắt đầu bằng đúng chừng đó là đủ.

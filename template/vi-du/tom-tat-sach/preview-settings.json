@@ -1,0 +1,72 @@
+{
+  "_ghiChu": [
+    "Thiet lap cua mau TOM TAT SACH (GD-05) — NGANG 16:9, NEN SANG.",
+    "",
+    "⚠ `visuals.colorMode` la `cream`, khong phai `dark`. Trinh sua doc khoa nay",
+    "de ve khung xem truoc; de `dark` thi app ve nen toi trong khi deck la nen giay.",
+    "",
+    "⚠ `subtitles.color` la MUC NAU DAM. Bo ghi mac dinh ve phu de TRANG — tren",
+    "nen giay la chu trang tren giay, mat sach. Day la cho de quen nhat o mau nen sang.",
+    "",
+    "⚠ `subtitles.fontSize` DE LEN `--subtitle-font-size` trong style.css. Hai cho",
+    "co y de cung mot so; doi mot ben thi doi ca hai.",
+    "",
+    "⚠ KHONG khai `visuals.backgroundFx`: nen giay da co van hat san.",
+    "",
+    "⚠ `theme.variables` PHAI TRUNG CA TEN LAN GIA TRI voi :root trong style.css.",
+    "Trinh sua ghi de :root luc quay, nen lech gia tri la video ra MAU CU trong khi",
+    "mo deck bang trinh duyet van thay mau moi. Bang duoi day duoc SINH RA tu chinh",
+    "style.css chu khong go tay."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#f1e8d8",
+      "--primary": "#7a4a24",
+      "--primary-light": "#9c6636",
+      "--primary-dark": "#4f2e12",
+      "--accent": "#3f5545",
+      "--accent-light": "#647d69",
+      "--info": "#3f5545",
+      "--success": "#2f7a55",
+      "--warning": "#a8620f",
+      "--danger": "#8f2420"
+    },
+    "customVariables": {
+      "--bg-dark": "#f1e8d8",
+      "--primary": "#7a4a24",
+      "--primary-light": "#9c6636",
+      "--primary-dark": "#4f2e12",
+      "--accent": "#3f5545",
+      "--accent-light": "#647d69",
+      "--info": "#3f5545",
+      "--success": "#2f7a55",
+      "--warning": "#a8620f",
+      "--danger": "#8f2420"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#2a1c0e",
+    "activeColor": "#7a4a24",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#f1e8d8",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Số đỏ, Vũ Trọng Phụng, đăng báo năm một chín ba sáu.",
+      "Tóm cả cuốn trong một câu. Một kẻ bị coi là hạ lưu leo lên tận đỉnh xã hội, mà đỉnh cao nhất lại là lúc anh ta thua một trận quần vợt.",
+      "Ý thứ nhất, xã hội tôn vinh cái vỏ. Xuân Tóc Đỏ đi lên bằng hiểu lầm và bằng cái mác người khác gán cho, chứ không bằng thứ gì anh ta có.",
+      "Ý thứ hai, phong trào Âu hoá thành một trò hề. Cải cách y phục, thể thao, bình dân, rốt cuộc chỉ còn là hình thức mà ai cũng biết và không ai nói ra.",
+      "Ý thứ ba, đến cái chết cũng thành dịp để khoe. Chương mười lăm kể một đám tang mà cả nhà đều vui, mỗi người vui một kiểu riêng.",
+      "Trích nguyên văn tên chương đó. Hạnh phúc của một tang gia, sáu chữ, và nó nói hết những gì cuốn sách muốn nói."
+    ]
+  }
+}

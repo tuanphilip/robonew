@@ -1,0 +1,590 @@
+/* ══ TOKEN GIAO DIỆN — nguồn DUY NHẤT cho màu, chữ, khoảng cách, bo góc ═════
+ *
+ * Nạp TRƯỚC mọi tệp CSS khác (index.html). Tệp CSS khác chỉ được dùng
+ * `var(--…)`; KHÔNG viết số/màu mới cho chữ, khoảng cách, bo góc, trạng thái —
+ * thiếu bậc thì thêm token Ở ĐÂY để cả app cùng đổi.
+ *
+ * Nền sáng = khối `body.theme-light` bên dưới ghi đè CÙNG TÊN biến. Nhờ vậy
+ * tệp khác không cần rule `body.theme-light …` cho màu nữa.
+ *
+ * ⚠ Gộp một rule `body.theme-light X` thành token CHỈ an toàn khi không có luật
+ * nào khác có độ ưu tiên NẰM GIỮA `X` và `body.theme-light X` cùng đặt thuộc
+ * tính đó — nếu có, token ở `X` sẽ thua luật kia. Đã dính một lần với
+ * `.field input[type="file"]`; xem chú thích tại chỗ trong app.css.
+ *
+ * Lịch sử: tách từ đầu app.css (CSS bước 1), gom giá trị rời rạc về thang
+ * (CSS bước 3) — xem BEEKNOEE_STUDIO_CSS_AUDIT.md.
+ */
+:root {
+  color-scheme: dark;
+
+  /* ── Nền & bề mặt ──────────────────────────────────────────────────────
+   * Chỉ ĐỘ SÁNG mới phân cấp: nền trang → panel → surface → surface-strong.
+   */
+  /* ⚠ BA BẬC RỜI NHAU, và thứ tự là CHROME → TRANG → NỔI.
+   *
+   * Bản trước cả `--bg` lẫn `--body-bg` đều là #000000 thuần. Hai hệ quả đã
+   * thấy: (1) bảng tài khoản dùng `--bg` nên nó ĐEN Y HỆT nền trang phía sau,
+   * bóng đổ cũng màu đen nên không tách ra nổi — nhìn như bảng dính vào nền;
+   * (2) đen tuyệt đối làm mọi đường viền mờ trông như không có.
+   *
+   * Nay: thanh dọc + thanh trên (--bg) tối nhất, nền trang (--body-bg) sáng hơn
+   * một bậc, thứ NỔI LÊN (--panel: popup, thẻ, bảng xổ) sáng nhất. Ba bậc cách
+   * nhau đủ để phân biệt mà không thành xám bẩn.
+   * Tông ẤM (đỏ nhỉnh hơn lam) chứ không xám trung tính — cùng họ với nền tối
+   * của Claude Desktop mà chủ dự án lấy làm mẫu.
+   */
+  --bg: #1f1e1d;
+  --body-bg: #262624;
+  --panel: #32312f;
+  /* Bản MỜ của --panel: nền cho mấy cụm nút NỔI TRÊN nội dung (cụm thu/phóng ở
+     góc khung slide). Phải hơi trong để không che mất mép deck, nhưng đủ đặc
+     để chữ đọc được trên cả deck tối lẫn deck kem. */
+  --panel-mo: rgba(50, 49, 47, 0.82);
+  --surface: rgba(255, 255, 255, 0.055);
+  --surface-strong: rgba(255, 255, 255, 0.10);
+  /* Bậc mờ NHẤT, chỉ dùng cho ô CHƯA được chọn nằm cạnh ô đã chọn. Đo được:
+     một bậc 0.035 thì nó chênh nút đang chọn (--surface, 0.055) có 0.02 — hai ô
+     nhìn như nhau. Bậc này kéo chênh lệch lên ~3 lần mà vẫn giữ được hình khối
+     của nút.
+     ⚠ ĐỪNG lấy bậc mờ nào làm nền cho thứ NỔI LÊN TRÊN (menu, popup, bảng nhật
+     ký): mờ thì nhìn xuyên thẳng xuống nội dung bên dưới. Thứ nổi dùng --panel.
+     Đã có một token 0.035 tên --surface-panel, gỡ 12/09/2026 vì cả hai chỗ dùng
+     nó đều phải bỏ vì đúng lỗi đó. */
+  --surface-mo: rgba(255, 255, 255, 0.018);
+  /* Viên "đang mở" của thanh tab (bảng tài khoản, 28/09/2026). Nền tối: SÁNG hơn thanh (--panel lại tối hơn thanh,
+     nhìn như không có gì được chọn); nền sáng: trắng trên thanh xám. */
+  --tab-mo: rgba(255, 255, 255, 0.13);
+  --option-bg: #32312f;
+  --field-bg: rgba(255, 255, 255, 0.05);
+  /* Nền ảnh thu nhỏ của LỚP PHỦ (Thư viện → Hiệu ứng, đợt 1): xám xanh như một tấm ảnh — lớp trong suốt (viền tối, vệt
+     sáng, viền trắng mảnh) phải nằm trên nền có độ sáng giữa mới thấy được. Giống nhau ở hai giao diện sáng / tối. */
+  --tv-lp-nen-a: #4f5f68;
+  --tv-lp-nen-b: #a8b4ba;
+
+  /* ── Chữ ───────────────────────────────────────────────────────────────
+   * Bốn mức đậm nhạt, KHÔNG dùng màu để phân cấp chữ.
+   */
+  /* BỐN bậc, hết. Trước đây có sáu tên cho bốn giá trị (`--muted` trùng y hệt
+     `--text-faint`, `--status-text` 0.72 nằm sát `--text-soft` 0.80), nên cùng
+     một loại chữ phụ chỗ thì đậm chỗ thì mờ — không ai sai, chỉ là có hai cái
+     tên nghe đều hợp lý. Gộp hết về đây 12/09/2026. */
+  --text: #f4f4f5;
+  --text-soft: rgba(244, 244, 245, 0.80);
+  /* 0.66 chứ không phải 0.55. Đo trong app thật: ở 0.55 chú thích trong hộp
+     báo lỗi chỉ đạt 4,1:1 trên nền sáng — DƯỚI ngưỡng AA 4,5 cho chữ nhỏ, mà
+     nhãn ô ngay phía trên là 10:1. 0.66 kéo cả hai nền lên khoảng 6:1 và vẫn
+     nhạt hơn --text-soft đủ để phân cấp. */
+  --text-faint: rgba(244, 244, 245, 0.66);
+  /* Bậc mờ nhất, chỉ dùng cho thứ CHƯA được chọn đứng cạnh thứ đã chọn — để
+     mắt bắt ngay cái nào đang bật. Đừng dùng cho chữ phải đọc: 0.40 là dưới
+     ngưỡng dễ đọc cho một đoạn văn. */
+  --text-mo: rgba(244, 244, 245, 0.40);
+
+  /* ── Viền ──────────────────────────────────────────────────────────────
+   * control-line dành cho ô nhập/nút; line là đường ngăn khối.
+   */
+  /* Sáng hơn hẳn bản trước (0.10/0.14/0.10/0.07). Trên nền #000 tuyệt đối thì
+     viền 10% trắng gần như tàng hình; nền nay là #262624 nên còn mờ hơn nữa nếu
+     giữ số cũ. Nâng đều một nhịp, giữ nguyên thứ tự bốn bậc. */
+  --line: rgba(255, 255, 255, 0.16);
+  /* Viền MỜ HƠN `--line` — cho khối chỉ cần gợi một đường bao, không cần kẻ ô
+     (thẻ mẫu đang chọn, chẳng hạn). Chung một màu, chỉ khác độ mờ, để hai mức
+     viền không đọc ra hai màu khác nhau. */
+  --line-mo: rgba(255, 255, 255, 0.08);
+  --control-line: rgba(255, 255, 255, 0.24);
+  --control-line-soft: rgba(255, 255, 255, 0.17);
+  --control-line-faint: rgba(255, 255, 255, 0.12);
+  /* Viền NHẸ NHẤT trong bộ. Dùng cho thứ xếp THÀNH DÃY DÀI — 57 thẻ dự án, các
+     khối trong bảng sửa: ở đó viền chỉ cần đủ để mắt biết chỗ nào hết một
+     khối, đọc ra được là cả màn hình thành lưới ô vuông. */
+  --vien-mo: rgba(255, 255, 255, 0.075);
+  /* Viền cho thứ nằm trên bề mặt NỔI (--panel). Cùng một lớp trắng mờ đặt trên
+     nền sáng hơn thì tương phản thấp hơn — đo được: viền 24% trên nền trang
+     (#262624) ra ~rgb(90,90,89), còn trên thẻ nổi (#32312f) ra ~rgb(99,98,97),
+     tức nhạt đi so với chính cái nền nó nằm lên. Bậc này bù lại chỗ đó. */
+  --control-line-noi: rgba(255, 255, 255, 0.32);
+
+  /* ── Nhấn & thương hiệu ────────────────────────────────────────────────
+   * accent = tương phản cao nhất (trắng ở nền tối, đen ở nền sáng).
+      brand = xanh biển logo Beeknoee, chỉ cho nút CHÍNH và ô ĐANG CHỌN.
+   */
+  --accent: #f4f4f5;
+  --accent-contrast: #111113;
+  --accent-glow: rgba(255, 255, 255, 0.12);
+  --brand: #7dd0f7;
+  /* Bản RẤT NHẠT của --brand: nền của hàng đang chọn trong danh sách dự án.
+     Phải nhạt tới mức chữ đen vẫn đọc thoải mái — nó nằm dưới cả một hàng chữ,
+     không phải một cái chip. */
+  --brand-mo: rgba(125, 208, 247, 0.08);
+  /* Viền của dòng ĐANG CHỌN. Không dùng thẳng `--brand`: một thẻ viền xanh đặc
+     giữa 56 thẻ viền mờ đọc ra như một nút bấm đang nhấn, nặng hơn hẳn việc nó
+     cần nói — "đang đứng ở đây". Đủ xanh để phân biệt, không đủ đậm để hét. */
+  --brand-vien: rgba(125, 208, 247, 0.34);
+  --brand-text: #05314f;
+
+  /* ── Trạng thái ────────────────────────────────────────────────────────
+   * Mỗi Ý NGHĨA một màu, có giá trị riêng cho nền sáng. Nền/viền suy
+      ra bằng color-mix nên đổi màu gốc là cả họ đổi theo.
+   */
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  /* Huy hiệu gói trả phí. Hai điểm dừng của dải vàng — nhạt ở giữa để khi
+     dải chạy ngang thì thấy một vệt sáng lướt qua. */
+  /* Nút "Tạo video" — dải xanh, dùng chung cho hai nền.
+     ⚠ 18/09/2026: chủ dự án báo nút này "nhìn hơi đau mắt" — nền xanh đậm bão
+     hoà + chữ trắng, mà nó là mảng màu LỚN NHẤT trên thanh trên và luôn nằm
+     trong tầm mắt. Hạ xuống dải xanh nhạt + chữ gần đen: tương phản vẫn cao
+     (chữ #06263a trên #a6d8f8 ≈ 9:1) nhưng không còn chói.
+     Muốn trả lại bản cũ thì chỉ cần đổi bốn dòng dưới đây và bỏ `--nut-tao-anh:
+     none` — không chỗ nào khác viết cứng màu nút này. */
+  /* Ba điểm dừng lấy từ ảnh mẫu chủ dự án gửi 18/09/2026: xanh dương sáng ở
+     đầu, chuyển dần sang tím-chàm ở cuối. Bản nhạt thử trước đó bị bác — nút
+     chính của app cần ĐỨNG HẲN ra, chỉ là bản cũ chói vì xanh đặc một màu chứ
+     không phải vì đậm. Dải chuyển màu đọc ra "nút chính" mà không gắt. */
+  --nut-tao-dau: #3e97f7;
+  --nut-tao-giua: #4a6bf3;
+  --nut-tao-cuoi: #5a3ae8;
+  --nut-tao-chu: #ffffff;
+  /* Nút chính trong tab AI — DÙNG CHUNG dải với nút Tạo video ở thanh trên.
+     Hai nút này làm cùng một việc trong đầu người dùng; để hai màu khác nhau là
+     bắt họ dừng lại nghĩ xem có phải hai thứ khác nhau không. */
+  --nut-ai-nen: linear-gradient(100deg, var(--nut-tao-dau), var(--nut-tao-giua) 55%, var(--nut-tao-cuoi));
+  --nut-ai-nen-dam: linear-gradient(100deg, var(--nut-tao-giua), var(--nut-tao-cuoi));
+  --nut-ai-chu: var(--nut-tao-chu);
+  /* ⚠ ẢNH NỀN TẮT. Tấm `nen-nut-tao-video.webp` là dải xanh ĐẬM vẽ sẵn; để
+     nguyên thì nó phủ lên dải màu nhạt ở trên và nút vẫn đậm y như cũ — đổi
+     token mà không thấy gì đổi, đúng kiểu sửa hụt khó lần ra. */
+  --nut-tao-anh: none;
+  /* Viên trạng thái ở bảng tiến trình: nền nhạt + chữ đậm, cùng họ xanh với
+     dải nút Tạo video. */
+  --brand-nhat: rgba(59, 139, 250, 0.18);
+  --brand-dam: #9ec5fe;
+  /* Nút "Dừng tạo" — nền tối. */
+  --nut-dung-nen: rgba(225, 29, 72, 0.14);
+  --nut-dung-vien: rgba(251, 113, 133, 0.42);
+  --nut-dung-chu: #fda4af;
+  --chon: #99c8ff;
+  --vang: #d9a521;
+  --vang-sang: #ffeaa0;
+  --danger: #ef4444;
+  --info: #38bdf8;
+  --status-idle: #94a3b8;
+  --status-wait: #7dd3fc;
+  --status-run: #38bdf8;
+  --status-wip: #a78bfa;
+  --ok-bg: color-mix(in srgb, var(--ok) 12%, transparent);
+  --ok-line: color-mix(in srgb, var(--ok) 40%, transparent);
+  --danger-bg: color-mix(in srgb, var(--danger) 12%, transparent);
+  --danger-bg-hover: color-mix(in srgb, var(--danger) 20%, transparent);
+  --danger-line: color-mix(in srgb, var(--danger) 40%, transparent);
+  --info-bg: color-mix(in srgb, var(--info) 12%, transparent);
+  --info-line: color-mix(in srgb, var(--info) 40%, transparent);
+  --idle-bg: color-mix(in srgb, var(--status-idle) 12%, transparent);
+  --idle-line: color-mix(in srgb, var(--status-idle) 40%, transparent);
+  /* ⚠ Nền ĐẶC dưới chữ trắng phải dùng bản -solid, KHÔNG dùng --ok/--danger.
+     Màu trạng thái được chọn để làm CHỮ và VIỀN trên nền tối nên nó tươi;
+     lấy nguyên nó làm nền cho chữ trắng thì tương phản tụt (nút "Tạo mã QR"
+     đo được 2,28:1 — dưới cả mức 3:1). Trộn 78%/86% với đen kéo về đúng
+     khoảng của bản cũ mà vẫn theo màu gốc khi đổi nhận diện. */
+  --ok-solid: color-mix(in srgb, var(--ok) 78%, #000);
+  /* Chữ/ký hiệu ĐẶT TRÊN nền xanh đặc. Cố định cho cả hai theme: chip xanh
+     không đổi màu theo theme nên chữ trên nó cũng không được đổi — dùng
+     --text-soft ở đây thì nền sáng lật chữ sang đen và tương phản tụt. */
+  /* Chữ/hình nằm TRÊN mảng --ok. Trắng chứ không phải xanh rất tối như bản
+     trước: dấu tích xanh-tối trên tròn xanh-lá đọc ra là một vệt mờ, trong khi
+     đây là tín hiệu "xong" — thứ cần thấy ngay từ xa. */
+  --on-ok: #ffffff;
+  --danger-solid: color-mix(in srgb, var(--danger) 86%, #000);
+  --good-text: #7ee0a8;
+  --warn-text: #e8c977;
+  --danger-text: #f19a9a;
+  --delete-text: #f19a9a;
+
+  /* ── Thành phần ────────────────────────────────────────────────────────
+   * Chỗ trước đây phải viết rule body.theme-light riêng.
+   */
+  /* Nền tối: nút chính là khối TRẮNG chữ đen — đúng phép lật của nền sáng (khối
+     đen chữ trắng). Bản trước dùng `--brand` xanh nhạt, mà chip tròn dưới icon
+     lại trắng, nên trên một cái nút có hai mảng sáng đá nhau.
+     ⚠ Đổi ở đây là đổi CẢ chip icon "Dựng video" trên thanh dọc — nó dùng chung
+     hai token này (pages.css). Đó là chủ ý: hai chỗ phải cùng một ngôn ngữ. */
+  --primary-bg: #ffffff;
+  --primary-text: #131315;
+  /* Xám TRUNG TÍNH: chip số của thẻ đang chọn nằm trên nền nhấn (trắng ở
+     nền tối, đen ở nền sáng) nên nó không được lật theo theme như các
+     surface khác — cùng một xám mờ hợp với cả hai. */
+  --chip-trung-tinh: rgba(127, 127, 127, 0.28);
+  --field-file-bg: rgba(255, 255, 255, 0.035);
+  --advanced-bg: rgba(255, 255, 255, 0.032);
+
+  /* ── Lớp phủ & bóng ────────────────────────────────────────────────────
+   * Ba mức bóng cho ba khoảng cách: thẻ nổi nhẹ, bảng, lớp phủ toàn màn.
+   */
+  --overlay: rgba(0, 0, 0, 0.55);
+  /* Màn che NHẸ cho popup neo cạnh nút — nó không chiếm cả màn hình như hộp
+     đăng nhập, nên che đậm bằng --overlay là làm cả app tối sầm cho một bảng
+     nhỏ. Vừa đủ để chữ phía sau lùi lại. */
+  --overlay-nhe: rgba(0, 0, 0, 0.38);
+  --overlay-strong: rgba(0, 0, 0, 0.80);
+  /* Mực đặt TRÊN mấy lớp phủ đen ở trên: số slide trên ảnh thu nhỏ, nút đóng
+     video. Lớp phủ đen ở CẢ hai theme nên mực này KHÔNG được lật theo theme —
+     cùng họ với --yt-chu và --hd-video-chu. ⚠ Đừng dùng --hero-chu cho việc
+     này: nó là mực ĐEN đặt trên tấm nền SÁNG của khối mở đầu, để lên lớp phủ
+     đen là đen trên đen (đã dính: số slide trên ảnh thu nhỏ không nhìn thấy). */
+  --chu-tren-phu: #f2f5ff;
+  --shadow: none;
+  /* Ba mức này là của NỀN TỐI. Bóng đen trên nền gần đen thì phải đậm hơn hẳn
+     bóng đen trên nền trắng mới thấy được — nền sáng khai lại giá trị nhẹ ở
+     khối body.theme-light bên dưới. */
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.60);
+  --shadow-lg: 0 28px 76px rgba(0, 0, 0, 0.72);
+
+  /* ── Phông & cỡ chữ ────────────────────────────────────────────────────
+   * Thang 9 bậc. KHÔNG thêm cỡ lẻ (12.5px, 13.5px…) — thiếu bậc thì
+      thêm token ở đây để cả app cùng đổi.
+   */
+  --font-ui: Inter, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 20px;
+  --text-3xl: 22px;
+
+  /* ── Độ đậm & dòng ─────────────────────────────────────────────────────
+   */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  /* Thang DỪNG ở 700 — cố ý không có 800/900.
+     Trước đây 99 trên 137 chỗ khai độ đậm nằm ở 800–900, nên gần như mọi chữ
+     trong app đều gào lên và chẳng còn gì phân cấp được nữa. Đối chiếu CSS
+     chạy thật của chatgpt.com: 400 dùng 42 chỗ, 700 dùng 26, 600 dùng 22,
+     500 dùng 22 — còn 900 đúng MỘT chỗ; và bộ OpenAI Sans của họ chỉ nạp tới
+     Bold, trong máy không hề có 800/900. Xoá hẳn hai bậc trên chứ không chỉ
+     ngừng dùng, để lần sau không ai vô tình gọi lại. */
+  --leading-display: 0.92;
+  --leading-none: 1;
+  --leading-tight: 1.3;
+  --leading-snug: 1.45;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+
+  /* ── Khoảng cách ───────────────────────────────────────────────────────
+   * Thang chẵn 2→40. Số lẻ (7, 9, 11, 13…) đã gom hết về đây.
+   */
+  --sp-2: 2px;
+  --sp-4: 4px;
+  --sp-6: 6px;
+  --sp-8: 8px;
+  --sp-10: 10px;
+  --sp-12: 12px;
+  --sp-14: 14px;
+  --sp-16: 16px;
+  --sp-18: 18px;
+  --sp-20: 20px;
+  --sp-24: 24px;
+  --sp-28: 28px;
+  --sp-32: 32px;
+  --sp-40: 40px;
+
+  /* ── Bo góc & chuyển động ──────────────────────────────────────────────
+   */
+  /* Bậc nhỏ nhất, cho hình rất bé mà 8px sẽ bo thành gần tròn — ví dụ ô vuông
+     10px của nút Dừng trên thanh chat (`ai-tao.css`). */
+  --radius-xs: 3px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --dur-fast: 0.14s;
+  --dur-slow: 0.25s;
+
+  /* ── Bố cục ───────────────────────────────────────────────────────────
+   * Kích thước khung mà NHIỀU chỗ phải khớp nhau.
+   */
+  /* Thanh điều hướng có HAI bề ngang. Lề trái của body bám theo --nav-w (mức
+     THU GỌN) và KHÔNG đổi khi thanh mở ra — thanh phủ lên nội dung chứ không
+     đẩy nó. Đẩy thì mỗi lần rê chuột qua là cả trang chạy ngang một nhịp. */
+  --nav-w: 56px;          /* thu gọn: chỉ icon; body chừa lề trái theo số này */
+  /* 214px chứ không phải 190px: dòng 'Create - Generate - Inspire' dưới tên
+     thương hiệu đo được ~140px ở 10px, mà 190px chỉ chừa 136px cho phần chữ —
+     thiếu 4px là cụt mất chữ cuối, chụp ảnh mới thấy. */
+  --nav-w-mo: 214px;      /* mở ra khi rê chuột: icon + nhãn */
+  /* Ba cột của trang biên tập (xem `bien-tap.css`).
+     Cột phải 320px: lưới vị trí đèn là 5 cột, mỗi ô tối thiểu ~26px cộng
+     khe và lề hai bên — hẹp hơn là lưới vỡ thành hai hàng. */
+  /* 340px: cột danh sách chỉ cần đủ cho tên dự án + một hàng meta; chỗ dôi ra
+     cho cột công cụ bên phải, nơi có lưới 15 vị trí và các ô chọn. */
+  --bt-cot-trai: 340px;
+  --bt-cot-phai: 360px;
+  /* Màu của ngọn đèn đang sửa trong bảng phải. `bang-sua.js` GHI ĐÈ biến này
+     trên từng khối `.bs-den` bằng chính giá trị ô màu, để chấm đang chọn tô
+     đúng màu đèn đó. Giá trị ở đây chỉ là nước lùi cho lúc chưa có deck nào. */
+  --bs-den-mau: var(--brand);
+  /* Phần đã chạy của thanh tiến độ dưới khung xem trước. `thanh-phat.js` ghi
+     đè biến này mỗi 100ms; giá trị ở đây là lúc chưa chạy gì. */
+  --tp-phan: 0%;
+  /* ── Timeline dưới khung xem trước (render/timeline.js, css/timeline.css) ──
+   * NHẸ MẮT là yêu cầu chính (chủ dự án 09/10/2026: "nhìn rối mắt quá"): khối
+   * nền NHẠT, không viền, chữ cùng họ màu; màu chỉ để PHÂN LOẠI track như
+   * Premiere (hình xanh dương · phụ đề tím · giọng xanh lá · nhạc xanh ngọc ·
+   * tiếng chuyển hổ phách), không để gây chú ý. Mỗi track một cặp nền/chữ —
+   * nét sóng âm dùng màu chữ. Nền sáng khai lại ở body.theme-light. */
+  --tl-cao: 300px;          /* chiều cao mặc định; timeline.js ghi đè trên .dashboard-shell */
+  --tl-dau-w: 190px;        /* cột tên track bên trái — đủ bốn nút + Hình · + Tiếng · + Chữ · + Giọng (GĐ2.1) */
+  --tl-nen: #1c1b1a;
+  --tl-dau: #1c1b1a;
+  --tl-lan: #1c1b1a;
+  --tl-vach: rgba(255, 255, 255, 0.07);
+  --tl-chu-thuoc: rgba(244, 244, 245, 0.45);
+  --tl-hinh: #24364b;
+  --tl-hinh-chu: #b9d3f0;
+  --tl-phude: #352a3b;
+  --tl-phude-chu: #dcc3e2;
+  --tl-giong: #1f342b;
+  --tl-giong-chu: #7ccaa0;
+  --tl-nhac: #1d3236;
+  --tl-nhac-chu: #78c2c8;
+  --tl-sfx: #3a3122;
+  --tl-sfx-chu: #e3c48a;
+  --tl-uoc: rgba(255, 255, 255, 0.07);  /* sọc chéo của khối ƯỚC TÍNH (chưa dựng) */
+  --tl-dau-phat: #4c9dff;  /* đầu phát — xanh như Premiere */
+  --tl-chon: #4c9dff;      /* viền khối slide đang ở dưới đầu phát */
+  /* Khối NGƯỜI DÙNG thêm vào (trình dựng): tím nhạt cho hình, xanh ngọc cho tiếng —
+     khác hẳn khối sinh từ deck để biết ngay cái nào sửa được. */
+  --tl-lop: #33284a;
+  --tl-lop-chu: #cdb8f5;
+  --tl-tieng-nd: #1d3a3f;
+  --tl-tieng-nd-chu: #74c9d2;
+  --tl-tay: rgba(255, 255, 255, 0.55);   /* tay cắt mép khối */
+  --tl-danh-dau: #e8b04a;                 /* cờ điểm đánh dấu trên thước (phím M) */
+  --tl-ket-thuc: #f0727a;                 /* vạch "Kết thúc" của dự án video trống (render/timeline.js) */
+  --tl-chuyen: rgba(255, 255, 255, 0.22); /* dải chuyển cảnh vào/ra ở hai đầu khối */
+  --tl-chuyen-noi: rgba(255, 255, 255, 0.42); /* … hoà với khối liền trước */
+  --tl-kf: #ffffff;                       /* hình thoi keyframe trên khối đang chọn */
+  --dx-chon: #4c9dff;                     /* khung chọn trên màn hình xem trước */
+  --dx-qua-cuoi: #000000;                 /* quá cuối video slide: bản xuất là nền ĐEN tuyệt đối (tpad) */
+  --tv-phan: 0%;                          /* % tạo bản xem trước của một ô Thư viện — thu-vien.js ghi đè trên từng ô */
+  /* Thanh trên nằm NGANG HẾT màn hình và là position:fixed, nên ba chỗ phải
+     khớp cùng con số này: chiều cao của chính nó, lề trên của body, và mép
+     trên của thanh điều hướng dọc. */
+  --topbar-h: 58px;
+
+  /* ── Khối đầu trang Dựng video ────────────────────────────────────────
+   * Khối này có ảnh nền riêng nên KHÔNG dùng --bg/--surface: nền của nó là
+      màu mép trái của chính tấm ảnh, lấy bằng cách đọc pixel chứ không ước
+      lượng bằng mắt. Lệch màu là thấy rõ vệt nối giữa ảnh và nền.
+   */
+  --rl-dau-bg: #092576;
+  --rl-dau-chip: rgba(255, 255, 255, 0.14);
+  --rl-dau-nhan: #7dd0f7;
+  --rl-dau-anh: url("../assets/nen-dung-video-toi.webp");
+
+  /* ── Trang Hướng dẫn ───────────────────────────────────────────────────
+   * Ba tấm nền khối mở đầu (Hướng dẫn, Template, Nâng cấp) do chủ dự án đưa,
+   * dùng CHUNG cho cả hai theme — khai MỘT LẦN ở đây, không ghi đè bên
+   * body.theme-light. Có đợt tôi tự sinh thêm bản phủ tối cho mỗi tấm; chủ dự
+   * án bảo "cứ để mầu nguyên bản dùng chung cho cả theme sáng tối", nên đã xoá
+   * cả ba. Hệ quả bắt buộc: chữ ĐẶT TRÊN mấy tấm này không được lật màu theo
+   * theme — xem --hero-chu* và --chu-gradient bên dưới.
+   */
+  --hd-hero-anh: url("../assets/hd-nen-sang.webp");
+  --tpl-hero-anh: url("../assets/tpl-nen-sang.webp");
+  --tt-hero-anh: url("../assets/tt-nen-sang.webp");
+  /* Thẻ "Xem video tổng quan": nền là ẢNH, dùng CHUNG cho cả hai theme — nó là
+     lời mời bấm duy nhất của cột phải nên được phép sáng cả ở nền tối.
+     `--hd-video-nen` giữ lại làm màu lót: ảnh chưa tải xong (hoặc hỏng) thì chữ
+     trắng vẫn có nền đậm để đọc, không rơi xuống nền trang. */
+  --hd-video-anh: url("../assets/hd-video-nen.webp");
+  --hd-video-nen: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
+  --hd-video-chu: #f2f5ff;
+  --hd-video-phu: rgba(242, 245, 255, 0.72);
+  /* Nút play trên ảnh video: đỏ của YouTube. Cố định cả hai theme — đây là dấu
+     hiệu "bấm vào ra YouTube", đổi màu theo nền là mất nghĩa. */
+  /* Dải màu cho cụm chữ được nhấn ở khối mở đầu ("video ấn tượng", "Plus").
+     CỐ ĐỊNH một bản cho cả hai theme.
+     ⚠ Bản trước khai riêng cho nền tối (#7dd0f7 → #b39bff), từ hồi mỗi theme
+     còn một tấm nền riêng. Nay cả hai theme dùng chung TẤM NỀN SÁNG, nên dải
+     pastel ấy thành chữ sáng trên nền sáng: tính ra 1,53:1 và 1,96:1 — gần như
+     không đọc được. Dải xanh→tím đậm dưới đây ăn 4,2:1 và 5,1:1 trên chính tấm
+     nền đó, và cùng họ màu với thẻ "Xem video tổng quan". */
+  --chu-gradient: linear-gradient(96deg, #2f6df6 0%, #7c4dff 100%);
+  /* Chữ + huy hiệu đặt TRÊN tấm nền sáng của khối mở đầu (Template, Hướng dẫn). */
+  --hero-chu: #131315;
+  --hero-chu-mo: rgba(19, 19, 21, 0.78);
+  --hero-chip-nen: rgba(9, 61, 130, 0.10);
+  --hero-chip-chu: #1668c9;
+  --yt-do: #ff0033;
+  --yt-chu: #ffffff;
+  --hd-video-nut-chu: #17225a;
+  /* Trình phát video hướng dẫn (guide.js#xemVideo): khung ĐEN ở cả hai theme — video luôn nền đen, chữ + nút
+     đóng trên thanh đầu là mực sáng theo khung, không lật theo theme. */
+  --hd-xem-nen: #000000;
+  --hd-xem-x: rgba(255, 255, 255, 0.75);
+  --hd-xem-x-nen: rgba(255, 255, 255, 0.14);
+  /* Thẻ "Vẫn cần hỗ trợ?": cùng họ nhưng NHẠT HƠN HẲN — nó là lối thoát khi bí,
+     không phải việc nên làm trước. Hai thẻ cùng độ đậm thì tranh nhau. */
+  --hd-hotro-nen: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(167, 139, 250, 0.14) 100%);
+  --hd-meo-nen: rgba(56, 189, 248, 0.10);
+
+  /* ── Lớp chồng (z-index) ───────────────────────────────────────────────
+   * TOÀN BỘ thứ tự chồng của app nằm ở đây — thêm lớp mới phải xen
+      vào đúng chỗ, đừng viết số trong tệp khác.
+   */
+  --z-base: 1;
+  --z-nav: 10;
+  --z-topbar: 11;         /* thanh trên phủ lên thanh dọc ở chỗ hai cái gặp nhau */
+  /* ⚠ TỪNG CÓ BỐN MỨC Ở ĐÂY (20–23). Góc dưới phải từng chồng bốn thứ: số hiệu
+     bản, nút trợ giúp, bảng trợ giúp, ô kết quả cập nhật — và chúng phải RỜI
+     NHAU, vì hoà số thì thứ tự vẽ rơi vào thứ tự DOM, tức đổi theo thứ tự nạp
+     module. Ngày 16/09/2026 ô số hiệu và ô kết quả cập nhật đã gỡ khỏi góc
+     (xem `version-badge.js`), nên `--z-badge` / `--z-badge-menu` không còn ai
+     dùng và xoá theo. Góc đó nay chỉ còn nút trợ giúp; đưa gì vào lại thì khai
+     lại số RIÊNG cho nó, đừng dùng chung với hai mức dưới đây. */
+  --z-hub: 21;            /* #bee-hub — nút trợ giúp ở góc dưới bên phải */
+  --z-hub-menu: 22;       /* #bee-hub-menu — bảng bung của nút trợ giúp */
+  --z-pop: 30;
+  --z-zoom: 31;
+  --z-bar: 40;
+  --z-toast: 50;
+  --z-guide: 60;
+  --z-checkout: 61;
+  --z-viewer: 62;
+  --z-modal: 63;
+}
+
+/* ══ NỀN SÁNG — chỉ khai lại biến ĐỔI theo theme ══════════════════════════ */
+body.theme-light {
+  color-scheme: light;
+
+  /* Nền & bề mặt */
+  --bg: #ffffff;
+  --body-bg: #ffffff;
+  /* ĐỤC HẲN, không phải 0.92 như trước.
+     --panel là nền của mọi thứ NỔI LÊN: bảng chọn giọng, popup ID, popup tài
+     khoản, bảng thanh toán, trang hướng dẫn. Để 92% thì 8% nội dung phía sau
+     lọt qua — trên nền trắng trơn không ai thấy, nhưng bảng chọn giọng xổ
+     xuống ĐÈ LÊN ba nút nguồn giọng đọc thì nhìn rõ mồn một nút nằm sau chữ.
+     Nền tối vốn đã đục (#32312f) nên chỉ nền sáng dính lỗi này. */
+  --panel: #ffffff;
+  --panel-mo: rgba(255, 255, 255, 0.86);
+  --surface: rgba(0, 0, 0, 0.035);
+  --surface-strong: rgba(0, 0, 0, 0.065);
+  --surface-mo: rgba(0, 0, 0, 0.012);
+  --tab-mo: #ffffff;
+  --option-bg: #ffffff;
+  --field-bg: #ffffff;
+
+  /* Chữ */
+  --text: #131315;
+  --text-soft: rgba(19, 19, 21, 0.80);
+  --text-faint: rgba(19, 19, 21, 0.66);
+  --text-mo: rgba(19, 19, 21, 0.40);
+
+  /* Viền */
+  --line: rgba(0, 0, 0, 0.10);
+  --line-mo: rgba(0, 0, 0, 0.05);
+  --control-line: rgba(0, 0, 0, 0.14);
+  --control-line-soft: rgba(0, 0, 0, 0.10);
+  --control-line-faint: rgba(0, 0, 0, 0.07);
+  --vien-mo: rgba(0, 0, 0, 0.045);
+  --control-line-noi: rgba(0, 0, 0, 0.20);
+
+  /* Nhấn & thương hiệu */
+  --accent: #1b1b1f;
+  --accent-contrast: #ffffff;
+  --accent-glow: rgba(0, 0, 0, 0.10);
+
+  /* Trạng thái */
+  --ok: #22c55e;
+  --warn: #b45309;
+  --brand-nhat: #e8effe;
+  --brand-dam: #2b56c9;
+  --brand-mo: rgba(43, 86, 201, 0.035);
+  --brand-vien: rgba(43, 86, 201, 0.26);
+  /* Nút "Dừng tạo" — nền sáng. */
+  --nut-dung-nen: #fff1f2;
+  --nut-dung-vien: #fbb6bd;
+  --nut-dung-chu: #e5484d;
+  --chon: #0075ff;
+  --vang: #b8860b;
+  --vang-sang: #ffd970;
+  --danger: #dc2626;
+  --info: #0284c7;
+  --status-idle: #64748b;
+  --status-wait: #0ea5e9;
+  --status-run: #0284c7;
+  --status-wip: #7c3aed;
+  --good-text: #15904d;
+  --warn-text: #7a5600;
+  --danger-text: #a32626;
+  --delete-text: #a32626;
+
+  /* Thành phần */
+  --primary-bg: #131315;
+  --primary-text: #ffffff;
+  --field-file-bg: rgba(255, 251, 244, 0.62);
+  --advanced-bg: rgba(255, 251, 244, 0.46);
+
+  /* Khối đầu trang Dựng video */
+  --rl-dau-bg: #e8f4fd;
+  --rl-dau-chip: rgba(9, 61, 130, 0.10);
+  --rl-dau-nhan: #1668c9;
+  --rl-dau-anh: url("../assets/nen-dung-video-sang.webp");
+
+  /* Trang Hướng dẫn — nền sáng.
+     KHÔNG khai lại --hd-hero-anh / --tpl-hero-anh / --tt-hero-anh ở đây: ba
+     tấm nền dùng chung cho cả hai theme, khai một lần ở :root. */
+  --hd-video-nen: linear-gradient(135deg, #2f6df6 0%, #7c4dff 100%);
+  --hd-video-chu: #ffffff;
+  --hd-video-phu: rgba(255, 255, 255, 0.78);
+  --hd-video-nut-chu: #17225a;
+  --hd-hotro-nen: linear-gradient(135deg, #eaf3ff 0%, #f3ecff 100%);
+  --hd-meo-nen: #eaf4ff;
+  --nut-tao-anh: none;
+
+  /* Timeline — nền sáng: khối pastel, chữ đậm cùng họ màu (xem :root). */
+  --tl-nen: #ffffff;
+  --tl-dau: #ffffff;
+  --tl-lan: #ffffff;
+  --tl-vach: rgba(0, 0, 0, 0.07);
+  --tl-chu-thuoc: rgba(19, 19, 21, 0.42);
+  --tl-hinh: #e6effa;
+  --tl-hinh-chu: #2a5c96;
+  --tl-phude: #f2e9f4;
+  --tl-phude-chu: #7b4686;
+  --tl-giong: #e4f3ea;
+  --tl-giong-chu: #3f9a68;
+  --tl-nhac: #e3f2f3;
+  --tl-nhac-chu: #3b8f97;
+  --tl-sfx: #fbf1de;
+  --tl-sfx-chu: #8f6418;
+  --tl-uoc: rgba(0, 0, 0, 0.05);
+  --tl-dau-phat: #1f6fe5;
+  --tl-chon: #1f6fe5;
+  --tl-lop: #ece4fb;
+  --tl-lop-chu: #5b3f9a;
+  --tl-tieng-nd: #def2f4;
+  --tl-tieng-nd-chu: #2f7f88;
+  --tl-tay: rgba(0, 0, 0, 0.35);
+  --tl-danh-dau: #c98a12;
+  --tl-ket-thuc: #cf3a44;
+  --tl-chuyen: rgba(0, 0, 0, 0.14);
+  --tl-chuyen-noi: rgba(0, 0, 0, 0.28);
+  --tl-kf: #1f2933;
+
+  /* Lớp phủ & bóng — nhẹ hơn hẳn bản nền tối, xem chú thích ở :root. */
+  --overlay-nhe: rgba(0, 0, 0, 0.22);
+  --shadow: none;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 28px 76px rgba(0, 0, 0, 0.42);
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trước và sau — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu trước và sau chia đôi theo chiều ngang: nửa trên tông xám nguội cho trước, nửa dưới tông ấm cho sau, hai ảnh thật cùng khung hình và một slide so sánh hai con số có mũi tên." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <!-- ══ SLIDE 1 · MÓC ═════════════════════════════════════════════
+           Câu móc nêu KHOẢNG CÁCH giữa hai đầu, chưa nói vì sao. Người xem ở
+           lại để biết đoạn giữa đã xảy ra chuyện gì.
+           ⚠ Hai ảnh là ảnh THẬT của NASA, Public domain. Nguồn ghi trong
+           source/source.md. Ảnh 1964 vốn là ảnh đen trắng — giữ nguyên, đừng
+           tô màu: chính cái đen trắng đó làm "quá khứ" đọc ra ngay. -->
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg sp-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up sp-doi-anh">
+          <figure class="sp-anh sp-anh-truoc"><img src="anh/aral-1964.jpg" alt="Biển Aral năm 1964, ảnh vệ tinh NASA" /><figcaption>1964</figcaption></figure>
+          <span class="sp-mui" aria-hidden="true"></span>
+          <figure class="sp-anh sp-anh-sau"><img src="anh/aral-2026.jpg" alt="Biển Aral năm 2026, ảnh vệ tinh NASA" /><figcaption>2026</figcaption></figure>
+        </div>
+        <h1 class="slide-element fade-up sp-hook">Sáu mươi hai năm,<br/><em>một vùng biển<br/>biến mất</em></h1>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 2 · TRƯỚC ══════════════════════════════════════════
+           Lớp `sp-truoc` trên chính thẻ `.slide`: nền ngả xám nguội, nhãn và
+           số đổi sang tông lạnh. Cặp với `sp-sau` ở slide 4. -->
+      <div class="slide sp-truoc" data-slide-id="1">
+        <div class="slide-bg sp-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="sp-ghost" aria-hidden="true">1964</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sp-khoi">
+          <span class="sp-nhan">Trước</span>
+          <figure class="sp-anh sp-anh-to"><img src="anh/aral-1964.jpg" alt="Biển Aral năm 1964 khi còn đầy nước" /></figure>
+        </div>
+        <div class="slide-element fade-up sp-mo-ta">
+          <b>Hồ lớn thứ tư thế giới</b>
+          <span>Biển Aral, giữa Kazakhstan và Uzbekistan</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3 · VIỆC ĐÃ LÀM ════════════════════════════════════
+           Ba gạch đầu dòng, đánh số. Đây là khúc trả lời "vì sao" — thiếu nó
+           thì hai tấm ảnh chỉ là một trò ảo thuật chứ không phải một câu
+           chuyện, và người xem không rút được gì mang đi. -->
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg sp-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up sp-dau-nho">
+          <span class="sp-nhan sp-nhan-giua">Đã làm gì</span>
+          <h2 class="sp-tieu">Nước bị lấy đi để trồng bông</h2>
+        </div>
+        <ol class="slide-element fade-up sp-ds">
+          <li><span class="sp-so" aria-hidden="true">1</span>Chuyển dòng <b>Amu Darya</b> và <b>Syr Darya</b>, hai con sông nuôi hồ</li>
+          <li><span class="sp-so" aria-hidden="true">2</span>Dẫn nước đi tưới <b>bông</b> trên đất khô Uzbekistan</li>
+          <li><span class="sp-so" aria-hidden="true">3</span>Hệ thống tưới <b>rò rỉ</b>, mất thêm nước dọc đường</li>
+        </ol>
+        <p class="slide-element fade-up sp-luuy">Bắt đầu từ thập niên <b>1960</b> và kéo dài hàng chục năm.</p>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 4 · SAU ════════════════════════════════════════════ -->
+      <div class="slide sp-sau" data-slide-id="3">
+        <div class="slide-bg sp-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="sp-ghost" aria-hidden="true">2026</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sp-khoi">
+          <span class="sp-nhan">Sau</span>
+          <figure class="sp-anh sp-anh-to"><img src="anh/aral-2026.jpg" alt="Biển Aral năm 2026, phần lớn đã thành sa mạc" /></figure>
+        </div>
+        <div class="slide-element fade-up sp-mo-ta">
+          <b>Mất khoảng 90% lượng nước</b>
+          <span>Hồ vỡ thành bốn vũng rời nhau</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 5 · SO SÁNH TRỰC TIẾP ══════════════════════════════
+           ⚠ Đây là slide CHIA ĐÔI, và là lý do mẫu này tồn tại. Hai con số
+           đặt cạnh nhau có mũi tên ở giữa: nửa trên tông xám nguội, nửa dưới
+           tông ấm. Đừng đổi thành hai cột — chia NGANG mới ra "trước rồi sau",
+           chia dọc chỉ ra "cái này và cái kia". -->
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg sp-bg sp-bg-doi"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up sp-dau-nho">
+          <span class="sp-nhan sp-nhan-giua">Trước và sau</span>
+        </div>
+        <div class="slide-element fade-up sp-canh">
+          <div class="sp-canh-o sp-canh-truoc">
+            <img src="anh/aral-1964.jpg" alt="" />
+            <div class="sp-canh-so"><b>100%</b><span>1964 · đầy nước</span></div>
+          </div>
+          <span class="sp-canh-mui" aria-hidden="true"></span>
+          <div class="sp-canh-o sp-canh-sau">
+            <img src="anh/aral-2026.jpg" alt="" />
+            <div class="sp-canh-so"><b>~10%</b><span>2026 · còn lại</span></div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6 · LỜI CHỐT ═══════════════════════════════════════
+           Kết bằng một sự thật mở ra lối đi, không bằng lời răn. Ở đây là
+           phần phía bắc đang quay lại — có thật, có số, và nó làm cả video
+           thôi nặng nề mà vẫn không nói dối. -->
+      <div class="slide sp-sau" data-slide-id="5">
+        <div class="slide-bg sp-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <h2 class="slide-element fade-up sp-ket">Phần phía bắc <em>đang quay lại</em></h2>
+        <div class="slide-element fade-up sp-chot">
+          <div class="sp-chot-hop"><b>2005</b><span>đập Kok-Aral dài 13 km<br/>giữ nước lại cho phần bắc</span></div>
+          <p class="sp-luuy">Năm 2025 lượng nước phần bắc tăng <b>42%</b>.</p>
+        </div>
+        </div>
+      </div>
+      </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  </div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

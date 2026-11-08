@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16 như mọi deck cũ.
+     Khai "ngang" thì khung slide là 1232×693 và app dựng ra 1920×1080.
+     Đổi thẻ này KHÔNG đủ để đổi khổ — toàn bộ style.css bên cạnh được thiết kế
+     cho khung ngang, gỡ thẻ ra là bố cục vỡ. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Bản tin &amp; số liệu — mẫu nền sáng 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font này. `rewriteFontLinks()` đổi chúng sang font ĐÓNG
+     GÓI lúc quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. TRANG NHẤT — 1 câu script ═══════════════════════════════════
+         Slide đầu có ĐÚNG 1 câu thì bảng nhịp gộp mọi phần tử vào một cú bấm
+         (HOOK_SENTENCE_COUNTS trong timeline.py), nên ba phần tử ở đây hiện
+         cùng lúc — cố ý, để mở bản tin dứt khoát như một trang nhất. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="trang-nhat">
+      <div class="nen nen-1"></div>
+      <div class="than">
+        <div class="slide-element bang-tin">
+          <span class="cham-song"></span>Bản tin công nghệ · 18/09
+        </div>
+        <div class="slide-element tieu-de-lon">Chip nội địa<br />vượt mốc sản lượng</div>
+        <div class="slide-element phu-de">Ba con số · Hai phản ứng · Một câu hỏi còn bỏ ngỏ</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. TÓM TẮT ĐẦU — 3 câu / 3 phần tử ═════════════════════════════ -->
+    <div class="slide" data-slide="1" data-bo-cuc="noi-dung">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="nhan">Chuyện gì đã xảy ra</div>
+        <div class="slide-element tieu-de">Sản lượng quý ba vượt kế hoạch cả năm</div>
+        <ul class="gach">
+          <li class="slide-element">Nhà máy chạy <b>ba ca liên tục</b> từ đầu tháng bảy</li>
+          <li class="slide-element">Đơn đặt hàng đã kín tới hết quý một năm sau</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 3. BIỂU ĐỒ CỘT — 3 câu / 3 phần tử ═════════════════════════════
+         ⚠ Biểu đồ vẽ bằng SVG ĐẶT THẲNG TRONG HTML, không phải thư viện và
+         cũng không phải ảnh. Ba lý do:
+           · deck phải dựng được OFFLINE — thư viện tải qua mạng là hỏng bản
+             dựng, ảnh thì không đổi được màu theo bảng "Tông màu";
+           · mỗi cột là một `.slide-element` nên nó mọc lên đúng nhịp câu nói;
+           · sửa số liệu là sửa thẳng trong HTML, không cần công cụ nào.
+         Mỗi cột dùng `--cao` để khai chiều cao theo phần trăm; CSS lo phần
+         còn lại. -->
+    <div class="slide" data-slide="2" data-bo-cuc="bieu-do">
+      <div class="nen nen-3"></div>
+      <div class="than">
+        <div class="nhan">Sản lượng theo quý</div>
+        <div class="tieu-de">Quý ba bỏ xa kế hoạch</div>
+        <div class="bieu-do">
+          <div class="truc">
+            <span>150%</span><span>100%</span><span>50%</span><span>0</span>
+          </div>
+          <div class="cot-vung">
+            <div class="luoi-ngang"></div>
+            <div class="slide-element cot" style="--cao: 41%">
+              <i></i><b>62%</b><span>Quý 1</span>
+            </div>
+            <div class="slide-element cot" style="--cao: 59%">
+              <i></i><b>89%</b><span>Quý 2</span>
+            </div>
+            <div class="slide-element cot noi-bat" style="--cao: 85%">
+              <i></i><b>128%</b><span>Quý 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. TRÍCH DẪN — 2 câu / 2 phần tử ═══════════════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="trich-dan">
+      <div class="nen nen-4"></div>
+      <div class="than giua">
+        <div class="slide-element loi-dan">Chúng tôi không tăng ca để chạy theo đơn hàng.
+          Chúng tôi tăng ca vì lần đầu tiên có đủ đơn hàng để mà chạy.</div>
+        <div class="slide-element nguoi-noi">
+          <span class="ten">Giám đốc nhà máy</span>
+          <span class="chuc">Trả lời phỏng vấn hôm thứ ba</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5. HAI PHÍA — 3 câu / 3 phần tử ════════════════════════════════
+         Mỗi thẻ có một icon SVG vẽ tay: mũi tên lên cho phía ủng hộ, dấu chấm
+         than cho phía dè dặt. Icon ăn `currentColor` nên đổi tông là đổi theo. -->
+    <div class="slide" data-slide="4" data-bo-cuc="hai-phia">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan">Hai phản ứng</div>
+        <div class="slide-element tieu-de">Người mừng, người dè dặt</div>
+        <div class="cot-doi">
+          <div class="slide-element the the-tot">
+            <span class="the-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 17 10 11l4 4 6-7" /><path d="M14 4h6v6" />
+              </svg>
+            </span>
+            <div class="the-nhan">Phía ủng hộ</div>
+            <div class="the-chu">Chuỗi cung ứng trong nước <b>bớt phụ thuộc nhập khẩu</b></div>
+          </div>
+          <div class="slide-element the the-lo">
+            <span class="the-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3 2.5 20h19L12 3Z" /><path d="M12 10v4" /><path d="M12 17.5h.01" />
+              </svg>
+            </span>
+            <div class="the-nhan">Phía dè dặt</div>
+            <div class="the-chu">Sản lượng tăng nhanh nhưng <b>biên lợi nhuận vẫn mỏng</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 6. CÂU HỎI CÒN LẠI — 3 câu / 3 phần tử ═════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="noi-dung">
+      <div class="nen nen-6"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Còn bỏ ngỏ</div>
+        <div class="slide-element tieu-de">Giữ nhịp được bao lâu?</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Ba ca liên tục là <b>giải pháp ngắn hạn</b>, không phải năng lực thật</li>
+          <li class="slide-element">Chưa có kế hoạch mở rộng dây chuyền nào được công bố</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 7. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="6" data-bo-cuc="trang-nhat">
+      <div class="nen nen-7"></div>
+      <div class="than giua">
+        <div class="slide-element tieu-de-lon">Theo dõi số quý sau</div>
+        <div class="slide-element phu-de">Bản tin cập nhật vào tuần đầu mỗi tháng</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

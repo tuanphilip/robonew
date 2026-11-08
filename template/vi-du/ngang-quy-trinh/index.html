@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết.
+     Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Quy trình từng bước — mẫu hướng dẫn 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         Một câu thì bảng nhịp gộp mọi phần tử vào một cú bấm. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+      <div class="than giua">
+        <div class="slide-element tieu-de-lon">Đưa một bản vá<br />lên máy chủ thật</div>
+        <div class="slide-element phu-de">Bốn bước · Mỗi bước một việc · Không bỏ bước nào</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. ĐƯỜNG ĐI — 4 câu / 4 phần tử ════════════════════════════════
+         Bố cục chữ ký: bốn chặng nằm NGANG trên một đường ray. Khung dọc 9:16
+         phải xếp dọc thành danh sách, và người xem mất luôn cảm giác "đi từ
+         trái sang phải" — thứ làm một quy trình đọc ra là quy trình. -->
+    <div class="slide" data-slide="1" data-bo-cuc="duong-ray">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="nhan">Toàn cảnh</div>
+        <div class="ray">
+          <div class="slide-element chang">
+            <div class="chang-dau"><span class="chang-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5 11.2 13.8 15.5 9.5"/><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/></svg></span><div class="chang-so">1</div></div>
+            <div class="chang-ten">Kiểm tại máy</div>
+            <div class="chang-chu">Chạy hết bộ kiểm trước khi đẩy đi</div>
+          </div>
+          <div class="slide-element chang">
+            <div class="chang-dau"><span class="chang-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="2.6"/><circle cx="6.5" cy="17.5" r="2.6"/><circle cx="17.5" cy="6.5" r="2.6"/><path d="M6.5 9.1v5.8"/><path d="M9.1 6.5h5.8"/></svg></span><div class="chang-so">2</div></div>
+            <div class="chang-ten">Đẩy lên nhánh</div>
+            <div class="chang-chu">Một nhánh riêng, không đẩy thẳng vào chính</div>
+          </div>
+          <div class="slide-element chang">
+            <div class="chang-dau"><span class="chang-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19V9"/><path d="M12 19V5"/><path d="M19 19v-6"/><path d="M3 21h18"/></svg></span><div class="chang-so">3</div></div>
+            <div class="chang-ten">Chạy thử</div>
+            <div class="chang-chu">Máy chủ thử phải giống máy thật</div>
+          </div>
+          <div class="slide-element chang">
+            <div class="chang-dau"><span class="chang-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7.5 9.5 4.5 4.5 4.5-4.5"/><path d="M4 17.5v1.5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/></svg></span><div class="chang-so">4</div></div>
+            <div class="chang-ten">Mở dần</div>
+            <div class="chang-chu">Mở cho một phần người dùng trước</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. BƯỚC 1 — 3 câu / 3 phần tử ══════════════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="noi-dung">
+      <div class="nen nen-3"></div>
+      <div class="than">
+        <div class="nhan">Bước 1 · Kiểm tại máy</div>
+        <div class="slide-element tieu-de">Việc rẻ nhất làm trước</div>
+        <ul class="gach">
+          <li class="slide-element">Lỗi bắt được ở máy mình <b>rẻ hơn gấp nhiều lần</b> lỗi bắt trên máy chủ</li>
+          <li class="slide-element">Bộ kiểm chạy hai phút — ngắn hơn một lần đẩy hỏng rồi quay lại</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 4. BƯỚC 2 VÀ 3 — 2 câu / 2 phần tử ═════════════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="hai-buoc">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="nhan">Bước 2 và 3</div>
+        <div class="cot-doi">
+          <div class="slide-element the">
+            <div class="the-so">02</div>
+            <div class="the-nhan">Đẩy lên nhánh</div>
+            <div class="the-chu">Nhánh riêng cho mỗi thay đổi. Nhánh chính <b>luôn ở trạng thái chạy được</b>.</div>
+          </div>
+          <div class="slide-element the">
+            <div class="the-so">03</div>
+            <div class="the-nhan">Chạy thử</div>
+            <div class="the-chu">Máy chủ thử phải giống máy thật. Khác cấu hình là <b>kiểm cho vui</b>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5. BƯỚC 4 — 3 câu / 3 phần tử ══════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan">Bước 4 · Mở dần</div>
+        <div class="slide-element tieu-de">Đừng mở cho tất cả cùng lúc</div>
+        <ul class="gach">
+          <li class="slide-element">Mở cho <b>năm phần trăm</b> người dùng, xem số liệu một giờ</li>
+          <li class="slide-element">Số liệu yên thì mở tiếp; có gì lạ thì đóng lại trong một phút</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. CHỖ HAY HỎNG — 3 câu / 3 phần tử ════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="noi-dung">
+      <div class="nen nen-6"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Chỗ hay hỏng</div>
+        <div class="slide-element tieu-de">Bỏ bước vì đang vội</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Vá gấp mà bỏ bước chạy thử là <b>đổi một sự cố lấy hai</b></li>
+          <li class="slide-element">Lúc vội chính là lúc quy trình có giá trị nhất</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 7. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="6" data-bo-cuc="mo-dau">
+      <div class="nen nen-7"></div>
+      <div class="than giua">
+        <div class="slide-element tieu-de-lon">Bốn bước, mỗi lần</div>
+        <div class="slide-element phu-de">Làm đủ thì nhanh hơn làm tắt rồi sửa</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

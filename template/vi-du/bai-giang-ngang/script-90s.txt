@@ -1,0 +1,9 @@
+Bộ nhớ đệm giải thích trong ba phút.
+Bài này có ba phần. Đầu tiên là cache làm gì và vì sao nó nhanh. Sau đó là ba kiểu cache hay gặp, và cuối cùng là cái bẫy mà ai cũng dính ít nhất một lần.
+Cache là một bản sao để gần chỗ cần dùng. Thay vì hỏi lại nguồn gốc mỗi lần, chương trình giữ sẵn kết quả cũ. Lần sau cần đúng thứ đó thì lấy ngay, khỏi đi xa.
+Trong mã nguồn nó trông đơn giản đến bất ngờ. Hàm kiểm tra xem đã có kết quả chưa, có thì trả về luôn. Chưa có thì mới tính, rồi cất lại cho lần sau.
+Có ba tầng cache hay gặp nhất. Cache trong bộ nhớ chương trình thì nhanh nhất nhưng mất khi tắt máy. Cache trên đĩa thì sống lâu hơn nhưng chậm hơn vài chục lần.
+Con số đáng nhớ là đây. Đọc từ bộ nhớ nhanh hơn đọc từ ổ cứng khoảng một trăm lần, và nhanh hơn gọi qua mạng khoảng một triệu lần.
+Và đây là cái bẫy. Cache sai còn tệ hơn không có cache, vì chương trình vẫn chạy nhưng trả về dữ liệu cũ. Người dùng sửa xong không thấy gì đổi, còn bạn thì đi tìm lỗi ở chỗ hoàn toàn khác.
+Tóm lại ba ý. Cache đổi bộ nhớ lấy tốc độ, mỗi tầng có giá của nó, và thứ khó nhất không phải lưu mà là biết khi nào phải bỏ đi.
+Cảm ơn bạn đã xem hết. Phần sau mình sẽ nói về cách xoá cache cho đúng.

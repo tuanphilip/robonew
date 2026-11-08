@@ -1,0 +1,209 @@
+/*
+ * Thanh menu DÙNG CHUNG cho mọi màn hình: danh sách dự án, xem slide, xem
+ * video, và các trang thông báo.
+ *
+ * Vì sao tách ra file riêng: trước đây trang chính có `.dashboard-header` với
+ * logo to, còn lớp phủ xem slide tự dựng thanh riêng bằng màu viết cứng trong
+ * JS. Hai chỗ, hai bộ màu, thêm nút phải sửa hai nơi. Nay cùng một bộ class:
+ * thêm nút vào `.app-bar-tools` là mọi màn hình đều có.
+ *
+ * Dùng biến theme (`--panel`, `--line`, `--text`) nên tự đổi theo Light/Dark,
+ * kể cả khi nằm đè lên trang deck vốn luôn tối.
+ */
+
+.app-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  flex: 0 0 auto;
+  width: 100%;
+  /* index.html có luật chung `header { max-width: 920px; margin-bottom: 34px }`
+     từ bản giao diện gốc. Thanh này là thẻ <header> nên dính phải: trong lớp
+     phủ xem slide nó co lại đúng 920px giữa màn hình 1444px, đo mới thấy — nhìn
+     ảnh chụp chỉ thấy "nút không ra sát mép phải". Ghi đè tại đây, đừng sửa luật
+     chung vì các trang khác của giao diện gốc còn dựa vào nó. */
+  max-width: none;
+  margin-bottom: 0;
+  padding: var(--sp-10) var(--sp-14);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+/* Nút "về trang chính" — thay cho logo to trước đây.
+   Vuông, để icon không bị méo khi thêm nút khác vào cạnh. */
+.app-bar-home {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex: 0 0 auto;
+  padding: var(--sp-8);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+.app-bar-home:hover {
+  border-color: var(--control-line-soft);
+  background: var(--surface);
+}
+
+/* Dạng MŨI TÊN QUAY LẠI (lớp phủ xem slide / xem video). Vuông vắn hơn dạng
+   logo vì nó chỉ chứa một icon, không kèm chữ. */
+.app-bar-home.is-back {
+  width: 34px;
+  height: 34px;
+  justify-content: center;
+  padding: 0;
+  color: var(--text-faint);
+}
+.app-bar-home.is-back:hover { color: var(--text); }
+
+/* Ở TRANG CHỦ nó là LOGO, không phải nút.
+   Nghĩa gốc của nút này là "quay về danh sách"; đang đứng ở danh sách rồi thì
+   nó chẳng dẫn đi đâu — và đúng là KHÔNG có handler nào gắn vào `data-app-home`
+   (đã grep cả cây: chỉ có một chỗ khai trong index.html, không ai nghe). Nên bỏ
+   con trỏ tay và bỏ nền di chuột, để nó đừng mời người ta bấm vào chỗ vô nghĩa.
+   Trước 10/09/2026 chỗ này ẩn hẳn, vì thanh trên khi ấy chưa dùng tới.
+   Lớp phủ xem slide dựng nút riêng bằng app-bar.js nên không dính luật này. */
+.dashboard-header .app-bar-home { display: inline-flex; cursor: default; }
+.dashboard-header .app-bar-home:hover { border-color: transparent; background: none; }
+
+/* Thanh trên của trang chính có chiều cao CỐ ĐỊNH (--topbar-h) nên bỏ lề dọc —
+   giữ lại thì tổng vẫn đúng nhờ border-box, nhưng phần ruột bị bóp 20px. */
+.dashboard-header.app-bar { padding: 0 var(--sp-14); }
+
+/* Tên + dòng nhận diện xếp DỌC. Dòng dưới nhỏ và mờ: nó là chữ thương hiệu,
+   không phải thông tin ai cũng phải đọc. */
+.app-bar-hieu { display: grid; gap: 1px; text-align: left; line-height: var(--leading-tight); }
+.app-bar-hieu .app-bar-name {
+  font-size: var(--text-lg); font-weight: var(--weight-bold); letter-spacing: -0.02em;
+}
+.app-bar-hieu em {
+  color: var(--text-faint); font-size: var(--text-2xs); font-style: normal;
+  font-weight: var(--weight-semibold); letter-spacing: 0.04em;
+}
+
+/* Cụm bên PHẢI: chuông, đổi nền, tài khoản.
+   `margin-left: auto` chứ không dựa vào `.header-tools` co giãn ở giữa —
+   depDauTrang() bê cụm giữa đi chỗ khác, mất nó thì cụm này trôi về sát logo. */
+.app-bar-phai { display: flex; align-items: center; gap: var(--sp-8); flex: 0 0 auto; margin-left: auto; }
+
+/* ── Ô tìm kiếm ở thanh trên ──────────────────────────────────────────────
+   Chỉ hiện ở trang Template và Hướng dẫn (pages.js#capNhatOTim) — hai trang
+   còn lại không có danh sách nào để lọc.
+   `[hidden]` phải ghi đè tường minh: luật dưới đây đặt display:flex với độ ưu
+   tiên cao hơn luật mặc định của trình duyệt, nên đặt hidden mà ô vẫn hiện. */
+.ab-tim {
+  display: flex; align-items: center; gap: var(--sp-8);
+  height: 34px; padding: 0 var(--sp-8) 0 var(--sp-12); margin-right: var(--sp-4);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-pill);
+  background: var(--field-bg);
+}
+.ab-tim[hidden] { display: none; }
+.ab-tim:focus-within { border-color: color-mix(in srgb, var(--info) 55%, transparent); }
+.ab-tim-kinh { flex: none; color: var(--text-faint); background: none; box-shadow: none; }
+.ab-tim-kinh svg { width: 15px; height: 15px; }
+.ab-tim-o {
+  width: 262px; min-width: 0; padding: 0; border: 0; outline: 0; background: none;
+  color: inherit; font: inherit; font-size: var(--text-md);
+}
+.ab-tim-o::placeholder { color: var(--text-faint); }
+/* Nút xoá mặc định của <input type=search> trên Chromium là một dấu X xám
+   nhạt, không theo theme và không tắt được bằng màu — bỏ hẳn, đã có Escape. */
+.ab-tim-o::-webkit-search-cancel-button { display: none; }
+.ab-tim-phim {
+  flex: none; padding: var(--sp-2) var(--sp-6); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text-faint);
+  font-size: var(--text-2xs); font-weight: var(--weight-semibold); white-space: nowrap;
+}
+/* Cửa sổ hẹp: thu ô lại chứ không bỏ — nó vẫn bấm được, chỉ là ngắn hơn. */
+@media (max-width: 1280px) { .ab-tim-o { width: 150px; } .ab-tim-phim { display: none; } }
+/* Nút chỉ-hình trên thanh, CÙNG khuôn với .theme-toggle-btn ngay bên cạnh —
+   hai nút đứng cạnh nhau mà lệch kích thước thì thấy ngay. */
+.app-bar-nut {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; flex: 0 0 auto; padding: 0;
+  border: 1px solid transparent; border-radius: var(--radius-pill);
+  background: none; color: var(--text-faint); cursor: pointer;
+}
+/* Rê chuột KHÔNG vẽ viền — mảng nền tròn mờ đã đủ báo "đang trỏ vào đây".
+   Ba nút đứng sát nhau ở góc phải, mỗi cái bật thêm một vòng viền thì thanh
+   trên lấm tấm khung con. Cùng cách đã làm cho nút Sửa / Chép phụ đề. */
+.app-bar-nut:hover { border-color: transparent; background: var(--surface); color: var(--text); }
+/* .btn-icon tự đặt color: var(--text-soft) (app.css) với độ ưu tiên (0,1,0) —
+   màu thừa kế không thắng nổi, phải nói thẳng inherit. Cùng bẫy đã gặp ở
+   .rl-dau-icon và ở chip icon của thanh dọc. */
+.app-bar-nut .btn-icon { color: inherit; background: none; box-shadow: none; }
+.app-bar-nut svg { width: 19px; height: 19px; }
+/* Đã đăng nhập thì icon người sáng lên — dấu hiệu duy nhất phân biệt, vì nút
+   này cố ý KHÔNG in email (email dài đẩy cả cụm bên phải lệch chỗ). */
+.app-bar-nut.da-dang-nhap { color: var(--accent); }
+.app-bar-home img { width: 26px; height: 26px; display: block; }
+/* Dấu hiệu bản nền tối kết thúc ở màu trắng — trên nền kem thì mất nét.
+   Cùng cách xử lý như logo dài ở header (cạm bẫy #45). */
+.app-bar-home .mark-light { display: none; }
+body.theme-light .app-bar-home .mark-dark { display: none; }
+body.theme-light .app-bar-home .mark-light { display: block; }
+
+
+/* Tiêu đề màn hình hiện tại — trống ở trang danh sách. */
+.app-bar-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-10);
+  min-width: 0;
+  font-weight: var(--weight-semibold);
+}
+.app-bar-title b { font-weight: var(--weight-bold); letter-spacing: -0.02em; }
+.app-bar-note {
+  color: var(--text-faint);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nút đổi theme — chỉ hình, vuông, nằm cuối cùng bên phải.
+   Hiện MẶT TRĂNG khi đang nền tối (bấm để sang sáng) và MẶT TRỜI khi đang nền
+   sáng. Đổi icon bằng CSS chứ không bằng JS: trước đây `applyTheme()` ghi đè
+   textContent của ký tự ☾/☀, mà ký tự thì mỗi máy một nét tuỳ font hệ thống. */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+.theme-toggle-btn:hover {
+  border-color: transparent;
+  background: var(--surface);
+  color: var(--text);
+}
+.theme-toggle-btn .ico-sun { display: none; }
+body.theme-light .theme-toggle-btn .ico-moon { display: none; }
+body.theme-light .theme-toggle-btn .ico-sun { display: block; }
+
+/* Cụm nút bên phải. Thêm nút mới thì thả vào đây, không cần đụng CSS. */
+.app-bar-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-10);
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}

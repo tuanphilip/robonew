@@ -1,0 +1,7 @@
+Chọn model AI để viết code theo ba con số đo được — đừng chọn theo lời quảng cáo hay bảng xếp hạng.
+Con số thứ nhất là tốc độ trả lời. Ngồi chờ mười giây cho một câu trả lời là mất mạch code ngay. Hãy đo bằng chính bài toán của bạn, không phải bằng bản demo.
+Con số thứ hai là giá cho một việc làm xong. Giá rẻ mà phải hỏi lại ba lần thì thành đắt. Hãy tính giá theo một tính năng hoàn chỉnh, đừng tính theo từng câu hỏi.
+Con số thứ ba là độ dài ngữ cảnh. Dự án lớn cần model đọc được nhiều tệp cùng lúc. Ngữ cảnh ngắn thì model quên đầu quên đuôi, sửa chỗ này hỏng chỗ kia.
+Cách thử công bằng nhất là một giờ với việc thật. Lấy đúng một lỗi khó trong dự án của bạn rồi cho từng model sửa. Kết quả sẽ nói thay mọi bảng xếp hạng.
+Còn một cái bẫy rất phổ biến. Bám mãi một model quen vì ngại đổi, trong khi công cụ tốt hơn ra mắt mỗi tháng. Cứ ba tháng thử lại một lần, chỉ mất một giờ thôi.
+Model tốt nhất không phải model nổi tiếng nhất. Nó là model hợp với việc của chính bạn.

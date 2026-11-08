@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- /!\ THE QUYET DINH KHO VIDEO. Khong khai = doc 9:16. Xem CONTEXT.md muc 2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Case study kinh doanh — mẫu phân tích 16:9</title>
+
+<!-- /!\ PHAI GIU ba the font. Va dung them font Google thu hai - ham
+     `rewriteFontLinks()` thay BAT KY link `fonts.googleapis.com/css2` nao bang
+     Inter dong goi, nen font them vao se am tham bien mat luc quay. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- == 1. BIA - 1 cau script ==========================================
+         /!\ Slide dau co DUNG 1 cau: app.js hien HET ba khoi ngay luc nap.
+         Anh bia nam o lop nen (khong phai .slide-element) va DUNG TRUOC dai
+         phu de — phu de mau muc dam chay de len anh den trang la mat chu. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="bia">
+      <div class="nen nen-trang">
+        <figure class="bia-anh">
+          <img src="anh/k0-bia.jpg" alt="Thả thân xe xuống khung trên dây chuyền Ford ở Highland Park năm 1913" />
+          <figcaption>Dây chuyền lắp ráp · Highland Park, 1913</figcaption>
+        </figure>
+      </div>
+      <div class="than than-bia">
+        <span class="slide-element nhan-muc bia-nhan">Case study kinh doanh</span>
+        <div class="slide-element bia-ten">
+          <h1>Ford Motor<br />Company</h1>
+          <p>Highland Park, Michigan &nbsp;·&nbsp; 1913</p>
+        </div>
+        <blockquote class="slide-element bia-dinh-vi">
+          <p>&ldquo;Một chiếc ô tô cho số đông.&rdquo;</p>
+          <cite>Henry Ford · <i>My Life and Work</i>, 1922</cite>
+        </blockquote>
+      </div>
+    </div>
+
+    <!-- == 2. VAN DE - 1 cau script, NEN TOI ============================
+         /!\ DUNG mot `.slide-element` va DUNG mot cau (slide nay khong duoc
+         mien nhu slide dau). So lon mo phia sau chi la hinh, khong phai phan tu. -->
+    <div class="slide" data-slide="1" data-bo-cuc="van-de">
+      <div class="nen nen-toi"><span class="vd-bong" aria-hidden="true"><span class="dem" style="--so-toi: 12"></span><span class="dem-le" style="--le-toi: 5"></span></span></div>
+      <div class="than than-vd">
+        <div class="slide-element vd-khoi">
+          <span class="nhan-muc nhan-sang">Vấn đề</span>
+          <p class="vd-cau">Muốn bán cho số đông thì xe phải rẻ — mà mỗi khung xe tốn
+            <em>12,5 giờ công</em> thì không rẻ nổi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 3. VIEC HO LAM - 3 cau script ================================
+         /!\ BA the = BA `.slide-element` = BA cau, xep theo THOI GIAN (4/1913
+         -> 10/1913 -> 1/1914). Tieu de phia tren KHONG phai phan tu: no hien
+         cung luc voi the dau tien khi vao slide. -->
+    <div class="slide" data-slide="2" data-bo-cuc="viec-lam">
+      <div class="nen nen-trang"></div>
+      <div class="than than-the">
+        <div class="the-dau">
+          <span class="nhan-muc">Việc họ làm</span>
+          <h2 class="the-dau-tieu-de">Ba thay đổi trong chín tháng</h2>
+        </div>
+        <div class="the-luoi">
+          <article class="slide-element the">
+            <figure class="the-anh">
+              <img src="anh/k2-magneto.jpg" alt="Dây chuyền magneto · Highland Park, 1913" />
+              <figcaption>Dây chuyền magneto · Highland Park, 1913</figcaption>
+            </figure>
+            <div class="the-than">
+              <span class="the-moc">4 · 1913</span>
+              <h3 class="the-tieu-de">Mỗi người một động tác</h3>
+              <p class="the-chu">Thử trước ở một khâu nhỏ: lắp magneto chia cho <b>29 người</b>, từ <b>20 phút</b> còn <b>5 phút</b>.</p>
+            </div>
+          </article>
+          <article class="slide-element the">
+            <figure class="the-anh">
+              <img src="anh/k1-day-chuyen.jpg" alt="Dây chuyền khung xe · Highland Park, 1913" />
+              <figcaption>Dây chuyền khung xe · Highland Park, 1913</figcaption>
+            </figure>
+            <div class="the-than">
+              <span class="the-moc">10 · 1913</span>
+              <h3 class="the-tieu-de">Cho dây chuyền chạy</h3>
+              <p class="the-chu">Khung xe được kéo qua từng trạm, linh kiện chờ sẵn; <b>thợ đứng yên</b> một chỗ.</p>
+            </div>
+          </article>
+          <article class="slide-element the">
+            <figure class="the-anh">
+              <img src="anh/k3-doi-ca.jpg" alt="Thợ Ford tan ca · Detroit, thập niên 1910" />
+              <figcaption>Thợ Ford tan ca · Detroit, thập niên 1910</figcaption>
+            </figure>
+            <div class="the-than">
+              <span class="the-moc">1 · 1914</span>
+              <h3 class="the-tieu-de">Trả gấp đôi: 5 đô một ngày</h3>
+              <p class="the-chu">Việc lặp lại làm thợ bỏ đi: năm 1913, giữ <b>100 chỗ</b> làm phải tuyển <b>370 người</b>.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 4-5. SO LIEU TRUOC / SAU - 2 cau script moi slide ============
+         /!\ HAI `.slide-element` moi slide: cot "truoc" hien cung slide, cot
+         "sau" (kem chu goi) hien o cau thu hai. Chieu cao cot `--cao` = gia tri / gia tri
+         lon nhat (93 / 748 = 0.1243) — tinh bang may, KHONG uoc bang mat. -->
+    <div class="slide" data-slide="3" data-bo-cuc="so-lieu">
+      <div class="nen nen-trang"></div>
+      <div class="than than-sl sl-hep">
+        <div class="sl-dau">
+          <span class="nhan-muc">Kết quả 1 · Thời gian</span>
+          <h2 class="sl-tieu-de">Giờ công lắp một khung xe Model T</h2>
+        </div>
+        <div class="sl-luoi">
+          <div class="sl-bieu-do">
+            <div class="slide-element sl-khoi sl-khoi-truoc">
+            <div class="sl-cot sl-truoc" style="--cao: 1.0">
+              <p class="sl-so"><span class="dem" style="--so-toi: 12"></span><span class="dem-le" style="--le-toi: 5"></span><small> giờ</small></p>
+              <div class="sl-thanh" aria-hidden="true"></div>
+              <p class="sl-nhan-cot">Lắp tại chỗ<span>tháng 9 · 1913</span></p>
+            </div>
+            </div>
+            <div class="slide-element sl-khoi sl-khoi-sau">
+            <div class="sl-cot sl-sau" style="--cao: 0.1243">
+              <p class="sl-so"><span class="dem" style="--so-toi: 93"></span><small> phút</small></p>
+              <div class="sl-thanh" aria-hidden="true"></div>
+              <p class="sl-nhan-cot">Dây chuyền<span>30 · 4 · 1914</span></p>
+            </div>
+              <div class="sl-goi"><b>×8</b><span>nhanh gấp tám lần</span></div>
+            </div>
+          </div>
+          <figure class="sl-bang-chung sl-bc-sach">
+            <p class="sl-bc-dau"><i>Ford Methods and the Ford Shops</i> · 1915 · tr. 161</p>
+            <div class="sl-bc-anh">
+              <img src="anh/k6-sach-1915.jpg" alt="Trang 161 sách Ford Methods and the Ford Shops năm 1915" />
+            </div>
+            <figcaption>Sách ghi lại tại chỗ: ngày 30/4/1914, ba dây chuyền lắp xong <b>1.212 khung xe</b> trong một ngày 8 tiếng.</figcaption>
+          </figure>
+        </div>
+        <p class="sl-nguon">Nguồn: Arnold &amp; Faurote, <i>Ford Methods and the Ford Shops</i> (1915). Số liệu là <b>giờ công</b> — tổng thời gian của mọi người thợ cho một khung xe.</p>
+      </div>
+    </div>
+
+    <div class="slide" data-slide="4" data-bo-cuc="so-lieu">
+      <div class="nen nen-trang"></div>
+      <div class="than than-sl sl-hep">
+        <div class="sl-dau">
+          <span class="nhan-muc">Kết quả 2 · Giá bán</span>
+          <h2 class="sl-tieu-de">Giá một chiếc Model T mui trần hai chỗ</h2>
+        </div>
+        <div class="sl-luoi">
+          <div class="sl-bieu-do">
+            <div class="slide-element sl-khoi sl-khoi-truoc">
+            <div class="sl-cot sl-truoc" style="--cao: 1.0">
+              <p class="sl-so"><span class="dem" style="--so-toi: 680"></span><small> USD</small></p>
+              <div class="sl-thanh" aria-hidden="true"></div>
+              <p class="sl-nhan-cot">Catalogue<span>năm 1911</span></p>
+            </div>
+            </div>
+            <div class="slide-element sl-khoi sl-khoi-sau">
+            <div class="sl-cot sl-sau" style="--cao: 0.3824">
+              <p class="sl-so"><span class="dem" style="--so-toi: 260"></span><small> USD</small></p>
+              <div class="sl-thanh" aria-hidden="true"></div>
+              <p class="sl-nhan-cot">Niêm yết<span>năm 1924</span></p>
+            </div>
+              <div class="sl-goi"><b>−62%</b><span>rẻ hơn, cùng một loại xe</span></div>
+            </div>
+          </div>
+          <figure class="sl-bang-chung">
+            <div class="sl-bc-anh">
+              <img src="anh/k4-catalogue.jpg" alt="Trang catalogue Ford năm 1911, Model T Open Runabout" />
+              <img class="sl-bc-gia" src="anh/k4-gia.jpg" alt="Fully Equipped $680, Unequipped $600" />
+            </div>
+            <figcaption>Catalogue Ford 1911 — giá in ngay trên trang. Số 680 là bản <b>đủ trang bị</b>.</figcaption>
+          </figure>
+        </div>
+        <p class="sl-nguon">Nguồn: catalogue Ford 1911 · giá niêm yết từ 12 · 1923. Cả hai <b>chưa có máy đề</b>, cùng cấu hình.</p>
+      </div>
+    </div>
+
+    <!-- == 6. VI SAO HIEU QUA - 2 cau script ============================
+         /!\ Hai gach dau dong = hai `.slide-element`. Anh ben phai KHONG phai
+         phan tu — no hien ngay khi vao slide lam boi canh. -->
+    <div class="slide" data-slide="5" data-bo-cuc="vi-sao">
+      <div class="nen nen-trang"></div>
+      <div class="than than-vs">
+        <div class="vs-trai">
+          <div class="vs-dau">
+            <span class="nhan-muc">Vì sao hiệu quả</span>
+            <h2 class="vs-tieu-de">Hai thứ làm nên con số</h2>
+          </div>
+          <div class="slide-element vs-y">
+            <span class="vs-so">01</span>
+            <div>
+              <h3>Thời gian mất ở chỗ đi lại, không ở tay nghề</h3>
+              <blockquote>&ldquo;Bước tiến đầu tiên là khi chúng tôi đưa việc tới người, thay vì đưa người tới việc.&rdquo;
+                <cite>Henry Ford, 1922 · bản dịch</cite></blockquote>
+            </div>
+          </div>
+          <div class="slide-element vs-y">
+            <span class="vs-so">02</span>
+            <div>
+              <h3>Rẻ hơn &rarr; bán nhiều hơn &rarr; rẻ hơn nữa</h3>
+              <p>Mỗi lần hạ giá, xe bán nhiều hơn và chi phí chia trên mỗi chiếc lại giảm.
+                Riêng năm 1923: <b>2.011.125 chiếc</b> (chưa tính Canada).</p>
+            </div>
+          </div>
+        </div>
+        <figure class="vs-anh">
+          <img src="anh/k5-mui-tran.jpg" alt="Ford Model T mui trần năm 1925" />
+          <figcaption>Model T mui trần · ảnh chụp 1925</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- == 7. BAI HOC - 2 cau script ======================================
+         /!\ Bai hoc phai AP DUNG DUOC cho nguoi xem, khong phai tom tat lai
+         case. Ba buoc cu the ma mot cua hang nho lam duoc ngay tuan nay. -->
+    <div class="slide" data-slide="6" data-bo-cuc="bai-hoc">
+      <div class="nen nen-trang"></div>
+      <div class="than than-bh">
+        <div class="slide-element bh-khoi">
+          <span class="nhan-muc nhan-sang">Bài học áp dụng được</span>
+          <p class="bh-cau">Đừng bắt người làm nhanh hơn.<br />
+            <em>Hãy tìm chỗ thời gian đang bị bỏ phí.</em></p>
+        </div>
+        <ol class="slide-element bh-buoc">
+          <li><span>1</span><div><b>Ghi lại</b><p>từng bước một đơn hàng đi qua, từ lúc nhận tới lúc giao.</p></div></li>
+          <li><span>2</span><div><b>Đánh dấu</b><p>bước nào người phải đi tìm đồ, bước nào phải ngồi chờ.</p></div></li>
+          <li><span>3</span><div><b>Đưa tới</b><p>thứ cần dùng tới tận chỗ người làm — như Ford đưa khung xe tới thợ.</p></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

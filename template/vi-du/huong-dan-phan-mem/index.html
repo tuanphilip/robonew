@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết.
+     Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Hướng dẫn phần mềm — mẫu ảnh chụp 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay. ⚠ Và đừng thêm font Google thứ hai — hàm đó thay BẤT KỲ link
+     `fonts.googleapis.com/css2` nào bằng Inter, nên font thêm vào sẽ âm thầm
+     biến mất lúc quay trong khi trình duyệt vẫn thấy đúng. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. TÊN VIỆC CẦN LÀM — 1 câu script ═════════════════════════════
+         ⚠ Slide đầu có ĐÚNG 1 câu thì bảng nhịp gộp mọi phần tử vào một cú
+         bấm, nên ba khối ở đây hiện cùng lúc — cố ý, để mở dứt khoát.
+
+         ⚠ ẢNH CHỤP TRONG MẪU NÀY LÀ ẢNH CHÍNH BEEKNOEE STUDIO. Chụp giao diện
+         phần mềm của người khác là dùng tác phẩm có bản quyền của họ; chụp
+         chính app của mình thì sạch hoàn toàn. Xem source/source.md. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+      <div class="than giua">
+        <div class="slide-element dau-app">
+          <span class="dau-cham" aria-hidden="true"></span>
+          <span class="dau-ten">Beeknoee Studio</span>
+        </div>
+        <h1 class="slide-element tieu-de-lon">Tạo video đầu tiên<br />trong 5 bước</h1>
+        <div class="slide-element hang-buoc">
+          <span>Chọn mẫu</span><i aria-hidden="true"></i>
+          <span>Tả nội dung</span><i aria-hidden="true"></i>
+          <span>Sửa lời thoại</span><i aria-hidden="true"></i>
+          <span>Chọn giọng</span><i aria-hidden="true"></i>
+          <span>Tạo video</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2. BƯỚC 1 ═══════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="1" data-bo-cuc="buoc">
+      <div class="nen nen-3"></div>
+      <div class="than than-buoc">
+        <div class="slide-element buoc-chu">
+          <span class="buoc-so">1</span>
+          <h2 class="tieu-de">Chọn một mẫu</h2>
+          <p class="buoc-lenh">Mở trang <b>Mẫu dọc 9:16</b>, ngắm qua các mẫu rồi bấm <b>Tạo dự án bằng AI</b> ở mẫu vừa ý.</p>
+        </div>
+        <figure class="slide-element khung-anh">
+          <img src="anh/b1-chon-mau.jpg" alt="Trang Mẫu dọc trong Beeknoee Studio, mỗi thẻ có nút Tạo dự án bằng AI" />
+          <span class="khoanh" style="--l: 15%; --t: 83%; --w: 25%; --h: 8%" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+    <!-- ══ 3. BƯỚC 2 ═══════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="buoc">
+      <div class="nen nen-4"></div>
+      <div class="than than-buoc">
+        <div class="slide-element buoc-chu">
+          <span class="buoc-so">2</span>
+          <h2 class="tieu-de">Tả nội dung</h2>
+          <p class="buoc-lenh">Viết vài dòng về thứ bạn muốn nói. Càng rõ thì AI viết càng sát ý bạn.</p>
+        </div>
+        <figure class="slide-element khung-anh">
+          <img src="anh/b2-ta-noi-dung.jpg" alt="Ô Nội dung và nút Tạo dự án bằng AI ở cột trái" />
+          <span class="khoanh mui-phai" style="--l: 2%; --t: 91%; --w: 40%; --h: 8%" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+    <!-- ══ 4. BƯỚC 3 ═══════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="buoc">
+      <div class="nen nen-5"></div>
+      <div class="than than-buoc">
+        <div class="slide-element buoc-chu">
+          <span class="buoc-so">3</span>
+          <h2 class="tieu-de">Sửa lời thoại</h2>
+          <p class="buoc-lenh">Mỗi slide một dòng. Sửa ngay ở ô <b>Lời thoại slide này</b> bên phải.</p>
+        </div>
+        <figure class="slide-element khung-anh">
+          <img src="anh/b3-loi-thoai.jpg" alt="Ô Lời thoại slide này trong thẻ Phụ đề" />
+          <span class="khoanh" style="--l: 38%; --t: 50%; --w: 58%; --h: 28%" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+    <!-- ══ 5. BƯỚC 4 ═══════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="buoc">
+      <div class="nen nen-6"></div>
+      <div class="than than-buoc">
+        <div class="slide-element buoc-chu">
+          <span class="buoc-so">4</span>
+          <h2 class="tieu-de">Chọn giọng đọc</h2>
+          <p class="buoc-lenh">Dùng giọng có sẵn của Beeknoee, hoặc tải lên file đọc của riêng bạn.</p>
+        </div>
+        <figure class="slide-element khung-anh">
+          <img src="anh/b4-giong-doc.jpg" alt="Mục Giọng đọc với ba lựa chọn Tải file, ElevenLabs và Beeknoee AI" />
+          <span class="khoanh" style="--l: 26%; --t: 55%; --w: 68%; --h: 22%" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+    <!-- ══ 6. BƯỚC 5 ═══════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="buoc">
+      <div class="nen nen-2"></div>
+      <div class="than than-buoc">
+        <div class="slide-element buoc-chu">
+          <span class="buoc-so">5</span>
+          <h2 class="tieu-de">Bấm Tạo video</h2>
+          <p class="buoc-lenh">Nút ở góc trên bên phải. Bấm xong thì app tự lo phần còn lại.</p>
+        </div>
+        <figure class="slide-element khung-anh">
+          <img src="anh/b5-tao-video.jpg" alt="Nút Tạo video ở góc trên bên phải thanh công cụ" />
+          <span class="khoanh" style="--l: 82%; --t: 2%; --w: 16%; --h: 9%" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+
+    <!-- ══ 7. KẾT QUẢ + LƯU Ý — 2 câu script ══════════════════════════════
+         ⚠ Dòng lưu ý phải nói thứ người xem CHƯA BIẾT sau khi làm xong, không
+         phải lời chúc mừng. -->
+    <div class="slide" data-slide="6" data-bo-cuc="ket">
+      <div class="nen nen-6"></div>
+      <div class="than giua">
+        <div class="slide-element ket-hang">
+          <div class="ket-o"><b>9:16</b><span>video dọc, sẵn sàng đăng</span></div>
+          <div class="ket-o"><b>Phụ đề</b><span>khớp theo từng câu</span></div>
+          <div class="ket-o"><b>Nhạc nền</b><span>trộn sẵn trong file</span></div>
+        </div>
+        <p class="slide-element ket-luuy">Lần sau chỉ cần đổi nội dung — <b>mẫu, giọng đọc và thiết lập vẫn giữ nguyên</b>.</p>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

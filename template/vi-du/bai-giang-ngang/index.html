@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16 như mọi deck cũ.
+     Khai "ngang" thì khung slide là 1232×693 và app dựng ra 1920×1080.
+     Đổi thẻ này KHÔNG đủ để đổi khổ — toàn bộ style.css bên cạnh được thiết kế
+     cho khung ngang, gỡ thẻ ra là bố cục vỡ. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Bộ nhớ đệm trong ba phút — mẫu bài giảng ngang</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font này. `rewriteFontLinks()` đổi chúng sang font ĐÓNG
+     GÓI lúc quay, nên video dựng offline vẫn đúng chữ. Bỏ đi thì bản dựng báo
+     "CẢNH BÁO font chưa nạp: Inter" và rơi về font hệ thống — mỗi máy một kiểu
+     chữ, và bố cục lệch theo. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ ĐẦU — 1 câu script ═══════════════════════════════════════
+         Slide đầu có ĐÚNG 1 câu thì bảng nhịp gộp mọi phần tử vào một cú bấm
+         (HOOK_SENTENCE_COUNTS trong timeline.py). Vì thế tiêu đề và phụ đề ở
+         đây hiện cùng lúc — cố ý, để mở bài dứt khoát. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <!-- ⚠ HÌNH LÀ SVG ĐẶT THẲNG TRONG HTML, không phải ảnh, không phải thư
+           viện: deck phải dựng được OFFLINE, và hình phải đổi màu theo bảng
+           "Tông màu" — ảnh thì không làm được cả hai. Hình KHÔNG mang lớp
+           `.slide-element` nên không ăn nhịp bấm nào và không kéo hộp bao mà
+           `kiemDeck` đo. -->
+      <div class="minh-hoa minh-hoa-chip" aria-hidden="true">
+        <svg viewBox="0 0 340 340" fill="none">
+          <circle class="quang-chip" cx="170" cy="170" r="112" />
+          <g class="chan">
+            <path d="M120 74v18" /><path d="M153 74v18" /><path d="M187 74v18" /><path d="M220 74v18" />
+            <path d="M120 248v18" /><path d="M153 248v18" /><path d="M187 248v18" /><path d="M220 248v18" />
+            <path d="M74 120h18" /><path d="M74 153h18" /><path d="M74 187h18" /><path d="M74 220h18" />
+            <path d="M248 120h18" /><path d="M248 153h18" /><path d="M248 187h18" /><path d="M248 220h18" />
+          </g>
+          <rect class="than-chip" x="90" y="90" width="160" height="160" rx="22" />
+          <rect class="loi-chip" x="118" y="118" width="104" height="104" rx="12" />
+          <path class="tia" d="M178 130 146 176h22l-8 36 36-50h-24Z" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Bộ nhớ đệm<br />trong ba phút</div>
+        <div class="slide-element phu-de">Cache làm gì · ba tầng hay gặp · cái bẫy ai cũng dính</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. MỤC LỤC — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="1" data-bo-cuc="noi-dung">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="nhan">Nội dung</div>
+        <div class="slide-element tieu-de">Bài này có ba phần</div>
+        <ul class="gach">
+          <li class="slide-element">Cache làm gì và <b>vì sao nó nhanh</b></li>
+          <li class="slide-element">Ba tầng cache hay gặp, và cái bẫy quen thuộc</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 3. KHÁI NIỆM — 3 câu / 3 phần tử ═══════════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="noi-dung">
+      <div class="nen nen-3"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Phần 1</div>
+          <div class="slide-element tieu-de">Cache là bản sao để gần</div>
+          <ul class="gach">
+            <li class="slide-element">Không hỏi lại nguồn gốc mỗi lần — giữ sẵn kết quả cũ</li>
+            <li class="slide-element">Lần sau cần đúng thứ đó thì <b>lấy ngay, khỏi đi xa</b></li>
+          </ul>
+        </div>
+
+        <!-- SƠ ĐỒ LUỒNG: chương trình → cache → nguồn gốc. Giải thích cache
+             bằng ba cái hộp và ba mũi tên nhanh hơn bằng hai câu chữ, và đây
+             đúng là thứ khung ngang có chỗ để đặt cạnh chữ.
+             Trang trí, không mang `.slide-element`. -->
+        <div class="so-do-luong" aria-hidden="true">
+          <svg viewBox="0 0 360 306" fill="none">
+            <g class="hop hop-tren">
+              <rect x="50" y="14" width="260" height="58" rx="14" />
+              <text x="180" y="50">Chương trình</text>
+            </g>
+
+            <g class="mui-ten di">
+              <path d="M132 76v38" /><path d="m126 108 6 8 6-8" />
+            </g>
+            <text class="nhan-ten ben-trai" x="120" y="100">hỏi</text>
+
+            <g class="mui-ten ve">
+              <path d="M228 114V76" /><path d="m222 82 6-8 6 8" />
+            </g>
+            <text class="nhan-ten ben-phai" x="240" y="100">trả ngay</text>
+
+            <g class="hop hop-cache">
+              <rect x="50" y="118" width="260" height="70" rx="16" />
+              <text x="180" y="152">Cache</text>
+              <text class="phu" x="180" y="176">bản sao để gần</text>
+            </g>
+
+            <g class="mui-ten cham">
+              <path d="M180 192v42" /><path d="m174 228 6 8 6-8" />
+            </g>
+            <text class="nhan-ten ben-trai" x="166" y="218">chỉ khi chưa có</text>
+
+            <g class="hop hop-duoi">
+              <rect x="50" y="238" width="260" height="58" rx="14" />
+              <text x="180" y="274">Nguồn gốc · ở xa</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. KHỐI MÃ — 3 câu / 3 phần tử ═════════════════════════════════
+         Bố cục dành riêng cho bài hướng dẫn: khung ngang đủ rộng để đặt mã mà
+         không phải thu nhỏ chữ, thứ khung dọc 9:16 không làm được. -->
+    <div class="slide" data-slide="3" data-bo-cuc="ma-nguon">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="nhan">Trong mã nguồn</div>
+        <div class="slide-element tieu-de">Đơn giản đến bất ngờ</div>
+        <div class="slide-element khoi-ma"><pre><code><span class="tu-khoa">def</span> lay(khoa):
+    <span class="tu-khoa">if</span> khoa <span class="tu-khoa">in</span> kho:
+        <span class="ghi-chu"># đã có — trả về luôn</span>
+        <span class="tu-khoa">return</span> kho[khoa]
+    kho[khoa] = tinh_lai(khoa)
+    <span class="tu-khoa">return</span> kho[khoa]</code></pre></div>
+        <div class="slide-element ghi-duoi">Chưa có thì mới tính, rồi cất lại cho lần sau.</div>
+      </div>
+    </div>
+
+    <!-- ══ 5. HAI CỘT — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="hai-cot">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan">Phần 2</div>
+        <div class="slide-element tieu-de">Ba tầng, mỗi tầng một giá</div>
+        <div class="cot-doi">
+          <div class="slide-element the">
+            <div class="the-dau">
+              <span class="the-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6.2" y="6.2" width="11.6" height="11.6" rx="2.4" />
+                  <rect x="9.6" y="9.6" width="4.8" height="4.8" rx="1.2" />
+                  <path d="M9.4 3.2v3" /><path d="M14.6 3.2v3" />
+                  <path d="M9.4 17.8v3" /><path d="M14.6 17.8v3" />
+                  <path d="M3.2 9.4h3" /><path d="M3.2 14.6h3" />
+                  <path d="M17.8 9.4h3" /><path d="M17.8 14.6h3" />
+                </svg>
+              </span>
+              <div class="the-nhan">Trong bộ nhớ</div>
+            </div>
+            <div class="the-chu">Nhanh nhất — nhưng <b>mất khi tắt máy</b></div>
+          </div>
+          <div class="slide-element the">
+            <div class="the-dau">
+              <span class="the-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="6.4" rx="7.6" ry="3.2" />
+                  <path d="M4.4 6.4v11.2c0 1.8 3.4 3.2 7.6 3.2s7.6-1.4 7.6-3.2V6.4" />
+                  <path d="M4.4 12c0 1.8 3.4 3.2 7.6 3.2s7.6-1.4 7.6-3.2" />
+                </svg>
+              </span>
+              <div class="the-nhan">Trên đĩa</div>
+            </div>
+            <div class="the-chu">Sống lâu hơn — nhưng <b>chậm hơn vài chục lần</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 6. CON SỐ — 2 câu / 2 phần tử ══════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="con-so">
+      <div class="nen nen-6"></div>
+      <div class="than giua">
+        <div class="slide-element tieu-de">Con số đáng nhớ</div>
+        <!-- ⚠ BIỂU ĐỒ THANG LÔ-GA-RÍT. Ba con số là 1, 100 và 1.000.000 — chênh
+             nhau một triệu lần. Vẽ theo thang thẳng thì hai thanh đầu biến mất
+             thành hai vạch không nhìn ra gì. Thang lô-ga-rít cho thấy được cả
+             ba, và có ghi rõ ở dưới là thang gì: vẽ lô-ga-rít mà không nói thì
+             người xem đọc ra sai tỉ lệ.
+             Cả khối này nằm TRONG MỘT `.slide-element` nên vẫn đúng hợp đồng
+             hai câu / hai phần tử của slide. -->
+        <div class="slide-element hang-so">
+          <div class="do-hang">
+            <span class="do-ten">Bộ nhớ</span>
+            <span class="do-ray"><i style="width: 4%"></i></span>
+            <b>1×</b>
+          </div>
+          <div class="do-hang">
+            <span class="do-ten">Ổ cứng</span>
+            <span class="do-ray"><i style="width: 35%"></i></span>
+            <b>100×</b>
+          </div>
+          <div class="do-hang noi-bat">
+            <span class="do-ten">Qua mạng</span>
+            <span class="do-ray"><i style="width: 100%"></i></span>
+            <b>1.000.000×</b>
+          </div>
+          <div class="do-chu-thich">Thang lô-ga-rít · mỗi vạch là nhân mười</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 7. CẢNH BÁO — 3 câu / 3 phần tử ════════════════════════════════ -->
+    <div class="slide" data-slide="6" data-bo-cuc="noi-dung">
+      <div class="nen nen-7"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Cái bẫy</div>
+        <div class="slide-element tieu-de">Cache sai tệ hơn không cache</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Chương trình vẫn chạy, nhưng <b>trả về dữ liệu cũ</b></li>
+          <li class="slide-element">Người dùng sửa xong không thấy gì đổi — bạn đi tìm lỗi nhầm chỗ</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 8. TÓM TẮT — 2 câu / 2 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="7" data-bo-cuc="noi-dung">
+      <div class="nen nen-8"></div>
+      <div class="than">
+        <div class="nhan">Tóm lại</div>
+        <div class="slide-element tieu-de">Ba ý cần nhớ</div>
+        <ol class="so-thu-tu slide-element">
+          <li>Cache đổi <b>bộ nhớ</b> lấy <b>tốc độ</b></li>
+          <li>Mỗi tầng có giá của nó</li>
+          <li>Khó nhất không phải lưu — mà là <b>biết khi nào bỏ đi</b></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- ══ 9. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="8" data-bo-cuc="mo-dau">
+      <div class="nen nen-9"></div>
+
+      <div class="minh-hoa minh-hoa-chip mo-hon" aria-hidden="true">
+        <svg viewBox="0 0 340 340" fill="none">
+          <circle class="quang-chip" cx="170" cy="170" r="112" />
+          <g class="chan">
+            <path d="M120 74v18" /><path d="M153 74v18" /><path d="M187 74v18" /><path d="M220 74v18" />
+            <path d="M120 248v18" /><path d="M153 248v18" /><path d="M187 248v18" /><path d="M220 248v18" />
+            <path d="M74 120h18" /><path d="M74 153h18" /><path d="M74 187h18" /><path d="M74 220h18" />
+            <path d="M248 120h18" /><path d="M248 153h18" /><path d="M248 187h18" /><path d="M248 220h18" />
+          </g>
+          <rect class="than-chip" x="90" y="90" width="160" height="160" rx="22" />
+          <rect class="loi-chip" x="118" y="118" width="104" height="104" rx="12" />
+          <path class="tia" d="M178 130 146 176h22l-8 36 36-50h-24Z" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Cảm ơn bạn đã xem</div>
+        <div class="slide-element phu-de">Phần sau: xoá cache cho đúng</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#0f172a",
+      "--primary": "#38bdf8",
+      "--primary-light": "#bae6fd",
+      "--primary-dark": "#0369a1",
+      "--accent": "#fbbf24",
+      "--accent-light": "#fde68a",
+      "--info": "#a5b4fc",
+      "--success": "#4ade80"
+    },
+    "customVariables": {
+      "--bg-dark": "#0f172a",
+      "--primary": "#38bdf8",
+      "--primary-light": "#bae6fd",
+      "--primary-dark": "#0369a1",
+      "--accent": "#fbbf24",
+      "--accent-light": "#fde68a",
+      "--info": "#a5b4fc",
+      "--success": "#4ade80"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#38bdf8",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#0f172a",
+    "gridEnabled": false,
+    "gridLight": "#fbbf24",
+    "iconGlow": "#38bdf8",
+    "iconBacklight": "#fbbf24",
+    "iconLight": "#4ade80",
+    "mainLight": "#38bdf8",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#fbbf24",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Học mãi vẫn không nói được, vì bạn đang học sai thứ.",
+      "Phần lớn người học đi gom từ vựng lẻ. Nhớ được nghĩa từng chữ, nhưng tới lúc mở miệng thì không ghép nổi thành câu. Vì từ lẻ không mang theo cách dùng.",
+      "Hãy học theo cụm thay vì theo từ. Đừng học riêng chữ decision, hãy học cả cụm make a decision. Cụm đi vào miệng nhanh hơn từ rất nhiều.",
+      "Mỗi cụm nên gắn với một câu thật của chính bạn. Ví dụ, I need to make a decision today. Câu có bối cảnh thì não giữ lâu hơn hẳn.",
+      "Ít mà lặp nhiều thắng nhiều mà lặp một lần. Năm cụm mỗi ngày, mỗi cụm nói ra miệng năm lần. Một tháng là một trăm năm mươi cụm thật sự dùng được.",
+      "Đừng chờ tới lúc giỏi rồi mới mở miệng. Nói sai rồi sửa là con đường ngắn nhất. Mở miệng hôm nay đi."
+    ],
+    "transitionSounds": [
+      "rise",
+      "chime",
+      "chime",
+      "chime",
+      "ascending",
+      "dramatic"
+    ],
+    "revealSounds": [
+      "pop",
+      "blip",
+      "blip",
+      "ping",
+      "tick",
+      "sparkle"
+    ]
+  }
+}

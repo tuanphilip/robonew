@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết —
+     toàn bộ style.css bên cạnh viết cho khung ngang. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Quản lý vốn &amp; rủi ro — mẫu giao dịch 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         ⚠ MỌI HÌNH LÀ SVG ĐẶT THẲNG TRONG HTML — không thư viện, không ảnh:
+         deck phải dựng được OFFLINE, hình phải đổi màu theo bảng "Tông màu",
+         và sửa số liệu là sửa thẳng toạ độ. Hình KHÔNG mang `.slide-element`
+         nên không ăn nhịp bấm và không kéo hộp bao mà `kiemDeck` đo. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-khien" aria-hidden="true">
+        <svg viewBox="0 0 360 340" fill="none">
+          <circle class="quang" cx="180" cy="168" r="112" />
+          <!-- lá chắn: hình quen thuộc cho "giữ vốn" -->
+          <path class="khien" d="M180 28 302 68v104c0 66-50 112-122 136-72-24-122-70-122-136V68Z" />
+          <path class="khien-trong" d="M180 52 278 84v88c0 54-40 92-98 112-58-20-98-58-98-112V84Z" />
+          <!-- đường vốn bên trong: sụt rồi hồi lại, không thẳng tưng -->
+          <path class="duong-von" d="M104 196 134 176 160 206 188 150 216 168 256 116" />
+          <circle class="cham-von" cx="188" cy="150" r="5.5" />
+          <circle class="cham-von cuoi" cx="256" cy="116" r="7" />
+          <path class="muc-goc" d="M100 196h160" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Quản lý vốn<br />trước, lệnh sau</div>
+        <div class="slide-element phu-de">Thứ quyết định bạn còn ở lại thị trường bao lâu</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. ĐẶT CƯỢC BAO NHIÊU — 3 câu / 3 phần tử ══════════════════════
+         Chữ trái, thanh "một phần trăm" phải. Cái thanh đó chỉ đọc được ở khung
+         ngang: nó phải dài để một phần trăm nhìn ra ĐÚNG là một phần trăm. -->
+    <div class="slide" data-slide="1" data-bo-cuc="noi-dung-hinh">
+      <div class="nen nen-2"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Đặt cược bao nhiêu</div>
+          <div class="slide-element tieu-de">Hỏi mất bao nhiêu trước khi hỏi mua gì</div>
+          <ul class="gach">
+            <li class="slide-element">Mỗi lệnh chỉ cược <b>một phần rất nhỏ</b> của tài khoản</li>
+            <li class="slide-element">Một phần trăm là con số nhiều người dùng — vì phép tính phía sau</li>
+          </ul>
+        </div>
+
+        <div class="thanh-von" aria-hidden="true">
+          <div class="tv-nhan">Một lệnh, một phần trăm</div>
+          <div class="tv-ray"><i></i></div>
+          <div class="tv-chu"><span>Phần đem ra rủi ro</span><b>1%</b></div>
+          <div class="tv-ray tv-con"><i></i></div>
+          <div class="tv-chu"><span>Phần còn nguyên</span><b>99%</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. PHÉP TÍNH HỒI VỐN — 4 câu / 4 phần tử ═══════════════════════
+         MỖI HÀNG LÀ MỘT `.slide-element`: hàng hiện đúng lúc người dẫn đọc tới
+         con số đó, và độ dài thanh đỏ dài ra theo từng câu — chính là cảm giác
+         "càng lỗ sâu càng khó về".
+
+         ⚠ HAI THANH DÙNG CHUNG MỘT THANG 0–300%, cố ý. Ai cũng muốn kéo thanh
+         hàng đầu dài ra cho "nhìn được", nhưng lỗ mười phần trăm mà vẽ dài bằng
+         lỗ bảy mươi lăm thì chính cái biểu đồ nói dối đúng điều slide này đang
+         phản bác. Hàng đầu ngắn tí xíu LÀ NỘI DUNG, không phải lỗi bố cục. -->
+    <div class="slide" data-slide="2" data-bo-cuc="hoi-von">
+      <div class="nen nen-3"></div>
+      <div class="than">
+        <div class="do-dau">
+          <div class="nhan canh-bao">Phép tính hồi vốn</div>
+          <div class="chu-giai">
+            <span class="cg cg-lo">Đã lỗ</span>
+            <span class="cg cg-lai">Cần lãi để về mốc cũ</span>
+          </div>
+        </div>
+
+        <div class="slide-element hang-hv">
+          <div class="hv-ten">Lỗ 10%</div>
+          <div class="hv-ray">
+            <i class="lo" style="width: 3.3%"></i>
+            <i class="lai" style="width: 3.7%"></i>
+          </div>
+          <div class="hv-so">+11%</div>
+        </div>
+
+        <div class="slide-element hang-hv">
+          <div class="hv-ten">Lỗ 25%</div>
+          <div class="hv-ray">
+            <i class="lo" style="width: 8.3%"></i>
+            <i class="lai" style="width: 11.1%"></i>
+          </div>
+          <div class="hv-so">+33%</div>
+        </div>
+
+        <div class="slide-element hang-hv">
+          <div class="hv-ten">Lỗ 50%</div>
+          <div class="hv-ray">
+            <i class="lo" style="width: 16.7%"></i>
+            <i class="lai" style="width: 33.3%"></i>
+          </div>
+          <div class="hv-so">+100%</div>
+        </div>
+
+        <div class="slide-element hang-hv noi-bat">
+          <div class="hv-ten">Lỗ 75%</div>
+          <div class="hv-ray">
+            <i class="lo" style="width: 25%"></i>
+            <i class="lai" style="width: 100%"></i>
+          </div>
+          <div class="hv-so">+300%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. VIỆC ĐẦU TIÊN — 3 câu / 3 phần tử ═══════════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="noi-dung">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="nhan">Việc đầu tiên</div>
+        <div class="slide-element tieu-de">Không phải tìm lệnh thắng</div>
+        <ul class="gach">
+          <li class="slide-element">Là <b>không để lệnh nào đủ sức làm hỏng tài khoản</b></li>
+          <li class="slide-element">Cắt lỗ nhỏ thì còn vốn để đợi lệnh tốt</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 5. CÁI BẪY — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Cái bẫy</div>
+        <div class="slide-element tieu-de">Gồng lỗ vì tin giá sẽ quay lại</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Giá có thể quay lại thật — <b>tài khoản không đợi được lâu như niềm tin</b></li>
+          <li class="slide-element">Mỗi lần gồng thành công lại dạy bạn gồng tiếp lần sau</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="mo-dau">
+      <div class="nen nen-6"></div>
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Một phần trăm<br />và một mức cắt lỗ</div>
+        <div class="slide-element phu-de">Hai thói quen giữ bạn ở lại đủ lâu</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

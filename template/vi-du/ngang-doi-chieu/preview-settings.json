@@ -1,0 +1,67 @@
+{
+  "_ghiChu": [
+    "Thiết lập của mẫu NGANG ngang-doi-chieu.",
+    "",
+    "⚠ KHOÁ `theme.variables` PHẢI TRÙNG CẢ TÊN LẪN GIÁ TRỊ với bảng màu trong",
+    "style.css. Trình sửa đọc file này và GHI ĐÈ :root lúc quay, nên lệch giá trị là",
+    "video ra MÀU CŨ trong khi mở deck bằng trình duyệt vẫn thấy màu mới — đúng bẫy đã",
+    "dính ngày 18/09/2026 khi đổi tông năm mẫu ngang. Đổi bảng màu thì đổi CẢ HAI,",
+    "kèm `visuals.backgroundColor` = `--bg-dark`.",
+    "",
+    "⚠ `subtitles.fontSize` ở đây ĐÈ LÊN --subtitle-font-size trong style.css",
+    "(settingsCss chèn sau thẻ <link>). Hai chỗ cố ý để cùng một số: style.css là",
+    "mặc định của THIẾT KẾ, còn file này là thứ Trình sửa đọc và ghi. Đổi một bên",
+    "thì đổi cả hai, kẻo Trình sửa hiện một đằng video ra một nẻo.",
+    "",
+    "⚠ KHÔNG khai `visuals.backgroundFx`: mẫu ngang cố ý không có hiệu ứng nền",
+    "động. Nền đã có ba lớp (quầng sáng + vân + vignette) trong style.css; chồng",
+    "thêm hiệu ứng động là chữ khó đọc mà máy yếu thì rớt khung hình."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#06141b",
+      "--primary": "#2dd4bf",
+      "--primary-light": "#99f6e4",
+      "--primary-dark": "#0f766e",
+      "--accent": "#fbbf24",
+      "--accent-light": "#fde68a",
+      "--info": "#38bdf8",
+      "--success": "#34d399"
+    },
+    "customVariables": {
+      "--bg-dark": "#06141b",
+      "--primary": "#2dd4bf",
+      "--primary-light": "#99f6e4",
+      "--primary-dark": "#0f766e",
+      "--accent": "#fbbf24",
+      "--accent-light": "#fde68a",
+      "--info": "#38bdf8",
+      "--success": "#34d399"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#2dd4bf",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#06141b",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Thuê máy chủ hay tự dựng, và chọn thế nào cho đỡ tiếc về sau.",
+      "Có hai cách, và mỗi cách là một kiểu chi phí. Thuê thì trả hằng tháng, còn tự dựng thì trả một lần rồi tự lo phần còn lại. Chọn sai không vỡ ngay, nó ngấm dần qua từng hoá đơn.",
+      "Thuê máy chủ thì chạy được trong ngày, không cần người trực, đổi lại trả đều mỗi tháng. Tự dựng thì mất vài tuần chuẩn bị và cần người biết vận hành, nhưng sau năm đầu thì rẻ dần.",
+      "Tiêu chí thứ nhất là thời gian tới lúc chạy, thuê một ngày còn tự dựng ba tuần. Tiêu chí thứ hai là chi phí năm đầu, sáu mươi tư triệu so với tám mươi tám triệu. Tiêu chí thứ ba là chi phí năm thứ ba, lúc này thuê đã lên một trăm chín hai triệu còn tự dựng chỉ một trăm lẻ tư.",
+      "Chỗ hay nhầm là tưởng bảng giá đã là toàn bộ chi phí. Tự dựng còn tốn thời gian người, thứ không nằm trên hoá đơn nào cả. Còn thuê thì tốn thêm khi dữ liệu đi ra, và khoản đó tăng theo lưu lượng.",
+      "Kết luận gọn lại thế này. Dưới hai năm thì thuê, trên ba năm và có người vận hành thì tự dựng, còn ở giữa hai mốc đó thì con số của bạn mới quyết định."
+    ]
+  }
+}

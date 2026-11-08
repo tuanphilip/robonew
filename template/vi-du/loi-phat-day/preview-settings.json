@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#14100c",
+      "--primary": "#d9a441",
+      "--primary-light": "#f2e6cf",
+      "--primary-dark": "#8c5a2b",
+      "--accent": "#8c5a2b",
+      "--accent-light": "#d8bf94",
+      "--info": "#b08d57",
+      "--success": "#a8b98a"
+    },
+    "customVariables": {
+      "--bg-dark": "#14100c",
+      "--primary": "#d9a441",
+      "--primary-light": "#f2e6cf",
+      "--primary-dark": "#8c5a2b",
+      "--accent": "#8c5a2b",
+      "--accent-light": "#d8bf94",
+      "--info": "#b08d57",
+      "--success": "#a8b98a"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#d9a441",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#14100c",
+    "gridEnabled": false,
+    "gridLight": "#8c5a2b",
+    "iconGlow": "#d9a441",
+    "iconBacklight": "#8c5a2b",
+    "iconLight": "#a8b98a",
+    "mainLight": "#d9a441",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#8c5a2b",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Bạn không khổ vì mất — bạn khổ vì vẫn còn nắm.",
+      "Lòng người như mặt nước. Nước lặng thì soi rõ cả trời mây. Nước động thì chẳng thấy gì, kể cả gương mặt mình.",
+      "Người ta khổ vì ba việc. Muốn thứ chưa tới, tiếc thứ đã đi, sợ thứ chưa xảy ra. Không việc nào trong ba việc đó đang có mặt lúc này.",
+      "Buông không phải là bỏ mặc. Buông là thôi bóp chặt bàn tay đang đau. Bạn vẫn làm mọi việc, chỉ là không mang theo hòn đá.",
+      "Thử một việc rất nhỏ hôm nay. Ngồi yên mười phút, không điện thoại, không nghĩ chuyện ngày mai. Chỉ thở, và biết mình đang thở.",
+      "Bình an không ở nơi nào xa. Nó ở ngay chỗ bạn thôi tìm kiếm. Về nhà đi, nhà vẫn luôn ở đó."
+    ],
+    "transitionSounds": [
+      "gong",
+      "minimal",
+      "bass",
+      "minimal",
+      "rise",
+      "gong"
+    ],
+    "revealSounds": [
+      "bell",
+      "chime",
+      "tick",
+      "chime",
+      "tick",
+      "bell"
+    ]
+  }
+}

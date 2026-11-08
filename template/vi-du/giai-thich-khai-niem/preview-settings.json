@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#12101a",
+      "--primary": "#a78bfa",
+      "--primary-light": "#ddd6fe",
+      "--primary-dark": "#6d28d9",
+      "--accent": "#22d3ee",
+      "--accent-light": "#a5f3fc",
+      "--info": "#818cf8",
+      "--success": "#4ade80"
+    },
+    "customVariables": {
+      "--bg-dark": "#12101a",
+      "--primary": "#a78bfa",
+      "--primary-light": "#ddd6fe",
+      "--primary-dark": "#6d28d9",
+      "--accent": "#22d3ee",
+      "--accent-light": "#a5f3fc",
+      "--info": "#818cf8",
+      "--success": "#4ade80"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#a78bfa",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#12101a",
+    "gridEnabled": false,
+    "gridLight": "#22d3ee",
+    "iconGlow": "#a78bfa",
+    "iconBacklight": "#22d3ee",
+    "iconLight": "#4ade80",
+    "mainLight": "#a78bfa",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#22d3ee",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Lãi kép là thứ khiến người bắt đầu sớm bỏ xa người bắt đầu muộn.",
+      "Hình dung một tờ giấy rất mỏng. Gấp đôi nó bốn mươi hai lần thì chồng giấy cao tới tận mặt trăng. Không phải vì giấy dày, mà vì mỗi lần gấp đều nhân đôi cái đã có.",
+      "Tiền chạy đúng như vậy. Lãi năm nay được cộng thẳng vào vốn, rồi chính phần vốn lớn hơn đó lại sinh lãi cho năm sau. Vòng lặp cứ thế tự lớn lên.",
+      "Lấy một trăm triệu, để yên với mức mười phần trăm mỗi năm. Sau bảy năm nó thành khoảng một trăm chín mươi lăm triệu. Sau hai mươi năm nó thành khoảng sáu trăm bảy mươi hai triệu.",
+      "Điều đáng nói là phần lớn số tiền đó đến ở những năm cuối. Ai rút giữa chừng sẽ không bao giờ nhìn thấy đoạn dốc ấy. Thời gian mới là thứ làm việc, không phải bạn.",
+      "Lãi kép không thiên vị ai. Nó chỉ thưởng cho người bắt đầu sớm và ngồi yên đủ lâu. Bắt đầu sớm hơn một năm thường hơn hẳn việc bỏ vào nhiều tiền hơn."
+    ],
+    "transitionSounds": [
+      "rise",
+      "chime",
+      "sweep",
+      "ascending",
+      "bass",
+      "dramatic"
+    ],
+    "revealSounds": [
+      "pop",
+      "bubble",
+      "blip",
+      "ping",
+      "tick",
+      "bell"
+    ]
+  }
+}

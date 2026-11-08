@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#161310",
+      "--primary": "#a8873e",
+      "--primary-light": "#e8dcc4",
+      "--primary-dark": "#6b5426",
+      "--accent": "#b06a52",
+      "--accent-light": "#c9a08c",
+      "--info": "#8f7d5e",
+      "--success": "#6e7d52"
+    },
+    "customVariables": {
+      "--bg-dark": "#161310",
+      "--primary": "#a8873e",
+      "--primary-light": "#e8dcc4",
+      "--primary-dark": "#6b5426",
+      "--accent": "#b06a52",
+      "--accent-light": "#c9a08c",
+      "--info": "#8f7d5e",
+      "--success": "#6e7d52"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#a8873e",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#161310",
+    "gridEnabled": false,
+    "gridLight": "#b06a52",
+    "iconGlow": "#a8873e",
+    "iconBacklight": "#b06a52",
+    "iconLight": "#6e7d52",
+    "mainLight": "#a8873e",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#b06a52",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Có một trận đánh thắng bằng cọc gỗ và con nước lên xuống.",
+      "Năm chín trăm ba mươi tám. Ngô Quyền đứng trước một đội thuyền chiến mạnh hơn hẳn, và ông không chọn đánh trực diện. Ông chọn đánh vào thứ quân địch không kiểm soát nổi, là thuỷ triều.",
+      "Chuẩn bị trước trận. Cọc gỗ bịt sắt được đóng chìm xuống lòng sông Bạch Đằng. Nước lên, cả bãi cọc biến mất, thuyền địch đi qua mà không hề hay biết.",
+      "Rồi tới giờ đã tính. Quân ta nhử địch vào sâu rồi vờ rút lui, đúng lúc nước bắt đầu rút xuống. Đáy thuyền va vào cọc và vỡ ra hàng loạt.",
+      "Trận đánh khép lại trong đúng một con nước. Hơn một nghìn năm Bắc thuộc chấm dứt từ đây. Nước Việt bắt đầu tự viết lấy sử của mình.",
+      "Bài học không nằm ở cọc gỗ. Nó nằm ở chỗ biết mình yếu ở đâu, rồi mượn sức của thứ lớn hơn mình. Đó là cách người ít thắng được người nhiều."
+    ],
+    "transitionSounds": [
+      "boom",
+      "bass",
+      "rise",
+      "dramatic",
+      "gong",
+      "minimal"
+    ],
+    "revealSounds": [
+      "tick",
+      "click",
+      "tick",
+      "snap",
+      "bell",
+      "chime"
+    ]
+  }
+}

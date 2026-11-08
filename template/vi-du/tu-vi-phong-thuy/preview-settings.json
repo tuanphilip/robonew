@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#1a0d14",
+      "--primary": "#e8635f",
+      "--primary-light": "#f0a3a0",
+      "--primary-dark": "#9c2b28",
+      "--accent": "#e0b354",
+      "--accent-light": "#f5dfa8",
+      "--info": "#d98c5f",
+      "--success": "#2d5a4a"
+    },
+    "customVariables": {
+      "--bg-dark": "#1a0d14",
+      "--primary": "#e8635f",
+      "--primary-light": "#f0a3a0",
+      "--primary-dark": "#9c2b28",
+      "--accent": "#e0b354",
+      "--accent-light": "#f5dfa8",
+      "--info": "#d98c5f",
+      "--success": "#2d5a4a"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#e8635f",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#1a0d14",
+    "gridEnabled": false,
+    "gridLight": "#e0b354",
+    "iconGlow": "#e8635f",
+    "iconBacklight": "#e0b354",
+    "iconLight": "#2d5a4a",
+    "mainLight": "#e8635f",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#e0b354",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Tháng này có ba con giáp bước vào vận tốt nhất trong năm.",
+      "Dẫn đầu là tuổi Thân. Công việc mở ra hướng mới, và có người đứng ra giúp mà bạn không cần mở lời. Tiền vào đều, nhưng đừng vội mở rộng.",
+      "Kế đến là tuổi Tý. Chuyện cũ tồn đọng suốt cả năm sẽ được gỡ trong tháng này. Đây là lúc đòi lại thứ vốn thuộc về mình.",
+      "Thứ ba là tuổi Dậu. Vận quý nhân rất mạnh, hợp ký kết và hợp tác. Nhưng tránh đứng tên vay giúp người khác.",
+      "Có ba việc nên làm trong tháng. Dọn bàn làm việc, đặt cây xanh hướng đông, trả hết những khoản nợ nhỏ. Việc nhỏ mở đường cho việc lớn.",
+      "Vận là thứ đến rồi đi. Người chuẩn bị sẵn thì giữ được, người ngồi chờ may thì tuột mất. Chuẩn bị đi, rồi hãy nói chuyện vận."
+    ],
+    "transitionSounds": [
+      "gong",
+      "chime",
+      "chime",
+      "chime",
+      "rise",
+      "dramatic"
+    ],
+    "revealSounds": [
+      "sparkle",
+      "ping",
+      "ping",
+      "ping",
+      "pop",
+      "bell"
+    ]
+  }
+}

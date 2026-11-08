@@ -1,0 +1,64 @@
+{
+  "_ghiChu": [
+    "KD-01 · Case study kinh doanh — khung NGANG 16:9 (thẻ <meta name=\"bee-khung\" content=\"ngang\">).",
+    "Nền TRẮNG, tông navy, biểu đồ cột phẳng. colorMode 'cream' (bộ máy chỉ nhận dark/cream).",
+    "⚠ Nền SÁNG nên phụ đề phải là mực ĐẬM. Mặc định của bộ ghi là trắng — trên nền trắng là mất sạch.",
+    "⚠ Số .slide-element mỗi slide phải bằng số câu dòng script tương ứng: 3/1/3/2/2/2/2.",
+    "   Slide 1 được miễn vì đúng 1 câu. Slide 2 KHÔNG được miễn: đúng 1 phần tử, đúng 1 câu.",
+    "⚠ Chiều cao cột (--cao) và số đích (--so-toi, --le-toi) sinh từ số liệu thật — đừng gõ tay.",
+    "⚠ Ảnh tư liệu đều thuộc phạm vi công cộng — xem source/source.md trước khi thay.",
+    "Thay case khác: sửa ba thẻ, hai biểu đồ, ảnh trong anh/ và cả 7 dòng script."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#ffffff",
+      "--primary": "#13294b",
+      "--primary-light": "#2f5596",
+      "--primary-dark": "#0b1a33",
+      "--accent": "#8793a7",
+      "--accent-light": "#c9d2df",
+      "--info": "#2f5596",
+      "--success": "#1f7a52",
+      "--warning": "#b7791f",
+      "--danger": "#b3261e"
+    },
+    "customVariables": {
+      "--bg-dark": "#ffffff",
+      "--primary": "#13294b",
+      "--primary-light": "#2f5596",
+      "--primary-dark": "#0b1a33",
+      "--accent": "#8793a7",
+      "--accent-light": "#c9d2df",
+      "--info": "#2f5596",
+      "--success": "#1f7a52",
+      "--warning": "#b7791f",
+      "--danger": "#b3261e"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#0f1b2e",
+    "activeColor": "#2f5596",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#ffffff",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Case study kinh doanh hôm nay: Ford Motor Company năm một nghìn chín trăm mười ba, hãng xe tuyên bố sẽ làm một chiếc ô tô cho số đông.",
+      "Vấn đề là muốn bán cho số đông thì xe phải rẻ, mà mỗi khung xe lúc đó tốn mười hai tiếng rưỡi công thợ thì không rẻ nổi.",
+      "Tháng tư năm một nghìn chín trăm mười ba, họ thử trước ở một khâu nhỏ: chia việc lắp magneto cho hai mươi chín người, mỗi người một động tác, và thời gian giảm từ hai mươi phút xuống năm phút. Tháng mười, họ làm thế với cả khung xe, cho khung xe chạy trên dây chuyền qua từng trạm còn thợ đứng yên một chỗ. Tháng một năm sau, họ tăng lương gấp đôi lên năm đô một ngày, vì việc lặp đi lặp lại khiến thợ bỏ đi quá nhiều.",
+      "Kết quả đầu tiên là thời gian: lắp tại chỗ, một khung xe tốn mười hai tiếng rưỡi công thợ. Khi dây chuyền chạy đều vào đầu năm một nghìn chín trăm mười bốn, con số đó chỉ còn chín mươi ba phút, nhanh gấp tám lần.",
+      "Kết quả thứ hai là giá: catalogue năm một nghìn chín trăm mười một của chính Ford in giá sáu trăm tám mươi đô cho bản mui trần hai chỗ. Đến năm một nghìn chín trăm hai mươi tư, chiếc xe cùng loại chỉ còn hai trăm sáu mươi đô, rẻ hơn sáu mươi hai phần trăm.",
+      "Vì sao hiệu quả, thứ nhất là thời gian bị mất nằm ở những bước đi lại và chờ đợi chứ không ở tay nghề, và dây chuyền xoá đúng chỗ đó. Thứ hai là một vòng quay: xe rẻ thì bán nhiều, bán nhiều thì chi phí mỗi chiếc lại giảm, đến năm một nghìn chín trăm hai mươi ba Ford làm ra hơn hai triệu chiếc trong một năm.",
+      "Bài học cho bất kỳ cửa hàng hay xưởng nhỏ nào: đừng bắt người làm nhanh hơn, hãy tìm chỗ thời gian đang bị bỏ phí. Ghi lại từng bước một đơn hàng đi qua, đánh dấu bước nào phải đi tìm hay phải chờ, rồi đưa thứ cần dùng tới tận chỗ người đang làm."
+    ]
+  }
+}

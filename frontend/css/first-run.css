@@ -1,0 +1,29 @@
+/* Tách từ first-run.js (02/09/2026, audit Phase 2.1). */
+#bee-firstrun{position:fixed;inset:0;z-index:var(--z-modal);display:flex;
+  align-items:center;justify-content:center;background:var(--overlay-strong);
+  font:var(--text-base)/var(--leading-relaxed) var(--font-ui);color:var(--text)}
+#bee-firstrun .card{width:min(560px,92vw);background:var(--panel);
+  border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--sp-24) var(--sp-28);
+  box-shadow:var(--shadow-lg)}
+#bee-firstrun h2{margin:0 0 var(--sp-4);font-size:var(--text-xl);font-weight:var(--weight-semibold)}
+#bee-firstrun .sub{color:var(--text-faint);font-size:var(--text-md);margin-bottom:var(--sp-20)}
+#bee-firstrun .steps{margin:0 0 var(--sp-18);padding:0;list-style:none}
+#bee-firstrun .steps li{display:flex;gap:var(--sp-10);padding:var(--sp-6) 0;color:var(--text-soft)}
+#bee-firstrun .steps li .m{width:16px;flex:none;text-align:center}
+#bee-firstrun .steps li.done{color:var(--ok)}
+#bee-firstrun .steps li.active{color:var(--text)}
+#bee-firstrun .bar{height:8px;background:var(--surface);border-radius:var(--radius-pill);
+  overflow:hidden;border:1px solid var(--line);margin:var(--sp-6) 0 var(--sp-8)}
+#bee-firstrun .bar>i{display:block;height:100%;width:0;background:var(--info);
+  transition:width var(--dur-slow) ease}
+#bee-firstrun .meta{font-size:var(--text-sm);color:var(--text-faint);min-height:18px;
+  word-break:break-word;white-space:pre-wrap}
+#bee-firstrun .row{display:flex;gap:var(--sp-10);margin-top:var(--sp-18);flex-wrap:wrap}
+#bee-firstrun button{font:inherit;padding:var(--sp-8) var(--sp-16);border-radius:var(--radius-sm);
+  border:1px solid var(--control-line);background:var(--surface-strong);color:var(--text);cursor:pointer}
+#bee-firstrun button.primary{background:var(--primary-bg);border-color:var(--primary-bg);color:var(--primary-text)}
+#bee-firstrun button:disabled{opacity:.5;cursor:default}
+#bee-firstrun .err{margin-top:var(--sp-14);padding:var(--sp-10) var(--sp-12);border-radius:var(--radius-sm);
+  background:var(--danger-bg);border:1px solid var(--danger);color:var(--danger-text);font-size:var(--text-md);
+  white-space:pre-wrap;max-height:180px;overflow:auto}
+#bee-firstrun .skip{margin-left:auto;background:none;border:none;color:var(--text-faint)}

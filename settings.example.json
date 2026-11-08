@@ -1,0 +1,42 @@
+{
+  "sourceRoot": "C:\\Users\\PhuongHUST\\robonew\\projects",
+  "theme": "dark",
+  "zoom": 1.25,
+  "language": "vi",
+  "autoSave": true,
+  "defaultVoice": "hn_female_ngochuyen_full_48k-fhg",
+  "elevenApiKey": "",
+  "vbee": {
+    "appId": "YOUR_VBEE_APP_ID",
+    "token": "YOUR_VBEE_TOKEN",
+    "voiceCode": "hn_female_ngochuyen_full_48k-fhg",
+    "speed": 1.05
+  },
+  "eleven": {
+    "apiKey": "",
+    "voiceId": "",
+    "modelId": "eleven_multilingual_v2"
+  },
+  "aiNhaId": "tuongThich",
+  "aiModel": "ag/gemini-3.8-flash-medium",
+  "aiDiaChi": "https://9router.cool.khokey.com/v1",
+  "aiTheoNha": {
+    "anthropic": {
+      "model": "claude-3-5-sonnet-latest",
+      "diaChi": "https://api.anthropic.com/v1",
+      "khoa": ""
+    },
+    "openai": {
+      "model": "gpt-4o-mini",
+      "diaChi": "https://api.openai.com/v1",
+      "khoa": ""
+    },
+    "tuongThich": {
+      "model": "ag/gemini-3.8-flash-medium",
+      "diaChi": "https://9router.cool.khokey.com/v1",
+      "khoa": "YOUR_LLM_KEY"
+    }
+  },
+  "aiMaxTokens": 2048,
+  "aiTemp": 0.7
+}

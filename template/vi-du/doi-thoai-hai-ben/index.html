@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- /!\ THE QUYET DINH KHO VIDEO. Khong khai = doc 9:16. Xem CONTEXT.md muc 2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Đối thoại hai bên — mẫu tranh luận 16:9</title>
+
+<!-- /!\ PHAI GIU ba the font. Va dung them font Google thu hai - ham
+     `rewriteFontLinks()` thay BAT KY link `fonts.googleapis.com/css2` nao bang
+     Inter dong goi, nen font them vao se am tham bien mat luc quay. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- == 1. CHU DE - 1 cau script =======================================
+         /!\ Slide dau co DUNG 1 cau: app.js hien HET ba khoi ngay luc nap.
+         Tieu de viet "DC hay AC?" — DC TRUOC vi phe DC dung BEN TRAI. Viet
+         nguoc lai la chu va hinh chi hai huong khac nhau. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="chu-de">
+      <div class="nen nen-doi nen-chu-de">
+        <span class="sang sang-trai" aria-hidden="true"></span>
+        <span class="sang sang-phai" aria-hidden="true"></span>
+        <span class="vach" aria-hidden="true"></span>
+      </div>
+      <div class="than than-cd">
+        <div class="slide-element cd-dau">
+          <span class="nhan-muc">Đối thoại hai bên</span>
+          <h1 class="cd-tieu-de"><span class="chu-lanh">DC</span> <i>hay</i> <span class="chu-am">AC</span>?</h1>
+          <p class="cd-phu">Cuộc chiến dòng điện · nước Mỹ, 1886 – 1896</p>
+        </div>
+        <div class="cd-hai-ben">
+          <div class="slide-element cd-ben cd-trai">
+            <img class="chan-dung lon" src="anh/d0-edison.jpg" alt="Thomas Edison, khoảng 1878" />
+            <p class="cd-ten">Thomas Edison</p>
+            <p class="cd-phe chu-lanh">Điện một chiều · DC</p>
+          </div>
+          <div class="slide-element cd-ben cd-phai">
+            <div class="cd-doi">
+              <img class="chan-dung lon" src="anh/d1-westinghouse.jpg" alt="George Westinghouse, khoảng 1900–1914" />
+              <img class="chan-dung lon" src="anh/d2-tesla.jpg" alt="Nikola Tesla, khoảng 1890" />
+            </div>
+            <p class="cd-ten">George Westinghouse &amp; Nikola Tesla</p>
+            <p class="cd-phe chu-am">Điện xoay chiều · AC</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 2. VÒNG 1 · AN TOÀN - 2 cau script ==================================
+         (!) DUNG hai `.slide-element`: ben A (trai) roi ben B (phai). Khi B hien,
+         A tu lui mo di va nua nen ben phai sang len — xem `:has()` trong style.css.
+         Nhan vong KHONG phai phan tu: no hien ngay khi vao slide. -->
+    <div class="slide" data-slide="1" data-bo-cuc="vong">
+      <div class="nen nen-doi">
+        <span class="sang sang-trai" aria-hidden="true"></span>
+        <span class="sang sang-phai" aria-hidden="true"></span>
+        <span class="vach" aria-hidden="true"></span>
+      </div>
+      <div class="than than-vong">
+        <p class="vong-chip">Vòng 1 · An toàn</p>
+        <div class="hang-ben">
+        <article class="slide-element ben ben-a">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d0-edison.jpg" alt="Thomas Edison" />
+            <div><b>Thomas Edison</b><span>phe điện một chiều · DC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Điện một chiều 110 vôn là an toàn</h2>
+          <p class="ben-phu">Điện xoay chiều cao thế mới là thứ chết người.</p>
+          <div class="ben-bc bc-so"><b><span class="dem" style="--so-toi: 110"></span> V</b><span>điện một chiều trong nhà, hệ Edison</span></div>
+        </article>
+        <article class="slide-element ben ben-b">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d1-westinghouse.jpg" alt="George Westinghouse" />
+            <div><b>George Westinghouse</b><span>phe điện xoay chiều · AC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Cao thế chỉ nằm trên đường dây</h2>
+          <p class="ben-phu">Máy biến áp hạ điện áp xuống trước khi vào tới nhà.</p>
+          <figure class="ben-bc bc-anh"><img src="anh/d3-bien-ap.jpg" alt="Máy biến áp ở nhà máy Niagara · ảnh 1904" /><figcaption>Máy biến áp ở nhà máy Niagara · ảnh 1904</figcaption></figure>
+        </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 3. VÒNG 2 · THỰC TẾ - 2 cau script ==================================
+         (!) DUNG hai `.slide-element`: ben A (trai) roi ben B (phai). Khi B hien,
+         A tu lui mo di va nua nen ben phai sang len — xem `:has()` trong style.css.
+         Nhan vong KHONG phai phan tu: no hien ngay khi vao slide. -->
+    <div class="slide" data-slide="2" data-bo-cuc="vong">
+      <div class="nen nen-doi">
+        <span class="sang sang-trai" aria-hidden="true"></span>
+        <span class="sang sang-phai" aria-hidden="true"></span>
+        <span class="vach" aria-hidden="true"></span>
+      </div>
+      <div class="than than-vong">
+        <p class="vong-chip">Vòng 2 · Thực tế</p>
+        <div class="hang-ben">
+        <article class="slide-element ben ben-a">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d0-edison.jpg" alt="Thomas Edison" />
+            <div><b>Thomas Edison</b><span>phe điện một chiều · DC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Pearl Street đã chạy thật từ 1882</h2>
+          <p class="ben-phu">400 bóng đèn cho 82 khách hàng ở Manhattan.</p>
+          <figure class="ben-bc bc-anh"><img src="anh/d4-pearl-street.jpg" alt="Máy phát trạm Pearl Street · tranh khắc thập niên 1880" /><figcaption>Máy phát trạm Pearl Street · tranh khắc thập niên 1880</figcaption></figure>
+        </article>
+        <article class="slide-element ben ben-b">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d1-westinghouse.jpg" alt="George Westinghouse" />
+            <div><b>George Westinghouse</b><span>phe điện xoay chiều · AC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Nhưng điện một chiều không đi xa được</h2>
+          <p class="ben-phu">Cứ vài khu phố lại phải xây thêm một nhà máy.</p>
+          <div class="ben-bc bc-so"><b>≈ <span class="dem" style="--so-toi: 800"></span> m</b><span>tầm xa kinh tế của điện một chiều</span></div>
+        </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 4. VÒNG 3 · MÁY MÓC - 2 cau script ==================================
+         (!) DUNG hai `.slide-element`: ben A (trai) roi ben B (phai). Khi B hien,
+         A tu lui mo di va nua nen ben phai sang len — xem `:has()` trong style.css.
+         Nhan vong KHONG phai phan tu: no hien ngay khi vao slide. -->
+    <div class="slide" data-slide="3" data-bo-cuc="vong">
+      <div class="nen nen-doi">
+        <span class="sang sang-trai" aria-hidden="true"></span>
+        <span class="sang sang-phai" aria-hidden="true"></span>
+        <span class="vach" aria-hidden="true"></span>
+      </div>
+      <div class="than than-vong">
+        <p class="vong-chip">Vòng 3 · Máy móc</p>
+        <div class="hang-ben">
+        <article class="slide-element ben ben-a">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d0-edison.jpg" alt="Thomas Edison" />
+            <div><b>Thomas Edison</b><span>phe điện một chiều · DC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Hệ xoay chiều lúc đầu chỉ thắp được đèn</h2>
+          <p class="ben-phu">Nhà máy cần <span class="lien">mô-tơ</span> — mà <span class="lien">mô-tơ</span> thời đó chạy bằng điện một chiều.</p>
+          <figure class="ben-bc bc-anh"><img src="anh/d5-xuong-edison.jpg" alt="Xưởng máy Edison, New York · 1881" /><figcaption>Xưởng máy Edison, New York · 1881</figcaption></figure>
+        </article>
+        <article class="slide-element ben ben-b">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d2-tesla.jpg" alt="Nikola Tesla" />
+            <div><b>Nikola Tesla</b><span>phe điện xoay chiều · AC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Mô-tơ chạy bằng điện xoay chiều</h2>
+          <p class="ben-phu">Bằng sáng chế số 381.968, cấp ngày 1/5/1888 — Westinghouse mua bản quyền cùng năm.</p>
+          <figure class="ben-bc bc-anh"><img src="anh/d6-sang-che.jpg" alt="Bản vẽ trong bằng sáng chế · 1888" /><figcaption>Bản vẽ trong bằng sáng chế · 1888</figcaption></figure>
+        </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 5. VÒNG 4 · QUY MÔ - 2 cau script ==================================
+         (!) DUNG hai `.slide-element`: ben A (trai) roi ben B (phai). Khi B hien,
+         A tu lui mo di va nua nen ben phai sang len — xem `:has()` trong style.css.
+         Nhan vong KHONG phai phan tu: no hien ngay khi vao slide. -->
+    <div class="slide" data-slide="4" data-bo-cuc="vong">
+      <div class="nen nen-doi">
+        <span class="sang sang-trai" aria-hidden="true"></span>
+        <span class="sang sang-phai" aria-hidden="true"></span>
+        <span class="vach" aria-hidden="true"></span>
+      </div>
+      <div class="than than-vong">
+        <p class="vong-chip">Vòng 4 · Quy mô</p>
+        <div class="hang-ben">
+        <article class="slide-element ben ben-a">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d0-edison.jpg" alt="Thomas Edison" />
+            <div><b>Thomas Edison</b><span>phe điện một chiều · DC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Hệ một chiều đã đi trước</h2>
+          <p class="ben-phu">Mỗi trạm là tiền đã đầu tư — đổi sang xoay chiều là bỏ đi hết.</p>
+          <div class="ben-bc bc-so"><b><span class="dem" style="--so-toi: 121"></span> trạm</b><span>điện một chiều ở Mỹ · năm 1887</span></div>
+        </article>
+        <article class="slide-element ben ben-b">
+          <header class="ben-dau">
+            <img class="chan-dung" src="anh/d1-westinghouse.jpg" alt="George Westinghouse" />
+            <div><b>George Westinghouse</b><span>phe điện xoay chiều · AC</span></div>
+            <span class="dang-noi" aria-hidden="true"><i></i><i></i><i></i></span>
+          </header>
+          <h2 class="ben-y">Một nhà máy lớn, điện đi thật xa</h2>
+          <p class="ben-phu">Năm 1896, điện từ thác Niagara đi hơn 30 km tới Buffalo.</p>
+          <figure class="ben-bc bc-anh"><img src="anh/d7-niagara.jpg" alt="Máy phát Westinghouse ở thác Niagara · ảnh 1904" /><figcaption>Máy phát Westinghouse ở thác Niagara · ảnh 1904</figcaption></figure>
+        </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 6. DIEM CHUNG - 2 cau script ===================================
+         /!\ Diem chung KHONG phai "ai thang". Tim thu CA HAI ben cung dung,
+         va cho thay ca hai ben con song den hom nay. -->
+    <div class="slide" data-slide="5" data-bo-cuc="diem-chung">
+      <div class="nen nen-doi nen-hoa">
+        <span class="sang sang-trai" aria-hidden="true"></span>
+        <span class="sang sang-phai" aria-hidden="true"></span>
+        <span class="vach" aria-hidden="true"></span>
+      </div>
+      <div class="than than-dc">
+        <div class="slide-element dc-dau">
+          <span class="nhan-muc">Điểm chung</span>
+          <p class="dc-cau">Cùng muốn điện <em>rẻ và an toàn</em> tới mọi nhà —<br />và cả hai đều đúng một phần.</p>
+        </div>
+        <div class="slide-element dc-hang">
+          <div class="dc-cot dc-trai">
+            <b class="chu-lanh">DC · một chiều</b>
+            <p>Mọi điện thoại, máy tính, tấm pin mặt trời — và đường dây siêu cao áp nối các vùng xa.</p>
+          </div>
+          <figure class="dc-anh">
+            <img src="anh/d8-hvdc.jpg" alt="Đường dây siêu cao áp một chiều Phase II nối Québec với New England" />
+            <figcaption>Đường dây một chiều siêu cao áp · 2019</figcaption>
+          </figure>
+          <div class="dc-cot dc-phai">
+            <b class="chu-am">AC · xoay chiều</b>
+            <p>Lưới điện truyền tải và phân phối tới từng nhà.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

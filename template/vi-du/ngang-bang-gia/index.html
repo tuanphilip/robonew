@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết —
+     toàn bộ style.css bên cạnh viết cho khung ngang. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Bảng giá thị trường — mẫu nền sáng 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         ⚠ MỌI HÌNH TRONG DECK LÀ SVG ĐẶT THẲNG TRONG HTML — không thư viện,
+         không ảnh: deck phải dựng được OFFLINE, hình phải đổi màu theo bảng
+         "Tông màu", và sửa số liệu là sửa thẳng toạ độ. Hình KHÔNG mang lớp
+         `.slide-element` nên không ăn nhịp bấm và không kéo hộp bao mà
+         `kiemDeck` đo. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-bang" aria-hidden="true">
+        <svg viewBox="0 0 400 320" fill="none">
+          <rect class="man" x="24" y="28" width="352" height="238" rx="18" />
+          <path class="man-vach" d="M24 78h352" />
+          <circle class="den-man" cx="50" cy="53" r="5" />
+          <circle class="den-man mo" cx="70" cy="53" r="5" />
+          <circle class="den-man mo" cx="90" cy="53" r="5" />
+
+          <g class="dong-man">
+            <rect x="52" y="104" width="96" height="14" rx="7" />
+            <rect x="52" y="148" width="76" height="14" rx="7" />
+            <rect x="52" y="192" width="88" height="14" rx="7" />
+          </g>
+          <g class="chip-man">
+            <rect class="len" x="272" y="100" width="76" height="22" rx="11" />
+            <rect class="len" x="272" y="144" width="76" height="22" rx="11" />
+            <rect class="xuong" x="272" y="188" width="76" height="22" rx="11" />
+          </g>
+          <path class="tia-man len" d="M172 118 196 106 220 112 244 96" />
+          <path class="tia-man len" d="M172 160 196 156 220 150 244 142" />
+          <path class="tia-man xuong" d="M172 192 196 198 220 196 244 206" />
+
+          <path class="chan-man" d="M200 266v28" />
+          <path class="chan-man" d="M154 296h92" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element bang-tem"><span class="cham-song"></span>Bảng giá tuần · 18/09</div>
+        <div class="slide-element tieu-de-lon">Năm đồng lớn nhất<br />và một con số lạ</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. BẢNG GIÁ — 4 câu / 4 phần tử ════════════════════════════════
+         MỖI HÀNG LÀ MỘT `.slide-element`, nên hàng hiện đúng lúc người dẫn đọc
+         tới đồng đó. Đây là lý do bảng có ĐÚNG bốn hàng: dòng script tương ứng
+         có bốn câu, và hợp đồng nhịp là một phần tử một câu.
+
+         ⚠ Bảng năm cột (tên · giá · phần trăm · đường bảy ngày) chỉ đặt được ở
+         khung ngang. Ở khung dọc 390px, cột giá và cột đường chồng lên nhau. -->
+    <div class="slide" data-slide="1" data-bo-cuc="bang-gia">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="nhan">Đóng cửa tuần</div>
+        <div class="bang-dau">
+          <span>Đồng</span><span>Giá</span><span>7 ngày</span><span class="phai">Tuần</span>
+        </div>
+
+        <div class="slide-element hang-gia">
+          <div class="o-ten"><span class="ky-hieu btc">₿</span>Bitcoin<em>BTC</em></div>
+          <div class="o-gia">107 622 <i>$</i></div>
+          <div class="o-tia">
+            <svg viewBox="0 0 120 34" fill="none" aria-hidden="true">
+              <path class="tia len" d="M2 26 21 24 40 27 59 18 78 16 97 10 118 6" />
+            </svg>
+          </div>
+          <div class="o-chip"><span class="chip len">+4,2%</span></div>
+        </div>
+
+        <div class="slide-element hang-gia">
+          <div class="o-ten"><span class="ky-hieu eth">Ξ</span>Ethereum<em>ETH</em></div>
+          <div class="o-gia">4 118 <i>$</i></div>
+          <div class="o-tia">
+            <svg viewBox="0 0 120 34" fill="none" aria-hidden="true">
+              <path class="tia len" d="M2 28 21 25 40 22 59 22 78 14 97 9 118 4" />
+            </svg>
+          </div>
+          <div class="o-chip"><span class="chip len">+6,1%</span></div>
+        </div>
+
+        <div class="slide-element hang-gia">
+          <div class="o-ten"><span class="ky-hieu sol">S</span>Solana<em>SOL</em></div>
+          <div class="o-gia">238 <i>$</i></div>
+          <div class="o-tia">
+            <svg viewBox="0 0 120 34" fill="none" aria-hidden="true">
+              <path class="tia ngang" d="M2 18 21 16 40 19 59 17 78 18 97 16 118 17" />
+            </svg>
+          </div>
+          <div class="o-chip"><span class="chip ngang">+0,3%</span></div>
+        </div>
+
+        <div class="slide-element hang-gia">
+          <div class="o-ten"><span class="ky-hieu ada">A</span>Cardano<em>ADA</em></div>
+          <div class="o-gia">0,92 <i>$</i></div>
+          <div class="o-tia">
+            <svg viewBox="0 0 120 34" fill="none" aria-hidden="true">
+              <path class="tia xuong" d="M2 8 21 12 40 10 59 16 78 20 97 24 118 27" />
+            </svg>
+          </div>
+          <div class="o-chip"><span class="chip xuong">−3,0%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. VỐN HOÁ — 2 câu / 2 phần tử ═════════════════════════════════
+         Vành tròn vẽ bằng `stroke-dasharray` trên ba cung — không thư viện,
+         không ảnh. Ba cung cộng lại đúng một vòng, sửa tỉ lệ là sửa hai số. -->
+    <div class="slide" data-slide="2" data-bo-cuc="von-hoa">
+      <div class="nen nen-3"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Theo vốn hoá</div>
+          <div class="slide-element tieu-de">Bức tranh khác hẳn bảng giá</div>
+          <div class="slide-element chu-giai">
+            <div class="cg cg-1"><b>54%</b><span>Bitcoin</span></div>
+            <div class="cg cg-2"><b>17%</b><span>Ethereum</span></div>
+            <div class="cg cg-3"><b>29%</b><span>Hàng nghìn đồng còn lại</span></div>
+          </div>
+        </div>
+
+        <div class="vanh-tron" aria-hidden="true">
+          <svg viewBox="0 0 160 160" fill="none">
+            <circle class="ray-vanh" cx="80" cy="80" r="54" />
+            <g class="cung">
+              <circle class="c1" cx="80" cy="80" r="54" />
+              <circle class="c2" cx="80" cy="80" r="54" />
+              <circle class="c3" cx="80" cy="80" r="54" />
+            </g>
+            <text class="so-giua" x="80" y="76">54%</text>
+            <text class="chu-giua" x="80" y="98">là Bitcoin</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. ĐỌC SAO CHO ĐÚNG — 3 câu / 3 phần tử ════════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="noi-dung">
+      <div class="nen nen-4"></div>
+      <div class="than">
+        <div class="nhan">Đọc sao cho đúng</div>
+        <div class="slide-element tieu-de">Đọc cả ba cột, đừng đọc một</div>
+        <ul class="gach">
+          <li class="slide-element">Giá là <b>mức hiện tại</b>, phần trăm là <b>tuần vừa rồi</b></li>
+          <li class="slide-element">Đường bảy ngày mới cho biết nó tới đó bằng con đường nào</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 5. CÁI BẪY — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Cái bẫy</div>
+        <div class="slide-element tieu-de">Phần trăm không có mốc gốc</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Tăng ba mươi phần trăm sau khi giảm bảy mươi: <b>vẫn lỗ nặng</b></li>
+          <li class="slide-element">Một con số đẹp không phải là một khoản lãi</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="mo-dau">
+      <div class="nen nen-6"></div>
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Giá · Phần trăm<br />Hình dáng đường đi</div>
+        <div class="slide-element phu-de">Đọc cùng nhau thì bảng giá mới nói thật</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

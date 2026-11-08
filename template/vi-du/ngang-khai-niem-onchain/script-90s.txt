@@ -1,0 +1,6 @@
+Bể thanh khoản là thứ khiến sàn phi tập trung chạy được mà không cần ai khớp lệnh.
+Sàn truyền thống cần người mua gặp người bán. Sàn phi tập trung thì không đợi ai cả, nó đổi thẳng với một cái bể. Bể đó chứa sẵn hai loại tài sản, và có người đã bỏ tiền vào để nó luôn có sẵn.
+Người bỏ tiền vào gọi là nhà cung cấp thanh khoản. Đổi lại họ ăn một phần phí của mỗi lượt đổi. Phí thường là ba phần nghìn, nghe bé nhưng cộng dồn theo số lượt.
+Tổng tiền đang nằm trong các bể có một cái tên riêng là tê vê eo. Con số đó lên xuống theo cả giá tài sản lẫn niềm tin của người gửi. Nhìn đường tê vê eo là nhìn được người ta đang rút ra hay đang bỏ vào.
+Cái bẫy có tên là tổn thất tạm thời. Khi giá hai tài sản trong bể lệch nhau nhiều, phần bạn rút ra ít hơn phần bạn đã bỏ vào. Phí thu được có thể không bù nổi khoản chênh đó.
+Bể thanh khoản không phải tài khoản tiết kiệm. Nó là một vị thế, và vị thế nào cũng có giá của nó.

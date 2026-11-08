@@ -1,0 +1,145 @@
+/* Tách từ don-rac.js — cùng nếp với help-hub.css và version-badge.css.
+   Mọi giá trị đi qua bảng token ở css/tokens.css (xem verify:css). */
+
+#rac-nen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--sp-24);
+  background: var(--overlay);
+  backdrop-filter: blur(3px);
+  font-family: var(--font-ui);
+}
+
+/* Cuộn Ở TRONG thân chứ không cuộn cả hộp: danh sách nhóm có thể dài, mà tiêu
+   đề và hàng nút phải đứng yên — cùng lý do với bảng "Có gì mới?". */
+#rac-hop {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 94vw);
+  max-height: 86vh;
+  padding: var(--sp-24);
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
+}
+
+#rac-hop h2 {
+  margin: 0 0 var(--sp-8);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+}
+#rac-hop .rac-phu {
+  margin: 0 0 var(--sp-8);
+  color: var(--text-soft);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+}
+#rac-hop .rac-giu { color: var(--text-faint); }
+#rac-hop .rac-loi { margin: 0; color: var(--delete-text); font-size: var(--text-md); }
+#rac-hop .rac-trong { margin: 0; color: var(--text-soft); font-size: var(--text-md); }
+
+/* ---- danh sách nhóm ---------------------------------------------------- */
+#rac-hop .rac-ds { display: flex; flex-direction: column; gap: var(--sp-8); margin-top: var(--sp-14); }
+
+#rac-hop .rac-nhom {
+  display: flex;
+  gap: var(--sp-10);
+  padding: var(--sp-12) var(--sp-14);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  cursor: pointer;
+}
+#rac-hop .rac-nhom:hover { border-color: var(--control-line); }
+/* Nhóm rỗng vẫn HIỆN chứ không giấu: thấy "không có" thì người dùng biết app
+   đã tìm và không có gì, khác hẳn với việc nhóm đó biến mất không rõ vì sao. */
+#rac-hop .rac-nhom.rac-rong { opacity: 0.55; cursor: default; }
+#rac-hop .rac-nhom input { margin-top: var(--sp-4); flex: none; }
+/* Ô chọn số ngày của nhóm "Deck cũ đã có video" — nằm giữa câu mô tả. */
+#rac-hop .rac-nhom select {
+  margin: 0 var(--sp-4); padding: var(--sp-2) var(--sp-6);
+  border: 1px solid var(--control-line); border-radius: var(--radius-sm);
+  background: var(--panel); color: var(--text); font: inherit; font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+#rac-hop .rac-than { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; }
+#rac-hop .rac-dong1 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+  font-size: var(--text-md);
+}
+#rac-hop .rac-so {
+  color: var(--text-faint);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+#rac-hop .rac-mo {
+  color: var(--text-soft);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+/* Lời cảnh báo của nhóm tốn tiền — phải đọc ra được, đừng để nhạt như chú thích. */
+#rac-hop .rac-canh {
+  color: var(--warn-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-normal);
+}
+
+/* ---- khối "xem tệp sẽ xoá" --------------------------------------------- */
+#rac-hop .rac-xem { margin-top: var(--sp-4); }
+#rac-hop .rac-xem summary {
+  color: var(--text-faint);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+#rac-hop .rac-xem pre {
+  margin: var(--sp-6) 0 0;
+  padding: var(--sp-8) var(--sp-10);
+  max-height: 160px;
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  color: var(--text-soft);
+  background: var(--surface-strong);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  white-space: pre;
+}
+#rac-hop .rac-deck { margin-top: var(--sp-12); }
+
+/* ---- chân hộp ---------------------------------------------------------- */
+#rac-hop .rac-ketqua {
+  margin: var(--sp-14) 0 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-relaxed);
+}
+#rac-hop .rac-ketqua.tot { color: var(--ok); }
+#rac-hop .rac-ketqua.xau { color: var(--delete-text); }
+
+#rac-hop .rac-nut { display: flex; justify-content: flex-end; gap: var(--sp-8); margin-top: var(--sp-18); }
+#rac-hop .rac-nut button {
+  min-height: 38px;
+  padding: 0 var(--sp-16);
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: none;
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+#rac-hop .rac-nut button.chinh {
+  border-color: transparent;
+  color: var(--accent-contrast);
+  background: var(--accent);
+}
+#rac-hop .rac-nut button:disabled { opacity: 0.5; cursor: default; }

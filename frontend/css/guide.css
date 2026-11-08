@@ -1,0 +1,368 @@
+/* Tách từ guide.js (02/09/2026, audit Phase 2.1). */
+#bee-guide { position: fixed; inset: 0; z-index: var(--z-guide); overflow-y: auto;
+  background: var(--overlay); backdrop-filter: blur(3px);
+  font-family: var(--font-ui); }
+#bee-guide .hd-hop { position: relative; width: min(760px, 94vw); margin: var(--sp-40) auto;
+  padding: var(--sp-28) var(--sp-32) var(--sp-24); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  /* --panel chứ KHÔNG phải một bậc --surface mờ: bậc mờ trong suốt một phần nên
+     cả bảng dự án phía sau lộ xuyên qua chữ (đã chụp thấy). */
+  background: var(--panel); color: var(--text);
+  box-shadow: var(--shadow-lg); }
+#bee-guide .hd-x { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px;
+  border: 0; border-radius: var(--radius-pill); background: var(--surface); color: var(--text);
+  font-size: var(--text-xl); line-height: var(--leading-none); cursor: pointer; }
+#bee-guide h2 { margin: 0 0 var(--sp-20); font-size: var(--text-2xl); font-weight: var(--weight-bold); }
+#bee-guide .hd-muc { padding: var(--sp-16) 0; border-top: 1px solid var(--line); }
+#bee-guide .hd-muc:first-of-type { border-top: 0; padding-top: 0; }
+#bee-guide .hd-nhan { margin: 0 0 var(--sp-4); color: var(--text-faint);
+  font-size: var(--text-xs); font-weight: var(--weight-bold); letter-spacing: 0.12em; text-transform: uppercase; }
+#bee-guide h3 { margin: 0 0 var(--sp-10); font-size: var(--text-lg); font-weight: var(--weight-bold); }
+#bee-guide .hd-mota { margin: calc(-1 * var(--sp-12)) 0 var(--sp-20); color: var(--text-soft);
+  font-size: var(--text-md); line-height: var(--leading-relaxed); }
+/* Ảnh chụp thật, tỉ lệ mỗi cái một khác (ảnh bước 2 chỉ là một nút nhỏ).
+   Nên KHÔNG ép chiều cao — để ảnh tự co theo bề ngang, và chặn trần bằng
+   vh để ảnh dài không đẩy nút bước sau ra khỏi tầm nhìn. */
+#bee-guide .hd-anh { display: block; width: 100%; max-height: 62vh;
+  object-fit: contain; object-position: left top;
+  margin: var(--sp-4) 0 var(--sp-12); border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: #ffffff; }
+#bee-guide ol { margin: 0 0 var(--sp-12); padding-left: var(--sp-20); }
+#bee-guide li { margin: 0 0 var(--sp-6); font-size: var(--text-md); line-height: var(--leading-relaxed); color: var(--text-soft); }
+/* ⚠ PHẢI đặt cả background, không chỉ color.
+   index.html có rule TOÀN CỤC cho mọi thẻ a, đặt background: var(--accent).
+   Chỉ ghi đè màu chữ thì nút giữ nguyên nền accent — mà ở nền sáng
+   --accent là #1b1b1f (đen) còn --text là #131315 (cũng đen) → chữ đen
+   trên nền đen, nút thành một vệt tối không đọc được.
+   Cặp dưới đây chép theo .small-link (index.html), cặp đã dùng thật. */
+#bee-guide .hd-link { display: inline-flex; font-family: inherit; cursor: pointer; align-items: center; gap: var(--sp-8);
+  min-height: 34px; padding: 0 var(--sp-14); border: 1px solid var(--control-line);
+  border-radius: var(--radius-md); color: var(--text); background: var(--surface-strong);
+  text-decoration: none; font-size: var(--text-sm); font-weight: var(--weight-bold); }
+#bee-guide .hd-link:hover { background: var(--surface); border-color: var(--text-faint); }
+#bee-guide .hd-cuoi { margin: var(--sp-18) 0 0; padding: var(--sp-12) var(--sp-14); border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text-soft); font-size: var(--text-md); line-height: var(--leading-relaxed); }
+
+/* ── Bản TRANG (không phải popup) ────────────────────────────────────────
+   Dùng lại đúng bộ quy tắc trên bằng cách lặp bộ chọn dưới tiền tố .hd-trang.
+   Không gộp thành một danh sách bộ chọn chung với #bee-guide: id có độ ưu
+   tiên cao hơn class rất nhiều, gộp vào là mấy dòng riêng của trang bị
+   chính #bee-guide đè lại. */
+.hd-trang { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--sp-4) var(--sp-2) var(--sp-28); }
+.hd-trang h2 { margin: 0 0 var(--sp-6); font-size: var(--text-3xl); font-weight: var(--weight-bold); letter-spacing: -0.02em; }
+.hd-trang .hd-mota { margin: 0 0 var(--sp-24); max-width: 720px;
+  color: var(--text-soft); font-size: var(--text-md); line-height: var(--leading-relaxed); }
+
+/* "BƯỚC 1" to hẳn lên và có icon đứng trước — mắt bắt được bước nào là bước
+   nào mà không phải đọc số. Trước đây nó là dòng chữ 11px xám nhạt, nhỏ hơn
+   cả nội dung bên dưới, nên bảy bước nhìn như một khối liền. */
+.hd-trang .hd-nhan {
+  display: flex; align-items: center; gap: var(--sp-8);
+  margin: 0 0 var(--sp-8); color: var(--text);
+  font-size: var(--text-lg); font-weight: var(--weight-bold); letter-spacing: 0.06em; text-transform: uppercase; }
+.hd-trang .hd-nhan .btn-icon {
+  display: grid; place-items: center; width: 30px; height: 30px; flex: 0 0 auto;
+  border-radius: var(--radius-pill); background: var(--surface-strong); color: var(--text); }
+.hd-trang .hd-nhan .btn-icon svg { width: 16px; height: 16px; }
+.hd-trang h3 { margin: 0 0 var(--sp-12); font-size: var(--text-lg); font-weight: var(--weight-bold); }
+.hd-trang ol { margin: 0 0 var(--sp-14); padding-left: var(--sp-20); }
+.hd-trang li { margin: 0 0 var(--sp-8); font-size: var(--text-base); line-height: var(--leading-relaxed); color: var(--text-soft); }
+.hd-trang .hd-link { display: inline-flex; font-family: inherit; cursor: pointer; align-items: center; gap: var(--sp-8);
+  min-height: 34px; padding: 0 var(--sp-14); border: 1px solid var(--control-line);
+  border-radius: var(--radius-md); color: var(--text); background: var(--surface-strong);
+  text-decoration: none; font-size: var(--text-sm); font-weight: var(--weight-bold); }
+.hd-trang .hd-link:hover { background: var(--surface); border-color: var(--text-faint); }
+/* Ô đường dẫn thư mục app: chữ mã + nút copy, xuống dòng được vì đường dẫn dài. */
+.hd-trang .hd-duong,
+#bee-guide .hd-duong {
+  display: flex; align-items: center; gap: var(--sp-10); flex-wrap: wrap;
+  margin: var(--sp-10) 0 0;
+}
+.hd-duong code {
+  padding: var(--sp-4) var(--sp-8);
+  border: 1px solid var(--control-line); border-radius: var(--radius-sm);
+  font-size: var(--text-sm); word-break: break-all;
+}
+.hd-duong-copy {
+  padding: var(--sp-6) var(--sp-12);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  background: none; color: var(--text);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  cursor: pointer; white-space: nowrap;
+}
+.hd-duong-copy:hover { background: var(--surface); }
+
+.hd-trang .hd-cuoi { margin: var(--sp-24) 0 0; padding: var(--sp-14) var(--sp-16); border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text-soft); font-size: var(--text-md); line-height: var(--leading-relaxed); }
+
+/* Chữ trái, ảnh phải. Cột ảnh rộng hơn một chút vì ảnh chụp giao diện mới
+   là thứ người ta nhìn để đối chiếu; chữ chỉ là mấy dòng ngắn.
+   align-items:start để ảnh không bị kéo cao bằng cột chữ.
+   (Không dùng dấu huyền trong chú thích — cả khối nằm trong template
+   literal, một dấu là đóng chuỗi CSS giữa chừng.) */
+.hd-trang .hd-doi {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: var(--sp-24); align-items: start; }
+/* Mục KHÔNG có ảnh thì trải một cột.
+   Bố cục hai cột trên chừa hơn nửa bề ngang cho ảnh; bài nào toàn chữ (như
+   bài hướng dẫn dùng app) mà vẫn hai cột thì chữ bị ép vào 44% bên trái còn
+   nửa phải trống hoác, nhìn như trang bị lỗi. Hàm than() gắn lớp này khi
+   mục không khai anh. */
+.hd-trang .hd-doi.hd-mot { grid-template-columns: minmax(0, 1fr); }
+.hd-trang .hd-doi.hd-mot .hd-phai { display: none; }
+.hd-trang .hd-hinh { margin: 0; }
+/* KHÔNG đặt width:100%. Bảy ảnh này tỉ lệ chênh nhau rất xa — ảnh bước 2
+   chỉ là một nút nhỏ 571px, kéo cho đầy cột là phóng to lên gấp đôi và vỡ
+   hạt. Để ảnh giữ cỡ thật, chỉ chặn trần bằng max-*. */
+.hd-trang .hd-phai .hd-anh {
+  display: block; max-width: 100%; height: auto; max-height: 260px;
+  border: 1px solid var(--line); border-radius: var(--radius-md); background: #ffffff; }
+.hd-trang .hd-chu {
+  margin: var(--sp-8) 0 0; max-width: 460px;
+  color: var(--text-faint); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+/* Nhiều ảnh trong một mục (23/10/2026): cột phải xếp dọc; ảnh RỘNG (chụp ngang có đánh số) + bảng nút nằm
+   ở hàng dưới, trải hết hai cột. Bấm ảnh nào cũng phóng to (guide.js#phongAnh). */
+.hd-trang .hd-phai { display: flex; flex-direction: column; gap: var(--sp-16); }
+.hd-trang .hd-duoi { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--sp-16); }
+.hd-trang .hd-hinh-rong .hd-anh {
+  display: block; max-width: 100%; height: auto;
+  border: 1px solid var(--line); border-radius: var(--radius-md); background: #ffffff; }
+.hd-trang .hd-anh { cursor: zoom-in; }
+.hd-trang .hd-link-video { margin-top: var(--sp-8); }
+/* Nút video vẽ sẵn `hidden`, hiện khi có tệp — display:inline-flex ở trên đè mất thuộc tính hidden nếu thiếu dòng này. */
+#bee-guide .hd-link[hidden], .hd-trang .hd-link[hidden] { display: none; }
+/* Bảng nút: ô ảnh cắt sát nút bên trái, tên + phím + làm gì + ví dụ bên phải. */
+.hd-nut-bang { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: var(--sp-10); }
+.hd-nut-dong {
+  display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: var(--sp-12); align-items: start;
+  padding: var(--sp-10) var(--sp-12); border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--panel); }
+.hd-nut-anh {
+  display: grid; place-items: center; min-height: 56px; padding: var(--sp-6);
+  border-radius: var(--radius-sm); background: var(--surface); }
+.hd-nut-anh img { display: block; max-width: 100%; max-height: 72px; height: auto; }
+.hd-nut-chu b { font-size: var(--text-md); }
+.hd-nut-chu kbd {
+  display: inline-block; margin-left: var(--sp-4); padding: 0 var(--sp-6);
+  border: 1px solid var(--control-line); border-radius: var(--radius-sm); background: var(--surface);
+  font: inherit; font-size: var(--text-xs); color: var(--text-soft); }
+.hd-nut-chu p { margin: var(--sp-4) 0 0; color: var(--text-soft); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+.hd-nut-chu .hd-nut-vd { color: var(--text-faint); }
+.hd-nut-chu .hd-nut-vd span { font-weight: var(--weight-semibold); color: var(--text-soft); }
+/* Phóng ảnh: lớp phủ cả cửa sổ, bấm đâu cũng đóng. */
+.hd-phong {
+  position: fixed; inset: 0; z-index: var(--z-guide); display: grid; place-items: center; padding: var(--sp-24);
+  background: var(--overlay-strong); cursor: zoom-out; }
+.hd-phong img { max-width: 100%; max-height: 100%; border-radius: var(--radius-md); background: #ffffff; }
+.hd-phong figcaption { margin-top: var(--sp-10); color: var(--on-ok); font-size: var(--text-md); text-align: center; }
+/* Trình phát video hướng dẫn (guide.js#xemVideo): lớp phủ cả cửa sổ, khung 16:9 vừa màn, bấm nền là đóng. */
+.hd-xem {
+  position: fixed; inset: 0; z-index: var(--z-guide); display: grid; place-items: center; padding: var(--sp-24);
+  background: var(--overlay-strong); }
+.hd-xem-khung { width: min(1280px, 100%, (100vh - 120px) * 16 / 9); border-radius: var(--radius-md); overflow: hidden;
+  background: var(--hd-xem-nen); box-shadow: var(--shadow-lg); }
+.hd-xem-dau { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-12);
+  padding: var(--sp-8) var(--sp-8) var(--sp-8) var(--sp-16); color: var(--yt-chu); font-size: var(--text-md); }
+.hd-xem-x { width: 32px; height: 32px; border: 0; border-radius: var(--radius-sm); background: transparent;
+  color: var(--hd-xem-x); font: inherit; font-size: var(--text-xl); line-height: var(--leading-none); cursor: pointer; }
+.hd-xem-x:hover { background: var(--hd-xem-x-nen); color: var(--yt-chu); }
+/* Khung đen cố định ở cả hai giao diện sáng / tối (video luôn nền đen) — màu ở token --hd-xem-*, không lật theo theme. */
+.hd-xem video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--hd-xem-nen); outline: none; }
+/* Cửa sổ hẹp thì hai cột thành hai cột teo — xếp dọc lại. */
+@media (max-width: 1000px) {
+  .hd-trang .hd-doi { grid-template-columns: 1fr; gap: var(--sp-14); }
+}
+
+/* ══ BÀI HƯỚNG DẪN — bản TRANG ═══════════════════════════════════════════
+ * Hai cột: nội dung bên trái, mục lục trong trang + hai thẻ phụ bên phải.
+ * Cùng bộ thước với mục lục bảy bài (css/pages.css) để hai màn hình đọc như
+ * một — trần 1600, cột phải 320, khe 24.
+ */
+.hd-bai {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--sp-24);
+  align-items: start;
+  max-width: 1600px;
+}
+/* Cửa sổ hẹp: cột phải rụng xuống dưới, không teo lại. */
+@media (max-width: 1100px) {
+  .hd-bai { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- Khối mở đầu ------------------------------------------------------- */
+.hd-trang .hd-dau {
+  position: relative; overflow: hidden;
+  color: var(--hero-chu);
+  margin: 0 0 var(--sp-20); padding: var(--sp-24) var(--sp-24) var(--sp-20);
+  border-radius: var(--radius-lg);
+  background-color: var(--rl-dau-bg);
+  background-image: var(--hd-hero-anh);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: cover;
+}
+/* Chặn bề ngang ở 62%: nửa phải tấm nền là hình minh hoạ, chữ chạy đè lên đó
+   là không đọc được chữ nào — cùng lý do với .hd-hero ở mục lục. */
+.hd-trang .hd-dau h2 { margin: 0 0 var(--sp-8); max-width: 62%; }
+.hd-trang .hd-dau .hd-mota { margin: 0; max-width: 58%; color: var(--hero-chu-mo); }
+/* Ba con tem nằm trên tấm nền sáng — vỏ và chữ phải theo tấm nền đó, không
+   theo nền trang. */
+.hd-trang .hd-dau .hd-tem > span {
+  background: var(--hero-chip-nen); border-color: transparent; color: var(--hero-chu-mo);
+}
+.hd-trang .hd-dau .hd-tem .btn-icon { color: var(--hero-chip-chu); }
+/* Ba con tem: đều là số đếm được từ chính bài, không phải lời quảng cáo. */
+.hd-tem { display: flex; flex-wrap: wrap; gap: var(--sp-8); margin-top: var(--sp-16); }
+.hd-tem > span {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-12); border-radius: var(--radius-pill);
+  background: var(--panel); border: 1px solid var(--line);
+  color: var(--text-soft); font-size: var(--text-sm); font-weight: var(--weight-semibold);
+}
+.hd-tem .btn-icon { color: var(--info); background: none; box-shadow: none; }
+.hd-tem svg { width: 14px; height: 14px; }
+
+/* ---- Thẻ "Bắt đầu nhanh" ----------------------------------------------- */
+.hd-nhanh {
+  display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: var(--sp-20);
+  align-items: center;
+  margin: 0 0 var(--sp-20); padding: var(--sp-20) var(--sp-24);
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-lg);
+}
+@media (max-width: 1280px) {
+  .hd-nhanh { grid-template-columns: minmax(0, 1fr); }
+  .hd-nhanh-hinh { display: none; }
+}
+.hd-nhanh-tem {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  margin: 0 0 var(--sp-10); padding: var(--sp-4) var(--sp-10);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info);
+  font-size: var(--text-2xs); font-weight: var(--weight-bold); letter-spacing: 0.08em;
+}
+.hd-nhanh-tem .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-nhanh-tem svg { width: 12px; height: 12px; }
+.hd-trang .hd-nhanh h3 { margin: 0 0 var(--sp-8); font-size: var(--text-xl); }
+.hd-nhanh p { margin: 0 0 var(--sp-16); max-width: 560px;
+  color: var(--text-soft); font-size: var(--text-base); line-height: var(--leading-relaxed); }
+.hd-nhanh-nut {
+  display: inline-flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-10) var(--sp-18); cursor: pointer; font: inherit;
+  font-size: var(--text-md); font-weight: var(--weight-bold);
+  background: var(--hd-video-nen); color: var(--hd-video-chu);
+  border: 0; border-radius: var(--radius-pill);
+}
+.hd-nhanh-nut:hover { opacity: 0.9; }
+.hd-nhanh-nut .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-nhanh-nut svg { width: 15px; height: 15px; }
+/* Ảnh bìa = một khung THẬT của video 1 đi kèm bộ cài (`assets/hd-video-bia.webp`, 24/10/2026; bản trước là ảnh YouTube).
+
+   ⚠ KHÔNG trỏ thẳng tới img.youtube.com: CSP của trang khai
+   `img-src 'self' file: data: blob:` — miền ngoài bị chặn, mà chặn thì KHÔNG
+   có lỗi nào hiện ra, chỉ là một ô trống. Cùng lý do với việc không nhúng
+   khung YouTube (xem chú thích ở đầu NOI_DUNG trong guide.js).
+
+   ⚠ ĐỔI VIDEO thì phải tải lại tấm này: ảnh và `VIDEO_HD` là một cặp, lệch
+   nhau là bấm vào một đằng ra một nẻo. Lấy ở
+   https://img.youtube.com/vi/<mã video>/maxresdefault.jpg */
+.hd-nhanh-hinh {
+  position: relative; overflow: hidden;
+  display: block; width: 100%; height: 130px; padding: 0;
+  border: 0; border-radius: var(--radius-md); cursor: pointer;
+  background: var(--surface);
+}
+.hd-nhanh-hinh img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Nút play đỏ đặt giữa, đúng ngôn ngữ của khung nhúng YouTube — để người ta
+   biết bấm vào là ra YouTube chứ không phải phát ngay trong app. */
+.hd-nhanh-play {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: var(--overlay-nhe);
+  transition: background var(--dur-fast) ease;
+}
+.hd-nhanh-play .btn-icon {
+  display: grid; place-items: center; width: 46px; height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--yt-do); color: var(--yt-chu); box-shadow: none;
+}
+.hd-nhanh-play svg { width: 18px; height: 18px; }
+.hd-nhanh-hinh:hover .hd-nhanh-play { background: transparent; }
+
+/* ---- Thẻ từng bước ----------------------------------------------------- */
+/* Mỗi mục nay là một THẺ có vỏ, không còn là mấy đoạn ngăn nhau bằng đường kẻ.
+   Bảy mục chữ liền nhau thì cuộn tới giữa bài là không biết mình đang ở mục
+   nào; có vỏ thì mắt bắt được ranh giới ngay. */
+.hd-trang .hd-muc {
+  padding: var(--sp-20) var(--sp-24);
+  margin: 0 0 var(--sp-14);
+  border: 1px solid var(--line); border-top: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+.hd-trang .hd-muc:first-of-type { padding-top: var(--sp-20); }
+.hd-muc-dau { display: flex; align-items: flex-start; gap: var(--sp-14); margin-bottom: var(--sp-14); }
+.hd-stt {
+  flex: none; display: grid; place-items: center;
+  width: 38px; height: 38px; border-radius: var(--radius-md);
+  font-size: var(--text-lg); font-weight: var(--weight-bold);
+  background: var(--surface); color: var(--text-soft);
+}
+.hd-stt[data-mau="lam"] { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.hd-stt[data-mau="luc"] { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.hd-stt[data-mau="tim"] { background: color-mix(in srgb, var(--status-wip) 16%, transparent); color: var(--status-wip); }
+.hd-stt[data-mau="vang"] { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.hd-stt[data-mau="do"] { background: color-mix(in srgb, var(--danger) 13%, transparent); color: var(--danger); }
+.hd-muc-ten { min-width: 0; }
+.hd-trang .hd-muc-ten h3 { margin: 0 0 var(--sp-2); font-size: var(--text-xl); }
+.hd-trang .hd-muc-dau .hd-nhan { margin: 0; }
+
+/* ---- Dải lưu ý cuối mục ------------------------------------------------- */
+.hd-luuy {
+  display: flex; align-items: flex-start; gap: var(--sp-10);
+  margin: var(--sp-14) 0 0; padding: var(--sp-10) var(--sp-14);
+  border-radius: var(--radius-md);
+  font-size: var(--text-md); line-height: var(--leading-relaxed);
+  background: color-mix(in srgb, var(--info) 10%, transparent); color: var(--text-soft);
+}
+.hd-luuy .btn-icon { flex: none; color: var(--info); background: none; box-shadow: none; }
+.hd-luuy svg { width: 15px; height: 15px; }
+.hd-luuy[data-tone="tot"] { background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.hd-luuy[data-tone="tot"] .btn-icon { color: var(--ok); }
+.hd-luuy[data-tone="nhac"] { background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.hd-luuy[data-tone="nhac"] .btn-icon { color: var(--warn); }
+
+/* ---- Mục lục trong trang ------------------------------------------------ */
+.hd-toc-ds { display: flex; flex-direction: column; gap: var(--sp-2); }
+.hd-toc-dong {
+  display: flex; align-items: center; gap: var(--sp-10);
+  width: calc(100% + var(--sp-16)); margin: 0 calc(-1 * var(--sp-8));
+  padding: var(--sp-8); cursor: pointer; font: inherit; color: inherit;
+  text-align: left; background: none; border: 0; border-radius: var(--radius-sm);
+}
+.hd-toc-dong:hover { background: var(--surface); }
+.hd-toc-so {
+  flex: none; display: grid; place-items: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-size: var(--text-sm); font-weight: var(--weight-bold);
+  background: var(--surface); color: var(--text-faint);
+}
+.hd-toc-so[data-mau="lam"] { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.hd-toc-so[data-mau="luc"] { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.hd-toc-so[data-mau="tim"] { background: color-mix(in srgb, var(--status-wip) 16%, transparent); color: var(--status-wip); }
+.hd-toc-so[data-mau="vang"] { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.hd-toc-so[data-mau="do"] { background: color-mix(in srgb, var(--danger) 13%, transparent); color: var(--danger); }
+.hd-toc-chu {
+  min-width: 0; font-size: var(--text-md); font-weight: var(--weight-semibold);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Thanh tab cho nhóm bài cùng chủ đề (ElevenLabs / Beeknoee Platform).
+   Dùng chung cho cả trang lẫn popup nên KHONG treo duoi tien to nao. */
+.hd-tab-thanh { display: flex; gap: var(--sp-8); margin: 0 0 var(--sp-20);
+  border-bottom: 1px solid var(--line); }
+.hd-tab { margin-bottom: -1px; padding: var(--sp-10) var(--sp-18); cursor: pointer;
+  border: 1px solid var(--line); border-bottom: 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--surface); color: var(--text-soft);
+  font-size: var(--text-md); font-weight: var(--weight-semibold); }
+.hd-tab:hover { color: var(--text); }
+.hd-tab.active { background: var(--surface-strong); color: var(--text);
+  border-bottom: 1px solid var(--surface-strong); }

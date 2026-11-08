@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Điểm tin tuần — mẫu bản tin 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font. ⚠ Và đừng thêm font Google thứ hai — hàm
+     `rewriteFontLinks()` thay BẤT KỲ link `fonts.googleapis.com/css2` nào bằng
+     Inter đóng gói, nên font thêm vào sẽ âm thầm biến mất lúc quay. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. BÌA — 1 câu script ══════════════════════════════════════════
+         ⚠ Slide đầu có ĐÚNG 1 câu thì bảng nhịp gộp mọi phần tử vào một cú
+         bấm, nên ba khối ở đây hiện cùng lúc — mở như một trang nhất. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="bia">
+      <div class="nen nen-1"></div>
+      <div class="than giua">
+        <div class="slide-element bia-nhan">
+          <span class="cham"></span>Điểm tin vũ trụ
+        </div>
+        <h1 class="slide-element bia-ngay">12<i>—</i>18<span>· 9 · 2026</span></h1>
+        <div class="slide-element bia-so">
+          <span class="bia-ke" aria-hidden="true"></span>
+          <b>5 tin</b>
+          <span class="bia-ke" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2. TIN 01 ════════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="1" data-bo-cuc="tin">
+      <div class="nen nen-3"></div>
+      <div class="than than-tin">
+        <div class="slide-element tin-dau">
+          <span class="tin-so">01</span>
+          <span class="tin-ke" aria-hidden="true"></span>
+        </div>
+        <div class="slide-element tin-than">
+          <div class="tin-chu">
+            <h2 class="tin-tieu-de">Tầng đẩy Artemis III gần xong</h2>
+            <p class="tin-tom">Hai tầng đẩy nhiên liệu rắn cao <b>54 m</b> mỗi tầng, góp hơn <b>75%</b> lực đẩy cho chuyến bay 2027.</p>
+            <p class="tin-nguon">NASA Kennedy · 15/9</p>
+          </div>
+          <figure class="tin-anh">
+            <img src="anh/tin1-artemis.jpg" alt="Tầng đẩy Artemis III gần xong" />
+            <figcaption>Ảnh: NASA</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <!-- ══ 3. TIN 02 ════════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="tin">
+      <div class="nen nen-4"></div>
+      <div class="than than-tin">
+        <div class="slide-element tin-dau">
+          <span class="tin-so">02</span>
+          <span class="tin-ke" aria-hidden="true"></span>
+        </div>
+        <div class="slide-element tin-than">
+          <div class="tin-chu">
+            <h2 class="tin-tieu-de">Crew-13 vào cách ly</h2>
+            <p class="tin-tom">Bốn phi hành gia vào cách ly hôm <b>17/9</b>, chờ phóng lên Trạm Vũ trụ đầu tháng 10.</p>
+            <p class="tin-nguon">NASA / SpaceX · 17/9</p>
+          </div>
+          <figure class="tin-anh">
+            <img src="anh/tin2-crew.jpg" alt="Crew-13 vào cách ly" />
+            <figcaption>Ảnh minh hoạ: NASA</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <!-- ══ 4. TIN 03 ════════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="3" data-bo-cuc="tin">
+      <div class="nen nen-5"></div>
+      <div class="than than-tin">
+        <div class="slide-element tin-dau">
+          <span class="tin-so">03</span>
+          <span class="tin-ke" aria-hidden="true"></span>
+        </div>
+        <div class="slide-element tin-than">
+          <div class="tin-chu">
+            <h2 class="tin-tieu-de">Ngưỡng phun tia của lỗ đen</h2>
+            <p class="tin-tom">Mọi lỗ đen đều phun tia khi tốc độ nuốt vật chất chạm <b>2%</b> giới hạn Eddington — bất kể lớn nhỏ.</p>
+            <p class="tin-nguon">Nature · 17/9</p>
+          </div>
+          <figure class="tin-anh">
+            <img src="anh/tin3-lo-den.jpg" alt="Ngưỡng phun tia của lỗ đen" />
+            <figcaption>Ảnh minh hoạ: tia lỗ đen M87 · NASA</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <!-- ══ 5. TIN 04 ════════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="tin">
+      <div class="nen nen-6"></div>
+      <div class="than than-tin">
+        <div class="slide-element tin-dau">
+          <span class="tin-so">04</span>
+          <span class="tin-ke" aria-hidden="true"></span>
+        </div>
+        <div class="slide-element tin-than">
+          <div class="tin-chu">
+            <h2 class="tin-tieu-de">Ngôi sao tái sinh đổi pha</h2>
+            <p class="tin-tom">Sakurai — ngôi sao "tái sinh" phát hiện năm <b>1996</b> — đang tiến vào pha giống sao Wolf-Rayet muộn.</p>
+            <p class="tin-nguon">MNRAS · 16/9</p>
+          </div>
+          <figure class="tin-anh">
+            <img src="anh/tin4-wolf-rayet.jpg" alt="Ngôi sao tái sinh đổi pha" />
+            <figcaption>Ảnh minh hoạ: sao Wolf-Rayet · NASA</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <!-- ══ 6. TIN 05 ════════════════════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="tin">
+      <div class="nen nen-2"></div>
+      <div class="than than-tin">
+        <div class="slide-element tin-dau">
+          <span class="tin-so">05</span>
+          <span class="tin-ke" aria-hidden="true"></span>
+        </div>
+        <div class="slide-element tin-than">
+          <div class="tin-chu">
+            <h2 class="tin-tieu-de">Sao lùn nâu nhẹ kỷ lục</h2>
+            <p class="tin-tom">Kính James Webb tìm ra sao lùn nâu chỉ nặng gấp <b>2 lần</b> Mộc tinh, ở vùng IC 348 cách <b>1.000</b> năm ánh sáng.</p>
+            <p class="tin-nguon">NASA / JWST · 18/9</p>
+          </div>
+          <figure class="tin-anh">
+            <img src="anh/tin5-sao-lun-nau.jpg" alt="Sao lùn nâu nhẹ kỷ lục" />
+            <figcaption>Ảnh vùng IC 348 · NASA / JWST</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 7. TIN NỔI BẬT + HỎI KHÁN GIẢ — 2 câu script ══════════════════
+         ⚠ Không tóm lại cả năm tin: chọn MỘT tin và nói vì sao nó đáng nhớ.
+         Tóm lại hết là người xem nghe đúng thứ vừa nghe xong. -->
+    <div class="slide" data-slide="6" data-bo-cuc="ket">
+      <div class="nen nen-6"></div>
+      <div class="than giua">
+        <div class="slide-element ket-khoi">
+          <span class="ket-nhan">Đáng chú ý nhất</span>
+          <h2 class="ket-tieu-de">Sao lùn nâu nặng gấp <em>2 lần</em> Mộc tinh</h2>
+          <p class="ket-vi-sao">Chúng đẩy ranh giới giữa <b>sao</b> và <b>hành tinh</b> xuống thấp hơn nữa.</p>
+        </div>
+        <p class="slide-element ket-hoi">Còn bạn — tin nào đáng chú ý nhất tuần này?</p>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

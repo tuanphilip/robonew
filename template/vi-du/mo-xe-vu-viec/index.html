@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- /!\ THE QUYET DINH KHO VIDEO. Khong khai = doc 9:16. Xem CONTEXT.md muc 2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Mổ xẻ một vụ việc — mẫu điều tra 16:9</title>
+
+<!-- /!\ PHAI GIU ba the font. Va dung them font Google thu hai - ham
+     `rewriteFontLinks()` thay BAT KY link `fonts.googleapis.com/css2` nao bang
+     Inter dong goi, nen font them vao se am tham bien mat luc quay. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- == 1. BIA - 1 cau script ==========================================
+         /!\ Slide dau co DUNG 1 cau nen bang nhip gop ca ba khoi vao mot cu
+         bam: mo ra nhu mot trang bia ho so, khong nho giot tung dong. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="bia">
+      <div class="nen nen-bia">
+        <img class="nen-anh" src="anh/a0-nhip-cau.jpg" alt="Cầu Tacoma Narrows ngày 29 tháng 8 năm 1940, mười tuần trước khi sập" />
+      </div>
+      <!-- /!\ Ghi NGAY CHUP len bia. Ban dau tien dung nham anh HAER chup nam
+           1993 — tuc la cay cau DUNG LAI nam 1950, khong phai cay cau da sap —
+           vi ten tep khong ghi nam. Mot dong ghi chu o day la thu buoc nguoi
+           thay anh phai tra ngay chup. -->
+      <p class="bia-anh-ghi">Ảnh chụp 29 · 8 · 1940<br />mười tuần trước khi sập</p>
+      <div class="than than-bia">
+        <div class="slide-element bia-nhan">
+          <span class="bia-ke" aria-hidden="true"></span>Mổ xẻ một vụ việc
+        </div>
+        <h1 class="slide-element bia-ten">Cầu <em>Tacoma<br />Narrows</em> sập</h1>
+        <p class="slide-element bia-ngay">7 · 11 · 1940 &nbsp;·&nbsp; Bang Washington, Mỹ &nbsp;·&nbsp; mở được 4 tháng 6 ngày</p>
+      </div>
+    </div>
+
+    <!-- == 2. BOI CANH - 2 cau script =====================================
+         /!\ Khoi dia danh de nguoi xem dinh vi NGAY, truoc khi nghe dien bien.
+         Ba o thong so, khong viet thanh cau - cau da nam o khoi duoi. -->
+    <div class="slide" data-slide="1" data-bo-cuc="boi-canh">
+      <div class="nen nen-thuong"></div>
+      <div class="than than-bc">
+        <div class="slide-element bc-dia-danh">
+          <div class="dd-o">
+            <span class="dd-nhan">Địa điểm</span>
+            <strong class="dd-tri">Eo biển Tacoma</strong>
+            <span class="dd-phu">Bang Washington, Mỹ</span>
+          </div>
+          <div class="dd-o">
+            <span class="dd-nhan">Nhịp chính</span>
+            <strong class="dd-tri">853 m</strong>
+            <span class="dd-phu">Dài thứ ba thế giới khi đó</span>
+          </div>
+          <div class="dd-o">
+            <span class="dd-nhan">Khánh thành</span>
+            <strong class="dd-tri">1 · 7 · 1940</strong>
+            <span class="dd-phu">Trước khi sập 4 tháng</span>
+          </div>
+        </div>
+        <div class="slide-element bc-than">
+          <figure class="bc-anh anh-bao">
+            <img src="anh/a1-khanh-thanh.jpg" alt="Ngày khánh thành cầu Tacoma Narrows, 1 tháng 7 năm 1940" />
+            <figcaption>Ngày khánh thành · 1·7·1940</figcaption>
+          </figure>
+          <div class="bc-chu">
+            <h2 class="bc-tieu-de">Cây cầu đã lắc từ trước khi mở</h2>
+            <p class="bc-doan">Ngay từ lúc lắp mặt cầu, thợ dựng đã thấy nó nhấp nhô mỗi khi có gió
+              và đặt cho nó biệt danh <b>&ldquo;Galloping Gertie&rdquo;</b> &mdash; con Gertie phi nước đại.</p>
+            <p class="bc-doan bc-nhan">Suốt bốn tháng, cái lắc ấy được xem là <b>chuyện bình thường</b>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 3. MOC 1 - 2 cau script =======================================
+         /!\ DUNG hai `.slide-element`: thanh moc hien truoc, roi khoi noi dung.
+         Them phan tu thu ba la lech nhip voi dong script hai cau. -->
+    <div class="slide" data-slide="2" data-bo-cuc="moc">
+      <div class="nen nen-moc"></div>
+      <div class="than than-moc">
+        <div class="slide-element moc-thanh" style="--tu: 0; --toi: 0; --tre: 0.2s">
+          <span class="moc-ray" aria-hidden="true"></span>
+          <span class="moc-ray-day" aria-hidden="true"></span>
+          <div class="moc-nut dang">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">7:30 sáng</span>
+            <span class="moc-ten">Mặt cầu gợn sóng</span>
+          </div>
+          <div class="moc-nut">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">≈9:30 sáng</span>
+            <span class="moc-ten">Sóng chuyển thành xoắn</span>
+          </div>
+          <div class="moc-nut">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">≈11:00 trưa</span>
+            <span class="moc-ten">Nhịp chính đứt rời</span>
+          </div>
+        </div>
+        <div class="slide-element moc-than">
+          <figure class="moc-anh anh-bao">
+            <img src="anh/a2-song-doc.jpg" alt="Mặt cầu gợn sóng" />
+            <figcaption>Sóng dọc trên mặt cầu · phim F. B. Farquharson</figcaption>
+          </figure>
+          <div class="moc-chu">
+            <span class="moc-so">Mốc 1</span>
+            <h2 class="moc-tieu-de">Mặt cầu gợn sóng</h2>
+            <p class="moc-doan">Gió đo được <b>61 km/h</b>. Mặt cầu nhấp nhô theo chiều dọc &mdash; đúng cái tật đã có từ ngày lắp, nên <b>không ai coi là bất thường</b>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- == 4. MOC 2 - 2 cau script =======================================
+         /!\ DUNG hai `.slide-element`: thanh moc hien truoc, roi khoi noi dung.
+         Them phan tu thu ba la lech nhip voi dong script hai cau. -->
+    <div class="slide" data-slide="3" data-bo-cuc="moc">
+      <div class="nen nen-moc"></div>
+      <div class="than than-moc">
+        <div class="slide-element moc-thanh" style="--tu: 0; --toi: 0.338; --tre: 1.1s">
+          <span class="moc-ray" aria-hidden="true"></span>
+          <span class="moc-ray-day" aria-hidden="true"></span>
+          <div class="moc-nut qua">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">7:30 sáng</span>
+            <span class="moc-ten">Mặt cầu gợn sóng</span>
+          </div>
+          <div class="moc-nut dang">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">≈9:30 sáng</span>
+            <span class="moc-ten">Sóng chuyển thành xoắn</span>
+          </div>
+          <div class="moc-nut">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">≈11:00 trưa</span>
+            <span class="moc-ten">Nhịp chính đứt rời</span>
+          </div>
+        </div>
+        <div class="slide-element moc-than">
+          <figure class="moc-anh anh-bao">
+            <img src="anh/a3-xoan.jpg" alt="Sóng chuyển thành xoắn" />
+            <figcaption>Mặt cầu xoắn, xe bị bỏ lại · phim F. B. Farquharson</figcaption>
+          </figure>
+          <div class="moc-chu">
+            <span class="moc-so">Mốc 2</span>
+            <h2 class="moc-tieu-de">Sóng chuyển thành xoắn</h2>
+            <p class="moc-doan">Gió lên <b>68 km/h</b> và một vòng kẹp cáp giữa nhịp <b>bị trượt</b>. Chuyển động đổi kiểu hẳn: mặt cầu <b>vặn xoắn</b>, có lúc nghiêng gần <b>45°</b>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- == 5. MOC 3 - 2 cau script =======================================
+         /!\ DUNG hai `.slide-element`: thanh moc hien truoc, roi khoi noi dung.
+         Them phan tu thu ba la lech nhip voi dong script hai cau. -->
+    <div class="slide" data-slide="4" data-bo-cuc="moc">
+      <div class="nen nen-moc"></div>
+      <div class="than than-moc">
+        <div class="slide-element moc-thanh" style="--tu: 0.338; --toi: 0.675; --tre: 1.1s">
+          <span class="moc-ray" aria-hidden="true"></span>
+          <span class="moc-ray-day" aria-hidden="true"></span>
+          <div class="moc-nut qua">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">7:30 sáng</span>
+            <span class="moc-ten">Mặt cầu gợn sóng</span>
+          </div>
+          <div class="moc-nut qua">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">≈9:30 sáng</span>
+            <span class="moc-ten">Sóng chuyển thành xoắn</span>
+          </div>
+          <div class="moc-nut dang">
+            <span class="moc-cham" aria-hidden="true"></span>
+            <span class="moc-gio">≈11:00 trưa</span>
+            <span class="moc-ten">Nhịp chính đứt rời</span>
+          </div>
+        </div>
+        <div class="slide-element moc-than">
+          <figure class="moc-anh anh-bao">
+            <img src="anh/a4-sap.jpg" alt="Nhịp chính đứt rời" />
+            <figcaption>Nhịp chính rơi xuống eo biển · ảnh báo chí 7·11·1940</figcaption>
+          </figure>
+          <div class="moc-chu">
+            <span class="moc-so">Mốc 3</span>
+            <h2 class="moc-tieu-de">Nhịp chính đứt rời</h2>
+            <p class="moc-doan">Mặt cầu <b>xé rời</b> khỏi hệ dây treo và rơi xuống eo biển, kéo theo chiếc xe cùng con chó mắc kẹt bên trong &mdash; <b>nạn nhân duy nhất</b> của cả vụ việc.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- == 6. BUOC NGOAT - 1 cau script ===================================
+         /!\ DUNG mot `.slide-element` va DUNG mot cau. Day la cho duy nhat
+         trong mau duoc phep de man hinh gan nhu trong: nen toi han lai,
+         nguoi xem chi con mot cau de nho. Dung nhoi them gi vao day. -->
+    <div class="slide" data-slide="5" data-bo-cuc="ngoat">
+      <div class="nen nen-toi"></div>
+      <div class="than than-ngoat">
+        <blockquote class="slide-element ngoat-cau">
+          <span class="ngoat-ke" aria-hidden="true"></span>
+          Thứ giật sập cây cầu không phải <span class="ngoat-mo">cơn gió mạnh</span>,<br />
+          mà là <em>chính chuyển động của nó</em>.
+        </blockquote>
+      </div>
+    </div>
+
+    <!-- == 7. CON LAI GI - 2 cau script ===================================
+         /!\ Ba gach dau dong la HE QUA con den hom nay, khong phai tom tat
+         lai dien bien. Tom tat lai la bat nguoi xem nghe hai lan mot thu. -->
+    <div class="slide" data-slide="6" data-bo-cuc="con-lai">
+      <div class="nen nen-thuong"></div>
+      <div class="than than-cl">
+        <div class="slide-element cl-dau">
+          <span class="cl-nhan">Còn lại gì</span>
+          <h2 class="cl-tieu-de">86 năm sau, vụ việc để lại ba thứ</h2>
+        </div>
+        <div class="slide-element cl-than">
+          <ul class="cl-ds">
+            <li>
+              <span class="cl-so">01</span>
+              <div><strong>Một lời giải thích sai</strong>
+                <p>Sách vật lý gọi đây là &ldquo;cộng hưởng&rdquo; suốt nửa thế kỷ. Cơ chế thật là
+                  <b>rung xoắn khí động</b> &mdash; cầu tự bơm năng lượng cho chính mình.</p></div>
+            </li>
+            <li>
+              <span class="cl-so">02</span>
+              <div><strong>Một cây cầu làm lại</strong>
+                <p>Thông xe năm 1950, sau <b>200 cấu hình</b> thử trong hầm gió: mặt cầu đổi từ
+                  dầm bản đặc sang <b>giàn thép hở sâu gấp bốn</b>.</p></div>
+            </li>
+            <li>
+              <span class="cl-so">03</span>
+              <div><strong>Một xác cầu</strong>
+                <p>Phần rơi xuống nước thành <b>rạn nhân tạo</b>, năm 1992 được xếp hạng di tích
+                  để chặn người trục vớt sắt vụn.</p></div>
+            </li>
+          </ul>
+          <!-- /!\ Hai mat cat VE CUNG TI LE 1:96 tren cung mot to ban ve HAER, nen
+               do chenh kich thuoc trong hinh LA so lieu that, khong phai minh hoa.
+               Dung phong to rieng mot ben. -->
+          <figure class="cl-hinh">
+            <img src="anh/a5-mat-cau.png" alt="Mặt cắt mặt cầu năm 1940 và năm 1950, vẽ cùng tỉ lệ" />
+            <div class="cl-hinh-nhan">
+              <span><b>1940 · sâu 2,45 m</b>dầm bản đặc</span>
+              <span><b>1950 · sâu 10 m</b>giàn thép hở</span>
+            </div>
+            <figcaption>Vẽ cùng tỉ lệ 1:96 · bản vẽ HAER, 1993</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

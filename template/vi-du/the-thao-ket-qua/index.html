@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thể thao & kết quả — Beeknoee Studio</title>
+  <meta name="description" content="Bảng tỉ số đổi theo diễn biến, mốc phút ghi bàn, sơ đồ thay người. Hợp tường thuật trận đấu, tổng hợp vòng đấu, kết quả giải." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-hero">
+          <div class="tt-nhan">Vòng đấu</div>
+          <h1 class="tt-hook">Lật ngược trong<br/><em>7 phút cuối</em></h1>
+          <div class="tt-bang">
+            <span class="tt-doi">CHỦ NHÀ</span>
+            <span class="tt-ti tt-thang">2 — 1</span>
+            <span class="tt-doi">KHÁCH</span>
+            
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-phut">
+          <span>Hiệp 1</span>
+        </div>
+        <div class="slide-element fade-up tt-scene">
+          <svg viewBox="0 0 240 92" aria-hidden="true">
+            <rect x="14" y="10" width="212" height="72" rx="4" fill="none" stroke="var(--primary-dark)" stroke-width="2.6"/>
+            <path d="M14 34 h26 v34 h-26" fill="none" stroke="var(--primary-dark)" stroke-width="2.6"/>
+            <circle cx="58" cy="26" r="6" fill="var(--accent)"/>
+            <circle cx="58" cy="46" r="6" fill="var(--accent)"/>
+            <circle cx="58" cy="66" r="6" fill="var(--accent)"/>
+            <circle cx="86" cy="32" r="6" fill="var(--accent)"/>
+            <circle cx="86" cy="60" r="6" fill="var(--accent)"/>
+            <circle cx="110" cy="24" r="6" fill="var(--accent)"/>
+            <circle cx="110" cy="46" r="6" fill="var(--accent)"/>
+            <circle cx="110" cy="68" r="6" fill="var(--accent)"/>
+            <text x="170" y="50" text-anchor="middle" font-size="14" fill="var(--primary-light)">không dâng lên</text>
+          </svg>
+          <div class="tt-cap">xe buýt hai tầng trước khung thành</div>
+        </div>
+        <div class="slide-element fade-up tt-khoi">
+          <div class="tt-bang tt-nho">
+            <span class="tt-doi">CHỦ NHÀ</span>
+            <span class="tt-ti">0 — 0</span>
+            <span class="tt-doi">KHÁCH</span>
+            <span class="tt-ghi">hết hiệp một</span>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-phut tt-do">
+          <span>58'</span>
+        </div>
+        <div class="slide-element fade-up tt-scene">
+          <svg viewBox="0 0 240 80" aria-hidden="true">
+            <path d="M22 58 C80 58 130 30 206 22" fill="none" stroke="var(--accent)" stroke-width="3" stroke-dasharray="7 5"/>
+            <path d="M196 16 l14 6 l-13 8" fill="none" stroke="var(--accent)" stroke-width="3"/>
+            <circle cx="22" cy="58" r="6" fill="var(--accent)"/>
+            <path d="M212 8 v28" stroke="var(--primary-light)" stroke-width="3"/>
+          </svg>
+          <div class="tt-cap">đội khách mở tỉ số từ một pha phản công</div>
+        </div>
+        <div class="slide-element fade-up tt-khoi">
+          <div class="tt-bang tt-nho tt-xau">
+            <span class="tt-doi">CHỦ NHÀ</span>
+            <span class="tt-ti">0 — 1</span>
+            <span class="tt-doi">KHÁCH</span>
+            <span class="tt-ghi">bị dẫn lần đầu sau 9 trận</span>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-phut">
+          <span>70'</span>
+        </div>
+        <div class="slide-element fade-up tt-thay">
+          <span class="tt-vao">▲ 2 tiền đạo vào sân cùng lúc</span>
+        </div>
+        <div class="slide-element fade-up tt-scene">
+          <svg viewBox="0 0 240 74" aria-hidden="true">
+            <circle cx="40" cy="18" r="6" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <circle cx="40" cy="38" r="6" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <circle cx="40" cy="58" r="6" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <circle cx="76" cy="28" r="6" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <circle cx="76" cy="48" r="6" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <path d="M104 38 h30 M128 32 l9 6 l-9 6" fill="none" stroke="var(--primary-light)" stroke-width="3"/>
+            <circle cx="168" cy="24" r="6" fill="var(--primary)"/>
+            <circle cx="168" cy="52" r="6" fill="var(--primary)"/>
+            <circle cx="204" cy="16" r="6" fill="var(--primary)"/>
+            <circle cx="204" cy="38" r="6" fill="var(--primary)"/>
+            <circle cx="204" cy="60" r="6" fill="var(--primary)"/>
+            <text x="58" y="72" text-anchor="middle" font-size="13" fill="var(--info)">4 hậu vệ</text>
+            <text x="186" y="72" text-anchor="middle" font-size="13" fill="var(--primary)">3 hậu vệ</text>
+          </svg>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-ban">
+          <span class="tt-phut tt-xanh">83'</span><span>gỡ hoà từ một quả phạt góc</span>
+        </div>
+        <div class="slide-element fade-up tt-ban">
+          <span class="tt-phut tt-xanh">90+1'</span><span>bàn ấn định</span>
+        </div>
+        <div class="slide-element fade-up tt-khoi">
+          <div class="tt-bang tt-nho">
+            <span class="tt-doi">CHỦ NHÀ</span>
+            <span class="tt-ti tt-thang">2 — 1</span>
+            <span class="tt-doi">KHÁCH</span>
+            <span class="tt-ghi">sân vận động vỡ oà</span>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg tt-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tt-khoi">
+          <div class="tt-bang">
+            <span class="tt-doi">CHỦ NHÀ</span>
+            <span class="tt-ti tt-thang">2 — 1</span>
+            <span class="tt-doi">KHÁCH</span>
+            
+          </div>
+        </div>
+        <div class="slide-element fade-up tt-line">
+          <span>Ba điểm đưa họ trở lại <b>nhóm dẫn đầu</b>.</span>
+        </div>
+        <div class="slide-element fade-up tt-cta">
+          <span>Bóng đá chỉ kết thúc khi trọng tài thổi còi</span>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

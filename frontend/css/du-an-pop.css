@@ -1,0 +1,92 @@
+/* ══ NÚT "DỰ ÁN:" + HỘP DỰ ÁN (render/thanh-tren.js) ═══════════════════════
+ * Thay tab "Dự án" ở cột trái (03/10/2026). Hộp chính là `#paneDuAn` cũ, vẫn
+ * nằm trong `.slide-list` để giữ mọi luật `.bt-ba-cot .slide-list …` của danh
+ * sách — ở đây chỉ biến nó thành hộp `position: fixed`; toạ độ + cỡ do
+ * `datViTriHop()` đặt lúc mở. Chỉ token (verify:css).
+ */
+
+/* Thanh trên: kéo cụm "Dự án:" sát vạch ngăn bên trái hơn (bien-tap.css đặt đệm
+   16px hai bên `.tb-giua`). Tệp này nạp SAU bien-tap.css nên thắng. */
+.tb-giua { padding-left: var(--sp-6); }
+
+/* Nút đứng TRƯỚC tên dự án. Rê chuột vào thì chữ "Dự án" GẠCH CHÂN + nền nhạt. */
+.tb-duan {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-6);
+  background: none;
+  color: var(--text-soft);
+  border: 0;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: var(--text-md);
+  cursor: pointer;
+}
+.tb-duan:hover,
+.tb-duan.dang-mo { background: var(--surface); color: var(--text); }
+.tb-duan .btn-icon { display: grid; place-items: center; background: none; box-shadow: none; }
+.tb-duan svg { width: 16px; height: 16px; }
+.tb-duan-chu { text-underline-offset: 3px; }
+.tb-duan:hover .tb-duan-chu,
+.tb-duan:focus-visible .tb-duan-chu,
+.tb-duan.dang-mo .tb-duan-chu { text-decoration: underline; }
+.tb-duan-hai { flex: none; margin-right: var(--sp-6); color: var(--text-faint); }
+
+/* Hộp: flex dọc như pane cũ — ô tìm trên, danh sách cuộn giữa, hàng chân dưới. */
+.duan-pop {
+  position: fixed;
+  z-index: var(--z-pop);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: var(--sp-12) var(--sp-8) 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.duan-pop[hidden] { display: none; }
+
+/* Luật khoá `body.bee-ai-khoa` ĐÃ GỠ cùng tab "Tạo bằng AI" (16/10/2026) — xem ai-tao.css. */
+
+/* ══ DỰ ÁN VIDEO TRỐNG (render/du-an-video.js, src/dung/duAnVideo.js) ═══════════════
+ * Hộp "Dự án mới" (mở từ nút trên thanh trên cùng — thanh-tren.js; dùng lại khung .ai-hop) + chế độ dự án video:
+ * ẩn ba tab của deck — dự án không có slide, giọng đọc hay phụ đề. */
+.dav-hop .ai-khung { width: min(460px, calc(100vw - var(--sp-32))); }
+.dav-hop .ai-than { display: flex; flex-direction: column; gap: var(--sp-8); }
+.dav-nhan { margin-top: var(--sp-6); color: var(--text-faint); font-size: var(--text-xs); font-weight: var(--weight-semibold); }
+.dav-o {
+  padding: var(--sp-8) var(--sp-10); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); font: inherit; font-size: var(--text-sm);
+}
+.dav-o:focus { outline: none; border-color: var(--brand); }
+.dav-kho { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-8); }
+.dav-chon {
+  display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: var(--sp-8); row-gap: var(--sp-2);
+  padding: var(--sp-10) var(--sp-12); text-align: left; min-width: 0;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); font: inherit; cursor: pointer;
+}
+.dav-chon .btn-icon { grid-row: span 2; background: none; box-shadow: none; color: var(--text-faint); }
+.dav-chon b { font-size: var(--text-sm); }
+.dav-chon small { color: var(--text-faint); font-size: var(--text-xs); overflow-wrap: anywhere; }
+.dav-chon:hover { border-color: var(--brand); }
+.dav-chon.on { border-color: var(--brand); background: var(--brand-mo); }
+.dav-chon.on .btn-icon { color: var(--brand); }
+.dav-loi { color: var(--danger-text); font-size: var(--text-sm); }
+/* Hộp "Tạo dự án" ở trang Mẫu (pages.js#moHopTaoMau): Nội dung + Lưu ý → prompt vào ô chat AI agent. */
+.tpl-hop .ai-khung { width: min(560px, calc(100vw - var(--sp-32))); }
+.tpl-hop-o { resize: vertical; min-height: 64px; max-height: 40vh; line-height: var(--leading-normal); }
+.tpl-hop-phu { font-weight: var(--weight-normal); }
+.tpl-hop .ait-hoi-nut .tpl-hop-tay { margin-right: auto; }
+.tpl-hop .dav-loi.tpl-hop-dang { color: var(--text-faint); }
+.tpl-hop-o { height: 7.5em; }
+
+/* Dự án video: ẩn hai tab của deck — còn "Thuộc tính" + "Thư viện" (tab riêng, render/tab-phai.js). */
+.du-an-video .bs-tab-nut[data-tab="mau"],
+.du-an-video .bs-tab-nut[data-tab="amthanh"] { display: none; }
+
+/* Tổng thời lượng (= độ dài SẼ XUẤT) cùng màu với vạch "Kết thúc" trên thước (render/timeline.js). */
+.du-an-video .tl-gio-tong { color: var(--tl-ket-thuc); }

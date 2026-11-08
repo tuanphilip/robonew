@@ -1,0 +1,6 @@
+Font Awesome Free 6.5.1 — https://fontawesome.com
+License: https://fontawesome.com/license/free
+  - Icons (SVG/JS/CSS glyph): CC BY 4.0
+  - Fonts (webfonts .woff2):  SIL OFL 1.1
+  - Code (CSS):               MIT
+Kèm theo trong sản phẩm để tuân thủ yêu cầu ghi công (attribution).

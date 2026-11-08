@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiền của bạn — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu tiền hằng ngày: một câu hỏi đời thường, đáp số đưa ra trước, phép tính hiện từng bước, rồi biểu đồ cột cho thấy khoảng cách giãn dần theo thời gian." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <!-- ══ SLIDE 1 · CÂU HỎI TIỀN BẠC ĐỜI THƯỜNG ════════════════════
+           Câu hỏi phải là thứ người xem LÀM THẬT mỗi ngày, không phải một bài
+           toán. Ly cà phê buổi sáng ai cũng có, nên ai cũng tự tính theo được.
+           ⚠ Ảnh là ảnh THẬT, giấy phép CC0, nguồn ghi trong source/source.md. -->
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg tc-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-anh-hop">
+          <figure class="tc-anh"><img src="anh/ca-phe.jpg" alt="Ly cà phê phin Việt Nam" /></figure>
+          <span class="tc-gia" aria-hidden="true">25.000<i>đ</i></span>
+        </div>
+        <h1 class="slide-element fade-up tc-hoi">Ly cà phê mỗi sáng.<br/><em>Hai mươi năm nữa<br/>nó đáng bao nhiêu?</em></h1>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 2 · CON SỐ GÂY SỐC ═════════════════════════════════
+           Đưa đáp số RA TRƯỚC rồi mới giải thích. Người xem thể loại này
+           không chờ hết phép tính mới biết có đáng xem không. -->
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg tc-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-dau">
+          <span class="tc-nhan">Câu trả lời</span>
+        </div>
+        <div class="slide-element fade-up tc-so-khoi">
+          <b class="tc-so-to">351<i>triệu</i></b>
+          <span class="tc-so-chu">nếu bạn để dành đúng số tiền đó<br/>và gửi tiết kiệm suốt 20 năm</span>
+          <span class="tc-so-vs">Cất dưới gối thì chỉ được <b>182 triệu</b></span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3 · CÁCH TÍNH · BƯỚC 1 ═════════════════════════════
+           Hai slide tính dùng CHUNG một bố cục: huy hiệu bước, rồi một dòng
+           phép tính đọc từ trái sang phải. Giữ nguyên khung đó cho cả hai. -->
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg tc-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-buoc">
+          <span class="tc-buoc-so">1</span>
+          <h2 class="tc-buoc-ten">Một năm là bao nhiêu</h2>
+        </div>
+        <div class="slide-element fade-up tc-tinh">
+          <div class="tc-tinh-hang">
+            <span class="tc-hang"><b>25.000</b><i>đ mỗi ngày</i></span>
+            <span class="tc-dau-x" aria-hidden="true">×</span>
+            <span class="tc-hang"><b>365</b><i>ngày</i></span>
+            <span class="tc-dau-bang" aria-hidden="true">=</span>
+            <span class="tc-hang tc-hang-ket"><b>9,1<u>tr</u></b><i>mỗi năm</i></span>
+          </div>
+          <p class="tc-tinh-luuy">Tính tròn 365 ngày, uống đều cả năm. Chia ra là khoảng <b>760 nghìn mỗi tháng</b>.</p>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 4 · CÁCH TÍNH · BƯỚC 2 ═════════════════════════════
+           ⚠ Ghi RÕ giả thiết lãi suất lên màn hình. Thiếu nó thì con số ở
+           slide 2 thành lời hứa, mà mẫu này nói về tiền của người ta. -->
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg tc-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-buoc">
+          <span class="tc-buoc-so">2</span>
+          <h2 class="tc-buoc-ten">Để dành đều mỗi tháng</h2>
+        </div>
+        <div class="slide-element fade-up tc-gt">
+          <div class="tc-gt-hang"><b>760.000<i>đ</i></b><span>mỗi tháng</span></div>
+          <div class="tc-gt-hang"><b>240<i>tháng</i></b><span>tức 20 năm</span></div>
+          <div class="tc-gt-hang"><b>6<i>%/năm</i></b><span>lãi nhập gốc</span></div>
+          <p class="tc-gt-luuy">Lãi suất giả định, thấp hơn mặt bằng hiện nay. Đổi lãi suất là đổi kết quả.</p>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 5 · BIỂU ĐỒ HAI KỊCH BẢN ═══════════════════════════
+           ⚠ Cột tăng dần theo MỐC THỜI GIAN chứ không phải chỉ hai cột đầu
+           cuối. Cả bài học của lãi kép nằm ở chỗ khoảng cách giãn ra càng về
+           sau càng nhanh — hai cột thì không thấy được điều đó.
+           Chiều cao cột tính bằng Python, không ước lượng bằng mắt. -->
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg tc-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-dau">
+          <span class="tc-nhan">Khoảng cách giãn dần</span>
+        </div>
+        <div class="slide-element fade-up tc-bieu">
+          <div class="tc-cot-hang">
+            <div class="tc-nhom"><span class="tc-cot-doi"><i class="tc-cot tc-cot-goc" style="--cao: 13.0%"></i><i class="tc-cot tc-cot-lai" style="--cao: 15.1%"></i></span><b>5</b><u>53<i>tr</i></u></div>
+            <div class="tc-nhom"><span class="tc-cot-doi"><i class="tc-cot tc-cot-goc" style="--cao: 26.0%"></i><i class="tc-cot tc-cot-lai" style="--cao: 35.5%"></i></span><b>10</b><u>125<i>tr</i></u></div>
+            <div class="tc-nhom"><span class="tc-cot-doi"><i class="tc-cot tc-cot-goc" style="--cao: 39.0%"></i><i class="tc-cot tc-cot-lai" style="--cao: 63.0%"></i></span><b>15</b><u>221<i>tr</i></u></div>
+            <div class="tc-nhom"><span class="tc-cot-doi"><i class="tc-cot tc-cot-goc" style="--cao: 51.9%"></i><i class="tc-cot tc-cot-lai" style="--cao: 100.0%"></i></span><b>20</b><u>351<i>tr</i></u></div>
+          </div>
+          <div class="tc-truc">năm</div>
+          <div class="tc-chu-thich">
+            <span><i class="tc-cham tc-cham-goc"></i>Tiền mình bỏ vào</span>
+            <span><i class="tc-cham tc-cham-lai"></i>Có thêm lãi</span>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6 · MỘT VIỆC LÀM ĐƯỢC NGAY HÔM NAY ═════════════════
+           ⚠ Kết KHÔNG bảo người ta bỏ cà phê. Mẫu này đưa cái giá của một
+           thói quen, còn chọn thì là việc của họ — dạy đời là mất người xem.
+           Việc chốt phải làm được trong hôm nay, bằng một thao tác. -->
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg tc-bg"></div><canvas class="fx-canvas" data-fx="scan"></canvas>
+        <div class="slide-content">
+        <h2 class="slide-element fade-up tc-ket">Không ai bắt bạn <em>bỏ cà phê</em></h2>
+        <div class="slide-element fade-up tc-viec">
+          <span class="tc-nhan tc-nhan-lam">Làm được hôm nay</span>
+          <div class="tc-viec-hop">
+            <span class="tc-viec-so">1</span>
+            <span class="tc-viec-chu">Đặt lệnh <b>tự động chuyển</b> một khoản cố định sang tài khoản tiết kiệm, ngay hôm nhận lương</span>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  </div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

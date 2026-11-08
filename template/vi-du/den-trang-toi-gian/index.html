@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đen trắng tối giản — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu tối giản đen trắng: không canvas, không hoạt cảnh, chữ và khoảng trống làm chủ." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-hero">
+          <svg class="ds-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="82" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".22"/>
+            <circle class="ds-ring-vo" cx="100" cy="100" r="82" fill="none" stroke="var(--primary)" stroke-width="14"
+              stroke-linecap="butt" stroke-dasharray="40 26" transform="rotate(-90 100 100)"/>
+            <circle cx="100" cy="100" r="5" fill="var(--accent-light)"/>
+          </svg>
+          <h1 class="ds-hook">Bạn không mất tập trung.<br/><em>Bạn đang bị cắt vụn.</em></h1>
+          <div class="ds-kicker">Tập trung · 01</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-figure">
+          <span class="ds-num">23</span><span class="ds-unit">phút</span>
+        </div>
+        <!-- ⚠ ĐƯỜNG HỒI PHỤC là hình chính của slide này, không phải trang trí.
+             Cả deck xoay quanh con số 23 phút; vẽ ra thì thấy được cái dốc dựng
+             đứng lúc bị cắt ngang và cái dốc thoai thoải lúc leo về — thứ mà đọc
+             riêng con số không thấy. SVG đặt thẳng trong HTML: deck phải dựng
+             được offline, và hình phải ăn theo bảng màu chủ đề. -->
+        <div class="slide-element fade-up ds-chart">
+          <svg viewBox="0 0 520 140" aria-hidden="true">
+            <path class="ds-vung" d="M150 104C230 99 330 60 470 30L470 104Z"/>
+            <path class="ds-muc" d="M0 26h520"/>
+            <path class="ds-duong" d="M0 26H120L150 104C230 99 330 60 470 30H520"/>
+            <circle class="ds-cham-dut" cx="150" cy="104" r="7"/>
+            <circle class="ds-cham-ve" cx="470" cy="30" r="7"/>
+            <path class="ds-nhip" d="M150 114v10M470 114v10M150 119h320"/>
+            <text class="ds-chu-nhip" x="310" y="138">23 phút để về lại</text>
+          </svg>
+          <div class="ds-cap">một tiếng chuông, và cái dốc bắt đầu lại từ đáy</div>
+        </div>
+        <div class="slide-element fade-up ds-step">
+          <div class="ds-lbl">Một mạch bị cắt còn lại</div>
+          <div class="ds-ray"><i style="width: 6%"></i></div>
+          <div class="ds-cap">sáu phần trăm của mạch cũ</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-strike">
+          <span>ý chí yếu</span>
+        </div>
+        <div class="slide-element fade-up ds-scene">
+          <svg viewBox="0 0 300 120" aria-hidden="true">
+            <path class="ds-net-mo" d="M20 62h260"/>
+            <g class="ds-moc">
+              <path d="M74 62c0-13 10-21 20-21s18 8 18 19"/>
+              <path d="M150 62c0-16 10-26 20-26s18 10 18 24"/>
+              <path d="M226 62c0-11 8-18 17-18s15 7 15 16"/>
+            </g>
+            <circle class="ds-cham-to" cx="46" cy="62" r="13"/>
+            <path class="ds-keo" d="M59 62h192"/>
+            <path class="ds-mui" d="m244 55 9 7-9 7"/>
+          </svg>
+          <div class="ds-cap">mỗi thông báo là một cái móc</div>
+        </div>
+        <div class="slide-element fade-up ds-scene">
+          <svg viewBox="0 0 300 94" aria-hidden="true">
+            <circle class="ds-cham-rong" cx="54" cy="46" r="14"/>
+            <path class="ds-net-dut" d="M72 46h154"/>
+            <circle class="ds-cham-to" cx="248" cy="46" r="14"/>
+            <text class="ds-chu-nho" x="54" y="84">chỗ vừa đứng</text>
+            <text class="ds-chu-nho ds-sang" x="248" y="84">chỗ bị kéo tới</text>
+          </svg>
+          <div class="ds-cap">và bạn không còn ở chỗ mình vừa đứng</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-lbl-solo">
+          <span>9:00</span><i></i><span>12:00</span>
+        </div>
+        <!-- ⚠ HAI THANH DÙNG CHUNG MỘT BỀ NGANG. Thanh trên là buổi sáng thật,
+             vỡ thành mười lăm mẩu; thanh dưới là một mạch 23 phút liền. Mẩu dài
+             nhất ở trên vẫn ngắn hơn khối dưới — đó chính là câu kết của slide,
+             nên ĐỪNG kéo mẩu nào dài ra cho "cân mắt". -->
+        <div class="slide-element fade-up ds-step">
+          <div class="ds-ray ds-ray-vun">
+            <i style="left: 0%; width: 4%"></i><i style="left: 7%; width: 3%"></i>
+            <i style="left: 13%; width: 6%"></i><i style="left: 22%; width: 2%"></i>
+            <i style="left: 27%; width: 5%"></i><i style="left: 35%; width: 3%"></i>
+            <i style="left: 41%; width: 7%"></i><i style="left: 51%; width: 2%"></i>
+            <i style="left: 56%; width: 4%"></i><i style="left: 63%; width: 3%"></i>
+            <i style="left: 69%; width: 6%"></i><i style="left: 78%; width: 2%"></i>
+            <i style="left: 83%; width: 5%"></i><i style="left: 91%; width: 3%"></i>
+            <i style="left: 96%; width: 3%"></i>
+          </div>
+          <div class="ds-cap">ba tiếng, chia thành mười lăm mẩu</div>
+        </div>
+        <div class="slide-element fade-up ds-step">
+          <div class="ds-lbl">Một mạch cần có</div>
+          <div class="ds-ray"><i class="ds-sang-i" style="width: 26%"></i></div>
+          <div class="ds-cap">23 phút — không mẩu nào ở trên dài tới đó</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-kicker-solo">
+          <span>Vậy phải làm gì?</span>
+        </div>
+        <div class="slide-element fade-up ds-vs">
+          <span class="ds-off">thêm động lực</span>
+          <span class="ds-on">bớt cửa ra vào</span>
+        </div>
+        <div class="slide-element fade-up ds-scene">
+          <svg viewBox="0 0 300 150" aria-hidden="true">
+            <g class="ds-cua">
+              <rect x="8" y="10" width="52" height="128" rx="4"/>
+              <circle cx="50" cy="76" r="3.4"/>
+              <rect x="70" y="10" width="52" height="128" rx="4"/>
+              <circle cx="112" cy="76" r="3.4"/>
+              <rect x="178" y="10" width="52" height="128" rx="4"/>
+              <circle cx="220" cy="76" r="3.4"/>
+              <rect x="240" y="10" width="52" height="128" rx="4"/>
+              <circle cx="282" cy="76" r="3.4"/>
+            </g>
+            <g class="ds-cua-mo">
+              <rect x="132" y="10" width="52" height="128" rx="4"/>
+              <path class="ds-anh-sang" d="M132 138 152 10h32v128Z"/>
+              <circle cx="174" cy="76" r="3.4"/>
+            </g>
+          </svg>
+          <div class="ds-cap">tắt thông báo = đóng bớt một cửa</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-kicker-solo">
+          <span>Thử một lần thôi</span>
+        </div>
+        <div class="slide-element fade-up ds-rules">
+          <span>90 phút</span><span>1 màn hình</span><span>0 thứ khác</span>
+        </div>
+        <div class="slide-element fade-up ds-step">
+          <div class="ds-ray ds-ray-day"><i class="ds-sang-i" style="width: 100%"></i></div>
+          <div class="ds-cap">một mạch, không đứt chỗ nào</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="6">
+        <div class="slide-bg ds-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up ds-line">
+          <span>Tập trung không phải tài năng bẩm sinh.</span>
+        </div>
+        <div class="slide-element fade-up ds-hero ds-hero-end">
+          <svg class="ds-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="82" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".22"/>
+            <circle cx="100" cy="100" r="82" fill="none" stroke="var(--primary)" stroke-width="14"
+              stroke-linecap="butt"/>
+            <circle cx="100" cy="100" r="5" fill="var(--accent-light)"/>
+          </svg>
+          <div class="ds-cta">Nó là thứ được bảo vệ</div>
+        </div>
+        </div>
+      </div>
+</div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">7</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

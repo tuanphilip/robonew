@@ -1,0 +1,413 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * KD-01 · CASE STUDY KINH DOANH — khung ngang 16:9, tự chứa
+ * ---------------------------------------------------------------------------
+ * ⚠ Mẫu NGANG dùng tệp CSS RIÊNG, không nối vào `style.css` của bộ máy dọc:
+ *   không dính bẫy flex kế thừa, nhưng mọi thứ phải tự khai.
+ *
+ * ⚠ Khung 1232×693 → quay ra 1920×1080. Dải an toàn [100, 493] khai bằng
+ *   padding của `.than`. Phần 200px dưới là chỗ của phụ đề.
+ *
+ * ⚠ NỀN TRẮNG: `subtitles.color` trong preview-settings.json PHẢI là mực đậm.
+ *   Mặc định của bộ ghi là trắng — trên nền trắng là mất sạch phụ đề.
+ *
+ * Phong cách: báo cáo tư vấn — trắng, navy, MỘT màu nhấn, biểu đồ PHẲNG không
+ * đổ bóng. Sự sống của mẫu nằm ở ảnh tư liệu thật và con số chạy lên, không
+ * nằm ở hiệu ứng trang trí.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ══ BẢNG MÀU CHUẨN — ĐỪNG ĐỔI TÊN ═══════════════════════════════════ */
+  --bg-dark: #ffffff;
+  --primary: #13294b;
+  --primary-light: #2f5596;
+  --primary-dark: #0b1a33;
+  --accent: #8793a7;
+  --accent-light: #c9d2df;
+  --info: #2f5596;
+  --success: #1f7a52;
+  --warning: #b7791f;
+  --danger: #b3261e;
+
+  /* ── Tên đọc được, bắc cầu ── */
+  --nen: var(--bg-dark);
+  --nen-2: #f2f5f9;
+  --nen-toi: var(--primary-dark);
+  --chu: #0f1b2e;
+  --chu-mem: #3d4a5f;
+  --chu-mo: #6c7789;
+  --nhan-sang: #9ec0ff;
+  --vien: rgba(19, 41, 75, 0.13);
+  --ke: rgba(19, 41, 75, 0.24);
+
+  /* ── Dải an toàn ── */
+  --an-toan-tren: 100px;
+  --an-toan-duoi: 200px;
+  --le: 76px;
+
+  /* ── Biểu đồ: chiều cao cột lớn nhất. Cột nào cũng là `--cao` × số này. ── */
+  --cot-toi-da: 188px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ⚠ PHẢI bằng `subtitles.fontSize` trong preview-settings.json. */
+  --subtitle-font-size: 22px;
+  --subtitle-bottom: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #e7ebf1;
+  color: var(--chu);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+.main-wrapper { height: 100%; display: grid; place-items: center; }
+
+/* ⚠ Bộ ghi GHI ĐÈ width/height/zoom lúc quay; giá trị đây chỉ để xem trước. */
+.slide-container {
+  position: relative;
+  width: 1232px; height: 693px;
+  overflow: hidden;
+  background: var(--nen);
+  border-radius: 18px;
+}
+.slide {
+  position: absolute; inset: 0;
+  display: flex; opacity: 0;
+  transition: opacity 0.42s ease;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* ══ NỀN ══════════════════════════════════════════════════════════════════
+ * Trắng phẳng + một dải navy mảnh ở mép trái: chữ ký của một bản báo cáo. */
+.nen { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+.nen-trang { background: var(--nen); }
+.nen-trang::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 8px; background: var(--primary);
+}
+/* ⚠⚠ KHỐI TỐI DỪNG Ở y = 560 — dưới là dải TRẮNG cho phụ đề.
+ * Màu phụ đề là MỘT màu cho cả video (mực navy, vì 6/7 slide nền trắng). Bản
+ * đầu để slide này tối kín khung: khung hình thật trích từ video cho thấy phụ
+ * đề navy trên nền navy, tỉ lệ tương phản 1,0:1 — biến mất suốt 6,7 giây, trong
+ * khi MỌI bộ soát bố cục đều báo ĐẠT. Cùng luật với ảnh bìa: không thứ gì tối
+ * được xuống dưới y = 560. */
+.nen-toi { background: var(--nen); }
+.nen-toi::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 560px;
+  background:
+    radial-gradient(ellipse 70% 90% at 22% 40%, rgba(47, 85, 150, 0.34), transparent 70%),
+    var(--nen-toi);
+}
+
+/* ══ DẢI AN TOÀN KHAI BẰNG PADDING ═══════════════════════════════════════ */
+.than {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  padding: var(--an-toan-tren) var(--le) var(--an-toan-duoi);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 20px;
+}
+
+/* ══ HỢP ĐỒNG VỚI ĐƯỜNG DỰNG — số `.slide-element` mỗi slide PHẢI bằng số câu
+ * của dòng script tương ứng (trừ slide đầu một câu). ĐỪNG đổi tên lớp. */
+.slide-element {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-element.visible { opacity: 1; transform: none; }
+
+/* Nhãn mục dùng chung: chữ hoa nhỏ, navy, có vạch mở đầu. */
+.nhan-muc {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12.5px; font-weight: 800; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--primary-light);
+}
+.nhan-muc::before { content: ''; width: 26px; height: 2px; background: currentColor; }
+.nhan-sang { color: var(--nhan-sang); }
+
+figure { margin: 0; }
+img { display: block; }
+
+/* ══ 1 · BÌA ═════════════════════════════════════════════════════════════
+ * Ảnh ở lớp NỀN, nửa phải, và DỪNG ở y=560 — trước dải phụ đề: phụ đề màu mực
+ * đậm chạy đè lên ảnh đen trắng là mất chữ. */
+.bia-anh {
+  position: absolute; top: 0; right: 0;
+  width: 588px; height: 560px;
+}
+.bia-anh img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.06); }
+.bia-anh figcaption {
+  position: absolute; left: 0; bottom: 0;
+  padding: 8px 14px;
+  background: var(--primary); color: #fff;
+  font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em;
+}
+.than-bia { justify-content: center; align-items: flex-start; gap: 18px; }
+.than-bia > * { max-width: 500px; }
+.bia-ten h1 {
+  font-size: 62px; font-weight: 900; line-height: 1.0;
+  letter-spacing: -0.035em; color: var(--primary);
+}
+.bia-ten p { margin-top: 12px; font-size: 16.5px; font-weight: 500; color: var(--chu-mo); }
+.bia-dinh-vi {
+  padding: 18px 24px 16px;
+  background: var(--primary); color: #fff;
+}
+.bia-dinh-vi p { font-size: 25px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+.bia-dinh-vi cite {
+  display: block; margin-top: 8px;
+  font-size: 12px; font-style: normal; color: rgba(255, 255, 255, 0.68);
+}
+
+/* ══ 2 · VẤN ĐỀ — nền tối, đúng một câu ═══════════════════════════════════ */
+/* Dải navy mép trái như mọi slide khác — chỉ lộ ra ở dải trắng bên dưới. */
+.nen-toi::after {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 8px; background: var(--primary);
+}
+.vd-bong {
+  position: absolute; z-index: 1; right: -28px; top: 280px; transform: translateY(-50%);
+  font-size: 400px; font-weight: 900; line-height: 1;
+  letter-spacing: -0.07em; color: rgba(255, 255, 255, 0.05);
+  font-variant-numeric: tabular-nums;
+}
+.than-vd { justify-content: center; }
+.vd-khoi { max-width: 860px; display: flex; flex-direction: column; gap: 20px; }
+.vd-cau {
+  font-size: 40px; font-weight: 700; line-height: 1.28;
+  letter-spacing: -0.022em; color: #fff;
+  text-wrap: balance;   /* không để một chữ mồ côi ở dòng cuối */
+}
+.vd-cau em { font-style: normal; color: var(--nhan-sang); }
+
+/* ══ 3 · VIỆC HỌ LÀM — ba thẻ ngang ══════════════════════════════════════ */
+.than-the { gap: 16px; }
+.the-dau-tieu-de, .sl-tieu-de, .vs-tieu-de {
+  margin-top: 6px;
+  font-size: 27px; font-weight: 800; line-height: 1.15;
+  letter-spacing: -0.02em; color: var(--primary);
+}
+.the-luoi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.the { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--vien); }
+.the-anh { position: relative; overflow: hidden; }
+.the-anh img { width: 100%; height: auto; filter: grayscale(1) contrast(1.05); }
+.the-anh figcaption {
+  position: absolute; left: 0; bottom: 0;
+  padding: 4px 9px;
+  background: rgba(11, 26, 51, 0.82); color: rgba(255, 255, 255, 0.9);
+  font-size: 10.5px; font-weight: 500;
+}
+.the-than { padding: 12px 15px 14px; display: flex; flex-direction: column; gap: 5px; }
+.the-moc {
+  align-self: flex-start;
+  padding: 3px 9px;
+  background: #e6edf8; color: var(--primary);
+  font-size: 11.5px; font-weight: 800; letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.the-tieu-de { font-size: 18.5px; font-weight: 800; line-height: 1.2; color: var(--primary); }
+.the-chu { font-size: 14px; line-height: 1.45; color: var(--chu-mem); }
+.the-chu b { color: var(--primary); font-weight: 800; }
+
+/* ══ 4–5 · SỐ LIỆU TRƯỚC / SAU ══════════════════════════════════════════
+ * Hai cột phẳng, không đổ bóng. Cột "trước" màu xám, cột "sau" navy.
+ * `--cao` (0–1) khai trên từng cột, SINH BẰNG TỆP DỰNG từ số liệu thật. */
+.than-sl { gap: 18px; }
+.sl-luoi { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: end; }
+.sl-hep .sl-luoi { grid-template-columns: 1fr 440px; align-items: center; }
+.sl-bieu-do { display: flex; align-items: flex-end; gap: 34px; }
+.sl-khoi { display: flex; align-items: flex-end; gap: 34px; }
+.sl-cot { width: 150px; display: flex; flex-direction: column; align-items: stretch; }
+.sl-so {
+  text-align: center; margin-bottom: 8px;
+  font-size: 40px; font-weight: 900; line-height: 1;
+  letter-spacing: -0.03em; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.sl-sau .sl-so { color: var(--primary); }
+.sl-so small { font-size: 16px; font-weight: 700; letter-spacing: 0; }
+.sl-thanh {
+  height: calc(var(--cao) * var(--cot-toi-da));
+  background: var(--accent-light);
+  transform-origin: bottom center;
+  transform: scaleY(0);
+}
+.sl-sau .sl-thanh { background: var(--primary); }
+.sl-nhan-cot {
+  padding-top: 9px; border-top: 2px solid var(--primary);
+  text-align: center;
+  font-size: 13.5px; font-weight: 800; color: var(--primary);
+}
+.sl-nhan-cot span { display: block; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--chu-mo); }
+
+/* Chữ gọi — nằm CHUNG phần tử với cột "sau" nên hiện đúng câu thứ hai. */
+.sl-goi { display: flex; flex-direction: column; gap: 6px; padding-bottom: 46px; }
+.sl-goi b {
+  font-size: 104px; font-weight: 900; line-height: 0.9;
+  letter-spacing: -0.05em; color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.sl-goi span { max-width: 330px; font-size: 16px; line-height: 1.45; color: var(--chu-mem); }
+.sl-hep .sl-goi b { font-size: 58px; }
+.sl-hep .sl-goi span { max-width: 178px; font-size: 13.5px; text-wrap: balance; }
+/* Slide không có khung bằng chứng: cột rộng hơn, chữ gọi lớn hơn để KHÔNG hở
+ * nửa phải — bản đầu cột 150px và chữ gọi 104px chỉ phủ 60% bề ngang. */
+.sl-rong .sl-cot { width: 196px; }
+.sl-rong .sl-bieu-do, .sl-rong .sl-khoi { gap: 52px; }
+.sl-rong .sl-so { font-size: 46px; }
+.sl-rong .sl-goi b { font-size: 150px; }
+.sl-rong .sl-goi span { max-width: 380px; font-size: 18px; text-wrap: balance; }
+.sl-nguon { font-size: 11.5px; color: var(--chu-mo); }
+.sl-nguon b { color: var(--chu-mem); }
+
+/* Bằng chứng: trang catalogue gốc + dải giá phóng to cắt từ chính trang đó. */
+.sl-bang-chung { display: flex; flex-direction: column; gap: 8px; }
+.sl-bc-anh { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.sl-bc-anh img:first-child { width: 100%; height: auto; border: 1px solid var(--vien); }
+.sl-bc-gia { width: 270px; height: auto; border: 2px solid var(--primary); background: #fff; }
+.sl-bang-chung figcaption { font-size: 12px; line-height: 1.45; color: var(--chu-mo); }
+/* Trích sách 1915: đoạn quét đặt trên nền giấy, viền trái navy như một lời dẫn. */
+.sl-bc-dau {
+  font-size: 12.5px; font-weight: 700; color: var(--primary);
+  padding-bottom: 6px; border-bottom: 1px solid var(--vien);
+}
+.sl-bc-sach .sl-bc-anh {
+  padding: 14px 14px 12px 16px;
+  background: #fbf8f1; border-left: 4px solid var(--primary);
+}
+.sl-bc-sach .sl-bc-anh img:first-child { border: 0; mix-blend-mode: multiply; }
+.sl-bang-chung figcaption b { color: var(--chu-mem); }
+
+/* ══ 6 · VÌ SAO HIỆU QUẢ ═════════════════════════════════════════════════ */
+.than-vs {
+  display: grid; grid-template-columns: 1fr 360px; gap: 46px;
+  align-items: center; justify-content: stretch;
+}
+.vs-trai { display: flex; flex-direction: column; gap: 18px; }
+.vs-y { display: grid; grid-template-columns: 50px 1fr; gap: 14px; align-items: start; }
+.vs-so {
+  font-size: 30px; font-weight: 900; line-height: 1;
+  letter-spacing: -0.04em; color: var(--primary-light);
+  font-variant-numeric: tabular-nums;
+}
+.vs-y h3 { font-size: 19px; font-weight: 800; line-height: 1.25; color: var(--primary); margin-bottom: 7px; }
+.vs-y p { font-size: 15px; line-height: 1.5; color: var(--chu-mem); }
+.vs-y p b { color: var(--primary); font-weight: 800; }
+.vs-y blockquote {
+  padding-left: 13px; border-left: 3px solid var(--primary-light);
+  font-size: 15px; line-height: 1.5; font-style: italic; color: var(--chu-mem);
+}
+.vs-y cite { display: block; margin-top: 4px; font-size: 11.5px; font-style: normal; color: var(--chu-mo); }
+.vs-anh img { width: 100%; height: auto; filter: grayscale(1) contrast(1.05); border: 1px solid var(--vien); }
+.vs-anh figcaption { margin-top: 7px; font-size: 11.5px; color: var(--chu-mo); }
+
+/* ══ 7 · BÀI HỌC ═════════════════════════════════════════════════════════ */
+.than-bh { gap: 24px; }
+.bh-khoi {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 26px 34px 28px;
+  background: var(--primary);
+}
+.bh-cau { font-size: 40px; font-weight: 800; line-height: 1.24; letter-spacing: -0.02em; color: #fff; }
+.bh-cau em { font-style: normal; color: var(--nhan-sang); }
+.bh-buoc { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.bh-buoc li {
+  display: grid; grid-template-columns: 46px 1fr; gap: 12px; align-items: start;
+  padding-top: 14px; border-top: 3px solid var(--primary);
+}
+.bh-buoc span {
+  font-size: 40px; font-weight: 900; line-height: 0.9;
+  letter-spacing: -0.04em; color: var(--primary-light); font-variant-numeric: tabular-nums;
+}
+.bh-buoc b { display: block; margin-bottom: 4px; font-size: 20px; font-weight: 800; color: var(--primary); }
+.bh-buoc p { font-size: 15.5px; line-height: 1.45; color: var(--chu-mem); }
+
+.tien-do {
+  position: absolute; left: 0; bottom: 0;
+  height: 5px; width: 0;
+  background: var(--primary);
+  transition: width 0.42s ease;
+  z-index: 4;
+}
+
+/* ══ CHUYỂN ĐỘNG THÊM ════════════════════════════════════════════════════
+ * ⚠ Chỉ `transform` và `opacity` cho hình — bộ ghi quay từng khung, thuộc tính
+ *   khác làm trình duyệt tính lại bố cục và khung hình bị giật. */
+
+/* Cột mọc từ đáy lên. `.sl-thanh` là HẬU DUỆ của `.slide-element` (khối bọc
+ * `.sl-khoi`) nên dấu cách ở đây ĐÚNG. */
+.slide-element.visible .sl-thanh {
+  transform: scaleY(1);
+  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) 0.12s;
+}
+
+/* ── CON SỐ CHẠY LÊN — thuần CSS, không đụng `app.js` dùng chung ─────────
+ * Khai kiểu <integer> bằng @property thì trình duyệt NỘI SUY được biến, và
+ * `counter()` in giá trị đang nội suy ra thành chữ. Số đích khai trên thẻ:
+ * `--so-toi` (phần nguyên), `--le-toi` (một chữ số thập phân, vd 12,5).
+ * ⚠ Trình duyệt không hỗ trợ @property thì số hiện NGAY giá trị cuối — không
+ *   bao giờ kẹt ở 0, vì biến đếm vẫn nhận `var(--so-toi)` như biến thường.
+ * ⚠ Thời lượng đếm PHẢI bằng thời lượng cột mọc (1,2s) để số và cột cùng tới. */
+/* ⚠⚠ @property ĐĂNG KÝ TÊN BIẾN CHO TOÀN TRANG. Bản đầu đặt tên `--le` (phần
+ *   lẻ) — trùng đúng biến LỀ `--le: 76px` của bố cục. "76px" không hợp kiểu
+ *   <integer> nên bị ép về giá trị khởi tạo 0, và MỌI slide mất lề trái-phải,
+ *   chữ dính sát mép. Bộ soát vùng an toàn không bắt được vì nó chỉ đo chiều
+ *   dọc. Tên biến đếm vì thế có tiền tố `--dem-` riêng — đừng rút gọn. */
+@property --dem-nguyen { syntax: '<integer>'; initial-value: 0; inherits: false; }
+@property --dem-le { syntax: '<integer>'; initial-value: 0; inherits: false; }
+.dem { --dem-nguyen: 0; counter-reset: dem-nguyen var(--dem-nguyen); }
+.dem::before { content: counter(dem-nguyen); }
+.dem-le { --dem-le: 0; counter-reset: dem-le var(--dem-le); }
+.dem-le::before { content: ',' counter(dem-le); }
+.slide-element.visible .dem {
+  --dem-nguyen: var(--so-toi);
+  transition: --dem-nguyen 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) 0.12s;
+}
+.slide-element.visible .dem-le {
+  --dem-le: var(--le-toi);
+  transition: --dem-le 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) 0.12s;
+}
+
+/* Ảnh trong thẻ thu dần từ 108% về khung khi thẻ hiện — ảnh tư liệu tĩnh có
+ * được một nhịp chuyển động. ⚠ `.the` CHÍNH LÀ `.slide-element` → tổ hợp. */
+.the-anh img { transform: scale(1.08); }
+.slide-element.visible.the .the-anh img {
+  transform: scale(1);
+  transition: transform 1.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* Ba bước bài học hiện SO LE — mắt đọc lần lượt 1 → 2 → 3.
+ * ⚠ `.bh-buoc` CHÍNH LÀ `.slide-element` → tổ hợp. */
+.bh-buoc li { opacity: 0; transform: translateY(10px); }
+.slide-element.visible.bh-buoc li {
+  opacity: 1; transform: none;
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-element.visible.bh-buoc li:nth-child(2) { transition-delay: 0.22s; }
+.slide-element.visible.bh-buoc li:nth-child(3) { transition-delay: 0.44s; }
+
+/* Số lớn mờ sau slide 2 cũng đếm lên — chậm hơn (2,2s) vì nó là nền, không
+ * phải số liệu để đọc. Kích hoạt bằng `.slide.active` vì nó KHÔNG nằm trong
+ * `.slide-element` nào. */
+.slide.active .vd-bong .dem {
+  --dem-nguyen: var(--so-toi);
+  transition: --dem-nguyen 2.2s cubic-bezier(0.2, 0.7, 0.3, 1) 0.2s;
+}
+.slide.active .vd-bong .dem-le {
+  --dem-le: var(--le-toi);
+  transition: --dem-le 2.2s cubic-bezier(0.2, 0.7, 0.3, 1) 0.2s;
+}
+
+/* Chữ gọi hiện SAU khi cột đã mọc xong một nửa — mắt thấy cột trước rồi mới
+ * đọc kết luận. ⚠ `.sl-goi` là hậu duệ của `.sl-khoi-sau` (phần tử) → dấu cách. */
+.sl-goi { opacity: 0; transform: translateX(-10px); }
+.slide-element.visible .sl-goi {
+  opacity: 1; transform: none;
+  transition: opacity 0.5s ease 0.75s, transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.75s;
+}

@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--primary": "#d4a542",
+      "--primary-light": "#f2d089",
+      "--primary-dark": "#8a6a1c",
+      "--accent": "#3d5f49",
+      "--accent-light": "#9fb8a6",
+      "--info": "#6f9fb5",
+      "--success": "#7fc79a",
+      "--bg-dark": "#111c16"
+    },
+    "customVariables": {
+      "--primary": "#d4a542",
+      "--primary-light": "#f2d089",
+      "--primary-dark": "#8a6a1c",
+      "--accent": "#3d5f49",
+      "--accent-light": "#9fb8a6",
+      "--info": "#6f9fb5",
+      "--success": "#7fc79a",
+      "--bg-dark": "#111c16"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#d4a542",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#111c16",
+    "gridEnabled": false,
+    "gridLight": "#3d5f49",
+    "iconGlow": "#d4a542",
+    "iconBacklight": "#3d5f49",
+    "iconLight": "#f2d089",
+    "mainLight": "#d4a542",
+    "mainLightPosition": "bottom-right",
+    "mainLightIntensity": "medium",
+    "softLight": "#3d5f49",
+    "softLightPosition": "top-center",
+    "softLightIntensity": "soft",
+    "backgroundFx": "scan"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Mỗi sáng một ly cà phê, hai mươi lăm nghìn. Hai mươi năm nữa, số tiền đó đáng bao nhiêu?",
+      "Ba trăm năm mươi mốt triệu. Đó là nếu bạn để dành đúng số tiền đó rồi gửi tiết kiệm.",
+      "Cách tính rất đơn giản. Hai mươi lăm nghìn một ngày là chín phẩy một triệu một năm, tức khoảng bảy trăm sáu mươi nghìn mỗi tháng.",
+      "Gửi đều số đó suốt hai trăm bốn mươi tháng. Với lãi sáu phần trăm một năm và lãi nhập gốc, con số ở trên chính là kết quả.",
+      "Càng để lâu khoảng cách càng giãn. Năm năm đầu chênh chưa tới tám triệu, nhưng tới năm thứ hai mươi thì tiền lãi đã gần bằng tiền gốc.",
+      "Không ai bắt bạn bỏ cà phê. Nhưng nếu muốn thử, hôm nay đặt một lệnh tự động chuyển tiền sang tài khoản tiết kiệm ngay hôm nhận lương."
+    ],
+    "transitionSounds": [
+      "rise",
+      "boom",
+      "minimal",
+      "minimal",
+      "ascending",
+      "chord"
+    ],
+    "revealSounds": [
+      "tick",
+      "bell",
+      "click",
+      "click",
+      "ping",
+      "sparkle"
+    ]
+  }
+}

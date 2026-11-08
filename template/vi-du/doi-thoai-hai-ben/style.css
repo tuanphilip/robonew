@@ -1,0 +1,294 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * DS-04 · ĐỐI THOẠI HAI BÊN — khung ngang 16:9, tự chứa
+ * ---------------------------------------------------------------------------
+ * ⚠ Mẫu NGANG dùng tệp CSS RIÊNG, không nối vào `style.css` của bộ máy dọc.
+ *
+ * ⚠ Khung 1232×693 → quay ra 1920×1080. Dải an toàn [100, 493] khai bằng
+ *   padding của `.than`. Phần 200px dưới là chỗ của phụ đề.
+ *
+ * Nền chia đôi bằng một đường dọc mảnh ở GIỮA khung (x = 616): nửa trái tông
+ * LẠNH là phe A, nửa phải tông ẤM là phe B. Bên nào đang nói thì SÁNG hơn.
+ *
+ * ⚠ Cả hai nửa đều TỐI, nên phụ đề là mực SÁNG và đọc được ở cả hai bên. Đổi
+ *   một nửa sang sáng là phụ đề chết ở nửa đó — màu phụ đề là MỘT màu cho cả
+ *   video (xem bẫy ở KD-01).
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ══ BẢNG MÀU CHUẨN — ĐỪNG ĐỔI TÊN ═══════════════════════════════════ */
+  --bg-dark: #121017;
+  --primary: #6fb0f0;
+  --primary-light: #8cc4ff;
+  --primary-dark: #22507d;
+  --accent: #f0a15a;
+  --accent-light: #ffb46e;
+  --info: #6fb0f0;
+  --success: #3f9f78;
+  --warning: #e0a040;
+  --danger: #d9534f;
+
+  /* ── Tên đọc được, bắc cầu ── */
+  --nen: var(--bg-dark);
+  --nen-lanh: #0d1621;          /* nửa trái — phe A */
+  --nen-am: #1d120c;            /* nửa phải — phe B */
+  --lanh: var(--primary-light);
+  --am: var(--accent-light);
+  --chu: #f2ede7;
+  --chu-mem: #b9b2aa;
+  --chu-mo: #857f78;
+  --vien: rgba(255, 255, 255, 0.09);
+
+  /* ── Dải an toàn ── */
+  --an-toan-tren: 100px;
+  --an-toan-duoi: 200px;
+  --le: 76px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ⚠ PHẢI bằng `subtitles.fontSize` trong preview-settings.json. */
+  --subtitle-font-size: 22px;
+  --subtitle-bottom: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #08070a;
+  color: var(--chu);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+.main-wrapper { height: 100%; display: grid; place-items: center; }
+
+/* ⚠ Bộ ghi GHI ĐÈ width/height/zoom lúc quay; giá trị đây chỉ để xem trước. */
+.slide-container {
+  position: relative;
+  width: 1232px; height: 693px;
+  overflow: hidden;
+  background: var(--nen);
+  border-radius: 18px;
+}
+.slide {
+  position: absolute; inset: 0;
+  display: flex; opacity: 0;
+  transition: opacity 0.42s ease;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* ══ NỀN CHIA ĐÔI ════════════════════════════════════════════════════════ */
+.nen { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+.nen-doi { background: linear-gradient(90deg, var(--nen-lanh) 0 50%, var(--nen-am) 50% 100%); }
+.sang {
+  position: absolute; top: 0; bottom: 0; width: 50%;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.sang-trai {
+  left: 0;
+  background: radial-gradient(ellipse 85% 70% at 55% 42%, rgba(84, 146, 214, 0.34), transparent 72%);
+}
+.sang-phai {
+  right: 0;
+  background: radial-gradient(ellipse 85% 70% at 45% 42%, rgba(232, 140, 64, 0.30), transparent 72%);
+}
+/* Đường dọc mảnh ở GIỮA khung. ⚠ Đừng dời: nó là trục đối xứng của cả mẫu. */
+.vach {
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  transform: translateX(-0.5px);
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.26) 10%,
+                              rgba(255, 255, 255, 0.26) 90%, transparent);
+}
+/* Slide chủ đề: cả hai bên cùng sáng vừa; đường dọc bắt đầu DƯỚI tiêu đề. */
+.nen-chu-de .sang { opacity: 0.6; }
+.nen-chu-de .vach { top: 262px; }
+/* Slide điểm chung: hai nửa cùng sáng, đường dọc mờ đi — hai bên gặp nhau. */
+.nen-hoa .sang { opacity: 0.75; }
+/* Nền slide điểm chung: hai tông HOÀ vào nhau ở giữa thay vì cắt cứng. */
+.nen-hoa { background: linear-gradient(90deg, var(--nen-lanh) 0 36%, var(--nen-am) 64% 100%); }
+.nen-hoa .vach { opacity: 0.25; transition: opacity 1.2s ease; }
+/* Khi điểm chung được nói ra, đường ranh giới TAN hẳn và hai nửa cùng sáng. */
+.slide:has(.dc-hang.visible) .vach { opacity: 0; }
+.slide:has(.dc-hang.visible) .sang { opacity: 1; }
+
+/* ══ DẢI AN TOÀN KHAI BẰNG PADDING ═══════════════════════════════════════ */
+.than {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  padding: var(--an-toan-tren) var(--le) var(--an-toan-duoi);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 20px;
+}
+
+/* ══ HỢP ĐỒNG VỚI ĐƯỜNG DỰNG — số `.slide-element` mỗi slide PHẢI bằng số câu
+ * của dòng script tương ứng (trừ slide đầu một câu). ĐỪNG đổi tên lớp. */
+.slide-element {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-element.visible { opacity: 1; transform: none; }
+/* Mỗi bên bước vào TỪ PHÍA CỦA MÌNH. */
+.ben-a, .cd-trai { transform: translateX(-22px); }
+.ben-b, .cd-phai { transform: translateX(22px); }
+
+.chu-lanh { color: var(--lanh); }
+/* Từ có gạch nối ("mô-tơ"): không cho ngắt dòng ở dấu gạch — `balance` từng
+ * cắt thành "mô- / tơ". */
+.lien { white-space: nowrap; }
+.chu-am { color: var(--am); }
+.nhan-muc {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12.5px; font-weight: 800; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--chu-mem);
+}
+.nhan-muc::before, .nhan-muc::after { content: ''; width: 24px; height: 1px; background: currentColor; opacity: 0.6; }
+figure { margin: 0; }
+img { display: block; }
+.chan-dung { border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.04); }
+
+/* ══ 1 · CHỦ ĐỀ ══════════════════════════════════════════════════════════ */
+.than-cd { align-items: stretch; gap: 26px; }
+.cd-dau { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cd-tieu-de { font-size: 76px; font-weight: 900; line-height: 1; letter-spacing: -0.035em; }
+.cd-tieu-de i { font-style: normal; font-weight: 400; color: var(--chu-mo); font-size: 0.62em; letter-spacing: 0; }
+.cd-phu { font-size: 16px; color: var(--chu-mem); }
+.cd-hai-ben { display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; }
+.cd-ben { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+.chan-dung.lon { width: 124px; height: 124px; }
+.cd-trai .chan-dung { box-shadow: 0 0 0 3px var(--lanh); }
+.cd-phai .chan-dung { box-shadow: 0 0 0 3px var(--am); }
+.cd-doi { display: flex; }
+.cd-doi .chan-dung + .chan-dung { margin-left: -16px; }
+.cd-ten { margin-top: 8px; font-size: 16px; font-weight: 700; }
+.cd-phe { font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+
+/* ══ 2–5 · CÁC VÒNG ĐỐI ĐÁP ══════════════════════════════════════════════ */
+/* ⚠ NEO LÊN TRÊN (`flex-start`), KHÔNG căn giữa. Căn giữa thì vị trí nhãn vòng
+ * phụ thuộc chiều cao thẻ: vòng nào chữ xuống dòng là nhãn nhảy ~10px khi
+ * chuyển vòng (đã dính y hệt ở KC-01). 124px = đỉnh của vòng CAO NHẤT khi căn
+ * giữa — nên vòng nào cũng bắt đầu cùng một chỗ mà không vòng nào tràn. */
+.than-vong { align-items: center; justify-content: flex-start; padding-top: 124px; gap: 14px; }
+/* Nhãn vòng nằm ĐÈ lên đường dọc (nền đặc che nó đi) — không phải phần tử. */
+.vong-chip {
+  position: relative; z-index: 3;
+  padding: 6px 15px; border-radius: 999px;
+  background: #0b0a0d; border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 12px; font-weight: 800; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--chu-mem);
+}
+.hang-ben { width: 100%; display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; }
+.ben {
+  padding: 16px 20px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--vien);
+}
+.ben-a { border-top: 3px solid var(--lanh); }
+.ben-b { border-top: 3px solid var(--am); }
+.ben-dau { display: flex; align-items: center; gap: 12px; }
+.ben-dau .chan-dung { width: 44px; height: 44px; }
+.ben-a .ben-dau .chan-dung { box-shadow: 0 0 0 2px var(--lanh); }
+.ben-b .ben-dau .chan-dung { box-shadow: 0 0 0 2px var(--am); }
+/* ⚠ `div > b` / `div > span`, KHÔNG `.ben-dau span`: bộ chọn chung theo thẻ bắt
+ *   luôn phần tử thêm sau (sóng âm đang nói là một <span> trong header — dính
+ *   `display: block` thành một cột gạch dọc). */
+.ben-dau div > b { display: block; font-size: 14.5px; font-weight: 700; }
+.ben-dau div > span { display: block; margin-top: 1px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.ben-a .ben-dau div > span { color: var(--lanh); }
+.ben-b .ben-dau div > span { color: var(--am); }
+.ben-y { margin: 12px 0 5px; font-size: 23px; font-weight: 800; line-height: 1.22; letter-spacing: -0.015em; text-wrap: balance; }
+.ben-phu { font-size: 14.5px; line-height: 1.45; color: var(--chu-mem); text-wrap: balance; }   /* không để "chiều." mồ côi */
+.ben-bc { margin-top: 14px; height: 124px; }
+.bc-so { display: flex; flex-direction: column; justify-content: center; }
+.bc-so b { font-size: 62px; font-weight: 900; line-height: 1; letter-spacing: -0.045em; font-variant-numeric: tabular-nums; }
+.ben-a .bc-so b { color: var(--lanh); }
+.ben-b .bc-so b { color: var(--am); }
+.bc-so > span { margin-top: 6px; font-size: 12.5px; color: var(--chu-mo); }   /* `>`: chỉ dòng chú thích, không bắt số đếm */
+.bc-anh { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: end; }
+.bc-anh img { height: 124px; width: auto; border-radius: 6px; filter: grayscale(1) contrast(1.05); }
+.bc-anh figcaption { font-size: 11.5px; line-height: 1.4; color: var(--chu-mo); }
+
+/* ══ BÊN ĐANG NÓI SÁNG HƠN ═══════════════════════════════════════════════
+ * Phe B hiện (câu thứ hai) thì phe A LÙI MỜ và nửa nền phải sáng lên thay nửa
+ * trái. Viết bằng `:has()` — không cần JavaScript, không đụng `app.js`.
+ * ⚠ Độ ưu tiên: `.slide:has(.ben-b.visible) .ben-a.visible` (0,5,0) thắng
+ *   `.slide-element.visible` (0,2,0) — đừng rút gọn bộ chọn. */
+.slide:has(.ben-a.visible) .sang-trai { opacity: 1; }
+.slide:has(.ben-b.visible) .sang-trai { opacity: 0; }
+.slide:has(.ben-b.visible) .sang-phai { opacity: 1; }
+.slide:has(.ben-b.visible) .ben-a.visible { opacity: 0.34; }
+
+/* ── Dấu hiệu ĐANG NÓI: ba vạch sóng âm cạnh tên, CHỈ ở thẻ đang nói ──────
+ * Độ sáng thôi thì người xem phải so hai bên mới biết ai đang nói; ba vạch
+ * nhảy theo nhịp là biết ngay. Phe B hiện thì vạch của phe A tắt.
+ * ⚠ `.ben-a`/`.ben-b` CHÍNH LÀ `.slide-element` → `.ben-a.visible` viết liền. */
+.ben-dau { position: relative; }
+.dang-noi {
+  margin-left: auto; align-self: center;
+  display: inline-flex; align-items: flex-end; gap: 3px; height: 22px;
+  opacity: 0; transition: opacity 0.35s ease;
+}
+.dang-noi i {
+  display: block; width: 4px; height: 100%; border-radius: 2px;
+  background: currentColor;
+  transform-origin: bottom center; transform: scaleY(0.3);
+  animation: song-am 0.9s ease-in-out infinite;
+}
+.dang-noi i:nth-child(2) { animation-delay: 0.15s; }
+.dang-noi i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes song-am { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+.ben-a .dang-noi { color: var(--lanh); }
+.ben-b .dang-noi { color: var(--am); }
+.ben-a.visible .dang-noi, .ben-b.visible .dang-noi { opacity: 1; }
+.slide:has(.ben-b.visible) .ben-a .dang-noi { opacity: 0; }
+
+/* ── Số lớn ĐẾM LÊN khi thẻ hiện (cùng kỹ thuật KD-01) ─────────────────────
+ * ⚠⚠ @property đăng ký tên cho TOÀN TRANG — tên có tiền tố `--dem-` để không
+ *   bao giờ trùng biến bố cục (KD-01 từng đặt `--le` trùng biến lề → mất lề).
+ * ⚠ KHÔNG giữ chỗ bằng `min-width: 3ch`: `ch` đo theo chữ "0" của font chứ
+ *   không phải chữ số tabular đậm 900, nên ô rộng hơn số thật và để lại một
+ *   khoảng hở ("≈   800 m"). Để số tự nở — đơn vị chỉ nhích hai lần trong
+ *   0,3 giây đầu. */
+@property --dem-so { syntax: '<integer>'; initial-value: 0; inherits: false; }
+.dem {
+  --dem-so: 0; counter-reset: dem-so var(--dem-so);
+}
+.dem::before { content: counter(dem-so); }
+.slide-element.visible .dem {
+  --dem-so: var(--so-toi);
+  transition: --dem-so 1.2s cubic-bezier(0.2, 0.7, 0.3, 1) 0.25s;
+}
+
+/* ══ 6 · ĐIỂM CHUNG ══════════════════════════════════════════════════════ */
+.than-dc { align-items: center; gap: 26px; }
+.dc-dau { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.dc-cau {
+  max-width: 900px;
+  font-size: 34px; font-weight: 800; line-height: 1.25; letter-spacing: -0.02em;
+}   /* ngắt dòng bằng <br /> đặt tay sau "nhà —": `balance` cắt "tới mọi / nhà" */
+/* Chữ nhấn tô DẢI MÀU LẠNH → ẤM: hai bên gặp nhau ở đúng chỗ đó.
+ * ⚠ Khai `background-image` rồi mới `background-clip` — khai `background` rút
+ *   gọn SAU clip là xoá mất clip, chữ thành hình chữ nhật (bẫy của GD-05). */
+.dc-cau em {
+  font-style: normal;
+  background-image: linear-gradient(90deg, var(--lanh), var(--am));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+.dc-hang { width: 100%; display: grid; grid-template-columns: 1fr 300px 1fr; column-gap: 30px; align-items: center; }
+.dc-cot b { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.dc-cot p { font-size: 15.5px; line-height: 1.5; color: var(--chu-mem); text-wrap: balance; }
+.dc-trai { text-align: right; }
+.dc-anh img { width: 300px; height: auto; border-radius: 8px; }
+.dc-anh figcaption { margin-top: 7px; text-align: center; font-size: 11px; color: var(--chu-mo); }
+
+.tien-do {
+  position: absolute; left: 0; bottom: 0;
+  height: 5px; width: 0;
+  background: linear-gradient(90deg, var(--lanh), var(--am));
+  transition: width 0.42s ease;
+  z-index: 4;
+}

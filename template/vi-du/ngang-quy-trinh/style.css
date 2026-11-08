@@ -1,0 +1,285 @@
+/* ══ MẪU QUY TRÌNH NGANG 16:9 (GD-04) ══════════════════════════════════════
+ *
+ * Khung thiết kế **1232 × 693** (693 × 16/9 = 1232 chằn → video không viền
+ * đen). Mọi `px` là px CỦA KHUNG; bộ ghi phóng bằng `zoom`.
+ *
+ * ⚠ VÙNG AN TOÀN [100, 493]. `main/kiemDeck.js` đo hộp bao của mọi
+ * `.slide-element`; ra ngoài là TRƯỢT. `.than` khai dải đó bằng padding.
+ *
+ * ⚠ VÌ SAO PHẢI LÀ KHUNG NGANG: bố cục chữ ký ở đây là **đường ray nằm ngang**
+ * với bốn chặng đi từ trái sang phải. Ở khung dọc 9:16 nó buộc phải xếp thành
+ * danh sách dọc, và người xem mất luôn cảm giác "đi tới" — thứ làm một quy
+ * trình đọc ra là quy trình chứ không phải một danh sách gạch đầu dòng.
+ */
+:root {
+  /* ══ BẢNG MÀU CHUẨN — ĐỪNG ĐỔI TÊN (hợp đồng với bảng "Tông màu") ════════ */
+  --bg-dark: #eef2f7;          /* tên là `dark` vì hợp đồng, giá trị là màu giấy can */
+  --primary: #1e40af;
+  --primary-light: #3b82f6;
+  --primary-dark: #172554;
+  --accent: #0f766e;
+  --accent-light: #14b8a6;
+  --info: #1e40af;
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #b91c1c;
+
+  /* ── Tên đọc được, bắc cầu ── */
+  --nen: var(--bg-dark);
+  --nen-2: #ffffff;
+  --chu: #0f172a;
+  --chu-mem: #475569;
+  --chu-mo: #7c8ca3;
+  --nhan-mau: var(--primary);
+  --canh-bao-mau: var(--warning);
+  --vien: rgba(15, 23, 42, 0.14);
+  --vien-sang: rgba(15, 23, 42, 0.28);
+  --bong: 0 10px 28px rgba(15, 23, 42, 0.10);
+
+  /* ── Dải an toàn ── */
+  --an-toan-tren: 100px;
+  --an-toan-duoi: 200px;
+  --le: 84px;
+
+  /* ── Thang chữ ── */
+  --co-nhan: 19px;
+  --co-tieu-de: 52px;
+  --co-tieu-de-lon: 74px;
+  --co-than: 27px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ⚠ 22px: khung ngang rộng 1232 nên cỡ mặc định 15px (tính cho khung dọc
+     390) chỉ chiếm 39% bề ngang — chữ bé tí lọt thỏm giữa màn hình. */
+  --subtitle-font-size: 22px;
+  --subtitle-bottom: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #dfe6ef;
+  color: var(--chu);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.main-wrapper { height: 100%; display: grid; place-items: center; }
+
+/* ⚠ Bộ ghi GHI ĐÈ width/height/zoom lúc quay; giá trị đây chỉ để xem trước. */
+.slide-container {
+  position: relative;
+  width: 1232px; height: 693px;
+  overflow: hidden;
+  background: var(--nen);
+  border-radius: 18px;
+  counter-reset: so-slide;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; opacity: 0;
+  counter-increment: so-slide;
+  transition: opacity 0.42s ease;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* ══ NỀN GIẤY CAN KỸ THUẬT ════════════════════════════════════════════════
+ * ⚠ Trên nền sáng KHÔNG dựng chiều sâu bằng quầng sáng được — quầng sáng trên
+ * giấy là vô hình. Thay bằng thứ mặt giấy thật sự có: lưới hai cấp (ô lớn 96px
+ * và ô nhỏ 24px) đúng kiểu giấy can kỹ thuật, hợp với một mẫu nói về quy trình.
+ * Lớp `::after` là vệt tối rất nhẹ ở mép, thay cho vignette đen. */
+.nen { position: absolute; inset: 0; }
+.nen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(30, 64, 175, 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 64, 175, 0.16) 1px, transparent 1px),
+    linear-gradient(to right, rgba(30, 64, 175, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 64, 175, 0.07) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  mask-image: radial-gradient(ellipse 92% 88% at 50% 46%, #000 24%, transparent 84%);
+}
+.nen::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 98% 98% at 50% 44%, transparent 54%, rgba(15, 23, 42, 0.08) 100%);
+}
+
+.nen-1 { background:
+  radial-gradient(ellipse 66% 82% at 20% 14%, color-mix(in srgb, var(--primary) 14%, transparent), transparent 66%),
+  radial-gradient(ellipse 52% 62% at 86% 86%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 64%), var(--nen); }
+.nen-2 { background: radial-gradient(ellipse 88% 60% at 50% 42%, color-mix(in srgb, var(--primary) 9%, transparent), transparent 70%), var(--nen); }
+.nen-3 { background: radial-gradient(ellipse 62% 78% at 16% 74%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 66%), var(--nen); }
+.nen-4 { background: radial-gradient(ellipse 66% 78% at 84% 20%, color-mix(in srgb, var(--info) 9%, transparent), transparent 66%), var(--nen); }
+.nen-5 { background: radial-gradient(ellipse 64% 78% at 24% 22%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 66%), var(--nen); }
+.nen-6 { background: radial-gradient(ellipse 66% 80% at 78% 76%, color-mix(in srgb, var(--warning) 9%, transparent), transparent 66%), var(--nen); }
+.nen-7 { background:
+  radial-gradient(ellipse 84% 92% at 50% 50%, color-mix(in srgb, var(--primary) 13%, transparent), transparent 70%),
+  radial-gradient(ellipse 46% 58% at 84% 84%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 62%), var(--nen); }
+
+/* Số slide mờ góc trên phải. ⚠ Pseudo-element của `.slide`, KHÔNG phải
+   `.slide-element` — trang trí không được kéo hộp bao mà `kiemDeck` đo. */
+.slide::after {
+  content: counter(so-slide, decimal-leading-zero);
+  position: absolute; right: 54px; top: 18px; z-index: 1;
+  font-size: 78px; font-weight: 900; letter-spacing: -0.05em; line-height: 1;
+  color: color-mix(in srgb, var(--primary) 15%, transparent);
+  pointer-events: none;
+}
+.slide[data-bo-cuc="mo-dau"]::after { content: none; }
+
+/* ══ DẢI AN TOÀN KHAI BẰNG PADDING ════════════════════════════════════════ */
+.than {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  padding: var(--an-toan-tren) var(--le) var(--an-toan-duoi);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 22px;
+}
+.than.giua { align-items: center; text-align: center; gap: 20px; }
+
+/* ══ HỢP ĐỒNG VỚI ĐƯỜNG DỰNG — số `.slide-element` mỗi slide PHẢI bằng số câu
+ * của dòng script tương ứng (trừ slide đầu một câu). ĐỪNG đổi tên lớp. */
+.slide-element {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(5px);
+  transition: opacity 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 0.42s ease;
+}
+.slide-element.visible { opacity: 1; transform: none; filter: none; }
+
+.nhan {
+  display: flex; align-items: center; gap: 12px;
+  font-size: var(--co-nhan); font-weight: 800;
+  letter-spacing: 0.17em; text-transform: uppercase; color: var(--nhan-mau);
+}
+/* Vạch mực ngắn — trên giấy, một vạch đặc đọc rõ hơn chấm phát sáng (thứ chỉ
+   có nghĩa trên nền tối). */
+.nhan::before {
+  content: '';
+  width: 26px; height: 4px; border-radius: 2px;
+  background: currentColor;
+}
+.nhan.canh-bao { color: var(--canh-bao-mau); }
+
+/* ⚠ KHÔNG dùng chữ gradient trên nền sáng: dải sáng từ trên xuống làm chữ bạc
+   màu và khó đọc. Trên nền tối nó làm chữ nổi, ở đây thì ngược lại. */
+.tieu-de, .tieu-de-lon { color: var(--chu); }
+.tieu-de { font-size: var(--co-tieu-de); font-weight: 850; letter-spacing: -0.03em; line-height: 1.1; }
+.tieu-de-lon { font-size: var(--co-tieu-de-lon); font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; }
+.phu-de { font-size: 27px; color: var(--chu-mem); font-weight: 500; }
+
+/* ── Gạch đầu dòng ── */
+.gach { list-style: none; display: flex; flex-direction: column; gap: 15px; }
+.gach li {
+  position: relative; padding-left: 38px;
+  font-size: var(--co-than); line-height: 1.45; color: var(--chu-mem);
+}
+.gach li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.56em;
+  width: 16px; height: 3px; border-radius: 2px;
+  background: var(--nhan-mau);
+}
+.gach.canh-bao li::before {
+  background: var(--canh-bao-mau);
+}
+.gach li b, .the-chu b, .chang-chu b { color: var(--chu); font-weight: 750; }
+
+/* ══ ĐƯỜNG RAY: bố cục chữ ký ═════════════════════════════════════════════
+ * Bốn chặng nằm ngang, nối bằng một đường kẻ chạy qua sau lưng.
+ * ⚠ Đường kẻ là `::before` của `.ray`, KHÔNG phải một `.slide-element`. Nếu
+ * để nó thành phần tử thì `kiemDeck` tính luôn bề rộng của nó vào hộp bao, và
+ * số đếm reveal cũng lệch một nhịp. */
+.ray {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding-top: 30px;
+}
+.ray::before {
+  content: '';
+  position: absolute;
+  left: 8%; right: 8%; top: 52px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 25%, transparent), transparent);
+}
+.chang {
+  position: relative;
+  padding: 0 10px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
+}
+/* ══ NÚT CHẶNG: icon + số ══════════════════════════════════════════════════
+ * ⚠ Icon SVG vẽ thẳng trong HTML, không phải phông icon và cũng không phải
+ * ảnh: deck phải dựng được OFFLINE, mà phông icon thì tải qua mạng còn ảnh thì
+ * không đổi màu theo bảng "Tông màu". `stroke: currentColor` nên icon tự ăn
+ * màu của nút.
+ * ⚠ `box-shadow: 0 0 0 7px var(--nen)` là vòng CẮT ĐƯỜNG RAY phía sau, để
+ * đường kẻ không chạy xuyên qua nút. Nền sáng nên vòng này phải bằng đúng màu
+ * giấy — bản trước lấy màu tối, sang nền sáng là một vệt bẩn quanh mỗi nút. */
+.chang-dau {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px 7px 8px;
+  border-radius: 999px;
+  background: var(--nen-2);
+  border: 1px solid color-mix(in srgb, var(--primary) 34%, transparent);
+  box-shadow: 0 0 0 7px var(--nen), var(--bong);
+}
+.chang-icon { display: block; width: 26px; height: 26px; color: var(--primary); }
+.chang-icon svg { width: 100%; height: 100%; display: block; }
+.chang-so {
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px; font-weight: 900;
+}
+.chang-ten { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; color: var(--chu); }
+.chang-chu { font-size: 19px; line-height: 1.42; color: var(--chu-mem); }
+
+/* ══ HAI BƯỚC ĐẶT CẠNH NHAU ═══════════════════════════════════════════════ */
+.cot-doi { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.the {
+  position: relative; overflow: hidden;
+  background: var(--nen-2);
+  border: 1px solid var(--vien);
+  border-radius: 18px;
+  padding: 24px 28px 26px;
+  box-shadow: var(--bong);
+}
+.the::before {
+  content: '';
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--nhan-mau), transparent 72%);
+}
+/* Số bước chìm ở góc — dấu hiệu thứ tự mà không chiếm một dòng chữ nào. */
+.the-so {
+  position: absolute; right: 18px; bottom: 6px;
+  font-size: 84px; font-weight: 900; letter-spacing: -0.05em; line-height: 1;
+  color: color-mix(in srgb, var(--primary) 8%, transparent);
+  pointer-events: none;
+}
+.the-nhan {
+  font-size: 18px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--nhan-mau); margin-bottom: 10px;
+}
+.the-chu { position: relative; z-index: 2; font-size: 24px; line-height: 1.42; color: var(--chu-mem); }
+
+/* Vạch tiến độ. */
+.tien-do {
+  position: absolute; left: 0; bottom: 0;
+  height: 5px; width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.42s ease;
+  z-index: 3;
+}

@@ -1,0 +1,95 @@
+/* Bảng tài khoản 3 tab + hồ sơ người mua dùng chung Bee Account (28/09/2026) — login.js + ho-so.js.
+   Chỉ dùng token ở css/tokens.css (npm run verify:css). Dựa trên nền #bee-login của login.css:
+   label / input / .primary / .ghost đã có sẵn ở đó, ở đây chỉ thêm phần mới. */
+
+/* Thẻ rộng hơn: có form (2 cột tỉnh/phường, SĐT/email) — 320px cũ chật tới mức ô chọn cắt chữ. */
+#bee-login.neo .card { width: min(400px, calc(100vw - var(--sp-20))); }
+
+/* ── Thanh 3 tab (kiểu "viên thuốc" như Bee Platform) ───────────────────── */
+#bee-login .tk-tabs { display: flex; gap: var(--sp-4); margin: 0 var(--sp-18);
+  padding: var(--sp-4); border-radius: var(--radius-pill); background: var(--surface); }
+#bee-login .tk-tab { flex: 1; display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--sp-6); min-width: 0; padding: var(--sp-6) var(--sp-8);
+  border: 0; border-radius: var(--radius-pill); background: none;
+  color: var(--text-faint); font: inherit; font-size: var(--text-sm); cursor: pointer;
+  white-space: nowrap; transition: background var(--dur-fast), color var(--dur-fast); }
+#bee-login .tk-tab:hover { color: var(--text); }
+#bee-login .tk-tab.dang-mo { background: var(--tab-mo); color: var(--text);
+  font-weight: var(--weight-semibold); box-shadow: var(--shadow-sm); }
+#bee-login .tk-tab .btn-icon { color: inherit; }
+#bee-login .tk-tab svg { width: 15px; height: 15px; }
+#bee-login .tk-panel[hidden] { display: none; }
+
+/* ── Form hồ sơ ─────────────────────────────────────────────────────────── */
+#bee-login .hs-form { display: grid; }
+#bee-login .hs-o { margin-bottom: var(--sp-10); }
+#bee-login .hs-nhan b { margin-left: var(--sp-2); color: var(--danger-text); }
+#bee-login .hs-hai { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-10); }
+#bee-login .hs-form select { width: 100%; min-height: 38px; padding: var(--sp-8) var(--sp-10);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md);
+  color: var(--text); background: var(--field-bg); font: inherit; font-size: var(--text-base); }
+/* Chữ trong ô nhỏ như Bee Platform (14px) — cỡ kế thừa của login.css to quá cho một form nhiều ô. */
+#bee-login .hs-form input:not([type=checkbox]) { min-height: 38px; padding: var(--sp-8) var(--sp-10);
+  font-size: var(--text-base); }
+#bee-login .hs-form .hs-nhan { font-size: var(--text-sm); }
+#bee-login .hs-form select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+/* Chế độ XEM: ô mờ đi, con trỏ "cấm" — nhìn là biết phải bấm "Sửa thông tin" (như Platform). */
+#bee-login .hs-form.xem input,
+#bee-login .hs-form.xem select { opacity: 0.6; cursor: not-allowed; background: var(--surface); }
+#bee-login .hs-form.xem .hs-tick { opacity: 0.6; cursor: default; }
+
+/* Ô tick: `#bee-login input` / `label span` của login.css áp cho MỌI input/label — phải gỡ lại cho ô tick. */
+#bee-login .hs-tick { display: flex; align-items: center; gap: var(--sp-10);
+  margin: var(--sp-4) 0 var(--sp-6); color: var(--text); font-size: var(--text-md); cursor: pointer; }
+#bee-login .hs-tick input { flex: none; width: auto; min-height: 0; margin: 0; padding: 0;
+  accent-color: var(--accent); }
+#bee-login .hs-tick span { display: inline; margin: 0; color: inherit;
+  font-size: inherit; font-weight: var(--weight-normal); }
+
+#bee-login .hs-goiy,
+#bee-login .hs-phaply { margin: 0 0 var(--sp-10); color: var(--text-faint);
+  font-size: var(--text-xs); line-height: var(--leading-normal); }
+#bee-login .hs-phaply { text-align: center; }
+/* ⚠ app.css biến MỌI thẻ <a> thành nút viên thuốc (inline-flex, nền --accent, đệm) — link trong câu phải gỡ hết. */
+#bee-login .hs-phaply .hs-link { display: inline; padding: 0; border-radius: 0; background: none;
+  color: var(--danger-text); font-weight: var(--weight-semibold); text-decoration: none; cursor: pointer; }
+#bee-login .hs-phaply .hs-link:hover { text-decoration: underline; }
+
+#bee-login .hs-khoa { display: flex; align-items: flex-start; gap: var(--sp-8); margin-bottom: var(--sp-12);
+  padding: var(--sp-10) var(--sp-12); border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text-soft); font-size: var(--text-sm); line-height: var(--leading-normal); }
+#bee-login .hs-khoa .btn-icon { flex: none; color: var(--good-text); }
+
+#bee-login .hs-tb { margin-bottom: var(--sp-10); padding: var(--sp-8) var(--sp-12);
+  border: 1px solid var(--line); border-radius: var(--radius-md); color: var(--text-soft);
+  font-size: var(--text-sm); line-height: var(--leading-normal); }
+#bee-login .hs-tb.tot { color: var(--good-text); }
+#bee-login .hs-tb.xau { color: var(--danger-text); }
+#bee-login .hs-cho { padding: var(--sp-16) 0; color: var(--text-faint); font-size: var(--text-sm); text-align: center; }
+
+/* Nút: một nút rộng hết khung (XEM) / Hủy + Lưu chia đôi (SỬA). Chữ thường, không in đậm. */
+#bee-login .hs-form .primary,
+#bee-login .hs-form .ghost { font-weight: var(--weight-normal); }
+/* Nút "Sửa thông tin" nhỏ lại một chút (28/09/2026, chủ dự án yêu cầu). */
+#bee-login .hs-nut-sua { display: flex; align-items: center; justify-content: center; gap: var(--sp-8);
+  min-height: 38px; font-size: var(--text-base); }
+#bee-login .hs-nut-sua .btn-icon { color: inherit; }
+#bee-login .hs-nut-sua svg { width: 16px; height: 16px; }
+/* ⚠ login.css (cuối tệp) thụt MỌI .primary/.ghost của popup neo 18px mỗi bên — dành cho nút Đăng xuất nằm NGOÀI
+   .tk-than. Nút bên trong .tk-than đã có đệm của khung ⇒ bị thụt hai lần, hẹp hơn ô nhập. Trả về rộng hết khung
+   (cả "Nâng cấp gói") như nút "Sửa thông tin" của Platform. */
+#bee-login.neo .tk-than .primary,
+#bee-login.neo .tk-than .ghost { width: 100%; margin: var(--sp-8) 0 0; }
+#bee-login .hs-nut-doi { display: flex; gap: var(--sp-10); }
+#bee-login .hs-nut-doi > button { flex: 1; min-height: 38px; margin-top: var(--sp-6); font-size: var(--text-base); }
+
+/* ── Đầu thẻ: tên + email bên trái, nút Nâng cấp / Gia hạn bên phải cùng hàng ── */
+#bee-login .tk-dau { display: flex; align-items: center; gap: var(--sp-12); }
+#bee-login .tk-dau-trai { flex: 1; min-width: 0; }
+#bee-login.neo .tk-dau .tk-nangcap { flex: none; display: inline-flex; align-items: center; gap: var(--sp-6);
+  width: auto; min-height: 32px; margin: 0; padding: 0 var(--sp-12); border-radius: var(--radius-pill);
+  font-size: var(--text-sm); font-weight: var(--weight-semibold); white-space: nowrap; }
+#bee-login .tk-nangcap .btn-icon { color: inherit; }
+#bee-login .tk-nangcap svg { width: 14px; height: 14px; }
+#bee-login .tk-nhac-dau { margin: 0 var(--sp-18) var(--sp-10); }

@@ -1,0 +1,764 @@
+/* Tách từ pages.js (02/09/2026, audit Phase 2.1). */
+/* Thanh điều hướng nằm bên TRÁI — chỗ mắt người dùng tìm đầu tiên và là
+   chỗ gần như mọi app đặt. Bản trước để bên phải, đứng cạnh thanh cuộn.
+
+   Từ 10/09/2026 thanh có HAI mức: THU GỌN (chỉ icon, --nav-w) và MỞ khi rê
+   chuột (icon + nhãn bên phải, --nav-w-mo). Bản trước xếp icon TRÊN nhãn DƯỚI
+   nên phải rộng cứng 78px và nhãn phải tụt xuống 10px mới không gãy đôi chữ
+   "Dựng video"; nay nhãn nằm cạnh icon nên dài bao nhiêu cũng được, còn lúc
+   thu gọn thì không tốn chỗ nào.
+
+   ⚠ Lề trái của body bám theo --nav-w (mức THU GỌN) và KHÔNG đổi khi thanh mở
+   ra: thanh là position:fixed, nó PHỦ LÊN nội dung. Cho lề chạy theo thì mỗi
+   lần chuột đi ngang qua thanh là cả trang xô sang phải rồi xô về. */
+body { padding-left: calc(var(--nav-w) + var(--sp-12)); }
+.app-nav {
+  /* Bắt đầu NGAY DƯỚI thanh trên, không phải từ y=0 — hai thanh chồng nhau thì
+     logo của thanh dọc nằm đè lên logo của thanh trên. */
+  position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--nav-w); z-index: var(--z-nav);
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-4);
+  /* Trên cùng nay là logo, không còn để trống 74px chờ tiêu đề trang. */
+  padding: var(--sp-16) var(--sp-8) var(--sp-10);
+  border-right: 1px solid var(--line); background: var(--bg);
+  /* Nhãn vẫn nằm trong luồng bố cục lúc thu gọn (chỉ mờ đi và bị cắt) chứ
+     KHÔNG display:none — gỡ khỏi luồng thì mỗi lần mở ra nút phải tính lại bề
+     ngang, chữ nảy một nhịp trước khi vào chỗ. */
+  overflow: hidden;
+  transition: width var(--dur-slow) ease;
+}
+.app-nav.mo { width: var(--nav-w-mo); box-shadow: var(--shadow-md); }
+@media (prefers-reduced-motion: reduce) {
+  .app-nav, .app-nav button > span:last-child { transition: none; }
+}
+/* Logo canh TRÁI, thẳng hàng với icon của các nút. Để place-items:center thì
+   lúc thanh mở ra logo trượt từ x=28 sang x=95 — một cú nhảy ngang mà không
+   phần tử nào khác trong thanh có. */
+/* Logo của thanh dọc đã BỎ (10/09/2026) — thanh trên cùng mang logo rồi, hai
+   cái xếp chồng ở góc trái nhìn thừa. Luật .nav-logo* xoá theo, đừng dựng lại
+   ở đây mà không xử lý luôn phần trùng với .app-bar-home. */
+.app-nav button {
+  display: flex; align-items: center; gap: var(--sp-10);
+  /* ⚠ Lề ngang 6px, KHÔNG phải 10px. Lúc thu gọn nút rộng 39px và icon 26px,
+     nên lề 10 để lại 10px bên trái mà chỉ 3px bên phải — mảng nền của nút đang
+     chọn ôm lệch hẳn quanh icon, nhìn như bị méo. 6px thì hai bên còn 6/7px,
+     lệch nửa pixel. Đo được, không ước lượng.
+     Đặt CHUNG cho cả hai trạng thái chứ không tách luật cho .mo: tách ra thì
+     icon trượt ngang một nhịp mỗi lần thanh mở/đóng. */
+  padding: var(--sp-8) var(--sp-6); border: 0; border-radius: var(--radius-md);
+  color: var(--text-faint); background: none;
+  /* Trả cỡ chữ về --text-md. Ràng buộc cũ ("--text-2xs, nếu không 'Dựng video'
+     gãy làm hai dòng") đến từ kiểu xếp DỌC trong 78px — nhãn nay nằm ngang,
+     một dòng, nowrap, nên bó nó xuống 10px chỉ còn là khó đọc. */
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  text-align: left; cursor: pointer; white-space: nowrap;
+}
+.app-nav button:hover { color: var(--text); background: var(--surface); }
+.app-nav button.active { color: var(--text); background: var(--surface-strong); }
+.app-nav button svg { width: 19px; height: 19px; }
+/* Icon KHÔNG có chip nền khi chưa rê chuột. Mỗi nút một chấm xám sau icon
+   làm thanh trái trông lấm tấm, mà cái nền đó chẳng phân biệt gì — trang
+   đang mở đã có nền riêng ở cả nút rồi. */
+/* Ô icon rộng bằng nhau ở MỌI mục (26px) để mép trái các nhãn thẳng hàng —
+   mục "Dựng video" có thêm chip nền, nếu ô của nó to hơn thì cả hàng lệch. */
+.app-nav .btn-icon { flex: none; width: 26px; height: 26px; background: none; box-shadow: none; }
+/* Mục "Dựng video": tô XANH BIỂN, KHÔNG chip nền (đổi 13/09/2026 theo yêu cầu
+   chủ dự án). Trước là chip tròn đặc `--primary-bg`, mà ở nền sáng token đó là
+   #131315 — gần như đen, nhìn nặng nề giữa bốn icon xám nhạt. Nay chỉ đổi MÀU
+   NÉT: cả thanh vẫn chỉ một mục được tô, nhưng bằng màu chứ không bằng khối.
+   `--info` là token xanh duy nhất của app và có ở cả hai nền (#0284c7 sáng /
+   #38bdf8 tối) — đừng viết mã màu thẳng, `verify:css` chặn.
+
+   ⚠ PHẢI kể ra cả :hover và .active. Hai luật ngay trên
+   (".app-nav button:hover .btn-icon", ".app-nav button.active .btn-icon") đặt
+   "background: none" với ĐỘ ƯU TIÊN BẰNG luật này (0,3,1) và đứng SAU nó, nên
+   hoà thì luật sau thắng — mà mục này gần như luôn mang .active vì nó là trang
+   mặc định. Đo được: nền chip ra rgba(0,0,0,0) dù luật trông như đã đúng. */
+.app-nav button[data-trang="render"] .btn-icon,
+.app-nav button[data-trang="render"]:hover .btn-icon,
+.app-nav button[data-trang="render"].active .btn-icon {
+  color: var(--info); background: none;
+}
+.app-nav button:hover .btn-icon,
+.app-nav button.active .btn-icon { background: none; }
+/* Nút tài khoản đã chuyển LÊN thanh trên cùng (10/09/2026) — kiểu dáng của nó
+   nay là .app-bar-nut trong app-bar.css. Ở thanh dọc chỉ còn "Cài đặt" ở đáy.
+
+   ── Bảng thông báo của cái chuông trên thanh trên ──
+   Dựng bằng JS rồi neo bằng toạ độ (pages.js#ganChuong), nên ở đây chỉ tả
+   DÁNG. position:fixed vì nó neo theo mép nút, không theo dòng chảy trang. */
+.tb-bang {
+  position: fixed; z-index: var(--z-pop);
+  min-width: 240px; max-width: 320px;
+  padding: var(--sp-12) var(--sp-14);
+  border: 1px solid var(--line); border-radius: var(--radius-md);
+  background: var(--panel); color: var(--text); box-shadow: var(--shadow-md);
+}
+.tb-dau { margin: 0 0 var(--sp-6); font-size: var(--text-md); font-weight: var(--weight-bold); }
+.tb-trong { color: var(--text-faint); font-size: var(--text-md); }
+/* Nút sáng/tối cũ trên thanh menu: ẨN chứ KHÔNG xoá. Nó nay nằm trong thẻ
+   Cài đặt của popup tài khoản, mà thẻ đó bấm lại chính nút này để chỉ có
+   MỘT chỗ quyết định theme — xoá đi là thẻ Cài đặt mất tác dụng. */
+.header-tools [data-theme-toggle] { display: none; }
+/* Nhãn mờ đi lúc thu gọn thay vì biến mất. overflow:hidden ở thanh lo phần
+   CẮT, opacity lo phần NHÌN — tách hai việc ra thì lúc mở chỉ có chữ hiện
+   dần, không có cú nhảy bố cục nào. */
+.app-nav button > span:last-child { opacity: 0; transition: opacity var(--dur-fast) ease; }
+.app-nav.mo button > span:last-child { opacity: 1; }
+
+/* body là flex, cao 100vh, overflow hidden — nên trang mới PHẢI tự cuộn.
+   Thiếu ba dòng dưới là nội dung dài bị cắt cụt, không kéo xuống được.
+
+   ⚠ CẢ BA trang phụ chung một luật. Trước đây #page-huongdan KHÔNG có luật
+   nào cả — ba trang do pages.js sinh ra bằng JS, chỉ đặt id, nên trang nào
+   quên viết CSS là mất sạch: đo được đệm 0px, tiêu đề "Hướng dẫn" dính đúng
+   0px vào thanh trên và 0px vào mép trái, mà cũng không có overflow-y nên
+   bài dài thì cụt luôn không cuộn được.
+
+   Đệm TRÊN 20px chứ không phải 4px như cũ: 4px thì tiêu đề gần như chạm
+   đường kẻ của thanh trên (đo: Template 4px, Nâng cấp 8px). */
+.trang-mau,
+#page-thanhtoan,
+#page-huongdan { flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  padding: var(--sp-20) var(--sp-4) var(--sp-24); }
+/* flex-start chu khong space-between: nut huong dan phai dung SAT tieu de,
+   de space-between thi no bay sang tan mep phai man hinh. */
+.trang-mau .tpl-head { display: flex; align-items: baseline;
+  justify-content: flex-start; gap: var(--sp-10); margin-bottom: var(--sp-4); flex-wrap: wrap; }
+.trang-mau h2 { margin: 0; font-size: var(--text-3xl); font-weight: var(--weight-bold); letter-spacing: -0.02em; }
+
+/* ---- Huong dan chi tiet: nut mo + bang noi dung ---- */
+/* Nut la chu tran, khong vo: dung canh tieu de 21px/900 ma dong them mot vo
+   nut nua thi hai thu danh nhau, mat ai la tieu de. */
+.trang-mau .tpl-hdmo { padding: 0; border: 0; background: none; cursor: pointer;
+  color: var(--hero-chip-chu); font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold);
+  text-decoration: underline; text-underline-offset: 3px; }
+.trang-mau .tpl-hdmo:hover { opacity: 0.75; }
+.trang-mau .tpl-hd { margin: 0 0 var(--sp-18); padding: var(--sp-14) var(--sp-16);
+  border: 1px solid var(--line); border-radius: var(--radius-md); }
+.trang-mau .tpl-hd[hidden] { display: none; }
+/* Nút video: có VỎ hẳn hoi, khác hai link chữ chạy trong câu bên dưới — nó
+   là việc đầu tiên nên làm khi mở khối này ra, không phải một chú thích. */
+.trang-mau .tpl-video { display: inline-flex; align-items: center; gap: var(--sp-8);
+  margin: 0 0 var(--sp-14); padding: var(--sp-8) var(--sp-14); border: 1px solid var(--control-line);
+  border-radius: var(--radius-pill); color: var(--text); background: var(--surface);
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold); cursor: pointer; }
+.trang-mau .tpl-video:hover { border-color: var(--accent); color: var(--accent); }
+.trang-mau .tpl-video .btn-icon { background: none; box-shadow: none; }
+.trang-mau .tpl-video svg { width: 15px; height: 15px; }
+.trang-mau .tpl-hd ol { margin: 0; padding-left: var(--sp-20); display: grid; gap: var(--sp-8); }
+.trang-mau .tpl-hd li { font-size: var(--text-md); line-height: var(--leading-relaxed); }
+.trang-mau .tpl-hd b { font-weight: var(--weight-bold); }
+/* ⚠ PHAI GO TUNG THUOC TINH MOT.
+   index.html co rule TOAN CUC bien MOI the a thanh nut bo tron nen dam:
+   display:inline-flex, padding, border-radius:999px, background:var(--accent),
+   color:var(--accent-contrast), font-weight:800.
+   Chi doi mau chu thoi thi ra chu den tren nen den, tang hinh — da dinh dung
+   nhu vay. Hai link nay nam GIUA cau van nen phai la chu chay dong, khong
+   phai nut. */
+.trang-mau .tpl-hd a { display: inline; align-items: initial;
+  justify-content: initial; padding: 0; border-radius: 0; background: none;
+  color: var(--accent); font-weight: var(--weight-bold); text-decoration: underline;
+  text-underline-offset: 2px; }
+.trang-mau .tpl-hd a:hover { opacity: 0.75; }
+/* Duong dan tu detect: cho xuong dong duoc, duong cai co the rat dai. */
+.trang-mau .tpl-duong { display: flex; align-items: center; gap: var(--sp-8);
+  margin-top: var(--sp-6); flex-wrap: wrap; }
+.trang-mau .tpl-duong code { padding: var(--sp-4) var(--sp-8); border: 1px solid var(--control-line);
+  border-radius: var(--radius-sm); font-size: var(--text-sm); word-break: break-all; }
+.trang-mau .tpl-hd .tpl-copy { font-size: var(--text-sm); }
+/* Khoi gioi thieu goi, dat duoi cung trong bang huong dan. */
+.trang-mau .tpl-goi { margin-top: var(--sp-14); padding-top: var(--sp-12);
+  border-top: 1px solid var(--line); display: flex; align-items: center;
+  gap: var(--sp-12); flex-wrap: wrap; }
+.trang-mau .tpl-goi-chu { font-size: var(--text-md); }
+.trang-mau .tpl-goi-chu span { display: block; color: var(--text-faint); font-size: var(--text-sm); }
+.trang-mau .tpl-luoi {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp-14); }
+.trang-mau .tpl-the {
+  display: grid; gap: var(--sp-8); padding: var(--sp-12); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); background: none; align-content: start; }
+/* Chi o kieu LUOI: day cum chan xuong day de hang nut Copy prompt thang nhau.
+   Kieu danh sach khong can (moi the mot hang rieng).
+
+   CANH BAO — KHONG dung `align-content: stretch` o day, da tung dung va SAI.
+   The la `display: grid` mot cot, nen `stretch` keo GIAN MOI HANG de lap cho
+   trong cua the, chia deu theo so hang. The nao it chu hon thi cho trong nhieu
+   hon, hang nut "Tao du an bang AI" cung gian nhieu hon. Do 23/09/2026 tren
+   trang Mau doc: 21 nut cao tu **36 den 42px**, lech 6px, trong khi the deu
+   cao 564px — chu du an chup lai dung canh nay.
+   Doi sang FLEX COT: `margin-top: auto` cua `.tpl-chan` van day duoc cum chan
+   xuong day, ma khong con hang nao bi keo gian. Cac con dat `flex: none` de
+   khong bi co lai khi the chat — anh mau va nut deu phai giu dung kich thuoc.
+   ⚠ CHI doi o nhanh `:not(.kieu-danhsach)`. Kieu danh sach dung `grid-area`
+   (`.tpl-khung { grid-area: anh }`) nen phai o nguyen luoi. */
+.trang-mau .tpl-luoi:not(.kieu-danhsach) .tpl-the { display: flex; flex-direction: column; }
+.trang-mau .tpl-luoi:not(.kieu-danhsach) .tpl-the > * { flex: none; }
+.trang-mau .tpl-luoi:not(.kieu-danhsach) .tpl-chan { margin-top: auto; }
+.trang-mau .tpl-khung { position: relative; }
+.trang-mau .tpl-anh {
+  display: block; aspect-ratio: 9 / 16; max-height: 300px; border-radius: var(--radius-md);
+  background: var(--surface); object-fit: cover; width: 100%; }
+.trang-mau video.tpl-anh { cursor: pointer; background: #000; }
+/* Mau NGANG 16:9 (GD-03 tro di). Khong co dong nay thi o xem truoc van la
+   9/16, ma `object-fit: cover` cat theo chieu ngang — do duoc: chi con
+   9 / (16 x 16/9) = 31.6% be ngang cua khung hinh, mat 68%. Doi ti le o
+   chu khong doi sang `contain`: o ngang that noi ngay duoc rang mau nay
+   dung ra video ngang, con `contain` chi de lai hai vien den. */
+.trang-mau .tpl-khung[data-khung="ngang"] .tpl-anh { aspect-ratio: 16 / 9; }
+.trang-mau .tpl-trong { display: grid; place-items: center;
+  color: var(--text-faint); font-size: var(--text-sm); }
+/* Nút phát giữa khung, kiểu trình phát quen thuộc. Mờ đi khi đang chạy để
+   không che hình, hiện lại khi rê chuột. */
+.trang-mau .tpl-phat {
+  position: absolute; inset: 0; margin: auto; width: 52px; height: 52px;
+  display: grid; place-items: center; border: 0; border-radius: var(--radius-pill);
+  color: #fff; background: var(--overlay); cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease; }
+.trang-mau .tpl-phat:hover { background: var(--overlay-strong); }
+.trang-mau .tpl-phat.dang-phat { opacity: 0; }
+.trang-mau .tpl-khung:hover .tpl-phat.dang-phat { opacity: 1; }
+.trang-mau .tpl-tieng {
+  position: absolute; right: 8px; bottom: 8px; width: 30px; height: 30px;
+  display: grid; place-items: center; border: 0; border-radius: var(--radius-pill);
+  color: #fff; background: var(--overlay); cursor: pointer; }
+.trang-mau .tpl-tieng:hover { background: var(--overlay-strong); }
+.trang-mau .tpl-tieng.tat { color: var(--danger); }
+/* Nút XEM TO — góc dưới bên TRÁI, đối xứng với nút tiếng ở bên phải. Chỉ dựng
+   cho thẻ mẫu ngang (xem chú thích ở `pages.js`). */
+.trang-mau .tpl-to {
+  position: absolute; left: 8px; bottom: 8px; width: 30px; height: 30px;
+  display: grid; place-items: center; border: 0; border-radius: var(--radius-pill);
+  color: #fff; background: var(--overlay); cursor: pointer; }
+.trang-mau .tpl-to:hover { background: var(--overlay-strong); }
+/* Kiểu danh sách: ô xem trước đã cao 164px, đủ nhìn — bỏ nút cho đỡ rối, đúng
+   như nút tiếng. */
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-to { display: none; }
+
+/* ══ LỚP PHỦ XEM TO ═══════════════════════════════════════════════════════
+ * Dựng bằng JS mỗi lần mở rồi bỏ đi khi đóng (xem `pages.js`). Nằm ở
+ * `--z-viewer` — cùng bậc với trình xem deck, tức trên mọi thứ của trang. */
+.tpl-den {
+  position: fixed; inset: 0; z-index: var(--z-viewer);
+  display: grid; place-items: center;
+  padding: var(--sp-32);
+  background: var(--overlay-strong);
+}
+.tpl-den-hop { position: relative; width: min(1500px, 100%); }
+/* ⚠ `aspect-ratio` CHỨ KHÔNG PHẢI chiều cao cố định: video mẫu ngang là
+   1920×1080 chằn, để trình duyệt tự bó theo bề ngang thì không bao giờ có
+   viền đen. Trần chiều cao lo cho màn hình thấp. */
+.tpl-den-video {
+  display: block; width: 100%; aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 2 * var(--sp-32));
+  border-radius: var(--radius-md); background: #000;
+}
+/* ⚠ Nút đóng nằm TRONG khung video, góc trên phải — đừng đẩy ra ngoài mép
+   trên. Bản đầu đặt `top: -44px`: trên cửa sổ hẹp (đo 963×574) nó ra tới
+   `top: -7px`, tức nhô khỏi mép trên màn hình và bị cắt mất một phần; trên cửa
+   sổ rộng thì nó rơi đúng lên thanh trên của app, trông như nút của app chứ
+   không phải của lớp phủ. Góc trên phải của video luôn trống — thanh điều
+   khiển của trình duyệt nằm ở đáy. */
+.tpl-den-x {
+  position: absolute; right: 10px; top: 10px;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-pill);
+  color: #fff; background: var(--overlay-strong); cursor: pointer;
+  font-size: var(--text-xl); line-height: var(--leading-none);
+}
+.tpl-den-x:hover { background: var(--danger-solid); }
+
+.trang-mau .tpl-ten { font-size: var(--text-base); font-weight: var(--weight-bold);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trang-mau .tpl-mota { color: var(--text-soft); font-size: var(--text-sm); line-height: var(--leading-snug); }
+.trang-mau .tpl-chan { display: flex; align-items: center;
+  justify-content: space-between; gap: var(--sp-8); margin-top: var(--sp-4); }
+.trang-mau .tpl-meta { color: var(--text-faint); font-size: var(--text-sm); }
+.trang-mau .tpl-copy { padding: var(--sp-6) var(--sp-12); border: 1px solid var(--control-line);
+  border-radius: var(--radius-md); color: var(--text); background: none;
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer; white-space: nowrap; }
+.trang-mau .tpl-copy:hover { background: var(--surface); }
+.trang-mau .tpl-copy.xong { border-color: var(--accent); color: var(--accent); }
+/* ── TẠO DỰ ÁN TỪ MẪU (16/09/2026) ───────────────────────────────────────
+   Nút CHÍNH của thẻ: nền nhấn, đứng cuối hàng chân. "Copy prompt" tụt xuống
+   hàng hai về mặt thị giác (viền suông) vì nó là đường cũ — dùng AI ngoài. */
+.trang-mau .tpl-tao {
+  width: 100%; margin-top: var(--sp-8);
+  padding: var(--sp-8) var(--sp-12); border: 0; border-radius: var(--radius-md);
+  /* CÙNG dải màu với "Tạo video" trên thanh trên và "Tạo dự án bằng AI" — nút
+     này nay cũng dẫn thẳng sang đó, để khác màu là trông như ba việc. */
+  color: var(--nut-ai-chu); background: var(--nut-ai-nen);
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-bold);
+  cursor: pointer; white-space: nowrap;
+}
+.trang-mau .tpl-tao { display: flex; align-items: center; justify-content: center; gap: var(--sp-6); }
+/* Ép màu icon như hai nút kia — `.btn-icon` có quy tắc màu riêng ở `app.css`. */
+.trang-mau .tpl-tao .btn-icon { display: grid; place-items: center; background: none; box-shadow: none; color: var(--nut-ai-chu); }
+.trang-mau .tpl-tao svg { width: 14px; height: 14px; color: var(--nut-ai-chu); }
+.trang-mau .tpl-tao:hover { background: var(--nut-ai-nen-dam); }
+.trang-mau .tpl-tao[hidden] { display: none; }
+/* Hàng nhập tên trong thẻ đã bỏ (23/10/2026): "Tạo dự án" mở hộp — pages.js#moHopTaoMau. Còn dòng báo lỗi (xoá mẫu). */
+.trang-mau .tpl-bao {
+  margin-top: var(--sp-6); color: var(--text-faint); font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+.trang-mau .tpl-bao[hidden] { display: none; }
+.trang-mau .tpl-bao-loi { color: var(--delete-text); }
+
+
+.trang-mau .tpl-tab {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-14); border: 1px solid var(--control-line-faint);
+  border-radius: var(--radius-pill); background: none; color: var(--text-faint);
+  font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold); cursor: pointer;
+  white-space: nowrap; }
+.trang-mau .tpl-tab:hover { color: var(--text); background: var(--surface); }
+.trang-mau .tpl-tab.dang-chon {
+  color: var(--accent-contrast); background: var(--accent); border-color: transparent; }
+.trang-mau .tpl-tab-so {
+  padding: 1px var(--sp-8); border-radius: var(--radius-pill);
+  background: var(--surface-strong); color: var(--text-faint);
+  font-size: var(--text-xs); font-weight: var(--weight-semibold); }
+.trang-mau .tpl-tab.dang-chon .tpl-tab-so {
+  background: var(--chip-trung-tinh); color: inherit; }
+
+/* ── Khối mở đầu trang Template ────────────────────────────────────────────
+   Nền dùng lại đúng bộ token của khối Dựng video / Hướng dẫn (--rl-dau-*) để
+   ba trang cùng một phong cách; ảnh bên phải thì lấy từ CHÍNH các mẫu đang có
+   (xem `anhMau` ở pages.js), không phải một tấm minh hoạ vẽ sẵn. */
+.trang-mau .tpl-hero {
+  position: relative; overflow: hidden;
+  min-height: 200px;
+  margin: 0 0 var(--sp-18); padding: var(--sp-24) var(--sp-28);
+  border-radius: var(--radius-lg);
+  background-color: var(--rl-dau-bg);
+  background-image: var(--tpl-hero-anh);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: cover;
+}
+/* Chữ chỉ chiếm nửa trái: nửa phải tấm nền là cụm ảnh mẫu, chữ chạy đè lên
+   đó là không đọc được chữ nào — cùng lý do với .hd-hero và .rl-dau. */
+.trang-mau .tpl-hero-chu { max-width: 58%; }
+/* Cửa sổ hẹp: trả chữ về full bề ngang. Ảnh nền vẫn ở đó nhưng cụm ảnh của nó
+   bị đẩy ra ngoài khung nhìn, nên không còn gì để né. */
+@media (max-width: 1100px) {
+  .trang-mau .tpl-hero-chu { max-width: none; }
+}
+.trang-mau .tpl-hero { color: var(--hero-chu); }
+.trang-mau .tpl-hero-tem {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  margin: 0 0 var(--sp-12); padding: var(--sp-6) var(--sp-12);
+  border-radius: var(--radius-pill);
+  background: var(--hero-chip-nen); color: var(--hero-chip-chu);
+  font-size: var(--text-2xs); font-weight: var(--weight-bold); letter-spacing: 0.08em;
+}
+.trang-mau .tpl-hero-tem .btn-icon { color: inherit; background: none; box-shadow: none; }
+.trang-mau .tpl-hero-tem svg { width: 13px; height: 13px; }
+/* Tiêu đề và nút hướng dẫn nằm CÙNG HÀNG, căn theo chân chữ.
+   Căn giữa theo chiều cao thì nút trôi lên lưng chừng tiêu đề 22px; căn chân
+   chữ thì nó đứng như một chú thích đi kèm, đúng vai của nó. */
+.trang-mau .tpl-hero-dong {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: var(--sp-10); margin: 0 0 var(--sp-10);
+}
+.trang-mau .tpl-hero h2 {
+  margin: 0; font-size: var(--text-3xl); font-weight: var(--weight-bold);
+  line-height: var(--leading-tight); letter-spacing: -0.02em;
+}
+.trang-mau .tpl-hero h2 em {
+  font-style: normal;
+  background: var(--chu-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.trang-mau .tpl-hero p {
+  margin: 0 0 var(--sp-18); max-width: 560px;
+  color: var(--hero-chu-mo); font-size: var(--text-base); line-height: var(--leading-relaxed);
+}
+/* Ba lợi ích: icon có ô màu, tên đậm, một dòng chú bên dưới. */
+.trang-mau .tpl-loi { display: flex; flex-wrap: wrap; gap: var(--sp-24); }
+.trang-mau .tpl-loi > span {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto; gap: 0 var(--sp-10); align-items: center;
+}
+.trang-mau .tpl-loi-o {
+  grid-row: 1 / 3; display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text-soft);
+}
+.trang-mau .tpl-loi-o[data-mau="lam"] { background: color-mix(in srgb, var(--info) 16%, transparent); color: var(--info); }
+.trang-mau .tpl-loi-o[data-mau="luc"] { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.trang-mau .tpl-loi-o[data-mau="tim"] { background: color-mix(in srgb, var(--status-wip) 18%, transparent); color: var(--status-wip); }
+.trang-mau .tpl-loi-o .btn-icon { color: inherit; background: none; box-shadow: none; }
+.trang-mau .tpl-loi-o svg { width: 17px; height: 17px; }
+.trang-mau .tpl-loi b { font-size: var(--text-md); font-weight: var(--weight-bold); }
+.trang-mau .tpl-loi em { font-style: normal; color: var(--hero-chu-mo); font-size: var(--text-sm); }
+
+
+/* ── Hàng lọc: nhóm ‹ › bên trái, kiểu hiển thị + sắp xếp bên phải ────────── */
+.trang-mau .tpl-hang {
+  display: flex; align-items: center; gap: var(--sp-8);
+  margin: 0 0 var(--sp-16); padding-bottom: var(--sp-12);
+  border-bottom: 1px solid var(--line);
+}
+/* Thanh cuộn ngang ĐÃ BỎ — trượt bằng hai nút ‹ ›. Một thanh cuộn cao vài điểm
+   ảnh trong hàng 36px vừa khó trúng vừa ăn mất chiều cao; `scrollbar-width:
+   none` cho Firefox, `::-webkit-scrollbar` cho Chromium. */
+.trang-mau .tpl-tabs-boc { flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.trang-mau .tpl-tabs-boc::-webkit-scrollbar { display: none; }
+.trang-mau .tpl-tabs { display: flex; gap: var(--sp-6); margin: 0; padding: 0; border: 0; }
+.trang-mau .tpl-truot {
+  flex: none; width: 28px; height: 28px; display: grid; place-items: center;
+  border: 1px solid var(--control-line-faint); border-radius: 50%;
+  background: none; color: var(--text-faint); cursor: pointer;
+  font: inherit; font-size: var(--text-lg); line-height: var(--leading-none);
+}
+.trang-mau .tpl-truot:hover:not(:disabled) { color: var(--text); background: var(--surface); }
+/* Hết đường trượt thì MỜ ĐI và không bấm được, chứ không ẩn: ẩn đi là hàng tab
+   nhảy ngang 36px mỗi lần cuộn tới đầu hoặc cuối. */
+.trang-mau .tpl-truot:disabled { opacity: 0.3; cursor: default; }
+.trang-mau .tpl-dieu { flex: none; display: flex; align-items: center; gap: var(--sp-10); }
+.trang-mau .tpl-kieu {
+  display: flex; gap: var(--sp-2); padding: var(--sp-2);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-md);
+}
+.trang-mau .tpl-kieu-nut {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-10); border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint); cursor: pointer;
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold);
+}
+.trang-mau .tpl-kieu-nut .btn-icon { color: inherit; background: none; box-shadow: none; }
+.trang-mau .tpl-kieu-nut svg { width: 14px; height: 14px; }
+.trang-mau .tpl-kieu-nut.dang-chon {
+  background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info);
+}
+.trang-mau .tpl-sap {
+  padding: var(--sp-6) var(--sp-10); border: 1px solid var(--control-line-faint);
+  border-radius: var(--radius-md); background: var(--field-bg); color: inherit;
+  font: inherit; font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer;
+}
+
+/* ── Thẻ phân loại dưới mô tả ─────────────────────────────────────────────
+   Màu chọn theo TÊN thẻ (băm ở pages.js), nên "Crypto" ở thẻ nào cũng một màu. */
+.trang-mau .tpl-the-ds { display: flex; flex-wrap: wrap; gap: var(--sp-6); }
+.trang-mau .tpl-tag {
+  padding: var(--sp-2) var(--sp-8); border-radius: var(--radius-pill);
+  font-size: var(--text-xs); font-weight: var(--weight-semibold);
+  background: var(--surface); color: var(--text-faint);
+}
+.trang-mau .tpl-tag[data-mau="lam"] { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.trang-mau .tpl-tag[data-mau="luc"] { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.trang-mau .tpl-tag[data-mau="tim"] { background: color-mix(in srgb, var(--status-wip) 16%, transparent); color: var(--status-wip); }
+.trang-mau .tpl-tag[data-mau="vang"] { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.trang-mau .tpl-tag[data-mau="do"] { background: color-mix(in srgb, var(--danger) 13%, transparent); color: var(--danger); }
+
+/* ── Kiểu DANH SÁCH ───────────────────────────────────────────────────────
+   Ảnh nhỏ bên trái, chữ bên phải. Khung ảnh GIỮ NGUYÊN tỉ lệ dọc 9/16 — mẫu là
+   video dọc, ép ngang là xem không ra hình gì. */
+.trang-mau .tpl-luoi.kieu-danhsach { grid-template-columns: minmax(0, 1fr); }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-the {
+  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-areas: 'anh ten' 'anh mota' 'anh the' 'anh chan';
+  align-content: center; column-gap: var(--sp-16); row-gap: var(--sp-6);
+}
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-khung { grid-area: anh; align-self: center; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-ten { grid-area: ten; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-mota { grid-area: mota; white-space: normal; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-the-ds { grid-area: the; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-chan { grid-area: chan; justify-content: flex-start; gap: var(--sp-16); }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-anh { max-height: 164px; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-phat { width: 34px; height: 34px; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-phat svg { width: 18px; height: 18px; }
+.trang-mau .tpl-luoi.kieu-danhsach .tpl-tieng { display: none; }
+
+/* ⚠ BẮT BUỘC có dòng này. Thuộc tính hidden của HTML chỉ đặt display:none
+   ở mức stylesheet trình duyệt, mà .tpl-the đã có display:grid với độ ưu
+   tiên cao hơn — đặt hidden mà thẻ vẫn hiện nguyên. Bộ chọn dưới đây có
+   thêm attribute nên thắng được dòng kia.
+   (Không dùng dấu huyền trong chú thích: cả khối nằm trong template
+   literal, một dấu là đóng chuỗi CSS giữa chừng.) */
+.trang-mau .tpl-the[hidden] { display: none; }
+
+/* CSS .goi-* của trang giới thiệu gói cũ đã xoá cùng #page-upgrade.
+   Kiểu dáng tương ứng nay nằm trong checkout.js (.co-goi-*, .co-ds, .co-dangdung). */
+
+/* ── Mục lục hướng dẫn ─────────────────────────────────────────────────────
+ *
+ * Bố cục hai cột: đường đi chính bên trái, thứ tra nhanh bên phải.
+ *
+ * ⚠ `max-width` đặt ở LỚP BỌC chứ không ở từng cột. Đặt ở cột thì hai cột tự
+ * co theo nội dung và khe giữa chúng rộng hẹp tuỳ bài — mà bài thì đổi.
+ */
+.hd-muc-trang .hd-trum {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--sp-24);
+  align-items: start;
+  max-width: 1600px;
+}
+/* ⚠ VÌ SAO VẪN CÓ TRẦN, và vì sao là 1600.
+
+   Trần cũ 1180 chạm đáy ngay từ cửa sổ ~1300: đo được ở cửa sổ 1500 thì ô
+   trang rộng 1404 mà khối nội dung đứng yên ở 1180, thừa 220px trống bên
+   phải; cửa sổ 1800 thì thừa 520px. Nhìn như trang bị lệch chứ không như một
+   lề cố ý.
+
+   Nhưng BỎ HẲN trần cũng sai. Thẻ bài là một hàng ngang: số, ô icon, chữ,
+   rồi mũi tên dạt sang mép phải. Dòng mô tả dài nhất đo được 702px — quá số
+   đó thì phần thừa chỉ là khoảng trắng, và ở cửa sổ phóng hết cỡ trên màn
+   rộng, mũi tên cách chữ cả nghìn điểm ảnh, không còn đọc ra là cùng một thẻ.
+
+   1600 phủ kín cửa sổ cỡ 1500-1700 (khổ làm việc thật) mà vẫn giữ mũi tên
+   trong tầm mắt khi phóng to hết. Cột phải nới 300 → 320 để phần rộng thêm
+   chia cho cả hai bên chứ không dồn hết vào cột trái. */
+
+/* Cửa sổ hẹp: cột phải RỤNG XUỐNG dưới, không teo lại.
+   Ép hai cột ở màn hẹp thì cột trái còn ~60% và tên bài vỡ ba dòng, còn cột
+   phải hẹp tới mức mấy dòng tài nguyên xuống hàng giữa chữ. */
+@media (max-width: 1100px) {
+  .hd-muc-trang .hd-trum { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- Khối mở đầu --------------------------------------------------------
+   Dùng LẠI nguyên bộ token của khối đầu trang Dựng video (--rl-dau-*): cùng
+   tấm ảnh nền, cùng màu nền, cùng màu nhấn. Vẽ một khối mở đầu thứ hai với
+   bảng màu riêng là app có hai phong cách banner, và đổi ảnh một lần thì phải
+   nhớ sửa hai chỗ. */
+/* Ảnh nền PHỦ HẾT khối (cover), không phải dán vào mép phải như .rl-dau.
+   Tấm này khác hẳn tấm kia: nó tự mang cả nền chuyển sắc lẫn hình minh hoạ
+   trong MỘT ảnh, mép trái không được làm mờ dần. Dán mép phải rồi lấp màu
+   phần còn lại là lộ vệt nối — đo trên chính tấm ảnh, cột ngoài cùng bên trái
+   chạy từ (254,254,254) ở hai góc xuống (200,223,253) ở giữa, không có màu
+   đơn nào khớp được.
+   min-height giữ cho hình minh hoạ không bị cover xén mất đầu đuôi khi khối
+   quá dẹt: ảnh tỉ lệ 3:1, còn khối thì rộng hơn cao nhiều. */
+.hd-hero {
+  position: relative; overflow: hidden;
+  min-height: 172px;
+  margin: 0 0 var(--sp-20); padding: var(--sp-28) var(--sp-28) var(--sp-32);
+  border-radius: var(--radius-lg);
+  background-color: var(--rl-dau-bg);
+  background-image: var(--hd-hero-anh);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: cover;
+}
+.hd-hero { color: var(--hero-chu); }
+.hd-hero-tag {
+  display: inline-flex; align-items: center; gap: var(--sp-6);
+  margin: 0 0 var(--sp-14); padding: var(--sp-6) var(--sp-12);
+  border-radius: var(--radius-pill);
+  background: var(--hero-chip-nen); color: var(--hero-chip-chu);
+  font-size: var(--text-2xs); font-weight: var(--weight-bold); letter-spacing: 0.08em;
+}
+/* ⚠ color: inherit BẮT BUỘC — `.btn-icon` tự đặt `color: var(--text-soft)`
+   với độ ưu tiên (0,1,0), mà màu THỪA KẾ không bao giờ thắng một luật nhắm
+   thẳng. Cùng cái bẫy đã ghi ở .rl-dau-icon. */
+.hd-hero-tag .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-hero-tag .btn-icon svg { width: 13px; height: 13px; }
+.hd-muc-trang .hd-hero h2 {
+  margin: 0 0 var(--sp-12); max-width: 62%;
+  font-size: var(--text-3xl); font-weight: var(--weight-bold);
+  line-height: var(--leading-tight); letter-spacing: -0.02em;
+}
+.hd-hero h2 em {
+  font-style: normal;
+  background: var(--chu-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Chặn bề ngang ở 56%: nửa phải tấm nền là hình minh hoạ, chữ chạy đè lên đó
+   là không đọc được chữ nào — cùng lý do với .rl-dau-hang. */
+.hd-hero p {
+  margin: 0; max-width: 56%;
+  color: var(--hero-chu-mo); font-size: var(--text-base); line-height: var(--leading-relaxed);
+}
+
+/* ---- Bảy thẻ bài -------------------------------------------------------- */
+.hd-muc { display: flex; flex-direction: column; gap: var(--sp-10); }
+.hd-the {
+  display: flex; align-items: center; gap: var(--sp-14); width: 100%;
+  padding: var(--sp-16) var(--sp-18); text-align: left; cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md);
+  color: inherit; font: inherit;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+/* Viền xanh biển nhạt, KHÔNG dùng --accent.
+   --accent là đen ở nền sáng và trắng ở nền tối — một màu "tương phản tối đa",
+   hợp cho nút chính chứ không hợp ở đây: cả trang Hướng dẫn đã đi theo tông
+   xanh của khối mở đầu, rê chuột ra viền đen là gãy mạch. */
+.hd-the:hover {
+  border-color: color-mix(in srgb, var(--info) 55%, transparent);
+  background: color-mix(in srgb, var(--info) 4%, var(--panel));
+}
+.hd-so {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-md); font-weight: var(--weight-semibold);
+  background: var(--line); color: var(--text-faint);
+}
+/* Ô vuông bo góc quanh icon — thay cho icon trần. Nó là thứ mang MÀU của thẻ:
+   một cái icon xám 16px không đủ diện tích để màu đọc được từ xa. */
+.hd-o {
+  flex: none; display: grid; place-items: center;
+  width: 40px; height: 40px; border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text-soft);
+}
+.hd-o .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-o svg { width: 19px; height: 19px; }
+.hd-icon { flex: none; }
+.hd-noi { display: flex; flex-direction: column; gap: var(--sp-4); flex: 1 1 auto; min-width: 0; }
+.hd-ten { font-size: var(--text-lg); font-weight: var(--weight-bold); }
+.hd-mo { font-size: var(--text-md); line-height: var(--leading-relaxed); color: var(--text-faint); }
+.hd-mui { flex: none; font-size: var(--text-2xl); color: var(--text-faint); }
+/* Dấu tích "đã xem" đứng NGAY SAU tên bài.
+   `display: none` chứ không phải opacity: 0 — nó nằm trong dòng chữ, giữ chỗ
+   sẵn là tên bài bị đẩy lệch so với mấy thẻ chưa xem. Tên bài không xuống
+   dòng (thẻ đủ rộng) nên bỏ hẳn khỏi luồng cũng không làm nhảy bố cục. */
+.hd-ten { display: inline-flex; align-items: center; gap: var(--sp-8); }
+.hd-tich {
+  display: none; place-items: center; flex: none;
+  color: var(--ok);
+}
+.hd-tich .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-tich svg { width: 16px; height: 16px; stroke-width: 3; }
+.hd-the.da-doc .hd-tich { display: grid; }
+/* Thẻ đã xem: viền và nền nhạt theo ĐÚNG màu của chính thẻ đó, để dấu hiệu
+   "đã xem" không đẻ thêm một màu thứ tám vào bảng. */
+.hd-the.da-doc[data-mau="lam"] { border-color: color-mix(in srgb, var(--info) 38%, transparent); }
+.hd-the.da-doc[data-mau="luc"] { border-color: color-mix(in srgb, var(--ok) 38%, transparent); }
+.hd-the.da-doc[data-mau="tim"] { border-color: color-mix(in srgb, var(--status-wip) 40%, transparent); }
+.hd-the.da-doc[data-mau="vang"] { border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+.hd-the.da-doc[data-mau="do"] { border-color: color-mix(in srgb, var(--danger) 34%, transparent); }
+.hd-the.da-doc[data-mau="xam"] { border-color: var(--control-line); }
+
+/* Màu theo bài — xem MAU_BAI trong pages.js.
+   Pha bằng color-mix từ chính token trạng thái của app, KHÔNG viết mã màu mới:
+   nền tối và nền sáng có bảng --ok/--warn/--danger khác nhau, pha từ token là
+   cả hai theme cùng đúng mà chỉ cần một luật. */
+.hd-the[data-mau="lam"] .hd-o { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.hd-the[data-mau="luc"] .hd-o { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.hd-the[data-mau="tim"] .hd-o { background: color-mix(in srgb, var(--status-wip) 16%, transparent); color: var(--status-wip); }
+.hd-the[data-mau="vang"] .hd-o { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.hd-the[data-mau="do"] .hd-o { background: color-mix(in srgb, var(--danger) 13%, transparent); color: var(--danger); }
+.hd-the[data-mau="lam"] .hd-so { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.hd-the[data-mau="luc"] .hd-so { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.hd-the[data-mau="tim"] .hd-so { background: color-mix(in srgb, var(--status-wip) 16%, transparent); color: var(--status-wip); }
+.hd-the[data-mau="vang"] .hd-so { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+.hd-the[data-mau="do"] .hd-so { background: color-mix(in srgb, var(--danger) 13%, transparent); color: var(--danger); }
+
+/* ---- Cột phải ----------------------------------------------------------- */
+.hd-ben { display: flex; flex-direction: column; gap: var(--sp-14); }
+.hd-ben-the {
+  padding: var(--sp-16) var(--sp-18);
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md);
+}
+.hd-ben-the h3 {
+  display: flex; align-items: center; gap: var(--sp-8);
+  margin: 0 0 var(--sp-10); font-size: var(--text-base); font-weight: var(--weight-bold);
+}
+.hd-ben-the h3 .btn-icon { background: none; box-shadow: none; }
+.hd-ben-the h3 svg { width: 16px; height: 16px; }
+.hd-ben-the p {
+  margin: 0; color: var(--text-faint);
+  font-size: var(--text-md); line-height: var(--leading-relaxed);
+}
+/* Thẻ đầu cột: nền xanh rất nhạt để tách khỏi ba thẻ trắng bên dưới — nó là
+   lời dặn đọc một lần, không phải mục tra đi tra lại. */
+.hd-meo { background: var(--hd-meo-nen); border-color: transparent; }
+.hd-meo h3 .btn-icon { color: var(--warn); }
+
+.hd-ds { display: flex; flex-direction: column; gap: var(--sp-2); }
+.hd-ds-dong {
+  display: flex; align-items: center; gap: var(--sp-10); width: 100%;
+  padding: var(--sp-8); margin: 0 calc(-1 * var(--sp-8));
+  width: calc(100% + var(--sp-16));
+  text-align: left; cursor: pointer; font: inherit; color: inherit;
+  background: none; border: 0; border-radius: var(--radius-sm);
+}
+.hd-ds-dong:hover { background: var(--surface); }
+.hd-ds-o {
+  flex: none; display: grid; place-items: center;
+  width: 30px; height: 30px; border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--info) 12%, transparent); color: var(--info);
+}
+.hd-ds-o .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-ds-o svg { width: 15px; height: 15px; }
+.hd-ds-chu { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; flex: 1 1 auto; }
+.hd-ds-nhan { font-size: var(--text-md); font-weight: var(--weight-semibold); }
+.hd-ds-mo { font-size: var(--text-xs); color: var(--text-mo); }
+.hd-ds-mui { flex: none; color: var(--text-mo); font-size: var(--text-md); }
+/* Loạt video hướng dẫn: số thứ tự trong ô icon; dòng / thẻ vẽ sẵn `hidden`, hiện khi có tệp (display ở trên đè hidden). */
+.hd-ds-o { font-size: var(--text-sm); font-weight: var(--weight-bold); }
+.hd-ds-dong[hidden], .hd-ben-the[hidden] { display: none; }
+
+/* Thẻ video — khối duy nhất trong cột có nền đặc, vì nó là lời mời DUY NHẤT
+   cần bấm ngay. Dùng lại đúng cặp màu của khối mở đầu cho cả trang một tông. */
+.hd-video {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: var(--sp-6); padding: var(--sp-20) var(--sp-18);
+  border-color: transparent;
+  color: var(--hd-video-chu);
+  /* Ảnh TRƯỚC, gradient SAU: lớp sau là màu lót lúc ảnh chưa tải. Ảnh đã được
+     cắt bỏ viền bo góc nung sẵn, bo góc để CSS lo — giữ góc của ảnh thì nó
+     không bao giờ khớp với --radius-md của thẻ. */
+  background-image: var(--hd-video-anh), var(--hd-video-nen);
+  background-size: cover, auto;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+/* Ô icon trên nền gradient: trắng mờ, KHÔNG dùng --rl-dau-chip.
+   Chip đó pha theo nền của khối Dựng video, đặt lên gradient tím-xanh này thì
+   ra một mảng lệch tông. */
+.hd-video-o {
+  display: grid; place-items: center; width: 44px; height: 44px;
+  margin-bottom: var(--sp-4); border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--hd-video-chu) 18%, transparent);
+  color: var(--hd-video-chu);
+}
+.hd-video-o .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-video-o svg { width: 22px; height: 22px; }
+.hd-video b { font-size: var(--text-lg); font-weight: var(--weight-bold); }
+.hd-video em { font-style: normal; font-size: var(--text-sm); color: var(--hd-video-phu); }
+.hd-video-nut {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-8);
+  width: 100%; margin-top: var(--sp-12); padding: var(--sp-10) var(--sp-16);
+  cursor: pointer; font: inherit; font-size: var(--text-md); font-weight: var(--weight-bold);
+  background: var(--hd-video-chu); color: var(--hd-video-nut-chu);
+  border: 0; border-radius: var(--radius-sm);
+}
+.hd-video-nut:hover { opacity: 0.88; }
+.hd-video-nut .btn-icon { color: inherit; background: none; box-shadow: none; }
+.hd-video-nut svg { width: 15px; height: 15px; }
+
+/* Cùng họ gradient với thẻ video nhưng NHẠT HƠN HẲN, và đảo hướng tím → xanh.
+   Hai thẻ cùng độ đậm thì tranh nhau, mà thẻ này là lối thoát khi bí chứ không
+   phải việc nên làm trước. */
+.hd-hotro { background: var(--hd-hotro-nen); border-color: transparent; }
+.hd-hotro h3 .btn-icon { color: var(--info); }
+.hd-hotro-nut {
+  margin-top: var(--sp-12); padding: var(--sp-8) var(--sp-14);
+  cursor: pointer; font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold);
+  background: transparent; color: inherit;
+  border: 1px solid var(--control-line); border-radius: var(--radius-pill);
+}
+/* Cùng lý do với .hd-the:hover — cả trang đi tông xanh, viền đen lúc rê chuột
+   là gãy mạch, mà ở đây nó lại nằm trên chính tấm nền chuyển sắc xanh-tím. */
+.hd-hotro-nut:hover {
+  border-color: color-mix(in srgb, var(--info) 60%, transparent);
+  background: color-mix(in srgb, var(--info) 8%, transparent);
+}
+
+/* Nút quay lại đứng RIÊNG một dòng trên cùng, không lẫn vào tiêu đề bài —
+   lẫn vào là người dùng không nhận ra đây là đường thoát. */
+.hd-lui {
+  display: inline-flex; align-items: center; gap: var(--sp-4); margin-bottom: var(--sp-14);
+  padding: var(--sp-8) var(--sp-12); cursor: pointer; font: inherit; font-size: var(--text-md); font-weight: var(--weight-semibold);
+  background: transparent; color: var(--text-faint);
+  border: 1px solid var(--line); border-radius: var(--radius-pill);
+}
+.hd-lui:hover { color: inherit; border-color: var(--accent); }

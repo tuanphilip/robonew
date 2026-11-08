@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lời Phật dạy — Beeknoee Studio</title>
+  <meta name="description" content="Nhịp chậm, chữ lớn, mỗi màn một ý. Vòng thiền mở đầu và khép lại cuối deck. Hợp lời dạy, chiêm nghiệm, chữa lành." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg pd-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up pd-hero">
+          <svg class="pd-enso" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="74" fill="none" stroke="var(--primary)" stroke-width="7"
+              stroke-linecap="round" stroke-dasharray="400 65" transform="rotate(-58 100 100)"/>
+          </svg>
+          <h1 class="pd-hook">Bạn không khổ vì mất.<br/><em>Bạn khổ vì vẫn còn nắm.</em></h1>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg pd-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up pd-nhan">
+          <span>Lòng người như mặt nước</span>
+        </div>
+        <div class="slide-element fade-up pd-scene">
+          <svg viewBox="0 0 300 132" aria-hidden="true">
+            <circle cx="150" cy="34" r="15" fill="none" stroke="var(--accent-light)" stroke-width="3"/>
+            <line x1="16" y1="66" x2="284" y2="66" stroke="var(--accent)" stroke-width="2.6"/>
+            <circle cx="150" cy="98" r="15" fill="none" stroke="var(--accent-light)" stroke-width="3" opacity=".45"/>
+            <line x1="60" y1="118" x2="240" y2="118" stroke="var(--accent)" stroke-width="1" opacity=".3"/>
+          </svg>
+          <div class="pd-cap">nước lặng — soi rõ cả trời mây</div>
+        </div>
+        <div class="slide-element fade-up pd-scene">
+          <svg viewBox="0 0 300 132" aria-hidden="true">
+            <circle cx="150" cy="34" r="15" fill="none" stroke="var(--accent-light)" stroke-width="3"/>
+            <line x1="16" y1="66" x2="284" y2="66" stroke="var(--accent)" stroke-width="2.6"/>
+            <path d="M16 92 q18 -11 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <path d="M16 112 q18 11 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0" fill="none" stroke="var(--info)" stroke-width="3" opacity=".78"/>
+          </svg>
+          <div class="pd-cap">nước động — chẳng thấy gì, kể cả mình</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg pd-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up pd-nhan">
+          <span>Người ta khổ vì ba việc</span>
+        </div>
+        <div class="slide-element fade-up pd-ba">
+          <span>muốn thứ chưa tới</span><span>tiếc thứ đã đi</span><span>sợ thứ chưa xảy ra</span>
+        </div>
+        <div class="slide-element fade-up pd-scene">
+          <svg viewBox="0 0 300 88" aria-hidden="true">
+            <line x1="14" y1="56" x2="286" y2="56" stroke="var(--accent)" stroke-width="2.6"/>
+            <circle cx="58" cy="56" r="9" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <circle cx="242" cy="56" r="9" fill="none" stroke="var(--info)" stroke-width="3"/>
+            <circle cx="150" cy="56" r="13" fill="var(--primary)"/>
+            <text x="58" y="30" text-anchor="middle" font-size="15" fill="var(--info)">đã đi</text>
+            <text x="242" y="30" text-anchor="middle" font-size="15" fill="var(--info)">chưa tới</text>
+            <text x="150" y="84" text-anchor="middle" font-size="15" fill="var(--primary)">bây giờ</text>
+          </svg>
+          <div class="pd-cap">không việc nào đang có mặt lúc này</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg pd-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up pd-bo">
+          <span>buông = bỏ mặc</span>
+        </div>
+        <div class="slide-element fade-up pd-scene">
+          <svg viewBox="0 0 300 110" aria-hidden="true">
+            <path d="M110 22 q40 -14 80 0 q16 32 0 66 q-40 14 -80 0 q-16 -32 0 -66Z" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <circle cx="150" cy="55" r="11" fill="var(--accent-light)"/>
+            <path d="M92 40 L74 34 M92 70 L74 76 M208 40 L226 34 M208 70 L226 76" stroke="var(--info)" stroke-width="3"/>
+          </svg>
+          <div class="pd-cap">bóp chặt — bàn tay đang đau</div>
+        </div>
+        <div class="slide-element fade-up pd-scene">
+          <svg viewBox="0 0 300 110" aria-hidden="true">
+            <path d="M96 34 q54 -18 108 0 q10 26 0 46 q-54 16 -108 0 q-10 -20 0 -46Z" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <circle cx="150" cy="96" r="11" fill="var(--accent-light)" opacity=".72"/>
+          </svg>
+          <div class="pd-cap">mở ra — vẫn làm mọi việc, chỉ không mang theo hòn đá</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg pd-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up pd-nhan">
+          <span>Thử hôm nay</span>
+        </div>
+        <div class="slide-element fade-up pd-ba">
+          <span>mười phút ngồi yên</span><span>không điện thoại</span><span>không nghĩ ngày mai</span>
+        </div>
+        <div class="slide-element fade-up pd-tho">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="70" fill="none" stroke="var(--accent)" stroke-width="2.6" opacity=".72"/>
+            <circle cx="100" cy="100" r="44" fill="none" stroke="var(--primary)" stroke-width="3"/>
+          </svg>
+          <div class="pd-cap">chỉ thở — và biết mình đang thở</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg pd-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up pd-line">
+          <span>Bình an không ở nơi nào xa.</span>
+        </div>
+        <div class="slide-element fade-up pd-line pd-manh">
+          <span>Nó ở ngay chỗ bạn thôi tìm kiếm.</span>
+        </div>
+        <div class="slide-element fade-up pd-hero pd-cuoi">
+          <svg class="pd-enso" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="74" fill="none" stroke="var(--primary)" stroke-width="7"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="pd-cta">Về nhà đi</div>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

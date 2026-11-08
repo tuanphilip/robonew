@@ -1,0 +1,63 @@
+{
+  "_ghiChu": [
+    "DS-04 · Đối thoại hai bên — khung NGANG 16:9 (thẻ <meta name=\"bee-khung\" content=\"ngang\">).",
+    "Nền chia đôi: nửa trái lạnh (phe A), nửa phải ấm (phe B). colorMode 'dark'.",
+    "⚠ CẢ HAI nửa đều tối nên phụ đề là mực SÁNG. Đổi một nửa sang sáng là phụ đề chết ở nửa đó.",
+    "⚠ Chữ đang đọc (activeColor) để TRẮNG trung tính — tô màu của một phe là thiên vị phe đó.",
+    "⚠ Số .slide-element mỗi slide phải bằng số câu dòng script tương ứng: 3/2/2/2/2/2.",
+    "   Slide 1 được miễn vì đúng 1 câu. Mỗi vòng: câu 1 = phe A (trái), câu 2 = phe B (phải).",
+    "⚠ Ảnh tư liệu thuộc phạm vi công cộng / CC0 — xem source/source.md trước khi thay.",
+    "Thay cuộc tranh luận khác: sửa thẳng index.html (mỗi vòng hai thẻ .ben-a / .ben-b), ảnh trong anh/ và cả 6 dòng script — xem source/source.md."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#121017",
+      "--primary": "#6fb0f0",
+      "--primary-light": "#8cc4ff",
+      "--primary-dark": "#22507d",
+      "--accent": "#f0a15a",
+      "--accent-light": "#ffb46e",
+      "--info": "#6fb0f0",
+      "--success": "#3f9f78",
+      "--warning": "#e0a040",
+      "--danger": "#d9534f"
+    },
+    "customVariables": {
+      "--bg-dark": "#121017",
+      "--primary": "#6fb0f0",
+      "--primary-light": "#8cc4ff",
+      "--primary-dark": "#22507d",
+      "--accent": "#f0a15a",
+      "--accent-light": "#ffb46e",
+      "--info": "#6fb0f0",
+      "--success": "#3f9f78",
+      "--warning": "#e0a040",
+      "--danger": "#d9534f"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#c8c1b8",
+    "activeColor": "#ffffff",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#121017",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Cuối thế kỷ mười chín, nước Mỹ phải chọn một trong hai: điện một chiều của Edison, hay điện xoay chiều của Westinghouse và Tesla.",
+      "Vòng một, an toàn: phe Edison nói điện một chiều một trăm mười vôn là an toàn, còn điện xoay chiều cao thế mới là thứ chết người. Phe Westinghouse đáp lại: điện cao thế chỉ chạy trên đường dây, máy biến áp hạ nó xuống trước khi vào tới nhà.",
+      "Vòng hai, thực tế: trạm Pearl Street của Edison từ năm một nghìn tám trăm tám mươi hai đã thắp bốn trăm bóng đèn cho tám mươi hai khách hàng ở Manhattan. Phe Westinghouse vặn lại: điện một chiều chỉ đi xa được chừng tám trăm mét, nên cứ vài khu phố lại phải xây thêm một nhà máy.",
+      "Vòng ba, máy móc: phe Edison chỉ ra rằng hệ xoay chiều lúc đầu chỉ thắp được đèn, trong khi nhà máy cần mô-tơ chạy bằng điện một chiều. Tháng năm năm một nghìn tám trăm tám mươi tám, Tesla được cấp bằng sáng chế mô-tơ chạy bằng điện xoay chiều, và cùng năm đó Westinghouse mua bản quyền.",
+      "Vòng bốn, quy mô: đến năm một nghìn tám trăm tám mươi bảy, Edison đã có một trăm hai mươi mốt trạm điện một chiều ở Mỹ, đổi sang xoay chiều là bỏ đi cả khoản đầu tư đó. Phe Westinghouse chỉ cần một nhà máy ở thác Niagara, và năm một nghìn tám trăm chín mươi sáu, điện từ đó đi hơn ba mươi ki lô mét tới thành phố Buffalo.",
+      "Điểm chung của hai bên là cùng muốn đưa điện rẻ và an toàn tới mọi nhà. Và cả hai đều đúng một phần: lưới điện hôm nay truyền tải bằng xoay chiều, nhưng mọi chiếc điện thoại, máy tính và những đường dây siêu cao áp nối các vùng xa lại chạy bằng một chiều."
+    ]
+  }
+}

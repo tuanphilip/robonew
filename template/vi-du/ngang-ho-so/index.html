@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ⚠ THẺ QUYẾT ĐỊNH KHỔ VIDEO. Không khai = dọc 9:16. Khai "ngang" thì khung
+     slide là 1232×693 và app dựng ra 1920×1080. Gỡ thẻ ra là bố cục vỡ hết.
+     Xem CONTEXT.md §2.9. -->
+<meta name="bee-khung" content="ngang" />
+
+<title>Hồ sơ &amp; trích dẫn — mẫu chân dung 16:9</title>
+
+<!-- ⚠ PHẢI GIỮ ba thẻ font: `rewriteFontLinks()` đổi sang font đóng gói lúc
+     quay, nên video dựng offline vẫn đúng chữ. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="main-wrapper">
+  <div class="slide-container" id="slideContainer">
+
+    <!-- ══ 1. MỞ — 1 câu script ═══════════════════════════════════════════
+         ⚠ HÌNH LÀ SVG ĐẶT THẲNG TRONG HTML, không phải ảnh và không phải thư
+         viện: deck phải dựng được OFFLINE, và hình phải đổi màu theo bảng
+         "Tông màu" — ảnh thì không làm được cả hai. Hình KHÔNG mang lớp
+         `.slide-element` nên nó không ăn nhịp bấm nào và không kéo hộp bao mà
+         `kiemDeck` đo. -->
+    <div class="slide active" data-slide="0" data-bo-cuc="mo-dau">
+      <div class="nen nen-1"></div>
+
+      <div class="minh-hoa minh-hoa-lo" aria-hidden="true">
+        <svg viewBox="0 0 400 360" fill="none">
+          <!-- vòng dấu triện quanh hình: nét đứt quay rất chậm -->
+          <circle class="vanh-trien" cx="200" cy="176" r="150" />
+          <circle class="vanh-trong" cx="200" cy="176" r="132" />
+
+          <!-- khói / hơi nóng bốc lên, ba nhịp lệch pha -->
+          <g class="khoi">
+            <path class="khoi-net k1" d="M168 78c-10-14 10-22 0-36" />
+            <path class="khoi-net k2" d="M200 66c-11-16 11-25 0-40" />
+            <path class="khoi-net k3" d="M232 78c-10-14 10-22 0-36" />
+          </g>
+
+          <!-- BÌNH GỐM: dáng cổ thắt, bụng phình -->
+          <path class="binh" d="M200 108c-14 0-24 6-24 14 0 9 7 13 7 22 0 12-31 22-31 56 0 34 22 58 48 58s48-24 48-58c0-34-31-44-31-56 0-9 7-13 7-22 0-8-10-14-24-14Z" />
+          <!-- vệt men chảy -->
+          <path class="men" d="M172 196c10 8 46 8 56 0" />
+          <path class="men" d="M166 220c14 10 54 10 68 0" />
+          <path class="men-sang" d="M182 168c-6 22-6 44 2 62" />
+
+          <!-- BÀN XOAY: đĩa nghiêng + vòng quay -->
+          <ellipse class="ban-xoay" cx="200" cy="270" rx="118" ry="27" />
+          <ellipse class="ban-vien" cx="200" cy="270" rx="118" ry="27" />
+          <ellipse class="ban-ron" cx="200" cy="270" rx="58" ry="13" />
+          <path class="tru-xoay" d="M200 283v42" />
+          <path class="chan-xoay" d="M154 328h92" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element nhan-giua">Hồ sơ</div>
+        <div class="slide-element tieu-de-lon">Người dựng lại<br />một xưởng gốm</div>
+        <div class="slide-element phu-de">Từ ba lò bỏ hoang tới hai mươi hộ sống được với nghề</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. CHÂN DUNG — 2 câu / 2 phần tử ═══════════════════════════════
+         Bố cục chữ ký: huy hiệu chữ cái lớn bên trái, thông tin bên phải. Khung
+         ngang cho phép đặt hai khối CẠNH NHAU; khung dọc phải xếp chồng và
+         chân dung mất hết sức nặng. -->
+    <div class="slide" data-slide="1" data-bo-cuc="chan-dung">
+      <div class="nen nen-2"></div>
+      <div class="than">
+        <div class="slide-element the-nguoi">
+          <div class="huy-hieu">
+            <span class="hh-chu">TH</span>
+            <svg class="hh-vanh" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+              <circle cx="60" cy="60" r="56" />
+            </svg>
+          </div>
+          <div class="nguoi-tin">
+            <div class="nguoi-ten">Trần Hậu</div>
+            <div class="nguoi-vai">Thợ cả · Làng gốm Bát Tràng</div>
+            <div class="nguoi-chu">Về làng năm hai mươi sáu tuổi, sau chín năm làm kỹ sư ở thành phố.</div>
+          </div>
+        </div>
+        <div class="slide-element hang-chi-so">
+          <div class="chi-so">
+            <span class="cs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 20.5h14" /><path d="M7 20.5v-6.2a5 5 0 0 1 10 0v6.2" />
+                <path d="M9.6 9.3V6.8" /><path d="M14.4 9.3V6.8" /><path d="M12 8.1V4.2" />
+              </svg>
+            </span><b>3</b><span>lò phục dựng</span>
+          </div>
+          <div class="chi-so">
+            <span class="cs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.4 20.6v-1.4a4.4 4.4 0 0 1 4.4-4.4h2.4a4.4 4.4 0 0 1 4.4 4.4v1.4" />
+                <circle cx="9" cy="7.6" r="3.4" />
+                <path d="M16.6 14.9a4.4 4.4 0 0 1 4 4.3v1.4" />
+                <path d="M15.4 4.6a3.4 3.4 0 0 1 0 6.6" />
+              </svg>
+            </span><b>20</b><span>hộ theo nghề</span>
+          </div>
+          <div class="chi-so">
+            <span class="cs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="8.6" /><path d="M12 7.2V12l3.2 2.2" />
+              </svg>
+            </span><b>7 năm</b><span>từ lúc bắt đầu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. TRÍCH DẪN LỚN — 2 câu / 2 phần tử ═══════════════════════════ -->
+    <div class="slide" data-slide="2" data-bo-cuc="trich-dan">
+      <div class="nen nen-3"></div>
+      <div class="than giua">
+        <div class="slide-element loi-dan">Tôi không về để giữ nghề cho đẹp.
+          Tôi về vì thấy nghề này vẫn nuôi được người, chỉ là chưa ai tính lại cho đúng.</div>
+        <div class="slide-element nguoi-noi">
+          <span class="ten">Trần Hậu</span>
+          <span class="chuc">Trả lời trong xưởng, tháng tám</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 4. BƯỚC NGOẶT — 3 câu / 3 phần tử ══════════════════════════════
+         Chữ bên trái, BIỂU ĐỒ VÙNG bên phải. Cả slide nói "hao hụt từ ba mươi
+         phần trăm xuống tám" — một con số đi xuống qua bốn mùa thì vẽ ra mới
+         thấy được độ dốc; đọc hai con số rời thì không.
+         Biểu đồ là trang trí (không `.slide-element`) nên nó không ăn nhịp bấm;
+         đường được vẽ dần bằng `stroke-dashoffset` khi slide thành `.active`. -->
+    <div class="slide" data-slide="3" data-bo-cuc="noi-dung">
+      <div class="nen nen-4"></div>
+      <div class="than than-doi">
+        <div class="cot-chu">
+          <div class="nhan">Bước ngoặt</div>
+          <div class="slide-element tieu-de">Đổi lò, không đổi tay nghề</div>
+          <ul class="gach">
+            <li class="slide-element">Lò ga thay lò củi: <b>hao hụt từ ba mươi phần trăm xuống tám</b></li>
+            <li class="slide-element">Men và dáng giữ nguyên — thứ khách tìm tới vẫn còn đó</li>
+          </ul>
+        </div>
+
+        <div class="bieu-do-hao" aria-hidden="true">
+          <div class="bd-nhan">Hao hụt mỗi mẻ</div>
+          <svg viewBox="0 0 400 244" fill="none">
+            <g class="luoi">
+              <path d="M52 45.7h344" /><path d="M52 97.1h344" />
+              <path d="M52 148.6h344" /><path d="M52 200h344" />
+            </g>
+            <g class="truc-doc">
+              <text x="44" y="50">30%</text><text x="44" y="101">20%</text>
+              <text x="44" y="153">10%</text><text x="44" y="204">0</text>
+            </g>
+
+            <path class="vung" d="M60 45.7 L173 86.9 L286 128 L399 158.9 L399 200 L60 200 Z" />
+            <path class="duong" d="M60 45.7 L173 86.9 L286 128 L399 158.9" />
+
+            <g class="cham">
+              <circle cx="60" cy="45.7" r="6" />
+              <circle cx="173" cy="86.9" r="5" />
+              <circle cx="286" cy="128" r="5" />
+              <circle class="cuoi" cx="399" cy="158.9" r="7" />
+            </g>
+            <g class="so-noi">
+              <text class="dau" x="60" y="30">30%</text>
+              <text class="cuoi" x="399" y="145">8%</text>
+            </g>
+            <g class="truc-ngang">
+              <text x="60" y="226">Lò củi</text>
+              <text x="173" y="226">Mùa 1</text>
+              <text x="286" y="226">Mùa 2</text>
+              <text x="399" y="226">Mùa 3</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5. CÁI GIÁ — 3 câu / 3 phần tử ═════════════════════════════════ -->
+    <div class="slide" data-slide="4" data-bo-cuc="noi-dung">
+      <div class="nen nen-5"></div>
+      <div class="than">
+        <div class="nhan canh-bao">Cái giá</div>
+        <div class="slide-element tieu-de">Hai năm đầu không ai tin</div>
+        <ul class="gach canh-bao">
+          <li class="slide-element">Bán dưới giá vốn suốt <b>mười tám tháng</b> để giữ khách</li>
+          <li class="slide-element">Ba hộ bỏ giữa chừng, và đó là phần khó kể lại nhất</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 6. KẾT — 2 câu / 2 phần tử ═════════════════════════════════════ -->
+    <div class="slide" data-slide="5" data-bo-cuc="mo-dau">
+      <div class="nen nen-6"></div>
+
+      <div class="minh-hoa minh-hoa-lua" aria-hidden="true">
+        <svg viewBox="0 0 320 300" fill="none">
+          <!-- cửa lò hình vòm, trong có lửa -->
+          <path class="lo-vom" d="M60 238V132a100 100 0 0 1 200 0v106Z" />
+          <path class="lo-mieng" d="M112 238v-54a48 48 0 0 1 96 0v54Z" />
+          <ellipse class="quang-lua" cx="160" cy="206" rx="58" ry="46" />
+          <path class="lua lua-to" d="M160 232c-27 0-46-18-46-41 0-22 19-32 27-54 5 15 12 20 19 27 5-10 2-20 0-30 17 13 46 32 46 57 0 23-19 41-46 41Z" />
+          <path class="lua lua-nho" d="M160 232c-12 0-22-10-22-22 0-12 12-17 15-32 7 10 29 20 29 32 0 12-10 22-22 22Z" />
+          <path class="lo-gach" d="M60 178h200" />
+          <path class="lo-gach" d="M60 210h52" />
+          <path class="lo-gach" d="M208 210h52" />
+          <path class="lo-de" d="M40 238h240" />
+        </svg>
+      </div>
+
+      <div class="than than-mo">
+        <div class="slide-element tieu-de-lon">Xưởng vẫn đỏ lửa</div>
+        <div class="slide-element phu-de">Và năm nay có thêm hai người trẻ về học nghề</div>
+      </div>
+    </div>
+
+    <div class="tien-do" id="tienDo"></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

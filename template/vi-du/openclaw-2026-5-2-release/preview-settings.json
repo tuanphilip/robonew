@@ -1,0 +1,9 @@
+{
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  }
+}

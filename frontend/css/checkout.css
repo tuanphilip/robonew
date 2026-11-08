@@ -1,0 +1,372 @@
+/* Tách từ checkout.js (02/09/2026, audit Phase 2.1).
+ * Dựng lại theo mẫu UI của chủ dự án 12/09/2026: khối mở đầu có ảnh nền, bốn
+ * thẻ chu kỳ in sẵn giá, hai bước đánh số ở cột trái, thẻ tóm tắt ở cột phải.
+ */
+#bee-checkout { position: fixed; inset: 0; z-index: var(--z-checkout); overflow-y: auto;
+  background: var(--overlay); backdrop-filter: blur(3px);
+  font-family: var(--font-ui); }
+#bee-checkout .co-hop { position: relative; width: min(1080px, 94vw);
+  margin: var(--sp-28) auto; padding: var(--sp-24); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); background: var(--panel);
+  box-shadow: var(--shadow-lg); }
+/* Chế độ TRANG: không phủ toàn màn hình, không nền mờ — nó là một trang
+   trong app, mở bằng nút Nâng cấp chứ không bung lên như hộp thoại. */
+#bee-checkout.la-trang { position: static; inset: auto; z-index: auto;
+  background: none; backdrop-filter: none; overflow: visible; }
+#bee-checkout.la-trang .co-hop { width: 100%; max-width: 1400px; margin: 0 auto;
+  padding: var(--sp-4) 0 var(--sp-24); border: 0; box-shadow: none; background: none; }
+/* Nút đóng: kiểu POPUP thì nổi ở góc trên phải; kiểu TRANG thì là mũi tên quay
+   lại, nằm TRONG luồng phía trên khối mở đầu. Để nó nổi ở góc như popup thì nó
+   rơi đúng lên tấm nền có hình vương miện. */
+#bee-checkout .co-x { position: absolute; top: 14px; right: 16px;
+  width: 32px; height: 32px; display: grid; place-items: center; border: 0;
+  border-radius: var(--radius-pill); color: var(--text-faint); background: none;
+  font-size: var(--text-2xl); line-height: var(--leading-none); cursor: pointer; }
+#bee-checkout .co-x:hover { color: var(--text); background: var(--surface); }
+/* Ở chế độ TRANG thì KHÔNG có nút quay lại: thanh dọc bên trái luôn ở đó và
+   là đường ra quen thuộc hơn, còn một mũi tên lơ lửng phía trên khối mở đầu
+   chỉ đẩy cả trang tụt xuống. Phím Esc vẫn về trang Dựng video như cũ. */
+#bee-checkout.la-trang .co-x { display: none; }
+/* Tiêu đề chung — nay chỉ còn màn "Đang chờ tiền về…" dùng tới. */
+#bee-checkout h2 { margin: 0 0 var(--sp-16); font-size: var(--text-xl); font-weight: var(--weight-bold);
+  letter-spacing: -0.02em; text-align: center; }
+
+/* ── Khối mở đầu ─────────────────────────────────────────────────────────
+   Tấm nền do chủ dự án đưa, DÙNG CHUNG cho cả hai theme (xem --tt-hero-anh).
+   Nền không lật màu thì chữ trên nó cũng không được lật: --hero-chu* là mực
+   tối cố định, --chu-gradient là dải xanh→tím cố định. */
+#bee-checkout .co-hero {
+  position: relative; overflow: hidden; min-height: 112px;
+  display: flex; flex-direction: column; justify-content: center;
+  margin: 0 0 var(--sp-12); padding: var(--sp-20) var(--sp-28);
+  border-radius: var(--radius-lg);
+  background-color: var(--rl-dau-bg);
+  background-image: var(--tt-hero-anh);
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: cover;
+  color: var(--hero-chu);
+}
+/* Chữ chỉ chiếm hai phần ba bên trái: góc phải tấm nền là hình vương miện,
+   chữ chạy đè lên đó là không đọc được — cùng lý do với .tpl-hero và .hd-hero. */
+#bee-checkout .co-hero h2 { margin: 0 0 var(--sp-6); max-width: 66%;
+  font-size: var(--text-3xl); font-weight: var(--weight-bold);
+  line-height: var(--leading-tight); letter-spacing: -0.02em; text-align: left; }
+#bee-checkout .co-hero h2 em {
+  font-style: normal;
+  background: var(--chu-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+#bee-checkout .co-hero p { margin: 0; max-width: 66%; color: var(--hero-chu-mo);
+  font-size: var(--text-base); line-height: var(--leading-relaxed); }
+@media (max-width: 900px) {
+  #bee-checkout .co-hero h2, #bee-checkout .co-hero p { max-width: none; }
+}
+
+/* Dải "bạn đang dùng gói này" — chỉ hiện khi gia hạn. Lục nhạt để đọc ra là
+   THÔNG TIN, không phải cảnh báo. */
+.co-dangdung { display: flex; align-items: flex-start; gap: var(--sp-10);
+  margin: 0 0 var(--sp-14); padding: var(--sp-10) var(--sp-14); border-radius: var(--radius-md);
+  background: var(--ok-bg); color: var(--good-text);
+  font-size: var(--text-md); line-height: var(--leading-relaxed); }
+.co-dangdung .btn-icon { flex: none; width: auto; height: auto; color: var(--ok); background: none; }
+.co-dangdung svg { width: 16px; height: 16px; }
+
+/* ── Bốn thẻ chu kỳ ──────────────────────────────────────────────────────
+   Trước đây là bốn viên thuốc chỉ có tên kỳ; nay in cả giá và giá gốc gạch
+   ngang. Bày sẵn con số là so sánh được ngay, không phải bấm từng cái rồi
+   nhìn sang cột phải mới biết đắt rẻ. */
+.co-chuky { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-10); margin: var(--sp-10) 0 var(--sp-18); }
+@media (max-width: 900px) { .co-chuky { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.co-ck { position: relative; display: flex; flex-direction: column; align-items: center;
+  gap: var(--sp-4); padding: var(--sp-12) var(--sp-10);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-md);
+  background: none; color: var(--text); font: inherit; cursor: pointer;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease; }
+.co-ck:hover { border-color: var(--control-line); }
+.co-ck.active { border-color: var(--info); background: var(--info-bg); }
+.co-ck-ten { font-size: var(--text-base); font-weight: var(--weight-bold); }
+.co-ck-gia { display: flex; align-items: baseline; gap: var(--sp-6);
+  color: var(--text-faint); font-size: var(--text-md); font-weight: var(--weight-semibold); }
+.co-ck.active .co-ck-gia { color: var(--text); }
+.co-ck-gia s { color: var(--text-mo); font-size: var(--text-sm); }
+.co-chuky .giam { position: absolute; top: -8px; right: var(--sp-8); padding: 1px var(--sp-6);
+  border-radius: var(--radius-pill); background: var(--danger-solid); color: #fff;
+  font-size: var(--text-2xs); font-weight: var(--weight-bold); }
+/* Huy hiệu ưu đãi lần đầu — căn TRÁI, nó đứng trong cột gói ngay dưới tên gói. */
+.co-uudai { margin: var(--sp-10) 0 0; padding: var(--sp-6) var(--sp-12); width: fit-content;
+  border-radius: var(--radius-pill); background: var(--ok-bg); color: var(--ok);
+  font-size: var(--text-sm); font-weight: var(--weight-bold); }
+.co-gia-cu { margin-left: var(--sp-8); color: var(--text-faint); font-size: var(--text-md);
+  font-weight: var(--weight-bold); text-decoration: line-through; }
+
+/* ── Bố cục hai cột ──────────────────────────────────────────────────────── */
+.co-luoi { display: grid; grid-template-columns: minmax(0, 1fr) 500px; gap: var(--sp-18); align-items: start; }
+@media (max-width: 1100px) { .co-luoi { grid-template-columns: minmax(0, 1fr); } }
+.co-trai { display: grid; gap: var(--sp-14); }
+/* .co-cot còn dùng ở màn "Đang chờ tiền về…". */
+.co-cot { border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--sp-18) var(--sp-20); }
+
+/* ── Thẻ một BƯỚC ────────────────────────────────────────────────────────
+   ⚠ CHỈ CÓ MỘT cách trả tiền, nên bước 1 là "Chuyển khoản ngân hàng" luôn.
+   Mẫu thiết kế có thêm một lớp "Phương thức thanh toán" bọc ngoài kèm nút
+   chọn — đúng khi có nhiều cách, nhưng ở đây nó là một câu hỏi không có lựa
+   chọn nào và một cái nút tròn không bao giờ tắt. */
+.co-buoc { padding: var(--sp-18) var(--sp-20); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); background: var(--panel); }
+.co-buoc-dau { display: flex; align-items: center; gap: var(--sp-12); margin-bottom: var(--sp-16); }
+.co-stt { flex: none; display: grid; place-items: center; width: 28px; height: 28px;
+  border-radius: var(--radius-pill); background: var(--info-bg); color: var(--info);
+  font-size: var(--text-md); font-weight: var(--weight-bold); }
+.co-buoc-ten { flex: 1 1 auto; min-width: 0; }
+.co-buoc-ten h3 { margin: 0; font-size: var(--text-lg); font-weight: var(--weight-bold); }
+.co-buoc-ten p { margin: var(--sp-2) 0 0; color: var(--text-faint);
+  font-size: var(--text-md); line-height: var(--leading-snug); }
+
+/* ── Khối thông tin ngân hàng + ô mã QR ──────────────────────────────────── */
+/* Nền nhạt hơn hẳn (--surface-mo thay vì --surface): khối này đã nằm trong thẻ
+   bước có viền rồi, nền đậm nữa là hai lớp hộp chồng nhau. */
+.co-nh-the { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--sp-16);
+  align-items: center; padding: var(--sp-16) var(--sp-18);
+  border-radius: var(--radius-md); background: var(--surface-mo); }
+@media (max-width: 900px) { .co-nh-the { grid-template-columns: minmax(0, 1fr); } }
+/* Ô hiệu ngân hàng: logo thật nếu có (xem LOGO_NH bên checkout.js), không thì
+   icon trong khung + tên đọc từ plans.json. */
+.co-nh-hieu { display: grid; justify-items: center; gap: var(--sp-8); width: 108px; }
+/* Nền TRẮNG cố định cả hai theme: logo có chữ "BANK" màu đen, thả lên nền tối
+   là mất nửa chữ. Đây cũng đúng cách mọi nơi in logo ngân hàng. */
+.co-nh-logo { display: block; width: 100%; height: auto; padding: var(--sp-10);
+  border-radius: var(--radius-md); background: #fff; box-shadow: var(--shadow-sm); }
+.co-nh-hieu-o { display: grid; place-items: center; width: 48px; height: 48px;
+  border-radius: var(--radius-md); background: var(--panel); color: var(--info); box-shadow: var(--shadow-sm); }
+.co-nh-hieu-o .btn-icon { width: auto; height: auto; color: inherit; background: none; }
+.co-nh-hieu-o svg { width: 24px; height: 24px; }
+.co-nh-hieu-ten { color: var(--text-soft); font-size: var(--text-md);
+  font-weight: var(--weight-bold); letter-spacing: 0.02em; text-align: center; }
+@media (max-width: 900px) { .co-nh-hieu { width: auto; justify-items: start; } }
+/* Hai vỏ bọc của khối ngân hàng. `min-width: 0` KHÔNG phải trang trí: ô lưới
+   mặc định là `min-width: auto`, nghĩa là nó từ chối co nhỏ hơn nội dung —
+   tên tài khoản dài ("Công ty TNHH Trí Tuệ Nhân Tạo và Robot Beeknoee") sẽ
+   đẩy cả khối tràn ra khỏi thẻ thay vì xuống dòng. */
+.co-nh-tin { min-width: 0; }
+.co-qr-o { flex: none; }
+.co-nh-bang { display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-8) var(--sp-16); margin: 0; align-items: baseline; }
+.co-nh-bang dt { color: var(--text-faint); font-size: var(--text-md); }
+.co-nh-bang dd { display: flex; align-items: center; gap: var(--sp-8); margin: 0; min-width: 0; }
+.co-nh-chu { font-size: var(--text-md); font-weight: var(--weight-semibold); user-select: text; }
+/* PHẢI cho chọn/copy được: số tài khoản và nội dung CK là hai thứ người dùng
+   cần gõ sang app ngân hàng. Gõ tay 15 ký tự mã CK là kiểu gì cũng có người
+   gõ sai, mà sai mã thì đối soát không ra đơn của họ. */
+.co-nh-gt { font-size: var(--text-base); font-weight: var(--weight-bold); user-select: text;
+  font-family: var(--font-mono); }
+/* Nội dung CK tô đỏ: sai một ký tự ở đây là tiền về mà không khớp đơn nào —
+   chỗ duy nhất trên màn này mà gõ sai thì mất dấu tiền. */
+.co-nh-gt.quan-trong { color: var(--danger); }
+/* Chỗ nội dung CK khi chưa có đơn: chữ mờ, không phải mã thật. */
+.co-nh-gt.co-mo { color: var(--text-faint); font-weight: var(--weight-semibold); }
+.co-chep { flex: none; padding: var(--sp-4) var(--sp-8); border: 1px solid var(--control-line);
+  border-radius: var(--radius-sm); color: var(--text-faint); background: none;
+  font: inherit; font-size: var(--text-xs); font-weight: var(--weight-semibold); cursor: pointer; }
+.co-chep:hover { color: var(--text); background: var(--surface); }
+.co-chep.xong { color: var(--good-text); border-color: var(--good-text); }
+.co-canhbao { margin-top: var(--sp-12); padding: var(--sp-8) var(--sp-10); border-radius: var(--radius-md);
+  color: var(--warn); font-size: var(--text-xs); line-height: var(--leading-normal); }
+
+/* Ô chưa có mã: nét ĐỨT — nói được "chỗ này rồi sẽ có gì đó" mà không giả
+   làm một tấm thẻ thật. */
+/* Cùng khuôn với tấm thẻ VietQR thật (264 x ~290): có mã rồi thì khối này
+   không nhảy kích thước, chỉ đổi ruột. */
+.co-qr-cho { display: grid; place-items: center; align-content: center; gap: var(--sp-6);
+  width: 264px; min-height: 290px; padding: var(--sp-16) var(--sp-16);
+  border: 1px dashed var(--control-line); border-radius: var(--radius-md); text-align: center; }
+.co-qr-cho .btn-icon { width: auto; height: auto; color: var(--text-mo); background: none; }
+.co-qr-cho svg { width: 30px; height: 30px; }
+.co-qr-cho b { color: var(--text-soft); font-size: var(--text-md); font-weight: var(--weight-bold); }
+.co-qr-cho span:not(.btn-icon) { color: var(--text-faint); font-size: var(--text-sm);
+  line-height: var(--leading-normal); }
+.co-qr-cho.loi { border-color: var(--warn); }
+.co-qr-cho.loi .btn-icon { color: var(--warn); }
+
+/* Khung VietQR chuẩn: thẻ trắng, logo VietQR trên, mã ở giữa, napas247 +
+   tên ngân hàng ở dưới — như mẫu app ngân hàng. Nền TRẮNG bắt buộc để máy
+   quét đọc được mã. */
+.co-qr-anh { width: 264px; border-radius: var(--radius-md); background: #fff;
+  padding: var(--sp-12) var(--sp-12) var(--sp-10); overflow: hidden; box-shadow: var(--shadow-sm); }
+.co-qr-top { display: flex; justify-content: center; margin-bottom: var(--sp-6); }
+.vq-mark { font-family: 'Arial', system-ui, sans-serif; font-weight: var(--weight-bold);
+  font-size: var(--text-2xl); letter-spacing: -0.5px; line-height: var(--leading-none); }
+.vq-mark .vq-v { color: #e11b22; }
+.vq-mark .vq-red { color: #e11b22; }
+.vq-mark .vq-navy { color: #1a3a6b; }
+.co-qr-ma { width: 240px; height: 240px; margin: 0 auto; display: grid;
+  place-items: center; overflow: hidden; }
+.co-qr-ma img { width: 100%; height: 100%; object-fit: contain; }
+.co-qr-bot { display: flex; align-items: center; justify-content: center; gap: var(--sp-8);
+  margin-top: var(--sp-8); padding-top: var(--sp-8); border-top: 1px solid #eceff3; }
+.np-mark { font-family: 'Arial', system-ui, sans-serif; font-weight: var(--weight-bold);
+  font-size: var(--text-md); font-style: italic; letter-spacing: -0.3px; }
+.np-mark .np-navy { color: #1b3a73; }
+.np-mark .np-blue { color: #2aa8e0; }
+.np-mark .np-green { color: #8dc63f; }
+.co-qr-sep { width: 1px; height: 14px; background: #d5d9df; }
+.co-qr-bank { display: inline-flex; align-items: center; gap: var(--sp-6);
+  font-family: 'Arial', system-ui, sans-serif; font-weight: var(--weight-semibold);
+  font-size: var(--text-sm); color: #222; }
+.co-qr-bank .bank-dia { width: 11px; height: 11px; color: #e11b22; }
+
+/* Dải báo LÝ DO máy chủ từ chối đơn. Cùng khuôn với .co-tin nhưng tông cảnh
+   báo; `overflow-wrap` vì câu lỗi có kèm địa chỉ máy chủ, không có chỗ ngắt. */
+.co-loi-don { display: flex; align-items: flex-start; gap: var(--sp-10);
+  margin-top: var(--sp-14); padding: var(--sp-10) var(--sp-14); border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warn) 12%, transparent); color: var(--text-soft);
+  font-size: var(--text-md); line-height: var(--leading-relaxed); overflow-wrap: anywhere; }
+.co-loi-don .btn-icon { flex: none; width: auto; height: auto; color: var(--warn); background: none; }
+.co-loi-don svg { width: 16px; height: 16px; }
+
+/* Dải nhắc dưới khối ngân hàng. */
+.co-tin { display: flex; align-items: flex-start; gap: var(--sp-10);
+  margin-top: var(--sp-14); padding: var(--sp-10) var(--sp-14); border-radius: var(--radius-md);
+  background: var(--info-bg); color: var(--text-soft);
+  font-size: var(--text-md); line-height: var(--leading-relaxed); }
+.co-tin .btn-icon { flex: none; width: auto; height: auto; color: var(--info); background: none; }
+.co-tin svg { width: 16px; height: 16px; }
+
+/* ── Form hoá đơn ────────────────────────────────────────────────────────
+   Nhãn nằm TRÊN ô, không nhét vào placeholder: gõ xong là placeholder biến
+   mất, người dùng không còn cách nào biết ô thứ tư đang là "Phường/Xã" hay
+   "Tỉnh/Thành phố" ngoài việc xoá đi gõ lại. */
+.co-form { display: grid; gap: var(--sp-12); }
+.co-hang { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12); }
+@media (max-width: 760px) { .co-hang { grid-template-columns: 1fr; } }
+.co-o { min-width: 0; }
+.co-o label { display: block; margin-bottom: var(--sp-6); color: var(--text-soft);
+  font-size: var(--text-md); font-weight: var(--weight-semibold); }
+.co-o label b { color: var(--danger); font-weight: var(--weight-semibold); }
+.co-form input { width: 100%; min-height: 42px; padding: var(--sp-10) var(--sp-12);
+  border: 1px solid var(--control-line); border-radius: var(--radius-md); color: var(--text);
+  background: var(--field-bg); font: inherit; font-size: var(--text-md); }
+.co-form input::placeholder { color: var(--text-mo); }
+.co-form input:focus { outline: none; border-color: var(--info); }
+.co-form input.thieu { border-color: var(--danger); }
+/* ── Theo hồ sơ Bee Account (28/09/2026): ô CHỈ ĐỌC + nút "Chỉnh sửa" mở bảng hồ sơ ─────────────────── */
+/* Nút "Sửa thông tin" là ô thứ hai của hàng CCCD / MST: canh ĐÁY cho ngang ô nhập, rộng hết ô, nền đen
+   (--accent) như nút "Sửa thông tin" của bảng hồ sơ. */
+.co-o-nut { display: flex; align-items: flex-end; }
+.co-sua { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-8);
+  width: 100%; min-height: 42px; padding: 0 var(--sp-14);
+  border: 0; border-radius: var(--radius-md); background: var(--accent); color: var(--accent-contrast);
+  font: inherit; font-size: var(--text-md); cursor: pointer; }
+.co-sua:hover { filter: brightness(1.15); }
+.co-sua .btn-icon { color: inherit; }
+.co-sua svg { width: 14px; height: 14px; }
+.co-form.chi-doc input { background: var(--surface); color: var(--text-soft); cursor: default; }
+.co-form.chi-doc input:focus { border-color: var(--control-line); }
+/* Nút gạt loại hoá đơn — nằm ở GÓC PHẢI tiêu đề bước 2, không nằm giữa form:
+   nó quyết định nhãn của ô cuối cùng, nên phải chọn trước khi gõ tới đó. */
+.co-loai { flex: none; display: flex; gap: var(--sp-2); padding: var(--sp-2);
+  border: 1px solid var(--control-line-faint); border-radius: var(--radius-md); }
+.co-loai button { padding: var(--sp-8) var(--sp-16); border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-faint); font: inherit; font-size: var(--text-md);
+  font-weight: var(--weight-semibold); cursor: pointer; }
+.co-loai button.active { background: var(--info-bg); color: var(--info); }
+
+/* ── Cột phải: tóm tắt gói ───────────────────────────────────────────────── */
+.co-goi { padding: var(--sp-18) var(--sp-20); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); background: var(--panel); }
+.co-goi-dau { display: flex; align-items: center; gap: var(--sp-12); margin-bottom: var(--sp-16); }
+/* Ô vương miện mượn cặp token của thẻ "Xem video tổng quan" bên Hướng dẫn:
+   nó đúng là một nền gradient đặc kèm sẵn màu chữ gần trắng cho cả hai theme,
+   không phải dựng thêm một cặp nữa cho cùng một việc. */
+.co-goi-o { flex: none; display: grid; place-items: center; width: 42px; height: 42px;
+  border-radius: var(--radius-md); background: var(--hd-video-nen); color: var(--hd-video-chu); }
+.co-goi-o .btn-icon { width: auto; height: auto; color: inherit; background: none; }
+.co-goi-o svg { width: 21px; height: 21px; }
+.co-goi-tem { flex: none; margin-left: auto; display: inline-flex; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-4) var(--sp-10); border-radius: var(--radius-pill);
+  background: var(--info-bg); color: var(--info);
+  font-size: var(--text-xs); font-weight: var(--weight-bold); }
+.co-goi-tem .btn-icon { width: auto; height: auto; color: inherit; background: none; }
+.co-goi-tem svg { width: 12px; height: 12px; }
+.co-goi-ten { font-size: var(--text-lg); font-weight: var(--weight-bold); letter-spacing: -0.02em; }
+.co-goi-gia { margin-top: var(--sp-2); color: var(--text-faint); font-size: var(--text-md); }
+.co-goi h3 { margin: 0 0 var(--sp-14); font-size: var(--text-base); font-weight: var(--weight-bold); }
+/* Danh sách quyền lợi: mỗi dòng MỘT icon riêng theo nội dung, không phải
+   một dấu hoa thị lặp lại bảy lần. Chữ 14px thay vì 12.5px — đây là phần
+   người ta đọc để quyết định mua, để nhỏ hơn dòng "VAT (10%)" bên dưới là
+   sai thứ tự quan trọng. */
+.co-ds { display: grid; gap: var(--sp-10); margin: 0 0 var(--sp-20); padding: 0; list-style: none; }
+.co-ds li { display: grid; grid-template-columns: 30px minmax(0, 1fr) 18px; gap: var(--sp-12);
+  align-items: center; font-size: var(--text-base); line-height: var(--leading-normal); }
+/* Không nền ô (29/09/2026, chủ dự án chốt) — chỉ còn icon đen/trắng (.co-ds-ic). */
+.co-ds-o { display: grid; place-items: center; width: 30px; height: 30px; }
+/* Icon ĐEN/TRẮNG, không tô màu: --accent là mực đậm nhất của mỗi theme. Tám
+   dòng tám icon mà mỗi cái một màu thì màu hết nghĩa; màu duy nhất được phép
+   nói to ở cột này là dấu tích xanh bên phải. */
+.co-ds-ic { width: 17px; height: 17px; color: var(--accent); }
+/* Dấu tích: nền --ok-solid (lục đã hạ 22% về đen) chứ không phải --ok — nét
+   trắng trên lục nguyên bản chỉ được 2,1:1, trên bản hạ này là 3,3:1. */
+.co-ds-tich { display: grid; place-items: center; width: 18px; height: 18px;
+  border-radius: var(--radius-pill); background: var(--ok-solid); color: #fff; }
+.co-ds-tich .btn-icon { width: auto; height: auto; color: inherit; background: none; }
+.co-ds-tich svg { width: 11px; height: 11px; stroke-width: 3; }
+.co-tong { border-top: 1px solid var(--line); padding-top: var(--sp-14); }
+.co-dong { display: flex; justify-content: space-between; gap: var(--sp-12); padding: var(--sp-6) 0;
+  font-size: var(--text-md); }
+.co-dong span:first-child { color: var(--text-faint); }
+.co-dong.lon { margin-top: var(--sp-6); padding-top: var(--sp-10); border-top: 1px solid var(--line);
+  font-size: var(--text-lg); font-weight: var(--weight-bold); }
+.co-dong.lon span:first-child { color: var(--text); }
+.co-tien { color: var(--info); font-size: var(--text-2xl); }
+.co-nut { width: 100%; min-height: 50px; margin-top: var(--sp-16); border: 0; border-radius: var(--radius-md);
+  color: #fff; background: var(--ok-solid); font: inherit; font-size: var(--text-base);
+  font-weight: var(--weight-bold); cursor: pointer; }
+.co-nut:disabled { background: var(--surface-strong); color: var(--text-faint); cursor: default; }
+/* Nút "Tạo mã QR" bị khoá vì hồ sơ hoá đơn chưa đủ (29/09/2026, như Bee Project): mờ + tooltip lý do.
+   Tooltip ở LỚP BỌC — nút disabled không nhận chuột. */
+.co-khoa-qr { position: relative; }
+.co-khoa-qr[data-tip] { cursor: not-allowed; }
+.co-khoa-qr[data-tip] .co-nut { pointer-events: none; opacity: 0.5; }
+.co-khoa-qr[data-tip]:hover::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + var(--sp-10));
+  z-index: var(--z-pop); width: max-content; max-width: 280px; padding: var(--sp-8) var(--sp-12);
+  border-radius: var(--radius-md); background: var(--accent); color: var(--accent-contrast);
+  box-shadow: var(--shadow-md); font-size: var(--text-sm); line-height: var(--leading-normal);
+  text-align: center; white-space: normal; transform: translateX(-50%); pointer-events: none; }
+
+/* Báo hồ sơ thiếu ngay dưới "Thông tin xuất hoá đơn" (29/09/2026): đỏ, căn giữa, icon cảnh báo phía trước. */
+.co-thieu { display: flex; align-items: center; justify-content: center; gap: var(--sp-6);
+  margin: var(--sp-12) 0 0; color: var(--danger); font-size: var(--text-sm);
+  font-weight: var(--weight-semibold); line-height: var(--leading-normal); text-align: center; }
+.co-thieu .btn-icon { flex: none; width: auto; height: auto; color: inherit; background: none; }
+.co-thieu svg { width: 15px; height: 15px; }
+.co-nhac { margin-top: var(--sp-10); color: var(--warn); font-size: var(--text-sm);
+  font-weight: var(--weight-semibold); text-align: center; }
+.co-dieukhoan { margin-top: var(--sp-14); color: var(--text-soft); font-size: var(--text-sm);
+  line-height: var(--leading-relaxed); text-align: center; }
+/* ⚠ ĐỪNG hạ lại về --text-faint/--text-xs. Hai khối .co-luat và .co-dieukhoan
+   là thứ người mua PHẢI đọc — một bên cảnh báo chuyển tiền khi chưa có mã QR
+   thì mất dấu đơn, một bên giải thích vì sao bắt khai thông tin hoá đơn. Bản
+   trước để 11px ở 55% độ đậm, đúng cỡ dành cho chú thích bỏ qua cũng được;
+   chủ dự án báo là mờ và khó đọc. Nay 12px ở 80% — tương phản ~13:1. */
+.co-luat { display: flex; align-items: flex-start; gap: var(--sp-10); margin-top: var(--sp-14);
+  color: var(--text-soft); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+/* Bản trong cột gói là một Ô TIN có nền, căn trái. Bản ở màn "chờ tiền về"
+   không có icon nên flex chỉ còn một con — vẫn hiện đúng. */
+.co-goi .co-luat { padding: var(--sp-12) var(--sp-14); border-radius: var(--radius-md);
+  background: var(--info-bg); }
+.co-luat .btn-icon { flex: none; width: auto; height: auto; color: var(--info); background: none; }
+.co-luat svg { width: 16px; height: 16px; }
+.co-luat b { color: var(--danger); }
+
+/* ── Màn "Đang chờ tiền về…" ─────────────────────────────────────────────── */
+.co-cho { display: flex; align-items: center; gap: var(--sp-8); margin-top: var(--sp-14);
+  padding: var(--sp-12); border-radius: var(--radius-md); background: var(--surface);
+  color: var(--text-soft); font-size: var(--text-md); line-height: var(--leading-normal); }
+.co-cho.xong { color: var(--good-text); font-weight: var(--weight-semibold); }
+.co-quay { width: 14px; height: 14px; flex: 0 0 auto; border-radius: var(--radius-pill);
+  border: 2px solid var(--control-line); border-top-color: var(--info);
+  animation: coQuay 0.9s linear infinite; }
+@keyframes coQuay { to { transform: rotate(360deg); } }

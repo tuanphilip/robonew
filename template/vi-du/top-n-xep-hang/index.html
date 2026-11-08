@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top N xếp hạng — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu đếm ngược 5 về 1: mỗi hạng một hình vật thể và một con số, thanh so sánh thang logarit, dãy chấm tiến độ giữ người xem tới hạng nhất." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <!-- ══ KHO HÌNH VẬT THỂ ═══════════════════════════════════════════════
+       Năm vật trong danh sách, vẽ một lần rồi gọi lại bằng <use>: mỗi vật
+       xuất hiện HAI chỗ — to ở slide của hạng nó, và nhỏ ở biểu đồ năm bậc
+       trên slide mở và slide kết. Chép hai bản là sớm muộn lệch nhau.
+
+       ⚠ SVG NỘI TUYẾN chứ không nhúng ảnh ngoài: deck phải dựng được offline,
+       và nét vẽ ăn theo biến màu chủ đề nên đổi bảng màu là hình đổi theo.
+       Nét vẽ để STYLE ở đây, không bỏ vào CSS — `<use>` không cho CSS ngoài
+       với tới bên trong shadow tree ở mọi trình duyệt. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- Hạng 05 · tay nắm cửa và công tắc đèn -->
+      <symbol id="ic-taynam" viewBox="0 0 80 80">
+        <rect x="9" y="8" width="37" height="64" rx="5" fill="none" stroke="var(--accent-light)" stroke-width="3"/>
+        <circle cx="38" cy="42" r="4.6" fill="var(--primary)"/>
+        <path d="M38 42h7" stroke="var(--primary)" stroke-width="3.6" stroke-linecap="round"/>
+        <rect x="55" y="25" width="17" height="26" rx="3.5" fill="none" stroke="var(--accent-light)" stroke-width="3"/>
+        <path d="M63.5 32v12" stroke="var(--primary)" stroke-width="4.4" stroke-linecap="round"/>
+      </symbol>
+      <!-- Hạng 04 · điện thoại -->
+      <symbol id="ic-dienthoai" viewBox="0 0 80 80">
+        <rect x="23" y="6" width="34" height="68" rx="8" fill="none" stroke="var(--accent-light)" stroke-width="3"/>
+        <rect x="28.5" y="15" width="23" height="46" rx="3" fill="var(--primary)" opacity=".3"/>
+        <path d="M35 10.5h10" stroke="var(--accent-light)" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="40" cy="67" r="3.4" fill="var(--primary)"/>
+      </symbol>
+      <!-- Hạng 03 · bồn rửa bát -->
+      <symbol id="ic-bonrua" viewBox="0 0 80 80">
+        <path d="M15 38h50l-6 28H21Z" fill="none" stroke="var(--accent-light)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M9 38h62" stroke="var(--primary)" stroke-width="3.6" stroke-linecap="round"/>
+        <path d="M40 38V24q0-9 9-9h7" fill="none" stroke="var(--accent-light)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M40 44v6" stroke="var(--primary)" stroke-width="2.8" stroke-linecap="round" opacity=".75"/>
+        <ellipse cx="40" cy="57" rx="5" ry="3.2" fill="var(--primary)" opacity=".8"/>
+      </symbol>
+      <!-- Hạng 02 · thớt và vết dao -->
+      <symbol id="ic-thot" viewBox="0 0 80 80">
+        <path d="M17 20h36a5 5 0 0 1 5 5v36a5 5 0 0 1-5 5H17Z" fill="none" stroke="var(--accent-light)" stroke-width="3"/>
+        <circle cx="25" cy="28" r="3.4" fill="var(--accent-light)"/>
+        <path d="M27 45h22M27 54h15" stroke="var(--primary)" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M64 12v34" stroke="var(--accent-light)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M64 46l5 8h-10Z" fill="var(--primary)"/>
+      </symbol>
+      <!-- Hạng 01 · miếng rửa bát và bọt -->
+      <symbol id="ic-mieng" viewBox="0 0 80 80">
+        <rect x="9" y="33" width="62" height="30" rx="8" fill="var(--primary)" opacity=".28"/>
+        <rect x="9" y="33" width="62" height="30" rx="8" fill="none" stroke="var(--primary)" stroke-width="3"/>
+        <path d="M9 44h62" stroke="var(--primary-light)" stroke-width="3"/>
+        <circle cx="22" cy="21" r="5.4" fill="none" stroke="var(--accent-light)" stroke-width="2.6"/>
+        <circle cx="38" cy="14" r="3.6" fill="none" stroke="var(--accent-light)" stroke-width="2.4"/>
+        <circle cx="53" cy="22" r="4.4" fill="none" stroke="var(--accent-light)" stroke-width="2.4"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+      <!-- ══ SLIDE 1 · MỞ ══════════════════════════════════════════════
+           Câu móc phải nói ĐỦ SỐ và ĐỦ CHỦ ĐỀ ngay giây đầu, vì người lướt
+           quyết định ở lại hay không trong chừng ấy thời gian.
+           Biểu đồ bên dưới là MỤC LỤC BẰNG HÌNH: năm vật, năm bậc, bậc cuối
+           vọt hẳn lên. Đó là lời hứa giữ người xem tới hết. -->
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">5</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hero">
+          <span class="xh-badge"><i>&#9733;</i> Top 5</span>
+          <h1 class="xh-title">Năm thứ trong nhà<br/><em>bẩn hơn bồn cầu</em></h1>
+        </div>
+        <div class="slide-element fade-up xh-hero">
+          <div class="xh-bieu-do" aria-hidden="true">
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-taynam"/></svg><b>05</b><div class="xh-ray"><i style="width: 15.9%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-dienthoai"/></svg><b>04</b><div class="xh-ray"><i style="width: 24.6%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-bonrua"/></svg><b>03</b><div class="xh-ray"><i style="width: 41.2%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-thot"/></svg><b>02</b><div class="xh-ray"><i style="width: 46.2%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-mieng"/></svg><b>01</b><div class="xh-ray"><i style="width: 96.0%"></i></div></div>
+          </div>
+          <p class="xh-sub">Và thứ bẩn nhất thì ngày nào bạn cũng cầm lên.</p>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 2 · HẠNG 05 ════════════════════════════════════════
+           Ba khối cố định cho MỌI hạng, đừng đổi thứ tự giữa chừng:
+             1. đầu hạng  (HÌNH vật thể + số thứ hạng + tên mục)
+             2. con số    (một con số duy nhất, cùng đơn vị ở cả năm hạng)
+             3. lý do + dãy chấm tiến độ
+           Cùng một đơn vị ở cả năm hạng là điều kiện để người xem so sánh
+           được. Đổi đơn vị giữa chừng là danh sách mất nghĩa.
+           ⚠ Hình đặt NẰM NGANG cạnh tên, không xếp dọc bên trên — slide này
+           chật nhất deck, xếp dọc là vỡ vùng an toàn ngay. -->
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">5</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hang">
+          <span class="xh-hinh"><svg><use href="#ic-taynam"/></svg></span>
+          <span class="xh-hang-chu">
+            <span class="xh-so-hang">Hạng <b>05</b></span>
+            <h2 class="xh-ten">Tay nắm cửa &amp; công tắc</h2>
+          </span>
+        </div>
+        <div class="slide-element fade-up xh-chi-so">
+          <div class="xh-so">3<span>lần</span></div>
+          <div class="xh-nhan">bẩn hơn bệ bồn cầu</div>
+          <div class="xh-thanh">
+            <div class="xh-ray"><i style="width: 15.9%"></i></div>
+            <div class="xh-moc"><span>bệ bồn cầu</span><span>hạng 01</span></div>
+          </div>
+        </div>
+        <div class="slide-element fade-up xh-cuoi">
+          <p class="xh-ly-do">Chạm <b>mấy chục lần mỗi ngày</b>, gần như không ai lau.</p>
+          <div class="xh-cham" aria-hidden="true"><i class="nay"></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3 · HẠNG 04 ════════════════════════════════════════ -->
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">4</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hang">
+          <span class="xh-hinh"><svg><use href="#ic-dienthoai"/></svg></span>
+          <span class="xh-hang-chu">
+            <span class="xh-so-hang">Hạng <b>04</b></span>
+            <h2 class="xh-ten">Chiếc điện thoại của bạn</h2>
+          </span>
+        </div>
+        <div class="slide-element fade-up xh-chi-so">
+          <div class="xh-so">10<span>lần</span></div>
+          <div class="xh-nhan">bẩn hơn bệ bồn cầu</div>
+          <div class="xh-thanh">
+            <div class="xh-ray"><i style="width: 24.6%"></i></div>
+            <div class="xh-moc"><span>bệ bồn cầu</span><span>hạng 01</span></div>
+          </div>
+        </div>
+        <div class="slide-element fade-up xh-cuoi">
+          <p class="xh-ly-do">Vào nhà vệ sinh cùng bạn, rồi <b>lên thẳng bàn ăn</b>.</p>
+          <div class="xh-cham" aria-hidden="true"><i class="qua"></i><i class="nay"></i><i></i><i></i><i></i></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 4 · HẠNG 03 ════════════════════════════════════════ -->
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">3</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hang">
+          <span class="xh-hinh"><svg><use href="#ic-bonrua"/></svg></span>
+          <span class="xh-hang-chu">
+            <span class="xh-so-hang">Hạng <b>03</b></span>
+            <h2 class="xh-ten">Bồn rửa bát</h2>
+          </span>
+        </div>
+        <div class="slide-element fade-up xh-chi-so">
+          <div class="xh-so">100<span>lần</span></div>
+          <div class="xh-nhan">bẩn hơn bệ bồn cầu</div>
+          <div class="xh-thanh">
+            <div class="xh-ray"><i style="width: 41.2%"></i></div>
+            <div class="xh-moc"><span>bệ bồn cầu</span><span>hạng 01</span></div>
+          </div>
+        </div>
+        <div class="slide-element fade-up xh-cuoi">
+          <p class="xh-ly-do">Thức ăn thừa, nước ấm, và <b>ẩm suốt cả ngày</b>.</p>
+          <div class="xh-cham" aria-hidden="true"><i class="qua"></i><i class="qua"></i><i class="nay"></i><i></i><i></i></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 5 · HẠNG 02 ════════════════════════════════════════ -->
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">2</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hang">
+          <span class="xh-hinh"><svg><use href="#ic-thot"/></svg></span>
+          <span class="xh-hang-chu">
+            <span class="xh-so-hang">Hạng <b>02</b></span>
+            <h2 class="xh-ten">Cái thớt</h2>
+          </span>
+        </div>
+        <div class="slide-element fade-up xh-chi-so">
+          <div class="xh-so">200<span>lần</span></div>
+          <div class="xh-nhan">bẩn hơn bệ bồn cầu</div>
+          <div class="xh-thanh">
+            <div class="xh-ray"><i style="width: 46.2%"></i></div>
+            <div class="xh-moc"><span>bệ bồn cầu</span><span>hạng 01</span></div>
+          </div>
+        </div>
+        <div class="slide-element fade-up xh-cuoi">
+          <p class="xh-ly-do">Mỗi nhát dao là một rãnh — <b>rửa qua loa không tới</b>.</p>
+          <div class="xh-cham" aria-hidden="true"><i class="qua"></i><i class="qua"></i><i class="qua"></i><i class="nay"></i><i></i></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6 · HẠNG 01 ════════════════════════════════════════
+           ⚠ Lớp `xh-nhat` đặt trên chính `.slide`: nó làm khung hình sáng lên,
+           số hạng đậm hơn, con số đổi màu và thêm một vệt sáng chạy qua thanh.
+           Không có nó thì hạng nhất nhìn y hệt bốn hạng trước và cả video tụt
+           nhịp ở đúng chỗ cần mạnh nhất. -->
+      <div class="slide xh-nhat" data-slide-id="5">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">1</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hang">
+          <span class="xh-hinh"><svg><use href="#ic-mieng"/></svg></span>
+          <span class="xh-hang-chu">
+            <span class="xh-so-hang">Hạng <b>01</b></span>
+            <h2 class="xh-ten">Miếng rửa bát</h2>
+          </span>
+        </div>
+        <div class="slide-element fade-up xh-chi-so">
+          <div class="xh-so">200.000<span>lần</span></div>
+          <div class="xh-nhan">bẩn hơn bệ bồn cầu</div>
+          <div class="xh-thanh">
+            <div class="xh-ray"><i style="width: 96.0%"></i></div>
+            <div class="xh-moc"><span>bệ bồn cầu</span><span>hạng 01</span></div>
+          </div>
+        </div>
+        <div class="slide-element fade-up xh-cuoi">
+          <p class="xh-ly-do">Bạn dùng <b>thứ bẩn nhất nhà</b> để lau sạch mọi thứ khác.</p>
+          <div class="xh-cham" aria-hidden="true"><i class="qua"></i><i class="qua"></i><i class="qua"></i><i class="qua"></i><i class="nay"></i></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 7 · KẾT ════════════════════════════════════════════
+           Hai việc, đúng hai việc: nhắc lại hạng 1 cho người vào giữa chừng,
+           rồi hỏi một câu để kéo bình luận. Đừng nhồi thêm mục thứ sáu.
+           Biểu đồ quay lại lần nữa, lần này hạng 01 thắp sáng — khép đúng cái
+           vòng đã mở ở slide đầu. -->
+      <div class="slide" data-slide-id="6">
+        <div class="slide-bg xh-bg"></div>
+        <div class="xh-ghost" aria-hidden="true">1</div>
+        <div class="slide-content">
+        <div class="slide-element fade-up xh-hang">
+          <span class="xh-hinh"><svg><use href="#ic-mieng"/></svg></span>
+          <span class="xh-hang-chu">
+            <span class="xh-ket-nhan">Bẩn nhất danh sách</span>
+            <h2 class="xh-ten">Miếng rửa bát</h2>
+          </span>
+        </div>
+        <div class="slide-element fade-up xh-ket">
+          <div class="xh-bieu-do" aria-hidden="true">
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-taynam"/></svg><b>05</b><div class="xh-ray"><i style="width: 15.9%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-dienthoai"/></svg><b>04</b><div class="xh-ray"><i style="width: 24.6%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-bonrua"/></svg><b>03</b><div class="xh-ray"><i style="width: 41.2%"></i></div></div>
+            <div class="xh-dong"><svg class="xh-ico"><use href="#ic-thot"/></svg><b>02</b><div class="xh-ray"><i style="width: 46.2%"></i></div></div>
+            <div class="xh-dong sang"><svg class="xh-ico"><use href="#ic-mieng"/></svg><b>01</b><div class="xh-ray"><i style="width: 96.0%"></i></div></div>
+          </div>
+          <p class="xh-cta">Thay mỗi tuần, hoặc luộc năm phút mỗi tối.<br/><em>Nhà bạn còn thứ gì đáng vào danh sách này?</em></p>
+        </div>
+        </div>
+      </div>
+</div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">7</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

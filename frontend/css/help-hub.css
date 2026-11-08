@@ -1,0 +1,169 @@
+/* Tách từ help-hub.js (02/09/2026, audit Phase 2.1). */
+#bee-hub {
+  position: fixed;
+  right: 12px;
+  bottom: 32px;
+  z-index: var(--z-hub);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  /* Cùng lý do với số hiệu bản ở version-badge.js: đừng chồng màu đã mờ
+     với opacity thấp. Nút này còn phải MỜI người ta bấm vào, mờ quá thì
+     không ai biết là có nút. */
+  color: var(--text-soft);
+  background: var(--panel);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+#bee-hub:hover, #bee-hub:focus-visible, #bee-hub[aria-expanded="true"] {
+  opacity: 1;
+  color: var(--text);
+  border-color: var(--control-line);
+}
+
+/* Mở LÊN TRÊN và neo mép phải — cùng lý do với bảng nhật ký của số hiệu
+   bản: cái neo nằm sát góc dưới phải, mở xuống hay sang phải là tràn ra
+   ngoài màn hình. */
+#bee-hub-menu {
+  position: fixed;
+  right: 12px;
+  bottom: 64px;
+  z-index: var(--z-hub-menu);
+  width: 252px;
+  padding: var(--sp-6);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--option-bg);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+#bee-hub-menu.mo { opacity: 1; visibility: visible; transform: none; }
+#bee-hub-menu .hub-nhom {
+  padding: var(--sp-6) var(--sp-10) var(--sp-4);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+#bee-hub-menu button {
+  display: block;
+  width: 100%;
+  padding: var(--sp-8) var(--sp-10);
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-soft);
+  background: none;
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  text-align: left;
+  cursor: pointer;
+}
+#bee-hub-menu button:hover { color: var(--text); background: var(--surface-strong); }
+#bee-hub-menu hr { margin: var(--sp-6) var(--sp-8); border: 0; border-top: 1px solid var(--line); }
+#bee-hub-menu .hub-loi { color: var(--delete-text); }
+
+/* ---- hộp báo lỗi ---- */
+#bee-loi-nen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-pop);
+  display: grid;
+  place-items: center;
+  padding: var(--sp-24);
+  background: var(--overlay);
+}
+#bee-loi {
+  width: min(560px, 100%);
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: var(--sp-24);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  background: var(--option-bg);
+  box-shadow: var(--shadow-lg);
+}
+#bee-loi h2 { margin: 0 0 var(--sp-4); font-size: var(--text-xl); font-weight: var(--weight-bold); }
+#bee-loi .loi-phu { margin: 0 0 var(--sp-16); color: var(--text-faint); font-size: var(--text-md); line-height: var(--leading-relaxed); }
+#bee-loi textarea {
+  width: 100%;
+  min-height: 128px;
+  padding: var(--sp-12);
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: var(--field-bg);
+  font: inherit;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  resize: vertical;
+}
+#bee-loi .loi-chon {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+  margin: var(--sp-14) 0 0;
+  color: var(--text-soft);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  cursor: pointer;
+}
+#bee-loi .loi-chon input { margin-top: var(--sp-2); }
+#bee-loi details { margin: var(--sp-10) 0 0; }
+#bee-loi summary {
+  color: var(--text-faint);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}
+#bee-loi pre {
+  margin: var(--sp-8) 0 0;
+  max-height: 160px;
+  overflow: auto;
+  padding: var(--sp-10);
+  border-radius: var(--radius-md);
+  color: var(--text-faint);
+  background: var(--field-bg);
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+#bee-loi .loi-nut { display: flex; justify-content: flex-end; gap: var(--sp-8); margin-top: var(--sp-18); }
+#bee-loi .loi-nut button {
+  min-height: 38px;
+  padding: 0 var(--sp-16);
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: none;
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+}
+#bee-loi .loi-nut button.chinh {
+  border-color: transparent;
+  color: var(--accent-contrast);
+  background: var(--accent);
+}
+#bee-loi .loi-nut button:disabled { opacity: 0.5; cursor: default; }
+#bee-loi .loi-ketqua { margin: var(--sp-14) 0 0; font-size: var(--text-md); font-weight: var(--weight-bold); line-height: var(--leading-relaxed); }
+/* Chép đúng màu của .config-state.ok trong index.html. Dự án chưa có biến
+   cho màu "ổn" nên viết thẳng số — trỏ vào một biến không tồn tại thì im
+   lặng rơi về màu thừa kế, còn tệ hơn. */
+#bee-loi .loi-ketqua.tot { color: var(--ok); }
+#bee-loi .loi-ketqua.xau { color: var(--delete-text); }

@@ -1,0 +1,89 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--primary": "#16c784",
+      "--primary-light": "#4adfa5",
+      "--primary-dark": "#0e8f60",
+      "--accent": "#8b93a7",
+      "--accent-light": "#aab3c5",
+      "--info": "#6366f1",
+      "--success": "#16c784",
+      "--bg-dark": "#0a0e17"
+    },
+    "customVariables": {
+      "--primary": "#16c784",
+      "--primary-light": "#4adfa5",
+      "--primary-dark": "#0e8f60",
+      "--accent": "#8b93a7",
+      "--accent-light": "#aab3c5",
+      "--info": "#6366f1",
+      "--success": "#16c784",
+      "--bg-dark": "#0a0e17"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.16,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#e8ecf4",
+    "activeColor": "#16c784",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#0a0e17",
+    "gridEnabled": false,
+    "gridLight": "#8b93a7",
+    "iconGlow": "#16c784",
+    "iconBacklight": "#6366f1",
+    "iconLight": "#f0b90b",
+    "mainLight": "#16c784",
+    "mainLightPosition": "top-left",
+    "mainLightIntensity": "low",
+    "softLight": "#6366f1",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "low",
+    "backgroundFx": "none"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Chín phần mười người mới thua ở cùng một chỗ — không phải vì chọn sai coin, mà vì vào lệnh to hơn mức mình chịu được.",
+      "Quy tắc thứ nhất là rủi ro một phần trăm. Mỗi lệnh chỉ được phép mất một phần trăm vốn, không hơn. Thua mười lệnh liên tiếp vẫn còn chín mươi phần trăm để chơi tiếp.",
+      "Quy tắc thứ hai là dừng lỗ đặt trước khi vào lệnh. Chưa biết thoát ở đâu thì chưa được vào. Hãy quyết định lúc còn tỉnh táo, đừng quyết lúc tài khoản đang đỏ.",
+      "Quy tắc thứ ba là chia ví nóng ví lạnh. Sàn giữ hộ nghĩa là mình không thật sự cầm tài sản. Phần lớn tài sản phải nằm trong ví chỉ mình mở được.",
+      "Quy tắc thứ tư là nhật ký từng lệnh. Vì sao vào, thoát ở đâu, và cảm xúc lúc bấm nút. Không ghi lại thì cùng một sai lầm sẽ quay lại với cái tên khác.",
+      "Còn đây là cái bẫy lớn nhất. Đòn bẩy nhân lãi bao nhiêu thì nhân lỗ bấy nhiêu. Nhân hai mươi lần thì chỉ cần rung năm phần trăm là cháy sạch lệnh.",
+      "Sống sót lâu hơn thị trường mới là lợi thế thật. Giữ vốn trước đã, kiếm lời tính sau."
+    ],
+    "transitionSounds": [
+      "minimal",
+      "bass",
+      "minimal",
+      "chime",
+      "minimal",
+      "boom",
+      "dramatic"
+    ],
+    "revealSounds": [
+      "tick",
+      "click",
+      "tick",
+      "click",
+      "tick",
+      "blip",
+      "bell"
+    ]
+  }
+}

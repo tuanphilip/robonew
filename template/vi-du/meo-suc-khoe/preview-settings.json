@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#0d1512",
+      "--primary": "#4ade80",
+      "--primary-light": "#bbf7d0",
+      "--primary-dark": "#15803d",
+      "--accent": "#a3e635",
+      "--accent-light": "#d9f99d",
+      "--info": "#5eead4",
+      "--success": "#86efac"
+    },
+    "customVariables": {
+      "--bg-dark": "#0d1512",
+      "--primary": "#4ade80",
+      "--primary-light": "#bbf7d0",
+      "--primary-dark": "#15803d",
+      "--accent": "#a3e635",
+      "--accent-light": "#d9f99d",
+      "--info": "#5eead4",
+      "--success": "#86efac"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#4ade80",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#0d1512",
+    "gridEnabled": false,
+    "gridLight": "#a3e635",
+    "iconGlow": "#4ade80",
+    "iconBacklight": "#a3e635",
+    "iconLight": "#86efac",
+    "mainLight": "#4ade80",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "medium",
+    "softLight": "#a3e635",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "particles"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Ba thói quen nhỏ này giúp bạn ngủ sâu hơn mà không cần thuốc.",
+      "Thứ nhất là ánh sáng buổi sáng. Ra ngoài trời trong mười lăm phút đầu ngày. Đồng hồ sinh học cần ánh sáng thật mới đặt lại được giờ ngủ buổi tối.",
+      "Thứ hai là cà phê. Sau khoảng sáu tiếng, một nửa lượng caffeine vẫn còn nguyên trong người. Uống lúc hai giờ chiều nghĩa là tới nửa đêm cơ thể vẫn đang xử lý nó.",
+      "Thứ ba là nhiệt độ phòng. Cơ thể phải hạ thân nhiệt xuống mới vào được giấc sâu. Phòng mát giúp việc đó xảy ra nhanh hơn phòng ấm.",
+      "Có một việc nên bỏ hẳn. Đừng nằm trên giường bấm điện thoại để chờ buồn ngủ. Não sẽ học rằng giường là chỗ để thức, chứ không phải chỗ để ngủ.",
+      "Đây là mẹo chăm sóc thường ngày, không thay thế lời khuyên bác sĩ. Mất ngủ kéo dài trên ba tuần thì nên đi khám. Ngủ được là cái nền của mọi thứ còn lại."
+    ],
+    "transitionSounds": [
+      "rise",
+      "chime",
+      "chime",
+      "chime",
+      "bass",
+      "minimal"
+    ],
+    "revealSounds": [
+      "pop",
+      "ping",
+      "ping",
+      "ping",
+      "tick",
+      "chime"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "_ghiChu": [
+    "Thiet lap mau QUY TRINH TUNG BUOC (GD-04) — NGANG 16:9, NEN SANG (giay can).",
+    "",
+    "⚠ `visuals.colorMode` = `cream`. De `dark` thi Trinh sua ve khung xem truoc toi.",
+    "⚠ `subtitles.color` la MUC DAM: bo ghi mac dinh ve phu de TRANG, tren giay la mat sach.",
+    "",
+    "⚠ KHOÁ `theme.variables` PHẢI TRÙNG CẢ TÊN LẪN GIÁ TRỊ với bảng màu trong",
+    "style.css. Trình sửa đọc file này và GHI ĐÈ :root lúc quay, nên lệch giá trị là",
+    "video ra MÀU CŨ trong khi mở deck bằng trình duyệt vẫn thấy màu mới — đúng bẫy đã",
+    "dính ngày 18/09/2026 khi đổi tông năm mẫu ngang. Đổi bảng màu thì đổi CẢ HAI,",
+    "kèm `visuals.backgroundColor` = `--bg-dark`."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#eef2f7",
+      "--primary": "#1e40af",
+      "--primary-light": "#3b82f6",
+      "--primary-dark": "#172554",
+      "--accent": "#0f766e",
+      "--accent-light": "#14b8a6",
+      "--info": "#1e40af",
+      "--success": "#15803d"
+    },
+    "customVariables": {
+      "--bg-dark": "#eef2f7",
+      "--primary": "#1e40af",
+      "--primary-light": "#3b82f6",
+      "--primary-dark": "#172554",
+      "--accent": "#0f766e",
+      "--accent-light": "#14b8a6",
+      "--info": "#1e40af",
+      "--success": "#15803d"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#0f172a",
+    "activeColor": "#1e40af",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#eef2f7",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Đưa một bản vá lên máy chủ thật, làm đúng bốn bước.",
+      "Bước một là chạy hết bộ kiểm ngay tại máy mình. Bước hai là đẩy lên một nhánh riêng chứ không đẩy thẳng vào nhánh chính. Bước ba là chạy thử trên máy chủ giống máy thật. Và bước bốn là mở dần cho một phần người dùng trước.",
+      "Bước một làm việc rẻ nhất trước. Lỗi bắt được ở máy mình rẻ hơn gấp nhiều lần lỗi bắt trên máy chủ. Bộ kiểm chạy hai phút, ngắn hơn một lần đẩy hỏng rồi quay lại.",
+      "Bước hai là mỗi thay đổi một nhánh riêng, để nhánh chính luôn ở trạng thái chạy được. Bước ba là máy chủ thử phải giống máy thật, vì khác cấu hình thì kiểm chỉ cho vui.",
+      "Bước bốn thì đừng mở cho tất cả cùng lúc. Mở cho năm phần trăm người dùng rồi xem số liệu trong một giờ. Số liệu yên thì mở tiếp, có gì lạ thì đóng lại trong một phút.",
+      "Chỗ hay hỏng là bỏ bước vì đang vội. Vá gấp mà bỏ bước chạy thử là đổi một sự cố lấy hai. Lúc vội chính là lúc quy trình có giá trị nhất.",
+      "Bốn bước, làm đủ mỗi lần. Làm đủ thì nhanh hơn làm tắt rồi ngồi sửa."
+    ]
+  }
+}

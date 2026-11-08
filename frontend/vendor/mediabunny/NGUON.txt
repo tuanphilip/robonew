@@ -1,0 +1,9 @@
+Mediabunny 1.59.1 — https://mediabunny.dev
+Giấy phép: Mozilla Public License 2.0 (LICENSE.txt). Tệp mediabunny.min.mjs là bản dựng
+NGUYÊN VẸN của gói npm, không sửa gì:
+  npm: mediabunny@1.59.1  (dist/bundles/mediabunny.min.mjs)
+  integrity: sha512-K6vFvOZ7x36fqP3MaFFWFLYEfGF192qY4LQ6QB+L5eB74SUJjEgq9ZRztYpk9RJOjSyxooPZBV4WE0k8PKcjaQ==
+  mã nguồn: https://github.com/Vanilagy/mediabunny (thẻ v1.59.1) — hoặc thư mục src/ của gói npm.
+Dùng cho: xem trước đúng từng khung trong trình dựng video (src/ui-classic/render/dung-khung.js).
+Nâng bản: tải gói mới (npm pack mediabunny@<bản>, đối chiếu integrity với `npm view`), chép đè
+hai tệp, sửa số bản ở đây — chọn bản đã phát hành ít nhất hai tuần.

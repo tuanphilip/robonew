@@ -1,0 +1,425 @@
+/* ====================================================================== */
+/*  TRÌNH DỰNG VIDEO — Thư viện · khối người dùng trên timeline · lớp xem  */
+/*  trước bản dựng · bảng Khối (docs/video-editor/KE-HOACH.md, GĐ 1).      */
+/*                                                                        */
+/*  Cùng tinh thần timeline.css: NHẸ MẮT — nền nhạt, không viền dày, chữ   */
+/*  chỉ hiện khi đủ chỗ. Màu/cỡ/khoảng cách đều qua token (`verify:css`).  */
+/* ====================================================================== */
+
+/* ── BA TAB ở cột trái (Tạo bằng AI · AI agent · Thư viện) ──────────────
+   Cột 340px chia ba thì nhãn "Tạo bằng AI" bị cụt ở cỡ chữ cũ — hạ một bậc chữ và
+   khe khi hàng tab có từ ba nút. */
+.rl-tab:has(> .rl-tab-nut:nth-of-type(3)) .rl-tab-nut {
+  font-size: var(--text-sm); gap: var(--sp-4); padding-left: var(--sp-2); padding-right: var(--sp-2);
+}
+
+/* ── TAB THƯ VIỆN (bảng phải từ 16/10/2026 — render/tab-phai.js dời `#paneThuVien` vào `.tv-phai`) ─── */
+.tv-phai { display: flex; flex-direction: column; }
+.tv-phai > #paneThuVien { flex: 1 1 auto; min-height: 0; }
+.tv {
+  position: relative;
+  display: flex; flex-direction: column; gap: var(--sp-10);
+  min-height: 100%;
+  padding: var(--sp-4) 0 var(--sp-12);
+}
+.tv-dau { display: flex; flex-direction: column; gap: var(--sp-8); }
+.tv-nhap {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-6);
+  padding: var(--sp-8) var(--sp-12);
+  border: 1px dashed var(--control-line); border-radius: var(--radius-md);
+  background: var(--surface-mo); color: var(--text);
+  font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.tv-nhap:hover { background: var(--surface); border-color: var(--brand); }
+.tv-nhap .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tv-nhap svg { width: 15px; height: 15px; }
+.tv-loc { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
+.tv-loc-nut {
+  padding: var(--sp-4) var(--sp-10);
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--surface-mo); color: var(--text-faint);
+  font-size: var(--text-xs); cursor: pointer;
+}
+.tv-loc-nut:hover { color: var(--text); }
+.tv-loc-nut.dang-chon { background: var(--brand-mo); color: var(--text); }
+.tv-bao, .tv-tien {
+  padding: var(--sp-8) var(--sp-10); border-radius: var(--radius-sm);
+  font-size: var(--text-xs); color: var(--text-faint); background: var(--surface-mo);
+}
+.tv-bao.loi { color: var(--danger-text); background: var(--danger-bg); }
+.tv-bao.canh-bao { color: var(--warn-text); background: color-mix(in srgb, var(--warn) 10%, transparent); }
+.tv-tien { color: var(--text-soft); }
+
+.tv-luoi {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--sp-8);
+}
+.tv-o {
+  position: relative;
+  display: flex; flex-direction: column; gap: var(--sp-4);
+  padding: var(--sp-4);
+  border-radius: var(--radius-sm);
+  background: var(--surface-mo);
+  cursor: grab;
+  user-select: none;
+}
+.tv-o:hover { background: var(--surface); }
+.tv-o:active { cursor: grabbing; }
+.tv-anh {
+  display: grid; place-items: center;
+  aspect-ratio: 16 / 10; overflow: hidden;
+  border-radius: var(--radius-xs);
+  background: var(--tl-lop); color: var(--tl-lop-chu);
+}
+.tv-loai-tieng .tv-anh { background: var(--tl-tieng-nd); color: var(--tl-tieng-nd-chu); }
+.tv-anh img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.tv-anh .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tv-anh svg { width: 20px; height: 20px; }
+.tv-anh .tv-song { width: 100%; height: 100%; }
+.tv-song path { stroke: currentColor; stroke-width: 1.2; fill: none; }
+.tv-gio {
+  position: absolute; right: var(--sp-8); top: var(--sp-8);
+  padding: 0 var(--sp-4); border-radius: var(--radius-xs);
+  background: var(--overlay); color: var(--chu-tren-phu);
+  font-size: var(--text-2xs); font-variant-numeric: tabular-nums;
+}
+.tv-proxy {
+  position: absolute; left: var(--sp-4); right: var(--sp-4); top: calc(var(--sp-4) + var(--sp-2));
+  height: 3px; border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--brand) var(--tv-phan, 0%), var(--overlay-nhe) var(--tv-phan, 0%));
+}
+.tv-ten {
+  display: flex; align-items: center; gap: var(--sp-4); min-width: 0;
+  font-size: var(--text-xs); color: var(--text-soft);
+}
+.tv-ten span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tv-ten .btn-icon { flex: none; background: none; box-shadow: none; color: var(--text-faint); }
+.tv-ten svg { width: 12px; height: 12px; }
+.tv-xoa {
+  position: absolute; left: var(--sp-8); top: var(--sp-8);
+  display: none; place-items: center;
+  width: 22px; height: 22px; padding: 0;
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--overlay); color: var(--chu-tren-phu); cursor: pointer;
+}
+.tv-o:hover .tv-xoa { display: grid; }
+.tv-xoa:hover { background: var(--danger-solid); }
+.tv-xoa .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tv-xoa svg { width: 12px; height: 12px; }
+.tv-trong {
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-6);
+  padding: var(--sp-24) var(--sp-12);
+  border: 1px dashed var(--control-line); border-radius: var(--radius-md);
+  text-align: center; color: var(--text-faint); font-size: var(--text-xs);
+}
+.tv-trong b { color: var(--text-soft); font-size: var(--text-sm); }
+.tv-trong .btn-icon { background: none; box-shadow: none; color: var(--text-faint); }
+.tv-trong svg { width: 22px; height: 22px; }
+.tv-chan { margin-top: auto; font-size: var(--text-xs); color: var(--text-mo); }
+.tv-tha {
+  position: absolute; inset: 0; z-index: var(--z-pop);
+  display: grid; place-items: center;
+  border: 2px dashed var(--brand); border-radius: var(--radius-md);
+  background: var(--brand-mo); color: var(--text);
+  font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  pointer-events: none;
+}
+
+/* ── TIMELINE: track + khối của người dùng ─────────────────────────────── */
+.tl-ten.nd .tl-ten-chu { color: var(--text-soft); }
+.tl-huy.nd { background: var(--tl-lop); color: var(--tl-lop-chu); }
+.tl-huy.a.nd { background: var(--tl-tieng-nd); color: var(--tl-tieng-nd-chu); }
+.tl-tr-nut {
+  flex: none; display: grid; place-items: center;
+  width: 18px; height: 18px; padding: 0; margin-left: auto;
+  border: 0; border-radius: var(--radius-xs);
+  background: none; color: var(--text-mo); cursor: pointer;
+}
+.tl-tr-nut + .tl-tr-nut { margin-left: 0; }
+.tl-tr-nut:hover { background: var(--surface); color: var(--text); }
+.tl-tr-nut.bat { color: var(--warn-text); }
+.tl-tr-nut .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tl-tr-nut svg { width: 12px; height: 12px; }
+.tl-ten-goc { cursor: pointer; }
+.tl-ten-goc:hover .tl-ten-chu { color: var(--text); }
+/* Track gốc đang chọn (C1 / A1 / A2 — bảng Thuộc tính đang hiện nó): tên đậm màu như khi rê chuột. */
+.tl-ten-goc.dang-chon .tl-ten-chu { color: var(--text); font-weight: var(--weight-semibold); }
+/* Bốn nút (+ Hình · + Tiếng · + Chữ · + Giọng) trong cột tên (--tl-dau-w): một hàng, không xuống dòng giữa "+" và chữ. */
+.tl-them { gap: var(--sp-2); padding-left: var(--sp-8); }
+.tl-them-nut {
+  flex: none; white-space: nowrap;
+  padding: 0 var(--sp-4); height: 18px;
+  border: 0; border-radius: var(--radius-xs);
+  background: var(--surface-mo); color: var(--text-faint);
+  font-size: var(--text-2xs); cursor: pointer;
+}
+.tl-them-nut:hover { background: var(--surface); color: var(--text); }
+.tl-lan.nd { background: color-mix(in srgb, var(--tl-lop) 18%, var(--tl-lan)); }
+.tl-lan.nd-tieng { background: color-mix(in srgb, var(--tl-tieng-nd) 18%, var(--tl-lan)); }
+.tl-lan.tat .tl-khoi { opacity: 0.4; }
+.tl-lan.tha { box-shadow: inset 0 0 0 1px var(--tl-dau-phat); }
+
+.tl-khoi.nd { background: var(--tl-lop); color: var(--tl-lop-chu); cursor: grab; }
+.tl-khoi.nd.nd-tieng { background: var(--tl-tieng-nd); color: var(--tl-tieng-nd-chu); }
+.tl-lan.nd-tieng .tl-khoi.nd.nd-video { background: var(--tl-tieng-nd); color: var(--tl-tieng-nd-chu); }
+.tl-khoi.nd.chon { box-shadow: inset 0 0 0 2px var(--tl-chon); }
+.tl-khoi.nd.khoa { cursor: default; }
+.tl-khoi.nd.lech { box-shadow: inset 0 0 0 1px var(--warn); }
+.tl-khoi.nd .tl-khoi-nhan { font-size: var(--text-2xs); }
+.tl-tay {
+  position: absolute; top: 0; bottom: 0; width: 6px; z-index: var(--z-base);
+  cursor: ew-resize;
+}
+.tl-tay.trai { left: 0; }
+.tl-tay.phai { right: 0; }
+.tl-khoi.nd:hover .tl-tay::after, .tl-khoi.nd.chon .tl-tay::after {
+  content: ''; position: absolute; top: 25%; bottom: 25%; width: 2px; left: var(--sp-2);
+  border-radius: var(--radius-pill); background: var(--tl-tay);
+}
+/* Dao cạo: khối cắt được (có tay kéo = sửa được: khối nội dung, đoạn V1, câu phụ đề) → chữ thập; làn dẫn xuất → cấm. */
+.bt-timeline.tl-cong-cu-cat .tl-khoi.nd,
+.bt-timeline.tl-cong-cu-cat .tl-khoi:has(> .tl-tay) { cursor: crosshair; }
+.bt-timeline.tl-cong-cu-cat .tl-khoi.nd.khoa,
+.bt-timeline.tl-cong-cu-cat .tl-khoi.giong,
+.bt-timeline.tl-cong-cu-cat .tl-khoi.nhac,
+.bt-timeline.tl-cong-cu-cat .tl-khoi.sfx { cursor: not-allowed; }
+body.tl-dang-sua, body.tl-dang-sua * { cursor: grabbing; user-select: none; }
+.tl-vach-tha {
+  position: absolute; top: 0; bottom: 0; width: 0; z-index: calc(var(--z-base) + 2);
+  border-left: 2px solid var(--tl-dau-phat); pointer-events: none;
+}
+
+/* Thanh công cụ: cụm công cụ sửa (nút "Xuất bản dựng" đã bỏ 12/10/2026 — Tạo video tự áp timeline) */
+.tl-cum-sua { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.tl-lat .btn-icon { transform: scaleX(-1); }
+
+/* ── LỚP XEM TRƯỚC BẢN DỰNG (đè lên video slide) ───────────────────────── */
+/* Nút "Quay lại" / "×" / nhãn của lớp video phải nằm TRÊN các khối ghép — khối to
+   (hay logo đặt ở góc) không được che mất lối thoát. */
+.sk-video .sk-video-lui, .sk-video .sk-video-dong, .sk-video .sk-video-nhan { z-index: calc(var(--z-base) + 1); }
+.dx-lop {
+  position: absolute; z-index: var(--z-base);
+  overflow: hidden; pointer-events: none;
+}
+.dx-khoi {
+  position: absolute; display: block; object-fit: fill;
+  transform-origin: center center;
+  pointer-events: auto; cursor: pointer;
+}
+.dx-am { display: none; }
+/* Lớp bọc mỗi khối hình — phủ cả khung xuất, mang mặt nạ chuyển cảnh (dung-xem.js#apMat). Không bắt chuột: khối bên
+   trong tự bắt (`.dx-khoi` pointer-events: auto). */
+.dx-mat {
+  position: absolute; inset: 0; pointer-events: none;
+  mask-repeat: no-repeat; mask-size: 100% 100%;
+}
+.dx-nhay { position: absolute; inset: 0; pointer-events: none; }
+/* Đầu phát đã qua cuối video slide: nền ĐEN như bản xuất (tpad màu đen). */
+.dx-lop.qua-cuoi { background: var(--dx-qua-cuoi); }
+.dx-chon {
+  position: absolute; z-index: var(--z-pop);
+  box-shadow: 0 0 0 1px var(--dx-chon);
+  transform-origin: center center;
+  pointer-events: auto; cursor: move;
+}
+.dx-chon.khoa { cursor: default; }
+.dx-goc {
+  position: absolute; width: 10px; height: 10px;
+  margin: calc(var(--sp-4) * -1);
+  border-radius: var(--radius-xs);
+  background: var(--dx-chon);
+}
+.dx-chon.khoa .dx-goc { display: none; }
+.dx-goc[data-goc="tt"] { left: 0; top: 0; cursor: nwse-resize; }
+.dx-goc[data-goc="tp"] { right: 0; top: 0; cursor: nesw-resize; }
+.dx-goc[data-goc="dt"] { left: 0; bottom: 0; cursor: nesw-resize; }
+.dx-goc[data-goc="dp"] { right: 0; bottom: 0; cursor: nwse-resize; }
+
+/* ── BẢNG KHỐI (cột phải) ──────────────────────────────────────────────── */
+.bk-than { display: flex; flex-direction: column; gap: var(--sp-12); }
+.bk-trong { padding: var(--sp-16) var(--sp-4); color: var(--text-faint); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+.bk-dau { display: flex; flex-direction: column; gap: var(--sp-2); }
+.bk-ten { font-size: var(--text-sm); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bk-phu { font-size: var(--text-xs); color: var(--text-faint); }
+.bk-nhom {
+  display: flex; flex-direction: column; gap: var(--sp-8);
+  padding: var(--sp-10) var(--sp-12);
+  border-radius: var(--radius-md); background: var(--surface-mo);
+}
+.bk-nhom-ten { font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--text-soft); }
+.bk-hang {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) 56px 28px; align-items: center; gap: var(--sp-6);
+  font-size: var(--text-xs); color: var(--text-soft);
+}
+.bk-truot { width: 100%; accent-color: var(--brand); }
+.bk-so {
+  width: 100%; padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-xs);
+  background: var(--field-bg); color: var(--text);
+  font-size: var(--text-xs); font-variant-numeric: tabular-nums;
+}
+.bk-dv { color: var(--text-mo); }
+.bk-neo { grid-template-columns: auto minmax(0, 1fr); }
+.bk-nut-hang { display: flex; gap: var(--sp-8); }
+.bk-nut {
+  flex: 1 1 0; padding: var(--sp-8);
+  border: 0; border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); font-size: var(--text-xs); cursor: pointer;
+}
+.bk-nut:hover:not(:disabled) { background: var(--surface-strong); }
+.bk-nut-xoa:hover:not(:disabled) { background: var(--danger-bg-hover); color: var(--danger-text); }
+.bk-nut:disabled { color: var(--text-mo); cursor: default; }
+
+/* ── Giai đoạn 2: keyframe, chuyển cảnh, cắt khung, chữ tiêu đề ─────────── */
+/* Hàng có keyframe: ⏱ · nhãn · thanh trượt · số · đơn vị · (◀ ◆ ▶ khi đang có hoạt ảnh) */
+.bk-hang.co-kf { grid-template-columns: 18px 56px minmax(0, 1fr) 52px 22px auto; }
+.bk-kf-nut {
+  display: inline-grid; place-items: center; width: 18px; height: 18px; padding: 0;
+  border: 0; border-radius: var(--radius-xs);
+  background: none; color: var(--text-mo); font-size: var(--text-2xs); line-height: var(--leading-none); cursor: pointer;
+}
+.bk-kf-nut:hover:not(:disabled) { background: var(--surface-strong); color: var(--text); }
+.bk-kf-nut:disabled { opacity: 0.35; cursor: default; }
+.bk-dong-ho.bat { color: var(--brand); }
+.bk-kim.bat { color: var(--brand); }
+.bk-kf-cum { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.bk-hang-chon { grid-template-columns: 64px minmax(0, 1fr); }
+.bk-chon {
+  width: 100%; padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-xs);
+  background: var(--field-bg); color: var(--text); font-size: var(--text-xs);
+}
+.bk-mau {
+  width: 44px; height: 22px; padding: 0;
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-xs); background: none; cursor: pointer;
+}
+.bk-chu-nd {
+  width: 100%; min-height: 48px; padding: var(--sp-4) var(--sp-6); resize: vertical;
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-xs);
+  background: var(--field-bg); color: var(--text); font-family: var(--font-ui); font-size: var(--text-sm);
+}
+.bk-lat .bk-nut.bat { background: var(--brand-mo); color: var(--text); box-shadow: inset 0 0 0 1px var(--brand); }
+
+/* Nền khung xuất (16:9… trên deck khác khổ): video slide phóng tràn, nhoè — như bản xuất. */
+.dx-nen { position: absolute; display: block; pointer-events: none; border-radius: var(--radius-md); }
+.tv-nut-dau { display: flex; gap: var(--sp-6); }
+.tv-nut-dau .tv-nhap:first-child { flex: 1 1 auto; }
+.tv-chu { flex: 0 0 auto; font-weight: var(--weight-semibold); }
+.sk-video.dx-co-khung { background: var(--bg); }
+
+/* ── Giai đoạn 3: thư viện dùng chung + mẫu ──────────────────────────── */
+.tv-che { display: flex; gap: var(--sp-2); padding: var(--sp-2); border-radius: var(--radius-md); background: var(--surface-mo); }
+.tv-che-nut {
+  flex: 1 1 0; padding: var(--sp-6) var(--sp-8);
+  border: 0; border-radius: var(--radius-sm);
+  background: none; color: var(--text-soft); font-size: var(--text-xs); font-weight: var(--weight-semibold); cursor: pointer;
+}
+.tv-che-nut:hover { color: var(--text); }
+.tv-che-nut.dang-chon { background: var(--surface); color: var(--text); }
+.tv-sao { left: auto; right: var(--sp-8); font-size: var(--text-xs); }
+.tv-trong-chu { grid-column: 1 / -1; padding: var(--sp-16) var(--sp-4); color: var(--text-faint); font-size: var(--text-sm); line-height: var(--leading-relaxed); }
+.tv-luoi.tv-luoi-mau { display: flex; flex-direction: column; gap: var(--sp-6); }
+.tv-mau {
+  position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: center; gap: var(--sp-8);
+  padding: var(--sp-6); border-radius: var(--radius-md); background: var(--surface-mo);
+}
+.tv-mau-anh { width: 64px; height: 40px; overflow: hidden; border-radius: var(--radius-sm); background: var(--surface); }
+.tv-mau-anh img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tv-mau-than { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; font-size: var(--text-xs); color: var(--text-faint); }
+.tv-mau-than b { color: var(--text); font-size: var(--text-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tv-mau .tv-xoa { top: var(--sp-6); left: var(--sp-6); }
+.tv-mau:hover .tv-xoa { display: grid; }
+.tv-mau-luu { display: flex; gap: var(--sp-6); }
+/* Lưu cả dự án làm mẫu dựng video — dùng chung ô tên ở trên, chỉ hiện ở dự án video. */
+.tv-mau-du-an[hidden] { display: none; }
+.tv-mau-ten {
+  flex: 1 1 auto; min-width: 0; padding: var(--sp-6) var(--sp-8);
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-md);
+  background: var(--field-bg); color: var(--text); font-size: var(--text-sm);
+}
+
+/* Phụ đề đã sửa trên lớp xem trước (dung-xem.js vePhuDe): khung CSS của deck, phóng theo vùng video. */
+.dx-phude {
+  position: absolute; z-index: calc(var(--z-pop) - 1);
+  overflow: hidden; pointer-events: none; transform-origin: 0 0;
+}
+
+/* ── GĐ2.1: giọng đọc thành khối — hộp "+ Giọng" (render/giong-khoi.js) + nhóm "Giọng đọc" ở Thuộc tính ── */
+.gk-hop .bs-hop-khung { width: min(520px, calc(100vw - var(--sp-32))); }
+.gk-than { display: flex; flex-direction: column; gap: var(--sp-8); padding-top: var(--sp-12); }
+.gk-chu {
+  width: 100%; min-height: 96px; padding: var(--sp-6) var(--sp-8); resize: vertical;
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-sm);
+  background: var(--field-bg); color: var(--text); font-family: var(--font-ui); font-size: var(--text-sm);
+}
+.gk-dem { margin-top: calc(-1 * var(--sp-4)); text-align: right; font-size: var(--text-2xs); color: var(--text-faint); }
+.gk-giong { display: flex; flex-direction: column; gap: var(--sp-8); }
+.gk-hang { display: grid; grid-template-columns: 84px minmax(0, 1fr); align-items: center; gap: var(--sp-8); }
+.gk-nhan { font-size: var(--text-xs); color: var(--text-soft); }
+.gk-chon {
+  width: 100%; min-width: 0; height: 28px; padding: 0 var(--sp-6);
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-xs);
+  background: var(--field-bg); color: var(--text); font-size: var(--text-xs);
+}
+.gk-toc { width: 96px; }
+.gk-phu { font-size: var(--text-2xs); color: var(--text-faint); }
+.gk-bao { padding: var(--sp-6) var(--sp-8); border-radius: var(--radius-sm); font-size: var(--text-xs); background: var(--surface-mo); color: var(--text-soft); }
+.gk-bao.loi { color: var(--danger-text); background: var(--danger-bg); border: 1px solid var(--danger-line); }
+.gk-cuoi { display: flex; justify-content: flex-end; gap: var(--sp-8); margin-top: var(--sp-4); }
+.gk-ok { background: var(--brand); color: var(--brand-text); }
+.gk-ok:hover:not(:disabled) { background: var(--brand); filter: brightness(1.08); }
+.bk-giong-chu {
+  padding: var(--sp-4) var(--sp-6); border-radius: var(--radius-xs);
+  background: var(--surface-mo); color: var(--text); font-size: var(--text-xs); white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+/* ── GĐ2.2: Thư viện → Nhạc (nhạc có sẵn, thu-vien.js oNhac) ── */
+.tv-mau.tv-nhac { grid-template-columns: 40px minmax(0, 1fr) auto auto; cursor: grab; }
+.tv-nhac-anh { width: 40px; display: grid; place-items: center; color: var(--info); }
+.tv-nhac-anh .btn-icon { background: none; box-shadow: none; color: inherit; }
+.tv-nghe { min-width: 64px; }
+/* Bốn chế độ (Dự án · Dùng chung · Mẫu · Nhạc) trên một hàng — không bẻ "Dùng chung" làm hai dòng. */
+.tv-che-nut { white-space: nowrap; }
+[data-dau-nhac] .tv-phu, [data-dau-hieu-ung] .tv-phu { font-size: var(--text-xs); color: var(--text-faint); line-height: var(--leading-snug); }
+/* Mục "Hiệu ứng" (đợt 1): tên nhóm + lưới lớp phủ (ảnh thu nhỏ trên nền xám dịu — lớp trong suốt mới thấy được). */
+/* Mẫu dựng video: dải "Lấp nhanh" ở Thư viện → Dự án + nhãn "Ô n" trên khối timeline. */
+.tv-lap {
+  display: flex; align-items: center; gap: var(--sp-8); padding: var(--sp-8) var(--sp-10);
+  border-radius: var(--radius-md); background: var(--info-bg); color: var(--text); font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+}
+.tv-lap[hidden] { display: none; }
+.tv-lap-chu { flex: 1 1 auto; min-width: 0; }
+.tl-o {
+  flex: none; margin-right: var(--sp-4); padding: 0 var(--sp-4); border-radius: var(--radius-sm);
+  background: var(--surface-strong); font-size: var(--text-2xs); font-weight: var(--weight-bold);
+}
+.tl-o.cho { outline: 1px dashed currentColor; outline-offset: -1px; }
+.tv-nhom-ten { margin-top: var(--sp-6); font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--text-soft); }
+.tv-lp-luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: var(--sp-6); }
+.tv-lp {
+  display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-4);
+  padding: var(--sp-4); border: 0; border-radius: var(--radius-md); background: var(--surface-mo);
+  color: var(--text); font-size: var(--text-2xs); cursor: grab; text-align: center;
+}
+.tv-lp:hover { background: var(--surface); }
+.tv-lp-anh {
+  display: block; aspect-ratio: 9 / 16; border-radius: var(--radius-sm); overflow: hidden;
+  background: linear-gradient(160deg, var(--tv-lp-nen-a), var(--tv-lp-nen-b));
+}
+.tv-lp-anh.ngang { aspect-ratio: 16 / 9; }
+.tv-lp-anh img { display: block; width: 100%; height: 100%; }
+.tv-lp-ten { line-height: var(--leading-snug); }
+
+/* ── GĐ3.5: thêm bộ slide vào dự án video (render/them-slide.js) ── */
+.ts-hop .bs-hop-khung { width: min(640px, calc(100vw - var(--sp-32))); }
+.ts-than { display: flex; flex-direction: column; gap: var(--sp-10); padding-top: var(--sp-12); }
+.ts-luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--sp-8); max-height: 46vh; overflow-y: auto; }
+.ts-o {
+  display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-4);
+  border: 1px solid var(--control-line-soft); border-radius: var(--radius-sm); background: var(--surface-mo);
+  color: var(--text); font-size: var(--text-xs); text-align: left; cursor: pointer;
+}
+.ts-o img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-xs); background: var(--surface); }
+.ts-o.chon { border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+.ts-ten { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

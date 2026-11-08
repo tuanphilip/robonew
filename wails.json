@@ -1,0 +1,9 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "robonew",
+  "outputfilename": "robonew.exe",
+  "author": {
+    "name": "Tuan Philip",
+    "email": "tuanphuong.vu.hut@gmail.com"
+  }
+}

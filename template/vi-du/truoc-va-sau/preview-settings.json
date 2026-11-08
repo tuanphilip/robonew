@@ -1,0 +1,86 @@
+{
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--primary": "#e8a33d",
+      "--primary-light": "#ffd08a",
+      "--primary-dark": "#9c6516",
+      "--accent": "#3c5570",
+      "--accent-light": "#9db4c9",
+      "--info": "#5b8ab5",
+      "--success": "#63c9a4",
+      "--bg-dark": "#0e1319"
+    },
+    "customVariables": {
+      "--primary": "#e8a33d",
+      "--primary-light": "#ffd08a",
+      "--primary-dark": "#9c6516",
+      "--accent": "#3c5570",
+      "--accent-light": "#9db4c9",
+      "--info": "#5b8ab5",
+      "--success": "#63c9a4",
+      "--bg-dark": "#0e1319"
+    }
+  },
+  "bgm": {
+    "mode": "custom",
+    "preset": "ambient",
+    "volume": 0.2,
+    "custom": {
+      "name": "meta.mp3",
+      "path": "preview-assets/bgm/meta.mp3",
+      "url": "preview-assets/bgm/meta.mp3"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#ffffff",
+    "activeColor": "#e8a33d",
+    "fontSize": 18,
+    "bottom": 100,
+    "maxLines": 1
+  },
+  "visuals": {
+    "colorMode": "dark",
+    "backgroundColor": "#0e1319",
+    "gridEnabled": false,
+    "gridLight": "#5b8ab5",
+    "iconGlow": "#e8a33d",
+    "iconBacklight": "#3c5570",
+    "iconLight": "#9db4c9",
+    "mainLight": "#9db4c9",
+    "mainLightPosition": "top-center",
+    "mainLightIntensity": "soft",
+    "softLight": "#e8a33d",
+    "softLightPosition": "bottom-right",
+    "softLightIntensity": "medium",
+    "backgroundFx": "scan"
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Năm một chín sáu tư, đây là hồ lớn thứ tư thế giới. Sáu mươi hai năm sau, nó gần như biến mất.",
+      "Biển Aral nằm giữa Kazakhstan và Uzbekistan. Rộng tới mức trên ảnh vệ tinh nó trông như một cái biển thật.",
+      "Rồi người ta chuyển dòng hai con sông nuôi nó, là Amu Darya và Syr Darya. Nước được dẫn đi tưới bông trên vùng đất khô. Hệ thống tưới lại rò rỉ, nên mất thêm nước dọc đường.",
+      "Đến hôm nay hồ đã mất khoảng chín mươi phần trăm lượng nước. Chỗ từng là đáy biển giờ là sa mạc muối.",
+      "Đặt cạnh nhau thì thấy rõ. Từ đầy nước xuống còn khoảng một phần mười.",
+      "Nhưng phần phía bắc đang quay lại. Năm hai nghìn không trăm lẻ năm người ta xây một con đập dài mười ba cây số để giữ nước lại, và lượng nước đã tăng trở lại."
+    ],
+    "transitionSounds": [
+      "dramatic",
+      "minimal",
+      "bass",
+      "boom",
+      "gong",
+      "rise"
+    ],
+    "revealSounds": [
+      "tick",
+      "click",
+      "click",
+      "blip",
+      "bell",
+      "sparkle"
+    ]
+  }
+}

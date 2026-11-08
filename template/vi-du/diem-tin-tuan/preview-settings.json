@@ -1,0 +1,64 @@
+{
+  "_ghiChu": [
+    "Thiet lap cua mau DIEM TIN TUAN (TIN-07) — NGANG 16:9, NEN SANG.",
+    "",
+    "⚠ `visuals.colorMode` la `cream`, khong phai `dark`.",
+    "⚠ `subtitles.color` la MUC DAM — nen trang nga ma de phu de trang la mat sach.",
+    "⚠ `subtitles.fontSize` DE LEN `--subtitle-font-size` trong style.css.",
+    "⚠ KHONG khai `visuals.backgroundFx`: nen giay da co van soi san.",
+    "⚠ `theme.variables` PHAI TRUNG CA TEN LAN GIA TRI voi :root trong style.css;",
+    "bang duoi day duoc SINH RA tu chinh style.css chu khong go tay."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#faf7f0",
+      "--primary": "#b5342a",
+      "--primary-light": "#d2544a",
+      "--primary-dark": "#7d1f18",
+      "--accent": "#3c3831",
+      "--accent-light": "#6a6459",
+      "--info": "#2f5f86",
+      "--success": "#1f7a52",
+      "--warning": "#a8620f",
+      "--danger": "#b5342a"
+    },
+    "customVariables": {
+      "--bg-dark": "#faf7f0",
+      "--primary": "#b5342a",
+      "--primary-light": "#d2544a",
+      "--primary-dark": "#7d1f18",
+      "--accent": "#3c3831",
+      "--accent-light": "#6a6459",
+      "--info": "#2f5f86",
+      "--success": "#1f7a52",
+      "--warning": "#a8620f",
+      "--danger": "#b5342a"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#14120f",
+    "activeColor": "#b5342a",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#faf7f0",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Điểm tin vũ trụ, tuần mười hai đến mười tám tháng chín, năm tin.",
+      "Tin một. Hai tầng đẩy nhiên liệu rắn cho chuyến Artemis ba gần xong, mỗi tầng cao năm mươi tư mét và góp hơn bảy mươi lăm phần trăm lực đẩy.",
+      "Tin hai. Bốn phi hành gia của chuyến Crew mười ba vào cách ly hôm mười bảy tháng chín, chờ phóng lên Trạm Vũ trụ đầu tháng mười.",
+      "Tin ba. Một nghiên cứu trên Nature cho thấy mọi lỗ đen đều phun tia khi tốc độ nuốt vật chất chạm hai phần trăm giới hạn Eddington.",
+      "Tin bốn. Ngôi sao tái sinh mang tên Sakurai, phát hiện năm một chín chín sáu, đang tiến vào pha giống sao Wolf-Rayet giai đoạn muộn.",
+      "Tin năm. Kính James Webb tìm ra những sao lùn nâu chỉ nặng gấp hai lần Mộc tinh, ở vùng IC ba bốn tám cách ta khoảng một nghìn năm ánh sáng.",
+      "Đáng chú ý nhất tuần này là mấy sao lùn nâu tí hon đó, vì chúng đẩy ranh giới giữa sao và hành tinh xuống thấp hơn nữa. Còn bạn thấy tin nào đáng chú ý nhất?"
+    ]
+  }
+}

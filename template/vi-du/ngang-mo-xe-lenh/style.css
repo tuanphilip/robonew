@@ -1,0 +1,331 @@
+/* ══ MẪU MỔ XẺ MỘT LỆNH — NGANG 16:9 (TC-04) ═══════════════════════════════
+ *
+ * Khung thiết kế **1232 × 693** (693 × 16/9 = 1232 chằn → video không viền
+ * đen). Mọi `px` là px CỦA KHUNG; bộ ghi phóng bằng `zoom`.
+ *
+ * ⚠ VÙNG AN TOÀN [100, 493]. `main/kiemDeck.js` đo hộp bao của mọi
+ * `.slide-element`; ra ngoài là TRƯỢT. `.than` khai dải đó bằng padding —
+ * đừng nới, hãy hạ thang chữ.
+ *
+ * ⚠ VÌ SAO PHẢI LÀ KHUNG NGANG: biểu đồ có BỐN mức giá nằm ngang, mỗi mức một
+ * nhãn ở lề trái. Ở khung dọc 390px, bốn nhãn chồng lên nhau và đè lên chính
+ * đường giá. Ba thẻ thông số cũng vậy: đặt cạnh nhau thì so được ba mức giá
+ * trong một cái liếc, xếp chồng thì thành một danh sách.
+ *
+ * ══ TÔNG MÀU RIÊNG: GIẤY SỔ TAY · MỰC XANH · DẤU ĐỎ ═════════════════════
+ * ⚠ ĐÂY LÀ MẪU NỀN SÁNG (`visuals.colorMode: "cream"`), giấy be ngả xám —
+ * khác cả ba mẫu nền sáng bên cạnh: bản tin nền kem, hồ sơ nền giấy cát ấm,
+ * bảng giá nền trắng băng lạnh. Deck này là một trang SỔ TAY viết tay: mực
+ * xanh đen cho số liệu, dấu đỏ cho chỗ sai. Đỏ chỉ dùng đúng ở chỗ sai — tô
+ * đỏ thêm chỗ khác là mất hết trọng lượng của nó.
+ *
+ * ⚠ NỀN SÁNG THÌ PHỤ ĐỀ PHẢI ĐỔI THEO. Bộ ghi mặc định `--subtitle-color:
+ * #ffffff`; `preview-settings.json` bên cạnh đã đặt màu mực đậm.
+ */
+:root {
+  /* ══ BẢNG MÀU CHUẨN — ĐỪNG ĐỔI TÊN ══════════════════════════════════════ */
+  --bg-dark: #f1f2ee;
+  --primary: #1e3a5f;          /* mực xanh đen */
+  --primary-light: #3f6591;
+  --primary-dark: #12263f;
+  --accent: #b91c1c;           /* dấu đỏ — CHỈ dùng ở chỗ sai */
+  --accent-light: #dc2626;
+  --info: #0f766e;
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #b91c1c;
+
+  /* ── Tên đọc được, bắc cầu ── */
+  --nen: var(--bg-dark);
+  --nen-2: #e5e7e0;
+  --chu: #1b2431;
+  --chu-mem: #4c5665;
+  --chu-mo: #8a93a0;
+  --nhan-mau: var(--primary);
+  --canh-bao-mau: var(--accent);
+  --vien: rgba(30, 45, 70, 0.16);
+  --vien-sang: rgba(255, 255, 255, 0.88);
+
+  /* ── Dải an toàn ── */
+  --an-toan-tren: 100px;
+  --an-toan-duoi: 200px;
+  --le: 84px;
+
+  /* ── Thang chữ ── */
+  --co-nhan: 19px;
+  --co-tieu-de: 50px;
+  --co-tieu-de-lon: 68px;
+  --co-than: 27px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ⚠ 22px: khung ngang rộng 1232 nên cỡ mặc định 15px (tính cho khung dọc
+     390) chỉ chiếm 39% bề ngang — chữ bé tí lọt thỏm giữa màn hình. */
+  --subtitle-font-size: 22px;
+  --subtitle-bottom: 56px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: #e0e2da;
+  color: var(--chu);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.main-wrapper { height: 100%; display: grid; place-items: center; }
+
+/* ⚠ Bộ ghi GHI ĐÈ width/height/zoom lúc quay; giá trị đây chỉ để xem trước. */
+.slide-container {
+  position: relative;
+  width: 1232px; height: 693px;
+  overflow: hidden;
+  background: var(--nen);
+  border-radius: 18px;
+  counter-reset: so-slide;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; opacity: 0;
+  counter-increment: so-slide;
+  transition: opacity 0.42s ease;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* ══ NỀN BA LỚP ═══════════════════════════════════════════════════════════
+ * Lớp giữa là DÒNG KẺ NGANG của giấy sổ tay — không phải lưới ô vuông kiểu
+ * màn hình giao dịch. ⚠ NỀN SÁNG NÊN LỚP PHỦ NGOÀI LÀ VIỀN XÁM NHẠT, KHÔNG
+ * PHẢI ĐEN ĐẶC: phủ đen như bản nền tối thì giấy hoá xám bùn. */
+.nen { position: absolute; inset: 0; }
+.nen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(to bottom, var(--vien) 0 1px, transparent 1px 38px);
+  opacity: 0.4;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 46%, #000 14%, transparent 82%);
+}
+.nen::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 98% 98% at 50% 46%, transparent 54%, rgba(40, 55, 75, 0.16) 100%);
+}
+
+.nen-1 { background:
+  radial-gradient(ellipse 62% 78% at 20% 20%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 66%),
+  radial-gradient(ellipse 50% 62% at 84% 82%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 64%), var(--nen); }
+.nen-2 { background: radial-gradient(ellipse 66% 74% at 50% 10%, color-mix(in srgb, var(--primary) 9%, transparent), transparent 68%), var(--nen); }
+.nen-3 { background: radial-gradient(ellipse 60% 76% at 80% 72%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 66%), var(--nen); }
+.nen-4 { background: radial-gradient(ellipse 62% 78% at 18% 26%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 66%), var(--nen); }
+.nen-5 { background: radial-gradient(ellipse 62% 76% at 82% 30%, color-mix(in srgb, var(--info) 11%, transparent), transparent 66%), var(--nen); }
+.nen-6 { background:
+  radial-gradient(ellipse 82% 90% at 50% 50%, color-mix(in srgb, var(--primary) 11%, transparent), transparent 70%),
+  radial-gradient(ellipse 46% 58% at 84% 84%, color-mix(in srgb, var(--info) 9%, transparent), transparent 62%), var(--nen); }
+
+/* Số slide mờ góc trên phải. ⚠ Pseudo-element của `.slide`, KHÔNG phải
+   `.slide-element` — trang trí không được kéo hộp bao mà `kiemDeck` đo. */
+.slide::after {
+  content: counter(so-slide, decimal-leading-zero);
+  position: absolute; right: 54px; top: 18px; z-index: 1;
+  font-size: 84px; font-weight: 900; letter-spacing: -0.05em; line-height: 1;
+  color: transparent;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 20%, transparent), transparent 96%);
+  -webkit-background-clip: text; background-clip: text;
+  pointer-events: none;
+}
+.slide[data-bo-cuc="mo-dau"]::after { content: none; }
+
+/* ══ DẢI AN TOÀN KHAI BẰNG PADDING ════════════════════════════════════════ */
+.than {
+  position: relative; z-index: 2;
+  width: 100%; height: 100%;
+  padding: var(--an-toan-tren) var(--le) var(--an-toan-duoi);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 20px;
+}
+/* Chừa chỗ bên phải cho hình. ⚠ `padding-right` chứ KHÔNG `max-width`: hẹp cột
+   chữ lại thì tiêu đề 68px vỡ thêm dòng và hộp nội dung cao quá 393px. */
+.than-mo { align-items: flex-start; justify-content: center; gap: 22px; padding-right: 420px; }
+
+/* ══ HỢP ĐỒNG VỚI ĐƯỜNG DỰNG — số `.slide-element` mỗi slide PHẢI bằng số câu
+ * của dòng script tương ứng (trừ slide đầu một câu). ĐỪNG đổi tên lớp. */
+.slide-element {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(5px);
+  transition: opacity 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 0.42s ease;
+}
+.slide-element.visible { opacity: 1; transform: none; filter: none; }
+
+.nhan {
+  display: flex; align-items: center; gap: 12px;
+  font-size: var(--co-nhan); font-weight: 800;
+  letter-spacing: 0.17em; text-transform: uppercase; color: var(--nhan-mau);
+}
+.nhan::before {
+  content: '';
+  width: 9px; height: 9px; border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 16%, transparent);
+}
+.nhan.canh-bao { color: var(--canh-bao-mau); }
+
+/* ⚠ NỀN SÁNG: tiêu đề tô ĐẶC màu mực, KHÔNG gradient-clip sang trắng như các
+   mẫu nền tối — chữ trắng trên giấy là chữ tàng hình. */
+.tieu-de, .tieu-de-lon { color: var(--chu); }
+.tieu-de { font-size: var(--co-tieu-de); font-weight: 850; letter-spacing: -0.03em; line-height: 1.1; }
+.tieu-de-lon { font-size: var(--co-tieu-de-lon); font-weight: 900; letter-spacing: -0.035em; line-height: 1.06; }
+.phu-de { font-size: 26px; color: var(--chu-mem); font-weight: 500; }
+
+.tem-ho-so {
+  display: inline-block; padding: 8px 18px;
+  border: 2px solid var(--accent); border-radius: 6px;
+  color: var(--accent);
+  font-size: 17px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  transform: rotate(-1.6deg);
+}
+
+/* ── Gạch đầu dòng ── */
+.gach { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.gach li {
+  position: relative; padding-left: 36px;
+  font-size: var(--co-than); line-height: 1.45; color: var(--chu-mem);
+}
+.gach li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.56em;
+  width: 16px; height: 3px; border-radius: 2px;
+  background: var(--nhan-mau);
+}
+/* Hai gạch NẰM NGANG cạnh nhau — chỉ dùng ở slide có biểu đồ lớn, nơi chiều
+   cao còn lại không đủ cho hai dòng chồng nhau. */
+.gach.mot-hang { flex-direction: row; gap: 40px; }
+.gach.mot-hang li { flex: 1 1 0; font-size: 23px; }
+.gach li b, .the-dan b { color: var(--chu); font-weight: 780; }
+
+/* Câu dẫn đóng khung, dùng cho slide chỉ có một ý. */
+.the-dan {
+  max-width: 900px;
+  padding: 24px 30px;
+  border-radius: 14px;
+  border: 1px solid var(--vien);
+  border-left: 5px solid var(--accent);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 8px 22px rgba(40, 55, 75, 0.08);
+  font-size: 30px; line-height: 1.38; color: var(--chu-mem);
+}
+
+/* ══ HÌNH TRANG SỔ (slide mở) ═════════════════════════════════════════════
+ * `position: absolute` — CỐ Ý. Để trong dòng chảy thì hình đẩy `.slide-element`
+ * lệch khỏi dải an toàn và `kiemDeck` đánh trượt, dù nó chỉ là trang trí. */
+.minh-hoa { position: absolute; z-index: 1; pointer-events: none; }
+.minh-hoa svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.minh-hoa-so { right: 72px; top: 50%; transform: translateY(-50%); width: 380px; height: 330px; }
+/* Tờ giấy đặt vội — nghiêng nhẹ, không thẳng tưng. */
+.trang-so { transform: rotate(-2.2deg); transform-origin: 176px 165px; }
+.giay { fill: #ffffff; stroke: var(--vien); stroke-width: 2; }
+.le-do { stroke: color-mix(in srgb, var(--accent) 45%, transparent); stroke-width: 2; }
+.dong-ke path { stroke: var(--vien); stroke-width: 2; stroke-linecap: round; }
+.o-bieu-do { fill: color-mix(in srgb, var(--primary) 7%, transparent); stroke: var(--vien); stroke-width: 1.5; }
+.net-gia {
+  fill: none; stroke: var(--primary); stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.minh-hoa .cham-ra { fill: var(--accent); }
+/* Con dấu: xoay nghịch chiều tờ giấy để hai thứ không song song, và đập nhẹ
+   một nhịp lúc slide mở — trang tĩnh gần chục giây nhìn như ảnh treo. */
+.con-dau { transform: rotate(-13deg); transform-origin: 286px 252px; }
+.slide.active .con-dau { animation: dong-dau 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s backwards; }
+@keyframes dong-dau {
+  from { transform: rotate(-13deg) scale(1.5); opacity: 0; }
+}
+.vanh-dau { fill: none; stroke: var(--accent); stroke-width: 5; opacity: 0.85; }
+.vanh-dau.trong { stroke-width: 2; }
+.chu-dau {
+  font-family: var(--font); text-anchor: middle;
+  font-size: 21px; font-weight: 900; letter-spacing: 0.06em;
+  fill: var(--accent); opacity: 0.9;
+}
+
+/* ══ BA THẺ THÔNG SỐ ══════════════════════════════════════════════════════ */
+.hang-the { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.the {
+  position: relative;
+  padding: 22px 26px 24px;
+  border-radius: 16px;
+  border: 1px solid var(--vien);
+  border-top: 4px solid currentColor;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 22px rgba(40, 55, 75, 0.08);
+}
+.the-vao { color: var(--primary); }
+.the-lo { color: var(--accent); }
+.the-dich { color: var(--info); }
+.the-nhan {
+  font-size: 17px; font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.the-so {
+  font-size: 46px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.04;
+  font-variant-numeric: tabular-nums; color: var(--chu);
+}
+.the-chu { margin-top: 8px; font-size: 20px; line-height: 1.38; color: var(--chu-mem); }
+
+/* ══ BIỂU ĐỒ ĐƯỜNG GIÁ ════════════════════════════════════════════════════
+ * ⚠ Bề ngang GHIM 760px chứ không `100%`. Khung SVG là 620×170; kéo hết bề
+ * ngang 1064px thì biểu đồ cao 292px, cộng tiêu đề và hai gạch là vượt dải an
+ * toàn 393px. 760px cho ra 208px và còn chừa dung sai. */
+.slide[data-bo-cuc="bieu-do-lon"] .than { gap: 16px; }
+.slide[data-bo-cuc="bieu-do-lon"] .tieu-de { font-size: 40px; }
+.bieu-do-lenh { width: 760px; margin-inline: auto; }
+.bieu-do-lenh svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.muc path { stroke-width: 1.8; }
+.muc-vao { stroke: var(--primary); stroke-dasharray: 6 6; }
+.muc-dich { stroke: var(--info); stroke-dasharray: 6 6; }
+.muc-lo { stroke: var(--accent); stroke-dasharray: 6 6; }
+.muc-doi { stroke: var(--accent); stroke-dasharray: 2 5; opacity: 0.75; }
+.nhan-muc text {
+  font-family: var(--font); text-anchor: end;
+  font-size: 14px; font-weight: 800;
+}
+.nhan-muc .m-vao { fill: var(--primary); }
+.nhan-muc .m-dich { fill: var(--info); }
+.nhan-muc .m-lo, .nhan-muc .m-doi { fill: var(--accent); }
+
+.duong-gia {
+  fill: none; stroke: var(--chu); stroke-width: 3.4;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 560; stroke-dashoffset: 560;
+}
+.slide.active .duong-gia { animation: ve-duong 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards; }
+@keyframes ve-duong { to { stroke-dashoffset: 0; } }
+.cham-vao { fill: var(--primary); stroke: var(--nen); stroke-width: 3; }
+.bieu-do-lenh .cham-ra circle { fill: var(--accent); }
+.bieu-do-lenh .cham-ra path { stroke: #ffffff; stroke-width: 2.4; stroke-linecap: round; }
+.chu-ra {
+  font-family: var(--font); text-anchor: middle;
+  font-size: 14px; font-weight: 800; fill: var(--accent);
+}
+.chi-ra { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 3 4; }
+/* Chấm và nhãn đợi đường vẽ xong mới hiện. */
+.cham-vao, .bieu-do-lenh .cham-ra, .chu-ra, .chi-ra { opacity: 0; }
+.slide.active .cham-vao,
+.slide.active .bieu-do-lenh .cham-ra,
+.slide.active .chu-ra,
+.slide.active .chi-ra { animation: hien-cham 0.5s ease 1.9s forwards; }
+@keyframes hien-cham { to { opacity: 1; } }
+
+/* Vạch tiến độ. */
+.tien-do {
+  position: absolute; left: 0; bottom: 0;
+  height: 5px; width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.42s ease;
+  z-index: 3;
+}

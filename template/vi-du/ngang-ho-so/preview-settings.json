@@ -1,0 +1,72 @@
+{
+  "_ghiChu": [
+    "Thiết lập của mẫu HỒ SƠ & TRÍCH DẪN (DS-03) — NGANG 16:9, NỀN SÁNG.",
+    "",
+    "⚠ KHOÁ `theme.variables` PHẢI TRÙNG CẢ TÊN LẪN GIÁ TRỊ với bảng màu trong",
+    "style.css. Trình sửa đọc file này và GHI ĐÈ :root lúc quay, nên lệch giá trị là",
+    "video ra MÀU CŨ trong khi mở deck bằng trình duyệt vẫn thấy màu mới — đúng bẫy đã",
+    "dính ngày 18/09/2026 khi đổi tông năm mẫu ngang. Đổi bảng màu thì đổi CẢ HAI,",
+    "kèm `visuals.backgroundColor` = `--bg-dark`.",
+    "",
+    "⚠ ĐÂY LÀ MẪU NỀN SÁNG: `visuals.colorMode` là `cream`, không phải `dark`, và",
+    "`subtitles.color` là mực đậm. Bộ ghi mặc định vẽ phụ đề TRẮNG",
+    "(--subtitle-color: #ffffff) — trên nền giấy cát là chữ trắng trên giấy trắng,",
+    "mất sạch. Đây là chỗ dễ quên nhất khi làm mẫu nền sáng.",
+    "",
+    "⚠ `subtitles.fontSize` ở đây ĐÈ LÊN --subtitle-font-size trong style.css",
+    "(settingsCss chèn sau thẻ <link>). Hai chỗ cố ý để cùng một số: style.css là",
+    "mặc định của THIẾT KẾ, còn file này là thứ Trình sửa đọc và ghi. Đổi một bên",
+    "thì đổi cả hai, kẻo Trình sửa hiện một đằng video ra một nẻo.",
+    "",
+    "⚠ KHÔNG khai `visuals.backgroundFx`: mẫu ngang cố ý không có hiệu ứng nền",
+    "động. Nền đã có ba lớp (quầng sáng + vân + vignette) trong style.css; chồng",
+    "thêm hiệu ứng động là chữ khó đọc mà máy yếu thì rớt khung hình."
+  ],
+  "theme": {
+    "preset": "custom",
+    "variables": {
+      "--bg-dark": "#f4ece0",
+      "--primary": "#b4472a",
+      "--primary-light": "#d0603f",
+      "--primary-dark": "#7c2d16",
+      "--accent": "#2f5d4a",
+      "--accent-light": "#4c8068",
+      "--info": "#2f5d4a",
+      "--success": "#2f7a55"
+    },
+    "customVariables": {
+      "--bg-dark": "#f4ece0",
+      "--primary": "#b4472a",
+      "--primary-light": "#d0603f",
+      "--primary-dark": "#7c2d16",
+      "--accent": "#2f5d4a",
+      "--accent-light": "#4c8068",
+      "--info": "#2f5d4a",
+      "--success": "#2f7a55"
+    }
+  },
+  "subtitles": {
+    "enabled": true,
+    "color": "#3b2a1e",
+    "activeColor": "#b4472a",
+    "fontSize": 22,
+    "bottom": 56,
+    "maxLines": 2
+  },
+  "visuals": {
+    "colorMode": "cream",
+    "backgroundColor": "#f4ece0",
+    "gridEnabled": false
+  },
+  "slides": {
+    "deletedIds": [],
+    "scriptLines": [
+      "Người đàn ông bỏ nghề kỹ sư để về dựng lại một xưởng gốm.",
+      "Trần Hậu là thợ cả ở làng gốm Bát Tràng, về làng năm hai mươi sáu tuổi sau chín năm làm kỹ sư ở thành phố. Bảy năm sau, ba lò đã được phục dựng và hai mươi hộ sống được với nghề.",
+      "Ông nói mình không về để giữ nghề cho đẹp. Ông về vì thấy nghề này vẫn nuôi được người, chỉ là chưa ai tính lại cho đúng.",
+      "Bước ngoặt nằm ở chỗ đổi lò mà không đổi tay nghề. Lò ga thay lò củi kéo hao hụt từ ba mươi phần trăm xuống còn tám. Men và dáng thì giữ nguyên, nên thứ khách tìm tới vẫn còn đó.",
+      "Nhưng cái giá của hai năm đầu là không ai tin. Xưởng bán dưới giá vốn suốt mười tám tháng để giữ khách. Ba hộ bỏ giữa chừng, và đó là phần ông khó kể lại nhất.",
+      "Xưởng giờ vẫn đỏ lửa. Và năm nay có thêm hai người trẻ về học nghề."
+    ]
+  }
+}

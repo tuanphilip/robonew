@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mẹo sức khoẻ — Beeknoee Studio</title>
+  <meta name="description" content="Mẹo đánh số, mỗi mẹo kèm lý do vẽ thành hình. Chốt bằng khối khuyến cáo y tế. Hợp mẹo sinh hoạt, dinh dưỡng, giấc ngủ." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg sk-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sk-hero">
+          <svg class="sk-trang" viewBox="0 0 120 120" aria-hidden="true">
+            <path d="M78 18 a44 44 0 1 0 24 54 a34 34 0 1 1 -24 -54Z" fill="none" stroke="var(--primary)" stroke-width="4"/>
+          </svg>
+          <h1 class="sk-hook"><span class="sk-so">3</span> thói quen nhỏ<br/>để ngủ sâu hơn</h1>
+          <div class="sk-kicker">không cần thuốc</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg sk-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sk-dau">
+          <span class="sk-stt">1</span><span class="sk-ten">Ánh sáng buổi sáng</span>
+        </div>
+        <div class="slide-element fade-up sk-lam">
+          <span>ra ngoài trời <b>15 phút</b> đầu ngày</span>
+        </div>
+        <div class="slide-element fade-up sk-scene">
+          <svg viewBox="0 0 200 116" aria-hidden="true">
+            <circle cx="100" cy="66" r="44" fill="none" stroke="var(--primary-dark)" stroke-width="3"/>
+            <path d="M100 66 L100 30" stroke="var(--primary)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M100 66 L128 82" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="40" cy="20" r="11" fill="var(--accent)"/>
+            <line x1="56.0" y1="20.0" x2="24.0" y2="20.0" stroke="var(--accent)" stroke-width="3"/>
+            <line x1="51.3" y1="31.3" x2="28.7" y2="8.7" stroke="var(--accent)" stroke-width="3"/>
+            <line x1="40.0" y1="36.0" x2="40.0" y2="4.0" stroke="var(--accent)" stroke-width="3"/>
+            <line x1="28.7" y1="31.3" x2="51.3" y2="8.7" stroke="var(--accent)" stroke-width="3"/>
+          </svg>
+          <div class="sk-vi"><span class="sk-tag">Vì sao</span>đồng hồ sinh học cần ánh sáng thật mới đặt lại được giờ ngủ</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg sk-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sk-dau">
+          <span class="sk-stt">2</span><span class="sk-ten">Cà phê</span>
+        </div>
+        <div class="slide-element fade-up sk-scene">
+          <svg viewBox="0 0 240 104" aria-hidden="true">
+            <line x1="20" y1="88" x2="228" y2="88" stroke="var(--primary-dark)" stroke-width="2.6"/>
+            <line x1="20" y1="88" x2="20" y2="14" stroke="var(--primary-dark)" stroke-width="2.6"/>
+            <path d="M20 18 C70 22 96 44 124 53 C160 65 196 78 224 84" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <line x1="124" y1="53" x2="124" y2="88" stroke="var(--accent)" stroke-width="3" stroke-dasharray="3 3"/>
+            <circle cx="124" cy="53" r="5" fill="var(--accent)"/>
+            <text x="124" y="102" text-anchor="middle" font-size="13" fill="var(--accent-light)">+6 tiếng</text>
+            <text x="150" y="46" font-size="13" font-weight="700" fill="var(--accent)">còn 1/2</text>
+          </svg>
+          <div class="sk-cap">lượng caffeine còn lại trong người theo giờ</div>
+        </div>
+        <div class="slide-element fade-up sk-vi sk-canh">
+          <span class="sk-tag">Nghĩa là</span>uống lúc 2 giờ chiều thì tới nửa đêm cơ thể vẫn đang xử lý nó
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg sk-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sk-dau">
+          <span class="sk-stt">3</span><span class="sk-ten">Nhiệt độ phòng</span>
+        </div>
+        <div class="slide-element fade-up sk-scene">
+          <svg viewBox="0 0 240 100" aria-hidden="true">
+            <path d="M16 30 C60 30 76 34 104 56 C132 76 180 80 224 80" fill="none" stroke="var(--primary)" stroke-width="3"/>
+            <line x1="16" y1="72" x2="224" y2="72" stroke="var(--info)" stroke-width="2.6" stroke-dasharray="5 4"/>
+            <text x="224" y="66" text-anchor="end" font-size="13" fill="var(--info)">ngưỡng vào giấc sâu</text>
+            <text x="16" y="24" font-size="13" fill="var(--accent-light)">thân nhiệt</text>
+          </svg>
+          <div class="sk-cap">thân nhiệt phải hạ xuống thì mới vào được giấc sâu</div>
+        </div>
+        <div class="slide-element fade-up sk-vi">
+          <span class="sk-tag">Nên</span>phòng mát giúp việc đó xảy ra nhanh hơn phòng ấm
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg sk-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sk-kicker-solo">
+          <span>Một việc nên bỏ hẳn</span>
+        </div>
+        <div class="slide-element fade-up sk-bo">
+          <span class="sk-x">×</span><div>nằm trên giường bấm điện thoại để chờ buồn ngủ</div>
+        </div>
+        <div class="slide-element fade-up sk-line">
+          <span>Não sẽ học rằng giường là chỗ để <b>thức</b>.</span>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg sk-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up sk-luu">
+          <span class="sk-tag">Lưu ý</span>đây là mẹo chăm sóc thường ngày, không thay thế lời khuyên bác sĩ
+        </div>
+        <div class="slide-element fade-up sk-line">
+          <span>Mất ngủ kéo dài trên <b>3 tuần</b> thì nên đi khám.</span>
+        </div>
+        <div class="slide-element fade-up sk-cta">
+          <span>Ngủ được là cái nền của mọi thứ còn lại</span>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

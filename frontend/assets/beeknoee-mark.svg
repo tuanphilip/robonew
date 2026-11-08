@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Dấu hiệu Beeknoee (bản ngắn) — dùng làm icon app.
+  Nguồn: bee_project/frontend/src/assets/beeknoee/Beeknoee-Short-Logo-dark.svg
+  Khác bản gốc: tô gradient xanh biển -> trắng thay vì trắng đặc.
+
+  gradientUnits="userSpaceOnUse" là BẮT BUỘC. Mặc định là objectBoundingBox,
+  nghĩa là MỖI path được tô một gradient riêng — 6 khối sẽ thành 6 dải màu rời
+  rạc thay vì một dải chạy suốt logo. Toạ độ dưới đây nằm trong hệ của <g>
+  (0..5500), tức trước phép translate/scale.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="550" height="550"
+     viewBox="0 0 550 550" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="beeSea" gradientUnits="userSpaceOnUse"
+                    x1="200" y1="5400" x2="5300" y2="300">
+      <stop offset="0%"   stop-color="#075e9d"/>
+      <stop offset="38%"  stop-color="#1b8fd8"/>
+      <stop offset="72%"  stop-color="#7dd0f7"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(0.000000,550.000000) scale(0.100000,-0.100000)"
+     fill="url(#beeSea)" stroke="none">
+    <path d="M1123 5252 l-303 -177 0 -355 0 -355 305 -177 305 -177 305 177 305
+177 0 355 0 355 -302 175 c-166 96 -304 176 -307 177 -3 0 -142 -78 -308 -175z"/>
+    <path d="M4253 4797 l-343 -201 0 -401 0 -400 338 -197 c187 -108 344 -198
+350 -200 6 -2 166 87 356 197 l346 200 0 400 0 400 -338 197 c-185 108 -344
+199 -352 202 -8 2 -169 -86 -357 -197z"/>
+    <path d="M2148 4002 l-528 -307 0 -620 0 -620 530 -307 529 -307 508 296 c279
+162 518 300 531 306 l22 10 -2 621 -3 621 -529 307 c-291 170 -530 308 -530
+307 -1 0 -238 -139 -528 -307z"/>
+    <path d="M357 3171 l-147 -86 2 -180 3 -179 140 -82 c77 -45 145 -83 150 -83
+6 -1 75 37 155 83 l145 84 2 178 3 179 -97 55 c-53 30 -121 69 -152 86 l-56
+32 -148 -87z"/>
+    <path d="M972 2092 l-152 -87 0 -175 0 -176 151 -88 151 -87 147 84 146 85 3
+179 2 180 -127 73 c-71 41 -137 79 -148 86 -18 12 -37 4 -173 -74z"/>
+    <path d="M2335 1450 l-340 -199 -3 -404 -2 -405 344 -201 344 -200 346 201
+346 201 0 402 0 402 -342 199 c-188 109 -344 200 -347 201 -3 1 -159 -88 -346
+-197z"/>
+  </g>
+</svg>

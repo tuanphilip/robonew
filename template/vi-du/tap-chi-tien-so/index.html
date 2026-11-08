@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tạp chí tiền số — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu tạp chí nền kem cho tiền số: tít serif, chip đỏ, bảng số mono, thẻ trắng — hợp giải thích crypto, điểm tin tài sản số." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-hero">
+          <div class="tc-chip-row"><span class="tc-chip">Tiền số</span><span class="tc-rule"></span><span class="tc-count">01 · 07</span></div>
+          <h1 class="tc-title tc-title-hero">Chỉ 21 Triệu,<br/><em>Không In Thêm.</em></h1>
+          <p class="tc-lede">Vì sao Bitcoin khan hiếm — hiểu trong một phút.</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-head">
+          <div class="tc-chip-row"><span class="tc-chip">Vì sao 1</span><span class="tc-rule"></span><span class="tc-count">02 · 07</span></div>
+          <h2 class="tc-title">Kho Đã Gần<br/><em>Cạn Đáy.</em></h2>
+        </div>
+        <div class="slide-element fade-up tc-body">Phần lớn coin đã được đào từ lâu — phần còn lại nhỏ giọt từng ngày.</div>
+        <div class="slide-element fade-up tc-card tc-card-bang">
+          <div class="tc-bang-row tc-bang-dau"><span>Nguồn cung</span><span>Số coin</span></div>
+          <div class="tc-bang-row"><span>Tổng cung tối đa</span><span class="tc-so">21.000.000</span></div>
+          <div class="tc-bang-row"><span>Đã đào tới nay</span><span class="tc-so">≈ 19,9 triệu</span></div>
+          <div class="tc-bang-row"><span>Còn lại cho cả thế giới</span><span class="tc-so tc-do">≈ 1,1 triệu</span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-head">
+          <div class="tc-chip-row"><span class="tc-chip">Vì sao 2</span><span class="tc-rule"></span><span class="tc-count">03 · 07</span></div>
+          <h2 class="tc-title">Bốn Năm,<br/><em>Giảm Một Nửa.</em></h2>
+        </div>
+        <div class="slide-element fade-up tc-body">Halving cắt đôi lượng coin mới mỗi bốn năm — nguồn cung chậm dần theo thời gian.</div>
+        <div class="slide-element fade-up tc-card tc-card-bang">
+          <div class="tc-bang-row tc-bang-dau"><span>Kỳ halving</span><span>Coin mới mỗi khối</span></div>
+          <div class="tc-bang-row"><span class="tc-so">2016</span><span class="tc-so">12,5</span></div>
+          <div class="tc-bang-row"><span class="tc-so">2020</span><span class="tc-so">6,25</span></div>
+          <div class="tc-bang-row"><span class="tc-so">2024</span><span class="tc-so tc-do">3,125</span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-head">
+          <div class="tc-chip-row"><span class="tc-chip">Vì sao 3</span><span class="tc-rule"></span><span class="tc-count">04 · 07</span></div>
+          <h2 class="tc-title">Mất Khoá,<br/><em>Mất Vĩnh Viễn.</em></h2>
+        </div>
+        <div class="slide-element fade-up tc-body">Không có nút quên mật khẩu — coin trong ví mất khoá nằm im mãi mãi.</div>
+        <div class="slide-element fade-up tc-card tc-card-list">
+          <div class="tc-row"><i class="fa-solid fa-key"></i><span>Ước tính 3–4 triệu coin đã mất khoá</span></div>
+          <div class="tc-row"><i class="fa-solid fa-box-archive"></i><span>Nhiều ví ngủ quên cả chục năm</span></div>
+          <div class="tc-row tc-row-mark"><i class="fa-solid fa-star"></i><span><mark>Cung thật còn ít hơn trên giấy</mark></span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-head">
+          <div class="tc-chip-row"><span class="tc-chip">So sánh</span><span class="tc-rule"></span><span class="tc-count">05 · 07</span></div>
+          <h2 class="tc-title">Tiền Giấy<br/><em>Đọ Bitcoin.</em></h2>
+        </div>
+        <div class="slide-element fade-up tc-body">Một bên in thêm được tuỳ chính sách — một bên khoá cứng trong code.</div>
+        <div class="slide-element fade-up tc-card tc-card-duo">
+          <div class="tc-duo-item"><i class="fa-solid fa-print"></i><span class="tc-pill">Tiền giấy · in thêm được</span></div>
+          <div class="tc-duo-vs">đọ với</div>
+          <div class="tc-duo-item"><i class="fa-solid fa-lock"></i><span class="tc-pill tc-pill-do">Bitcoin · khoá cứng 21 triệu</span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-head">
+          <div class="tc-chip-row"><span class="tc-chip">Cái bẫy</span><span class="tc-rule"></span><span class="tc-count">06 · 07</span></div>
+          <h2 class="tc-title">Khan Hiếm<br/><em>Chưa Chắc Thắng.</em></h2>
+        </div>
+        <div class="slide-element fade-up tc-body">Khan hiếm chỉ là một vế — giá còn chạy theo niềm tin và dòng tiền.</div>
+        <div class="slide-element fade-up tc-card tc-card-shot">
+          <div class="tc-shot-bar"><i class="fa-solid fa-triangle-exclamation"></i><span>Nhớ trước khi xuống tiền</span></div>
+          <div class="tc-shot-check"><i class="fa-regular fa-square-check"></i><span>Giá từng rơi quá nửa nhiều lần</span></div>
+          <div class="tc-shot-check"><i class="fa-regular fa-square-check"></i><span>Khan hiếm không đỡ nổi hoảng loạn</span></div>
+          <div class="tc-shot-check"><i class="fa-regular fa-square-check"></i><span><mark>Chỉ dùng tiền nhàn rỗi</mark></span></div>
+        </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide-id="6">
+        <div class="slide-bg tc-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up tc-hero">
+          <div class="tc-chip-row"><span class="tc-chip">Chốt lại</span><span class="tc-rule"></span><span class="tc-count">07 · 07</span></div>
+          <h2 class="tc-title tc-title-hero">Hiểu Trước,<br/><em>Mua Sau.</em></h2>
+        </div>
+        <div class="slide-element fade-up tc-lede tc-lede-cta">Khan hiếm là câu chuyện lõi — hiểu nó rồi hãy quyết định.</div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">7</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Một điểm nhấn — Beeknoee Studio</title>
+  <meta name="description" content="Toàn bộ video xám, chỉ một từ hoặc một con số được tô màu ở mỗi màn. Mắt người xem bị kéo về đúng chỗ mình muốn." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-hero">
+          <div class="dn-so"><span class="dn-hot">90%</span></div>
+          <h1 class="dn-hook">việc bạn làm hôm nay<br/>sẽ không ai nhớ</h1>
+          <div class="dn-kicker">kể cả bạn</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-lbl">
+          <span>Một ngày</span><i></i><span>40 việc</span>
+        </div>
+        <div class="slide-element fade-up dn-scene">
+          <svg viewBox="0 0 300 104" aria-hidden="true">
+            <rect x="3" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+          </svg>
+          <div class="dn-cap">trả lời, họp, sửa vặt, dọn dẹp, xác nhận, nhắc nhở</div>
+        </div>
+        <div class="slide-element fade-up dn-scene">
+          <svg viewBox="0 0 300 104" aria-hidden="true">
+            <rect x="3" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="55" width="22" height="18" rx="2" fill="var(--primary)" stroke="var(--accent)" stroke-width="0" opacity="1"/>
+            <rect x="123" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+          </svg>
+          <div class="dn-cap">chỉ <b class="dn-hot">một việc</b> thật sự đẩy bạn đi tiếp</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-kicker-solo">
+          <span>Vấn đề nằm ở đây</span>
+        </div>
+        <div class="slide-element fade-up dn-vang">
+          <span>không thông báo</span><span>không ai giục</span><span>không hạn chót</span>
+        </div>
+        <div class="slide-element fade-up dn-tut">
+          <span class="dn-hot">việc quan trọng nhất</span>
+          <svg viewBox="0 0 240 60" aria-hidden="true">
+            <path d="M20 10 L120 50 L220 50" fill="none" stroke="var(--accent)" stroke-width="3" stroke-dasharray="5 5"/>
+            <circle cx="220" cy="50" r="5" fill="var(--accent)"/>
+          </svg>
+          <div class="dn-cap">tụt xuống cuối danh sách</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-kicker-solo">
+          <span>Đảo ngược cách sắp việc</span>
+        </div>
+        <div class="slide-element fade-up dn-buoi">
+          <span class="dn-gio">SÁNG</span>
+          <div class="dn-khoi dn-khoi-hot">việc khó nhất</div>
+          <div class="dn-cap">đầu còn sạch, chưa ai kịp hỏi gì</div>
+        </div>
+        <div class="slide-element fade-up dn-buoi">
+          <span class="dn-gio">CHIỀU</span>
+          <div class="dn-khoi">mọi thứ còn lại</div>
+          <div class="dn-cap">để tới chiều cũng không sao</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-kicker-solo">
+          <span>Rồi một điều hơi lạ</span>
+        </div>
+        <div class="slide-element fade-up dn-doi">
+          <span class="dn-mo">làm ít việc hơn</span>
+          <svg class="dn-mui" viewBox="0 0 60 20" aria-hidden="true"><path d="M2 10 H50 M42 4 L52 10 L42 16" fill="none" stroke="var(--accent)" stroke-width="3"/></svg>
+          <span class="dn-hot dn-xa">đi xa hơn</span>
+        </div>
+        <div class="slide-element fade-up dn-scene">
+          <svg viewBox="0 0 300 104" aria-hidden="true">
+            <rect x="3" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="3" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="29" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="55" width="22" height="18" rx="2" fill="var(--primary)" stroke="var(--accent)" stroke-width="0" opacity="1"/>
+            <rect x="123" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="55" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="3" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="33" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="63" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="93" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="123" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="153" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="183" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="213" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="243" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+            <rect x="273" y="81" width="22" height="18" rx="2" fill="var(--accent)" stroke="none" opacity="0.30"/>
+          </svg>
+          <div class="dn-cap">sức dồn vào <b>một</b> chỗ, thay vì rải đều bốn mươi</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-kicker-solo">
+          <span>Nhìn lại tuần trước</span>
+        </div>
+        <div class="slide-element fade-up dn-lbl">
+          <span>200 việc</span><i></i><span>nhớ được?</span>
+        </div>
+        <div class="slide-element fade-up dn-dem">
+          <span class="dn-hot">1–2</span>
+          <div class="dn-cap">và đó chính là những việc đáng</div>
+        </div>
+        </div>
+      </div>
+      <div class="slide" data-slide-id="6">
+        <div class="slide-bg dn-bg"></div>
+        <div class="slide-content">
+        <div class="slide-element fade-up dn-gach">
+          <span>đo ngày bằng số việc đã xong</span>
+        </div>
+        <div class="slide-element fade-up dn-cta">
+          <span>đo bằng <b class="dn-hot">việc quan trọng nhất</b><br/>có được làm hay không</span>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">7</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

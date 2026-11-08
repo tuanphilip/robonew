@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đố vui — Beeknoee Studio</title>
+  <meta name="description" content="Mẫu đố vui bốn lựa chọn: mỗi lựa chọn một ảnh thật, một nhịp ba giây không chữ để người xem kịp nghĩ, rồi đáp án sáng lên và một câu giải thích." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=beeknoee-slide-starter" />
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="script-panel" id="scriptPanel"><div class="script-panel-title"><i class="fa-solid fa-scroll"></i> Script</div><div class="script-panel-badge" id="scriptSlideBadge">Ready</div><div class="script-panel-text" id="scriptText">Bấm vào slide để bắt đầu...</div></div>
+    <div class="audio-panel" id="audioPanel"><div class="audio-panel-title"><i class="fa-solid fa-sliders"></i> Âm Thanh</div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-music"></i> Nhạc nền</label><select id="bgmSelect" onchange="switchBGM(this.value)"><option value="ambient" selected>Ambient</option><option value="cinematic">Cinematic</option><option value="lofi">Lo-fi</option><option value="piano">Piano</option><option value="dark">Dark</option><option value="custom">Custom upload</option><option value="none">Tắt</option></select></div><div class="audio-panel-divider"></div><div class="audio-slide-header"><span class="audio-slide-badge" id="audioPanelSlide">Ready</span><div class="audio-slide-nav"><button class="audio-nav-btn" onclick="audioPanelPrev()"><i class="fa-solid fa-chevron-left"></i></button><button class="audio-nav-btn" onclick="audioPanelNext()"><i class="fa-solid fa-chevron-right"></i></button></div></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-forward"></i> Chuyển slide</label><select id="transitionSelect" onchange="setSlideTransition(currentSlide, this.value)"><option value="gong">Gong</option><option value="rise">Rise</option><option value="bass">Bass</option><option value="chime">Chime</option><option value="sweep">Sweep</option><option value="boom">Boom</option><option value="alarm">Alarm</option><option value="chord">Chord</option><option value="ascending">Ascending</option><option value="retro">Retro</option><option value="minimal">Minimal</option><option value="dramatic">Dramatic</option></select></div><div class="audio-group"><label class="audio-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Hiện element</label><select id="revealSelect" onchange="setSlideReveal(currentSlide, this.value)"><option value="ping">Ping</option><option value="pop">Pop</option><option value="chime">Chime</option><option value="click">Click</option><option value="bubble">Bubble</option><option value="sparkle">Sparkle</option><option value="blip">Blip</option><option value="tick">Tick</option><option value="bell">Bell</option></select></div><div class="audio-actions"><button onclick="testTransition()">Test slide</button><button onclick="testReveal()">Test reveal</button></div></div>
+
+    <div id="slideContainer" class="slide-container">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <!-- ══ SLIDE 1 · CÂU HỎI ═════════════════════════════════════════
+           Câu hỏi phải nêu được cái LẠ mà chưa lộ đáp án. Ở đây cái lạ nằm
+           sẵn trong câu: ai cũng tưởng gần Mặt Trời nhất thì nóng nhất.
+           ⚠ Ảnh Mặt Trời là ảnh THẬT của NASA (đài quan sát SDO), Public
+           domain. Nguồn từng tấm ghi trong source/source.md. -->
+      <div class="slide active" data-slide-id="0">
+        <div class="slide-bg qz-bg"></div><canvas class="fx-canvas" data-fx="stars"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up qz-dau">
+          <span class="qz-nhan">Đố vui</span>
+          <figure class="qz-anh qz-mt"><img src="anh/mat-troi.jpg" alt="Mặt Trời chụp bởi đài quan sát SDO của NASA" /></figure>
+        </div>
+        <h1 class="slide-element fade-up qz-hoi">Hành tinh nào <em>nóng nhất</em> Hệ Mặt Trời?</h1>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 2 · BỐN LỰA CHỌN ═══════════════════════════════════
+           Mỗi lựa chọn một ẢNH THẬT. Thể loại đố vui mà chỉ có bốn dòng chữ
+           thì người xem lướt qua; có ảnh thì họ dừng lại để nhìn và so sánh,
+           mà dừng lại chính là thứ mẫu này cần. -->
+      <div class="slide" data-slide-id="1">
+        <div class="slide-bg qz-bg"></div><canvas class="fx-canvas" data-fx="stars"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up qz-dau-nho">
+          <span class="qz-nhan qz-nhan-mo">Chọn một</span>
+        </div>
+        <div class="slide-element fade-up qz-luoi">
+          <div class="qz-o"><span class="qz-chu">A</span><figure class="qz-anh"><img src="anh/sao-thuy.jpg" alt="Sao Thuỷ chụp bởi tàu MESSENGER của NASA" /></figure><b>Sao Thuỷ</b></div>
+          <div class="qz-o"><span class="qz-chu">B</span><figure class="qz-anh"><img src="anh/sao-kim.jpg" alt="Sao Kim chụp bởi tàu Mariner 10 của NASA" /></figure><b>Sao Kim</b></div>
+          <div class="qz-o"><span class="qz-chu">C</span><figure class="qz-anh"><img src="anh/trai-dat.jpg" alt="Trái Đất chụp từ tàu Apollo 17" /></figure><b>Trái Đất</b></div>
+          <div class="qz-o"><span class="qz-chu">D</span><figure class="qz-anh"><img src="anh/sao-hoa.jpg" alt="Sao Hoả với hẻm núi Valles Marineris" /></figure><b>Sao Hoả</b></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 3 · BA GIÂY, KHÔNG MỘT CHỮ ═════════════════════════
+           ⚠ Slide này CỐ Ý không có chữ nào trên màn hình. Đây là chỗ người
+           xem nghĩ; chèn thêm chữ vào là lấy mất đúng cái khoảng trống đó.
+           Dòng script tương ứng cũng chỉ là một câu đệm rất ngắn. -->
+      <div class="slide" data-slide-id="2">
+        <div class="slide-bg qz-bg"></div><canvas class="fx-canvas" data-fx="stars"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up qz-dem">
+          <svg class="qz-vong" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="qz-vong-nen" cx="60" cy="60" r="52" />
+            <circle class="qz-vong-chay" cx="60" cy="60" r="52" />
+          </svg>
+          <span class="qz-cham-hang" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="qz-nho-hang" aria-hidden="true">
+            <img src="anh/sao-thuy.jpg" alt="" /><img src="anh/sao-kim.jpg" alt="" /><img src="anh/trai-dat.jpg" alt="" /><img src="anh/sao-hoa.jpg" alt="" />
+          </span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 4 · ĐÁP ÁN ═════════════════════════════════════════
+           Dùng LẠI đúng lưới của slide 2, không vẽ lưới khác: mắt người xem
+           đã nhớ vị trí bốn ô, nên chỉ cần một ô sáng lên là đọc ra ngay.
+           Ba ô còn lại xám đi bằng `filter` — `filter` không đụng bố cục nên
+           phép đo vùng an toàn vẫn ra đúng số. -->
+      <div class="slide" data-slide-id="3">
+        <div class="slide-bg qz-bg"></div><canvas class="fx-canvas" data-fx="stars"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up qz-dau-nho">
+          <span class="qz-nhan qz-nhan-dung">Đáp án</span>
+        </div>
+        <div class="slide-element fade-up qz-luoi qz-luoi-ket">
+          <div class="qz-o"><span class="qz-chu">A</span><figure class="qz-anh"><img src="anh/sao-thuy.jpg" alt="Sao Thuỷ chụp bởi tàu MESSENGER của NASA" /></figure><b>Sao Thuỷ</b></div>
+          <div class="qz-o dung"><span class="qz-chu">B</span><figure class="qz-anh"><img src="anh/sao-kim.jpg" alt="Sao Kim chụp bởi tàu Mariner 10 của NASA" /></figure><b>Sao Kim</b></div>
+          <div class="qz-o"><span class="qz-chu">C</span><figure class="qz-anh"><img src="anh/trai-dat.jpg" alt="Trái Đất chụp từ tàu Apollo 17" /></figure><b>Trái Đất</b></div>
+          <div class="qz-o"><span class="qz-chu">D</span><figure class="qz-anh"><img src="anh/sao-hoa.jpg" alt="Sao Hoả với hẻm núi Valles Marineris" /></figure><b>Sao Hoả</b></div>
+        </div>
+        <div class="slide-element fade-up qz-dap">
+          <b class="qz-nhiet">465<i>°C</i></b>
+          <span>bề mặt Sao Kim — đủ nóng để chảy chì</span>
+        </div>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 5 · VÌ SAO ═════════════════════════════════════════
+           Một câu giải thích, rồi hai con số chống lưng cho nó. Đố vui mà chỉ
+           có đáp án thì xem xong quên ngay; có lý do thì người ta kể lại được
+           cho người khác — và kể lại được mới là thứ làm video lan đi. -->
+      <div class="slide" data-slide-id="4">
+        <div class="slide-bg qz-bg"></div><canvas class="fx-canvas" data-fx="stars"></canvas>
+        <div class="slide-content">
+        <div class="slide-element fade-up qz-dau-nho">
+          <span class="qz-nhan qz-nhan-mo">Vì sao</span>
+          <h2 class="qz-vi-sao">Tại bầu khí quyển</h2>
+        </div>
+        <div class="slide-element fade-up qz-doi">
+          <div class="qz-the"><b>96%</b><span>khí quyển Sao Kim là CO₂, giữ nhiệt lại không cho thoát</span></div>
+          <div class="qz-the"><b>−180°C</b><span>đêm trên Sao Thuỷ, vì gần như không có khí quyển</span></div>
+        </div>
+        <p class="slide-element fade-up qz-luuy">Gần Mặt Trời hơn <b>không</b> có nghĩa là nóng hơn.</p>
+        </div>
+      </div>
+
+      <!-- ══ SLIDE 6 · MỜI BÌNH LUẬN ══════════════════════════════════
+           Thể loại đố vui sống bằng bình luận. Hỏi thẳng một câu trả lời
+           được bằng MỘT CHỮ CÁI — càng dễ gõ thì càng nhiều người gõ. -->
+      <div class="slide" data-slide-id="5">
+        <div class="slide-bg qz-bg"></div><canvas class="fx-canvas" data-fx="stars"></canvas>
+        <div class="slide-content">
+        <h2 class="slide-element fade-up qz-ket">Bạn đoán đúng không?</h2>
+        <div class="slide-element fade-up qz-cta">
+          <span class="qz-cta-hop">Gõ <b>A</b> <b>B</b> <b>C</b> <b>D</b> vào bình luận</span>
+          <span class="qz-sau">Câu sau · <em>Hành tinh nào nhẹ tới mức nổi được trên nước?</em></span>
+        </div>
+        </div>
+      </div>
+      </div>
+
+    <div class="side-controls"><button class="side-btn" id="muteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button><div class="side-divider"></div><button class="side-btn" id="nextBtn" onclick="nextSlide()"><i class="fa-solid fa-chevron-up"></i></button><div class="side-counter"><span id="currentSlide">1</span>/<span id="totalSlides">6</span></div><button class="side-btn" id="prevBtn" onclick="prevSlide()"><i class="fa-solid fa-chevron-down"></i></button></div>
+  </div>
+  <script src="app.js?v=beeknoee-slide-starter"></script>
+</body>
+</html>

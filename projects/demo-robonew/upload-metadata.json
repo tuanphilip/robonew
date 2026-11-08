@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "youtube": {
+    "title": "TODO title dưới 100 ký tự",
+    "description": "🎬 TODO đoạn 1.\n\n🔎 TODO đoạn 2.\n\nNguồn: TODO\n\n#BeeknoeeStudio #TODO",
+    "privacyStatus": "private",
+    "tags": [
+      "Beeknoee Studio",
+      "TODO"
+    ]
+  },
+  "facebook": {
+    "caption": "🎬 TODO đoạn 1.\n\n🔎 TODO đoạn 2.\n\n#BeeknoeeStudio #TODO",
+    "videoState": "DRAFT",
+    "sourceComment": "Nguồn: TODO"
+  }
+}
